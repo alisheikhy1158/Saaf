@@ -173,7 +173,7 @@ abstract class AppLocalizations {
   /// Screen 04 (Privacy consent) headline. This promise is contractual: the code must make it true.
   ///
   /// In en, this message translates to:
-  /// **'Your photos stay on your phone'**
+  /// **'Your photos stay\non your phone'**
   String get consentTitle;
 
   /// Screen 04 subtitle.
@@ -259,6 +259,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The full text will be published here before Saaf is released.'**
   String get legalPlaceholderBody;
+
+  /// Overline above each quiz question (shown in capitals).
+  ///
+  /// In en, this message translates to:
+  /// **'Step {current} of {total}'**
+  String quizStepLabel(int current, int total);
+
+  /// Skip the current quiz question.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get quizSkip;
+
+  /// Continue to the next quiz step. Disabled until an answer is picked.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get quizNext;
+
+  /// Quiz question (screen 05).
+  ///
+  /// In en, this message translates to:
+  /// **'What bothers you most about your skin?'**
+  String get quizConcernsTitle;
+
+  /// Helper text under the concerns question.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up to two. You can change this later.'**
+  String get quizConcernsHint;
+
+  /// Quiz option.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark spots & pigmentation'**
+  String get concernDarkSpotsTitle;
+
+  /// Quiz option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Marks left by acne or the sun'**
+  String get concernDarkSpotsCaption;
+
+  /// Quiz option.
+  ///
+  /// In en, this message translates to:
+  /// **'Acne & breakouts'**
+  String get concernAcneTitle;
+
+  /// Quiz option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Pimples, blackheads, bumps'**
+  String get concernAcneCaption;
+
+  /// Quiz option.
+  ///
+  /// In en, this message translates to:
+  /// **'Oiliness & large pores'**
+  String get concernOilinessTitle;
+
+  /// Quiz option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Shiny by midday'**
+  String get concernOilinessCaption;
+
+  /// Quiz option.
+  ///
+  /// In en, this message translates to:
+  /// **'Dryness & dullness'**
+  String get concernDrynessTitle;
+
+  /// Quiz option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Tight, flaky or tired-looking'**
+  String get concernDrynessCaption;
+
+  /// Quiz option.
+  ///
+  /// In en, this message translates to:
+  /// **'Uneven skin tone'**
+  String get concernUnevenToneTitle;
+
+  /// Quiz option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Patchy colour, dark circles'**
+  String get concernUnevenToneCaption;
 
   /// Title of the page shown for an unknown route.
   ///

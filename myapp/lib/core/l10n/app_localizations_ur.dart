@@ -100,6 +100,55 @@ class AppLocalizationsUr extends AppLocalizations {
       'مکمل متن صاف کے جاری ہونے سے پہلے یہاں شائع کیا جائے گا۔';
 
   @override
+  String quizStepLabel(int current, int total) {
+    return 'مرحلہ $current از $total';
+  }
+
+  @override
+  String get quizSkip => 'چھوڑیں';
+
+  @override
+  String get quizNext => 'آگے';
+
+  @override
+  String get quizConcernsTitle =>
+      'آپ کی جلد کے بارے میں سب سے زیادہ کیا پریشان کرتا ہے؟';
+
+  @override
+  String get quizConcernsHint =>
+      'زیادہ سے زیادہ دو چنیں۔ آپ بعد میں تبدیل کر سکتے ہیں۔';
+
+  @override
+  String get concernDarkSpotsTitle => 'داغ دھبے اور رنگت';
+
+  @override
+  String get concernDarkSpotsCaption => 'مہاسوں یا دھوپ کے نشانات';
+
+  @override
+  String get concernAcneTitle => 'مہاسے اور دانے';
+
+  @override
+  String get concernAcneCaption => 'دانے، بلیک ہیڈز، ابھار';
+
+  @override
+  String get concernOilinessTitle => 'چکناہٹ اور کھلے مسام';
+
+  @override
+  String get concernOilinessCaption => 'دوپہر تک چمکتی جلد';
+
+  @override
+  String get concernDrynessTitle => 'خشکی اور بے رونقی';
+
+  @override
+  String get concernDrynessCaption => 'کھنچاؤ، پپڑی یا تھکی ہوئی جلد';
+
+  @override
+  String get concernUnevenToneTitle => 'ناہموار رنگت';
+
+  @override
+  String get concernUnevenToneCaption => 'دھبے دار رنگ، سیاہ حلقے';
+
+  @override
   String get notFoundTitle => 'صفحہ نہیں ملا';
 
   @override

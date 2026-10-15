@@ -37,7 +37,7 @@
   "back": "Back",
   "@back": { "description": "Tooltip / screen-reader label of the back button in the top bar." },
 
-  "consentTitle": "Your photos stay on your phone",
+  "consentTitle": "Your photos stay\non your phone",
   "@consentTitle": { "description": "Screen 04 (Privacy consent) headline. This promise is contractual: the code must make it true." },
 
   "consentSubtitle": "Saaf checks your skin, not your identity. Here’s how we look after your data.",
@@ -87,6 +87,49 @@
 
   "legalPlaceholderBody": "The full text will be published here before Saaf is released.",
   "@legalPlaceholderBody": { "description": "Temporary body of the Terms / Privacy pages. Must be replaced by the real documents before store submission." },
+
+  "quizStepLabel": "Step {current} of {total}",
+  "@quizStepLabel": {
+    "description": "Overline above each quiz question (shown in capitals).",
+    "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } }
+  },
+
+  "quizSkip": "Skip",
+  "@quizSkip": { "description": "Skip the current quiz question." },
+
+  "quizNext": "Next",
+  "@quizNext": { "description": "Continue to the next quiz step. Disabled until an answer is picked." },
+
+  "quizConcernsTitle": "What bothers you most about your skin?",
+  "@quizConcernsTitle": { "description": "Quiz question (screen 05)." },
+
+  "quizConcernsHint": "Pick up to two. You can change this later.",
+  "@quizConcernsHint": { "description": "Helper text under the concerns question." },
+
+  "concernDarkSpotsTitle": "Dark spots & pigmentation",
+  "@concernDarkSpotsTitle": { "description": "Quiz option." },
+  "concernDarkSpotsCaption": "Marks left by acne or the sun",
+  "@concernDarkSpotsCaption": { "description": "Quiz option caption." },
+
+  "concernAcneTitle": "Acne & breakouts",
+  "@concernAcneTitle": { "description": "Quiz option." },
+  "concernAcneCaption": "Pimples, blackheads, bumps",
+  "@concernAcneCaption": { "description": "Quiz option caption." },
+
+  "concernOilinessTitle": "Oiliness & large pores",
+  "@concernOilinessTitle": { "description": "Quiz option." },
+  "concernOilinessCaption": "Shiny by midday",
+  "@concernOilinessCaption": { "description": "Quiz option caption." },
+
+  "concernDrynessTitle": "Dryness & dullness",
+  "@concernDrynessTitle": { "description": "Quiz option." },
+  "concernDrynessCaption": "Tight, flaky or tired-looking",
+  "@concernDrynessCaption": { "description": "Quiz option caption." },
+
+  "concernUnevenToneTitle": "Uneven skin tone",
+  "@concernUnevenToneTitle": { "description": "Quiz option." },
+  "concernUnevenToneCaption": "Patchy colour, dark circles",
+  "@concernUnevenToneCaption": { "description": "Quiz option caption." },
 
   "notFoundTitle": "Page not found",
   "@notFoundTitle": { "description": "Title of the page shown for an unknown route." },

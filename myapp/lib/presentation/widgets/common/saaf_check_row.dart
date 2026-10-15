@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart' show CustomSemanticsAction;
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
+import 'package:saaf/presentation/widgets/common/saaf_check.dart';
 
 /// Checkbox row (design.md §6): a 24 dp r7 box (sage + ink tick when checked,
 /// faint 1.5 dp outline when not), 12 dp gap, 14/20/700 label.
@@ -29,33 +30,6 @@ class SaafCheckRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.saaf;
-    final colors = context.colors;
-
-    final box = SizedBox.square(
-      dimension: tokens.size.checkMedium,
-      child: DecoratedBox(
-        key: const ValueKey('saaf-check-box'),
-        decoration: BoxDecoration(
-          color: value ? colors.primary : null,
-          borderRadius: BorderRadius.circular(tokens.radius.r7),
-          border: value
-              ? null
-              : Border.all(
-                  color: tokens.checkBorder,
-                  width: tokens.size.borderFocus,
-                ),
-        ),
-        child: value
-            ? Center(
-                child: Icon(
-                  Icons.check,
-                  size: tokens.size.checkIconMedium,
-                  color: colors.onPrimary,
-                ),
-              )
-            : null,
-      ),
-    );
 
     return Semantics(
       checked: value,
@@ -73,7 +47,7 @@ class SaafCheckRow extends StatelessWidget {
           child: Row(
             spacing: tokens.space.x12,
             children: [
-              box,
+              SaafCheck(checked: value),
               Expanded(
                 child: DefaultTextStyle.merge(
                   style: tokens.styles.checkLabel,

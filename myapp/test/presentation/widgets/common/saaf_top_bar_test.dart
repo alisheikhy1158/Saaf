@@ -63,6 +63,32 @@ void main() {
     expect(center, closeTo(195, 1));
   });
 
+  testWidgets('a custom centre widget (quiz progress bar) replaces the title', (
+    tester,
+  ) async {
+    await pumpSaaf(
+      tester,
+      Align(
+        alignment: Alignment.topCenter,
+        child: SaafTopBar(
+          leading: SaafTopBar.backButton(tooltip: 'Back', onBack: () {}),
+          center: const SizedBox(key: ValueKey('centre'), height: 6),
+          trailing: const SizedBox(
+            key: ValueKey('trail'),
+            width: 48,
+            height: 48,
+          ),
+        ),
+      ),
+    );
+    final leading = tester.getRect(find.byType(IconButton));
+    final centre = tester.getRect(find.byKey(const ValueKey('centre')));
+    final trailing = tester.getRect(find.byKey(const ValueKey('trail')));
+    expect(centre.left, greaterThanOrEqualTo(leading.right));
+    expect(centre.right, lessThanOrEqualTo(trailing.left));
+    expect(centre.width, greaterThan(100));
+  });
+
   testWidgets('title uses the 16 dp button text style', (tester) async {
     await pumpSaaf(
       tester,

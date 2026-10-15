@@ -46,7 +46,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get back => 'Back';
 
   @override
-  String get consentTitle => 'Your photos stay on your phone';
+  String get consentTitle => 'Your photos stay\non your phone';
 
   @override
   String get consentSubtitle =>
@@ -98,6 +98,53 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get legalPlaceholderBody =>
       'The full text will be published here before Saaf is released.';
+
+  @override
+  String quizStepLabel(int current, int total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get quizSkip => 'Skip';
+
+  @override
+  String get quizNext => 'Next';
+
+  @override
+  String get quizConcernsTitle => 'What bothers you most about your skin?';
+
+  @override
+  String get quizConcernsHint => 'Pick up to two. You can change this later.';
+
+  @override
+  String get concernDarkSpotsTitle => 'Dark spots & pigmentation';
+
+  @override
+  String get concernDarkSpotsCaption => 'Marks left by acne or the sun';
+
+  @override
+  String get concernAcneTitle => 'Acne & breakouts';
+
+  @override
+  String get concernAcneCaption => 'Pimples, blackheads, bumps';
+
+  @override
+  String get concernOilinessTitle => 'Oiliness & large pores';
+
+  @override
+  String get concernOilinessCaption => 'Shiny by midday';
+
+  @override
+  String get concernDrynessTitle => 'Dryness & dullness';
+
+  @override
+  String get concernDrynessCaption => 'Tight, flaky or tired-looking';
+
+  @override
+  String get concernUnevenToneTitle => 'Uneven skin tone';
+
+  @override
+  String get concernUnevenToneCaption => 'Patchy colour, dark circles';
 
   @override
   String get notFoundTitle => 'Page not found';

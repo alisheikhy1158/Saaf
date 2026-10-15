@@ -9,7 +9,13 @@ import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 /// have a 48 dp hit area (§9.1), so that extra 4 dp per side is taken out of the
 /// padding: the circles sit exactly where Figma puts them and the bar is 56 dp.
 class SaafTopBar extends StatelessWidget {
-  const SaafTopBar({super.key, this.title, this.leading, this.trailing});
+  const SaafTopBar({
+    super.key,
+    this.title,
+    this.center,
+    this.leading,
+    this.trailing,
+  });
 
   /// A bar with only a back chevron on the leading side.
   SaafTopBar.back({
@@ -17,10 +23,14 @@ class SaafTopBar extends StatelessWidget {
     required VoidCallback onBack,
     super.key,
     this.title,
-  }) : leading = backButton(tooltip: tooltip, onBack: onBack),
+  }) : center = null,
+       leading = backButton(tooltip: tooltip, onBack: onBack),
        trailing = null;
 
   final String? title;
+
+  /// Replaces [title] with any widget (the quiz progress bar).
+  final Widget? center;
   final Widget? leading;
   final Widget? trailing;
 
@@ -49,13 +59,15 @@ class SaafTopBar extends StatelessWidget {
         children: [
           leading ?? slot,
           Expanded(
-            child: title == null
-                ? const SizedBox.shrink()
-                : Text(
-                    title!,
-                    textAlign: TextAlign.center,
-                    style: context.text.labelLarge,
-                  ),
+            child:
+                center ??
+                (title == null
+                    ? const SizedBox.shrink()
+                    : Text(
+                        title!,
+                        textAlign: TextAlign.center,
+                        style: context.text.labelLarge,
+                      )),
           ),
           trailing ?? slot,
         ],

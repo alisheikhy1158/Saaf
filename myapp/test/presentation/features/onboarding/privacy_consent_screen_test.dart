@@ -66,7 +66,7 @@ void main() {
   group('content (English)', () {
     testWidgets('shows the Figma copy', (tester) async {
       await pumpConsent(tester);
-      expect(find.text('Your photos stay on your phone'), findsOneWidget);
+      expect(find.text('Your photos stay\non your phone'), findsOneWidget);
       expect(
         find.text(
           'Saaf checks your skin, not your identity. '
@@ -93,7 +93,7 @@ void main() {
     ) async {
       await pumpConsent(tester);
       final title = tester.widget<Text>(
-        find.text('Your photos stay on your phone'),
+        find.text('Your photos stay\non your phone'),
       );
       expect(title.style?.fontSize, 32);
     });
@@ -218,7 +218,7 @@ void main() {
       expect(tester.takeException(), isNull);
       final context = tester.element(find.byType(PrivacyConsentScreen));
       expect(Directionality.of(context), TextDirection.rtl);
-      expect(find.text('Your photos stay on your phone'), findsNothing);
+      expect(find.text('Your photos stay\non your phone'), findsNothing);
     });
   });
 
