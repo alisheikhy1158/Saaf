@@ -15,6 +15,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeTitle => 'Clear skin, made simple.';
 
   @override
+  String get welcomeSubtitle =>
+      'A skincare coach for South Asian skin. Routines built from products you can actually buy in Pakistan.';
+
+  @override
+  String get welcomeChip => 'For South Asian skin';
+
+  @override
+  String get welcomeStatCaption => 'Example: dark spots';
+
+  @override
+  String get welcomeStatValue => '−32% in 8 weeks';
+
+  @override
+  String get getStarted => 'Get started';
+
+  @override
+  String get alreadyHaveAccount => 'I already have an account';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageUrdu => 'Urdu';
+
+  @override
   String get notFoundTitle => 'Page not found';
 
   @override

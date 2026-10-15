@@ -7,6 +7,33 @@
   "welcomeTitle": "Clear skin, made simple.",
   "@welcomeTitle": { "description": "Screen 01 (Welcome) headline." },
 
+  "welcomeSubtitle": "A skincare coach for South Asian skin. Routines built from products you can actually buy in Pakistan.",
+  "@welcomeSubtitle": { "description": "Screen 01 subtitle under the headline." },
+
+  "welcomeChip": "For South Asian skin",
+  "@welcomeChip": { "description": "Chip on the Welcome hero." },
+
+  "welcomeStatCaption": "Example: dark spots",
+  "@welcomeStatCaption": { "description": "Caption of the example stat card on the Welcome hero. Must say it is an example (store rule: no unsubstantiated claims)." },
+
+  "welcomeStatValue": "−32% in 8 weeks",
+  "@welcomeStatValue": { "description": "Value of the example stat card on the Welcome hero." },
+
+  "getStarted": "Get started",
+  "@getStarted": { "description": "Primary button on the Welcome screen." },
+
+  "alreadyHaveAccount": "I already have an account",
+  "@alreadyHaveAccount": { "description": "Text button on the Welcome screen for returning users." },
+
+  "language": "Language",
+  "@language": { "description": "Screen-reader label of the language switch." },
+
+  "languageEnglish": "English",
+  "@languageEnglish": { "description": "Language switch option." },
+
+  "languageUrdu": "Urdu",
+  "@languageUrdu": { "description": "Language switch option." },
+
   "notFoundTitle": "Page not found",
   "@notFoundTitle": { "description": "Title of the page shown for an unknown route." },
 

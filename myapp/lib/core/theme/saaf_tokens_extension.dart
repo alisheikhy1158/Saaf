@@ -17,6 +17,7 @@ class SaafTextStyles {
     required this.meta,
     required this.legal,
     required this.micro,
+    required this.wordmark,
     required this.avatarInitial,
     required this.ringValue,
     required this.otpDigit,
@@ -32,6 +33,7 @@ class SaafTextStyles {
   final TextStyle meta;
   final TextStyle legal;
   final TextStyle micro;
+  final TextStyle wordmark;
   final TextStyle avatarInitial;
   final TextStyle ringValue;
   final TextStyle otpDigit;
@@ -58,6 +60,7 @@ class SaafTextStyles {
       meta: _style(SaafType.meta, metaColor),
       legal: _style(SaafType.legal, metaColor),
       micro: _style(SaafType.micro, metaColor),
+      wordmark: _style(SaafType.wordmark, primary),
       avatarInitial: _style(SaafType.avatarInitial, primary),
       ringValue: _style(SaafType.ringValue, primary),
       otpDigit: _style(SaafType.otpDigit, primary),
@@ -77,6 +80,7 @@ class SaafTextStyles {
       meta: l(meta, other.meta),
       legal: l(legal, other.legal),
       micro: l(micro, other.micro),
+      wordmark: l(wordmark, other.wordmark),
       avatarInitial: l(avatarInitial, other.avatarInitial),
       ringValue: l(ringValue, other.ringValue),
       otpDigit: l(otpDigit, other.otpDigit),

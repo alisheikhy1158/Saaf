@@ -70,7 +70,10 @@ void main() {
     await pumpSaaf(tester, scaffold(bodyHeight: 2000), scaffold: false);
     expect(tester.getRect(find.byKey(ctaKey)).top, greaterThan(844));
     // (scrollUntilVisible stops at once: the CTA is already in the tree.)
-    await tester.drag(find.byType(CustomScrollView), const Offset(0, -2000));
+    await tester.drag(
+      find.byType(SingleChildScrollView),
+      const Offset(0, -2000),
+    );
     await tester.pump();
     expect(tester.getRect(find.byKey(ctaKey)).bottom, lessThanOrEqualTo(844));
   });
@@ -93,6 +96,22 @@ void main() {
       expect(top.bottom, lessThanOrEqualTo(body.top));
     },
   );
+
+  testWidgets('accepts a body that contains a LayoutBuilder', (tester) async {
+    await pumpSaaf(
+      tester,
+      SaafScaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) =>
+              SizedBox(key: bodyKey, height: 100, width: constraints.maxWidth),
+        ),
+        bottom: const SizedBox(key: ctaKey, height: 56),
+      ),
+      scaffold: false,
+    );
+    expect(tester.takeException(), isNull);
+    expect(tester.getRect(find.byKey(ctaKey)).bottom, 844 - 28);
+  });
 
   testWidgets('has no overflow at 320×480 with 200 % text', (tester) async {
     await pumpSaaf(

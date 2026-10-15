@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:saaf/app.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
+import 'package:saaf/core/router/app_router.dart';
 import 'package:saaf/core/theme/saaf_theme.dart';
+import 'package:saaf/presentation/providers/app_router_provider.dart';
 
 /// The responsive matrix from design.md §7 / test-strategy.md §4.
 const List<Size> matrixSizes = [
@@ -59,6 +62,31 @@ Future<void> pumpSaaf(
     ),
   );
   await tester.pump();
+}
+
+/// Pumps the real [SaafApp] (router, theme, locale) starting at [location].
+/// Uses fixed-duration pumps: a spinner anywhere would hang `pumpAndSettle`.
+Future<void> pumpSaafApp(
+  WidgetTester tester, {
+  String location = '/welcome',
+  Size size = const Size(390, 844),
+  List<Override> overrides = const [],
+}) async {
+  tester.view.devicePixelRatio = 1;
+  tester.view.physicalSize = size;
+  addTearDown(tester.view.reset);
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        appRouterProvider.overrideWithValue(
+          buildAppRouter(initialLocation: location),
+        ),
+        ...overrides,
+      ],
+      child: const SaafApp(),
+    ),
+  );
+  await tester.pump(const Duration(milliseconds: 400));
 }
 
 /// Renders [build] at every size of the matrix, in dark mode, at 200 % text

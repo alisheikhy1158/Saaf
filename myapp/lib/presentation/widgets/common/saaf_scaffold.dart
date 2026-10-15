@@ -48,33 +48,36 @@ class SaafScaffold extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         ?topBar,
+                        // Body at the top, CTA at the bottom of the viewport when
+                        // everything fits (min-height + spaceBetween), otherwise
+                        // the whole column scrolls. Uses no intrinsic sizing, so
+                        // bodies may contain a LayoutBuilder.
                         Expanded(
-                          child: CustomScrollView(
-                            slivers: [
-                              SliverFillRemaining(
-                                hasScrollBody: false,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    body,
-                                    Expanded(
-                                      child: Align(
-                                        alignment:
-                                            AlignmentDirectional.bottomCenter,
-                                        child: Padding(
+                          child: LayoutBuilder(
+                            builder: (context, viewport) =>
+                                SingleChildScrollView(
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: viewport.maxHeight,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        body,
+                                        Padding(
                                           padding: EdgeInsetsDirectional.only(
                                             top: space.x16,
                                             bottom: space.pageBottom,
                                           ),
                                           child: bottom,
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
                           ),
                         ),
                       ],

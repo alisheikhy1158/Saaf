@@ -110,6 +110,60 @@ abstract class AppLocalizations {
   /// **'Clear skin, made simple.'**
   String get welcomeTitle;
 
+  /// Screen 01 subtitle under the headline.
+  ///
+  /// In en, this message translates to:
+  /// **'A skincare coach for South Asian skin. Routines built from products you can actually buy in Pakistan.'**
+  String get welcomeSubtitle;
+
+  /// Chip on the Welcome hero.
+  ///
+  /// In en, this message translates to:
+  /// **'For South Asian skin'**
+  String get welcomeChip;
+
+  /// Caption of the example stat card on the Welcome hero. Must say it is an example (store rule: no unsubstantiated claims).
+  ///
+  /// In en, this message translates to:
+  /// **'Example: dark spots'**
+  String get welcomeStatCaption;
+
+  /// Value of the example stat card on the Welcome hero.
+  ///
+  /// In en, this message translates to:
+  /// **'−32% in 8 weeks'**
+  String get welcomeStatValue;
+
+  /// Primary button on the Welcome screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get getStarted;
+
+  /// Text button on the Welcome screen for returning users.
+  ///
+  /// In en, this message translates to:
+  /// **'I already have an account'**
+  String get alreadyHaveAccount;
+
+  /// Screen-reader label of the language switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// Language switch option.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// Language switch option.
+  ///
+  /// In en, this message translates to:
+  /// **'Urdu'**
+  String get languageUrdu;
+
   /// Title of the page shown for an unknown route.
   ///
   /// In en, this message translates to:

@@ -37,6 +37,12 @@ abstract final class SaafAlpha {
   static const double trackSegmentedDark = 0.05;
   static const double tint = 0.10;
 
+  // 01 Welcome hero art (Figma node 2:37).
+  static const double heroLightCircle = 0.0784;
+  static const double heroInkCircle = 0.1216;
+  static const double heroOvalFill = 0.1020;
+  static const double heroOvalStroke = 0.4;
+
   /// Floor applied to every text step by the high-contrast themes (§2.4).
   static const double highContrastTextFloor = 0.70;
 }
@@ -92,6 +98,33 @@ class SaafSpace {
   final double buttonPaddingV = 18;
   final double textButtonPaddingV = 10;
   final double navPaddingH = 36;
+}
+
+/// Geometry of the 01 Welcome hero (Figma node 2:37), in the 350 × 372 design
+/// frame. The hero scales uniformly with its width.
+class SaafHeroGeometry {
+  const SaafHeroGeometry();
+
+  final double designWidth = 350;
+  final double designHeight = 372;
+
+  final double bigCircleLeft = 120;
+  final double bigCircleTop = 140;
+  final double bigCircleSize = 320;
+
+  final double cornerCircleLeft = -70;
+  final double cornerCircleTop = -60;
+  final double cornerCircleSize = 220;
+
+  final double ovalLeft = 91;
+  final double ovalTop = 70;
+  final double ovalWidth = 168;
+  final double ovalHeight = 214;
+
+  final double glowLeft = 77;
+  final double glowTop = 55;
+  final double glowWidth = 196;
+  final double glowHeight = 244;
 }
 
 /// Corner radii (design.md §4).
@@ -190,6 +223,11 @@ abstract final class SaafType {
   static const TextStyle headlineSmall = TextStyle(
     fontSize: 29,
     height: 38 / 29,
+    fontWeight: FontWeight.w800,
+  );
+  static const TextStyle wordmark = TextStyle(
+    fontSize: 30,
+    height: 1.1,
     fontWeight: FontWeight.w800,
   );
   static const TextStyle avatarInitial = TextStyle(

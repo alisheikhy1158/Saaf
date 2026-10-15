@@ -78,6 +78,9 @@ flutter:
   # Generates lib/core/l10n/app_localizations*.dart from the ARB files (l10n.yaml).
   generate: true
 
+  assets:
+    - assets/images/
+
   # Bundled fonts (SIL OFL, see assets/fonts/OFL-*.txt). Variable fonts: the
   # same file is declared once per weight the design uses (design.md §3).
   fonts:

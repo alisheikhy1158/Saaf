@@ -95,6 +95,41 @@ void main() {
     });
   });
 
+  group('01 Welcome hero (Figma node 2:37)', () {
+    test('design frame is 350 × 372', () {
+      const g = SaafHeroGeometry();
+      expect(g.designWidth, 350);
+      expect(g.designHeight, 372);
+    });
+
+    test('decorative shapes sit where Figma puts them', () {
+      const g = SaafHeroGeometry();
+      expect(
+        [g.bigCircleLeft, g.bigCircleTop, g.bigCircleSize],
+        [120, 140, 320],
+      );
+      expect(
+        [g.cornerCircleLeft, g.cornerCircleTop, g.cornerCircleSize],
+        [-70, -60, 220],
+      );
+      expect(
+        [g.ovalLeft, g.ovalTop, g.ovalWidth, g.ovalHeight],
+        [91, 70, 168, 214],
+      );
+      expect(
+        [g.glowLeft, g.glowTop, g.glowWidth, g.glowHeight],
+        [77, 55, 196, 244],
+      );
+    });
+
+    test('shape opacities equal the Figma fills', () {
+      expect(SaafAlpha.heroLightCircle, closeTo(0.0784, 0.0001));
+      expect(SaafAlpha.heroInkCircle, closeTo(0.1216, 0.0001));
+      expect(SaafAlpha.heroOvalFill, closeTo(0.1020, 0.0001));
+      expect(SaafAlpha.heroOvalStroke, 0.4);
+    });
+  });
+
   group('radii (design.md §4)', () {
     const r = SaafRadius();
     test('equal the Figma scale', () {
@@ -178,6 +213,12 @@ void main() {
       expect(SaafType.button.height, closeTo(20 / 16, 0.001));
       expect(SaafType.subtitle.height, closeTo(22 / 15, 0.001));
       expect(SaafType.caption.height, closeTo(16 / 12, 0.001));
+    });
+
+    test('wordmark is 30 / 33 ExtraBold (01 "Saaf")', () {
+      expect(SaafType.wordmark.fontSize, 30);
+      expect(SaafType.wordmark.height, closeTo(1.1, 0.001));
+      expect(SaafType.wordmark.fontWeight, FontWeight.w800);
     });
 
     test('body, button, chip, overline', () {
