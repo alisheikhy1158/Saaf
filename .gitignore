@@ -1,0 +1,13 @@
+# Secrets — never commit (CLAUDE.md rule 8)
+*.jks
+*.keystore
+*.p8
+key.properties
+.env
+
+# Generated code — regenerate with build_runner (architecture.md §2)
+*.g.dart
+*.freezed.dart
+
+# Claude Code local settings
+.claude/settings.local.json
