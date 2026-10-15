@@ -65,12 +65,12 @@ Press F12 → device toolbar (Ctrl+Shift+M) → choose iPhone 12 Pro (390×844) 
 Ask Claude, one step at a time (it must read architecture.md + design.md first):
 - [x] 2.1 Add packages with `flutter pub add` (riverpod set, go_router, drift set, flutter_secure_storage,
       permission_handler, freezed set, intl, mocktail as dev) — Claude explains each.
-- [ ] 2.2 `analysis_options.yaml` strict rules; folder skeleton from architecture.md §2.
-- [ ] 2.3 Theme: `tokens.dart`, `SaafTokens` extension, light + dark `ThemeData`, Nunito + Noto Naskh fonts bundled.
+- [x] 2.2 `analysis_options.yaml` strict rules; folder skeleton from architecture.md §2.
+- [~] 2.3 (fonts still to bundle) Theme: `tokens.dart`, `SaafTokens` extension, light + dark `ThemeData`, Nunito + Noto Naskh fonts bundled.
       Tests first: tokens equal the Figma values (design.md §2–§4), high-contrast pairs ≥ 4.5:1, extension in all themes.
-- [ ] 2.4 `no_hardcoded_values_test.dart` + layer-import architecture tests.
-- [ ] 2.5 Localisation (English + Urdu ARB, RTL check), `go_router` with placeholder routes for the 14 screens.
-- [ ] 2.6 Common widgets (design.md §4): SaafScaffold, SaafAdaptiveNav, SaafButton, SaafIconButton, SaafCard,
+- [x] 2.4 `no_hardcoded_values_test.dart` + layer-import architecture tests.
+- [x] 2.5 Localisation (English + Urdu ARB, RTL check), `go_router` with placeholder routes for the 14 screens.
+- [x] 2.6 Common widgets (design.md §4): SaafScaffold, SaafAdaptiveNav, SaafButton, SaafIconButton, SaafCard,
       SaafChip, SaafTextField — each with widget + a11y tests. Build a hidden `/gallery` route to view them in Chrome.
 ✔ Success = gallery page matches the Figma components side by side (compare with Figma at 390 wide), in light & dark,
   at 360/768/1280 widths.

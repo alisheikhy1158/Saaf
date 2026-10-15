@@ -45,6 +45,21 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('paints the theme background behind the pill', (tester) async {
+      for (final mode in [ThemeMode.light, ThemeMode.dark]) {
+        await pumpSaaf(tester, nav(), scaffold: false, themeMode: mode);
+        final context = tester.element(find.byKey(const ValueKey('content')));
+        final background = tester.widget<ColoredBox>(
+          find.byKey(const ValueKey('saaf-nav-background')),
+        );
+        expect(
+          background.color,
+          Theme.of(context).colorScheme.surface,
+          reason: '$mode',
+        );
+      }
+    });
+
     testWidgets('does not cover the content', (tester) async {
       await pumpSaaf(tester, nav());
       final pill = tester.getRect(

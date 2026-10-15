@@ -41,30 +41,42 @@ class SaafAdaptiveNav extends StatelessWidget {
     final width = MediaQuery.sizeOf(context).width;
     final breakpoint = SaafBreakpoint.fromWidth(width);
 
-    if (breakpoint == SaafBreakpoint.compact) {
-      final space = context.saaf.space;
-      return Column(
-        children: [
-          Expanded(child: child),
-          SafeArea(
-            top: false,
-            child: Padding(
-              padding: EdgeInsetsDirectional.only(
-                start: SaafBreakpoint.gutterFor(width),
-                end: SaafBreakpoint.gutterFor(width),
-                bottom: space.x16,
-              ),
-              child: _BottomPill(
-                destinations: destinations,
-                selectedIndex: selectedIndex,
-                onSelected: onSelected,
-              ),
+    // The nav wraps whole screens, so it paints the page background itself
+    // (the strip around the pill / rail would otherwise show the host colour).
+    return ColoredBox(
+      key: const ValueKey('saaf-nav-background'),
+      color: context.colors.surface,
+      child: breakpoint == SaafBreakpoint.compact
+          ? _compact(context, width)
+          : _rail(breakpoint),
+    );
+  }
+
+  Widget _compact(BuildContext context, double width) {
+    final space = context.saaf.space;
+    return Column(
+      children: [
+        Expanded(child: child),
+        SafeArea(
+          top: false,
+          child: Padding(
+            padding: EdgeInsetsDirectional.only(
+              start: SaafBreakpoint.gutterFor(width),
+              end: SaafBreakpoint.gutterFor(width),
+              bottom: space.x16,
+            ),
+            child: _BottomPill(
+              destinations: destinations,
+              selectedIndex: selectedIndex,
+              onSelected: onSelected,
             ),
           ),
-        ],
-      );
-    }
+        ),
+      ],
+    );
+  }
 
+  Widget _rail(SaafBreakpoint breakpoint) {
     return Row(
       children: [
         SafeArea(
