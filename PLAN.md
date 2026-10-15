@@ -66,7 +66,7 @@ Ask Claude, one step at a time (it must read architecture.md + design.md first):
 - [x] 2.1 Add packages with `flutter pub add` (riverpod set, go_router, drift set, flutter_secure_storage,
       permission_handler, freezed set, intl, mocktail as dev) — Claude explains each.
 - [x] 2.2 `analysis_options.yaml` strict rules; folder skeleton from architecture.md §2.
-- [~] 2.3 (fonts still to bundle) Theme: `tokens.dart`, `SaafTokens` extension, light + dark `ThemeData`, Nunito + Noto Naskh fonts bundled.
+- [x] 2.3 Theme: `tokens.dart`, `SaafTokens` extension, light + dark `ThemeData`, Nunito + Noto Naskh fonts bundled.
       Tests first: tokens equal the Figma values (design.md §2–§4), high-contrast pairs ≥ 4.5:1, extension in all themes.
 - [x] 2.4 `no_hardcoded_values_test.dart` + layer-import architecture tests.
 - [x] 2.5 Localisation (English + Urdu ARB, RTL check), `go_router` with placeholder routes for the 14 screens.
@@ -129,9 +129,10 @@ android {
 ---
 
 ## Phase 5 — Onboarding (01 Welcome, 04 Privacy consent, 05 Skin quiz)
-- [ ] Tests first for each screen (states, a11y guidelines, responsive matrix, RTL).
-- [ ] Language switch English/Urdu persists. Consent stored with timestamp + policy version.
-- [ ] Router guard: no app access until consent + quiz done.
+- [x] Tests first for each screen (states, a11y guidelines, responsive matrix, RTL). 01, 04, 05 done (quiz: concerns step only).
+- [~] Language switch English/Urdu works (in memory; persistence needs the local DB). Consent stored with timestamp + policy
+      version (in-memory repository until drift).
+- [ ] Router guard: no app access until consent + quiz done (needs sign-up/auth state from Phase 4).
 
 ### 📝 Document & Clear · commit · `/clear`
 

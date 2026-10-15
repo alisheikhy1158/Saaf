@@ -114,7 +114,8 @@ Urdu glyphs.
 | Style token (TextTheme role) | Size / line height | Weight | Figma usage |
 |---|---|---|---|
 | `display` (`displaySmall`) | 46 / 48 | 800 | 01 "Clear skin, made simple." |
-| `headlineLarge` | 34 / 44 | 800 | 02, 03, 04, 13 screen titles |
+| `headlineLarge` | 34 / 44 | 800 | 02, 03, 13 screen titles |
+| `screenTitle` (SaafTokens) | 32 / 42 | 800 | 04 "Your photos stay / on your phone" (Figma node 2:227; was wrongly listed as 34/44) |
 | `headlineMedium` | 30 / 40 | 800 | 14 "Profile", 07/08 titles; 01 "Saaf" wordmark (30 / 33) |
 | `headlineSmall` | 29 / 38 | 800 | 09 "Salam, Ayesha", 05 quiz question |
 | `avatarInitial` (SaafTokens) | 27 / 34 | 800 | 14 avatar |
