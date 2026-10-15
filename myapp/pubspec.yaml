@@ -78,6 +78,26 @@ flutter:
   # Generates lib/core/l10n/app_localizations*.dart from the ARB files (l10n.yaml).
   generate: true
 
+  # Bundled fonts (SIL OFL, see assets/fonts/OFL-*.txt). Variable fonts: the
+  # same file is declared once per weight the design uses (design.md §3).
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-Variable.ttf
+          weight: 400
+        - asset: assets/fonts/Nunito-Variable.ttf
+          weight: 700
+        - asset: assets/fonts/Nunito-Variable.ttf
+          weight: 800
+    - family: NotoNaskhArabic
+      fonts:
+        - asset: assets/fonts/NotoNaskhArabic-Variable.ttf
+          weight: 400
+        - asset: assets/fonts/NotoNaskhArabic-Variable.ttf
+          weight: 700
+        - asset: assets/fonts/NotoNaskhArabic-Variable.ttf
+          weight: 800
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

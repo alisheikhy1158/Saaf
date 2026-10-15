@@ -101,6 +101,18 @@ class _GalleryContent extends StatelessWidget {
           ],
         ),
         _Section(
+          title: 'Typography (Nunito 400 / 700 / 800, Noto Naskh)',
+          children: [
+            Text('Clear skin, made simple.', style: context.text.headlineSmall),
+            Text('Routine step title', style: context.saaf.styles.rowTitle),
+            Text(
+              'Subtitle text in regular weight.',
+              style: context.text.bodyLarge,
+            ),
+            Text('صاف جلد، آسان انداز میں۔', style: context.text.titleLarge),
+          ],
+        ),
+        _Section(
           title: 'SaafButton',
           children: [
             SaafButton.primary(
