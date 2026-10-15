@@ -53,7 +53,11 @@ void main() {
   group('analysis_options.yaml', () {
     final options = File('analysis_options.yaml').readAsStringSync();
 
-    for (final mode in ['strict-casts', 'strict-inference', 'strict-raw-types']) {
+    for (final mode in [
+      'strict-casts',
+      'strict-inference',
+      'strict-raw-types',
+    ]) {
       test('enables $mode', () {
         expect(RegExp('$mode:\\s*true').hasMatch(options), isTrue);
       });
