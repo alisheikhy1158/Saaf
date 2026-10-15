@@ -95,6 +95,34 @@ void main() {
     });
   });
 
+  group('04 Privacy consent additions (Figma node 2:227)', () {
+    test('ink tint is 5 % and the checkbox corner is r7', () {
+      expect(SaafAlpha.inkTint, 0.05);
+      expect(const SaafRadius().r7, 7);
+    });
+
+    test(
+      'screen title is 32 / 42 ExtraBold (Figma, not design.md 34 / 44)',
+      () {
+        expect(SaafType.screenTitle.fontSize, 32);
+        expect(SaafType.screenTitle.height, closeTo(42 / 32, 0.001));
+        expect(SaafType.screenTitle.fontWeight, FontWeight.w800);
+      },
+    );
+
+    test('checkbox label is 14 / 20 Bold', () {
+      expect(SaafType.checkLabel.fontSize, 14);
+      expect(SaafType.checkLabel.height, closeTo(20 / 14, 0.001));
+      expect(SaafType.checkLabel.fontWeight, FontWeight.w700);
+    });
+
+    test('privacy point caption is 13 / 19 Regular', () {
+      expect(SaafType.pointCaption.fontSize, 13);
+      expect(SaafType.pointCaption.height, closeTo(19 / 13, 0.001));
+      expect(SaafType.pointCaption.fontWeight, FontWeight.w400);
+    });
+  });
+
   group('01 Welcome hero (Figma node 2:37)', () {
     test('design frame is 350 × 372', () {
       const g = SaafHeroGeometry();

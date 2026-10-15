@@ -43,6 +43,63 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageUrdu => 'Urdu';
 
   @override
+  String get back => 'Back';
+
+  @override
+  String get consentTitle => 'Your photos stay on your phone';
+
+  @override
+  String get consentSubtitle =>
+      'Saaf checks your skin, not your identity. Here’s how we look after your data.';
+
+  @override
+  String get consentPointDeviceTitle => 'Saved on your device';
+
+  @override
+  String get consentPointDeviceBody =>
+      'Photos stay on your phone unless you turn on backup.';
+
+  @override
+  String get consentPointNeverSoldTitle => 'Never sold or shared';
+
+  @override
+  String get consentPointNeverSoldBody =>
+      'Brands and advertisers never see your face data.';
+
+  @override
+  String get consentPointDeleteTitle => 'Delete anytime';
+
+  @override
+  String get consentPointDeleteBody =>
+      'Remove your account and every photo in one tap.';
+
+  @override
+  String consentAgree(String terms, String privacy) {
+    return 'I agree to the $terms and $privacy';
+  }
+
+  @override
+  String get consentAge => 'I am 16 or older';
+
+  @override
+  String get consentContinue => 'Agree and continue';
+
+  @override
+  String get termsTitle => 'Terms of Use';
+
+  @override
+  String get privacyPolicyTitle => 'Privacy Policy';
+
+  @override
+  String openDocumentAction(String name) {
+    return 'Open $name';
+  }
+
+  @override
+  String get legalPlaceholderBody =>
+      'The full text will be published here before Saaf is released.';
+
+  @override
   String get notFoundTitle => 'Page not found';
 
   @override

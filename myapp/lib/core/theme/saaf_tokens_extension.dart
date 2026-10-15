@@ -18,6 +18,9 @@ class SaafTextStyles {
     required this.legal,
     required this.micro,
     required this.wordmark,
+    required this.screenTitle,
+    required this.checkLabel,
+    required this.pointCaption,
     required this.avatarInitial,
     required this.ringValue,
     required this.otpDigit,
@@ -34,6 +37,9 @@ class SaafTextStyles {
   final TextStyle legal;
   final TextStyle micro;
   final TextStyle wordmark;
+  final TextStyle screenTitle;
+  final TextStyle checkLabel;
+  final TextStyle pointCaption;
   final TextStyle avatarInitial;
   final TextStyle ringValue;
   final TextStyle otpDigit;
@@ -49,6 +55,7 @@ class SaafTextStyles {
     required Color primary,
     required Color label,
     required Color metaColor,
+    required Color secondary,
   }) {
     return SaafTextStyles(
       inputText: _style(SaafType.inputText, primary),
@@ -61,6 +68,9 @@ class SaafTextStyles {
       legal: _style(SaafType.legal, metaColor),
       micro: _style(SaafType.micro, metaColor),
       wordmark: _style(SaafType.wordmark, primary),
+      screenTitle: _style(SaafType.screenTitle, primary),
+      checkLabel: _style(SaafType.checkLabel, primary),
+      pointCaption: _style(SaafType.pointCaption, secondary),
       avatarInitial: _style(SaafType.avatarInitial, primary),
       ringValue: _style(SaafType.ringValue, primary),
       otpDigit: _style(SaafType.otpDigit, primary),
@@ -81,6 +91,9 @@ class SaafTextStyles {
       legal: l(legal, other.legal),
       micro: l(micro, other.micro),
       wordmark: l(wordmark, other.wordmark),
+      screenTitle: l(screenTitle, other.screenTitle),
+      checkLabel: l(checkLabel, other.checkLabel),
+      pointCaption: l(pointCaption, other.pointCaption),
       avatarInitial: l(avatarInitial, other.avatarInitial),
       ringValue: l(ringValue, other.ringValue),
       otpDigit: l(otpDigit, other.otpDigit),
@@ -121,6 +134,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
     required this.onInkSecondary,
     required this.onInkMeta,
     required this.styles,
+    required this.inkTint,
     this.space = const SaafSpace(),
     this.radius = const SaafRadius(),
     this.size = const SaafSize(),
@@ -190,7 +204,9 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
         primary: ink,
         label: textLabel,
         metaColor: textMeta,
+        secondary: a(ink, text(SaafAlpha.textSecondary)),
       ),
+      inkTint: a(ink, SaafAlpha.inkTint),
     );
   }
 
@@ -229,6 +245,9 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
   final Color onInkMeta;
 
   final SaafTextStyles styles;
+
+  /// The page ink at 5 % (04 point icon circles).
+  final Color inkTint;
   final SaafSpace space;
   final SaafRadius radius;
   final SaafSize size;
@@ -263,6 +282,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
     Color? onInkSecondary,
     Color? onInkMeta,
     SaafTextStyles? styles,
+    Color? inkTint,
   }) {
     return SaafTokens(
       sage: sage ?? this.sage,
@@ -292,6 +312,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
       onInkSecondary: onInkSecondary ?? this.onInkSecondary,
       onInkMeta: onInkMeta ?? this.onInkMeta,
       styles: styles ?? this.styles,
+      inkTint: inkTint ?? this.inkTint,
       space: space,
       radius: radius,
       size: size,
@@ -331,6 +352,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
       onInkSecondary: l(onInkSecondary, other.onInkSecondary),
       onInkMeta: l(onInkMeta, other.onInkMeta),
       styles: styles.lerp(other.styles, t),
+      inkTint: l(inkTint, other.inkTint),
       space: space,
       radius: radius,
       size: size,

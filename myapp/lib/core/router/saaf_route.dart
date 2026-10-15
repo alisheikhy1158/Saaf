@@ -74,6 +74,16 @@ class SaafRoute {
   /// the router registers it only in debug builds.
   static const gallery = SaafRoute._(0, 'gallery', '/gallery', 'Gallery');
 
+  /// Legal pages reachable from the consent screen, sign-up, paywall and
+  /// profile (store requirement). Not Figma screens, so not in [all].
+  static const terms = SaafRoute._(0, 'terms', '/terms', 'Terms of Use');
+  static const privacyPolicy = SaafRoute._(
+    0,
+    'privacyPolicy',
+    '/privacy-policy',
+    'Privacy Policy',
+  );
+
   /// In Figma order.
   static const List<SaafRoute> all = [
     welcome,

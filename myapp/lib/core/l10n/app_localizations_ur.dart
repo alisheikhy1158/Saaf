@@ -43,6 +43,63 @@ class AppLocalizationsUr extends AppLocalizations {
   String get languageUrdu => 'اردو';
 
   @override
+  String get back => 'واپس';
+
+  @override
+  String get consentTitle => 'آپ کی تصاویر آپ کے فون پر رہتی ہیں';
+
+  @override
+  String get consentSubtitle =>
+      'صاف آپ کی جلد کو دیکھتا ہے، آپ کی شناخت کو نہیں۔ دیکھیے ہم آپ کے ڈیٹا کی حفاظت کیسے کرتے ہیں۔';
+
+  @override
+  String get consentPointDeviceTitle => 'آپ کے آلے پر محفوظ';
+
+  @override
+  String get consentPointDeviceBody =>
+      'تصاویر آپ کے فون پر ہی رہتی ہیں، جب تک آپ بیک اپ آن نہ کریں۔';
+
+  @override
+  String get consentPointNeverSoldTitle => 'نہ فروخت، نہ شیئر';
+
+  @override
+  String get consentPointNeverSoldBody =>
+      'برانڈز اور اشتہاری ادارے آپ کے چہرے کا ڈیٹا کبھی نہیں دیکھتے۔';
+
+  @override
+  String get consentPointDeleteTitle => 'جب چاہیں حذف کریں';
+
+  @override
+  String get consentPointDeleteBody =>
+      'ایک ٹیپ میں اپنا اکاؤنٹ اور ہر تصویر ہٹا دیں۔';
+
+  @override
+  String consentAgree(String terms, String privacy) {
+    return 'میں $terms اور $privacy سے متفق ہوں';
+  }
+
+  @override
+  String get consentAge => 'میری عمر 16 سال یا اس سے زیادہ ہے';
+
+  @override
+  String get consentContinue => 'اتفاق کریں اور آگے بڑھیں';
+
+  @override
+  String get termsTitle => 'استعمال کی شرائط';
+
+  @override
+  String get privacyPolicyTitle => 'رازداری کی پالیسی';
+
+  @override
+  String openDocumentAction(String name) {
+    return '$name کھولیں';
+  }
+
+  @override
+  String get legalPlaceholderBody =>
+      'مکمل متن صاف کے جاری ہونے سے پہلے یہاں شائع کیا جائے گا۔';
+
+  @override
   String get notFoundTitle => 'صفحہ نہیں ملا';
 
   @override

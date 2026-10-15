@@ -126,6 +126,48 @@ void main() {
     );
   });
 
+  testWidgets('inkTint tone is ink @ 5 % and iconColor overrides the icon', (
+    tester,
+  ) async {
+    await pumpSaaf(
+      tester,
+      const Center(
+        child: SaafIconCircle(
+          icon: Icons.lock_outline,
+          tone: SaafIconCircleTone.inkTint,
+        ),
+      ),
+    );
+    final box = tester.widget<DecoratedBox>(
+      find
+          .descendant(
+            of: find.byType(SaafIconCircle),
+            matching: find.byType(DecoratedBox),
+          )
+          .first,
+    );
+    expect((box.decoration as BoxDecoration).color?.a, closeTo(0.05, 0.01));
+    expect(
+      tester.widget<Icon>(find.byIcon(Icons.lock_outline)).color,
+      SaafPalette.ink,
+    );
+
+    await pumpSaaf(
+      tester,
+      const Center(
+        child: SaafIconCircle(
+          icon: Icons.verified_user_outlined,
+          size: SaafIconCircleSize.large,
+          tone: SaafIconCircleTone.sageTint,
+          iconColor: SaafIconCircleColor.sage,
+        ),
+      ),
+    );
+    final icon = tester.widget<Icon>(find.byIcon(Icons.verified_user_outlined));
+    expect(icon.color, SaafPalette.sage);
+    expect(icon.size, 32);
+  });
+
   testWidgets('is decorative: hidden from screen readers', (tester) async {
     final handle = tester.ensureSemantics();
     await pumpSaaf(

@@ -164,6 +164,102 @@ abstract class AppLocalizations {
   /// **'Urdu'**
   String get languageUrdu;
 
+  /// Tooltip / screen-reader label of the back button in the top bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// Screen 04 (Privacy consent) headline. This promise is contractual: the code must make it true.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photos stay on your phone'**
+  String get consentTitle;
+
+  /// Screen 04 subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf checks your skin, not your identity. Here’s how we look after your data.'**
+  String get consentSubtitle;
+
+  /// Screen 04 privacy point 1 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved on your device'**
+  String get consentPointDeviceTitle;
+
+  /// Screen 04 privacy point 1 text.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos stay on your phone unless you turn on backup.'**
+  String get consentPointDeviceBody;
+
+  /// Screen 04 privacy point 2 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Never sold or shared'**
+  String get consentPointNeverSoldTitle;
+
+  /// Screen 04 privacy point 2 text.
+  ///
+  /// In en, this message translates to:
+  /// **'Brands and advertisers never see your face data.'**
+  String get consentPointNeverSoldBody;
+
+  /// Screen 04 privacy point 3 title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete anytime'**
+  String get consentPointDeleteTitle;
+
+  /// Screen 04 privacy point 3 text.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove your account and every photo in one tap.'**
+  String get consentPointDeleteBody;
+
+  /// Consent checkbox on screen 04. {terms} and {privacy} become tappable links (the names of the two documents).
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the {terms} and {privacy}'**
+  String consentAgree(String terms, String privacy);
+
+  /// Age confirmation checkbox on screen 04.
+  ///
+  /// In en, this message translates to:
+  /// **'I am 16 or older'**
+  String get consentAge;
+
+  /// Primary button on screen 04. Disabled until both boxes are ticked.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree and continue'**
+  String get consentContinue;
+
+  /// Name of the Terms of Use document.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get termsTitle;
+
+  /// Name of the Privacy Policy document.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicyTitle;
+
+  /// Screen-reader action that opens a legal document.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {name}'**
+  String openDocumentAction(String name);
+
+  /// Temporary body of the Terms / Privacy pages. Must be replaced by the real documents before store submission.
+  ///
+  /// In en, this message translates to:
+  /// **'The full text will be published here before Saaf is released.'**
+  String get legalPlaceholderBody;
+
   /// Title of the page shown for an unknown route.
   ///
   /// In en, this message translates to:

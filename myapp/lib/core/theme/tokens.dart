@@ -36,6 +36,7 @@ abstract final class SaafAlpha {
   static const double trackSegmented = 0.04;
   static const double trackSegmentedDark = 0.05;
   static const double tint = 0.10;
+  static const double inkTint = 0.05;
 
   // 01 Welcome hero art (Figma node 2:37).
   static const double heroLightCircle = 0.0784;
@@ -132,6 +133,7 @@ class SaafRadius {
   const SaafRadius();
 
   final double r3 = 3;
+  final double r7 = 7;
   final double r12 = 12;
   final double r14 = 14;
   final double r18 = 18;
@@ -224,6 +226,24 @@ abstract final class SaafType {
     fontSize: 29,
     height: 38 / 29,
     fontWeight: FontWeight.w800,
+  );
+
+  /// 04 Privacy consent title. design.md listed 34 / 44, but the Figma screen
+  /// is 32 / 42 and Figma wins (design.md §0).
+  static const TextStyle screenTitle = TextStyle(
+    fontSize: 32,
+    height: 42 / 32,
+    fontWeight: FontWeight.w800,
+  );
+  static const TextStyle checkLabel = TextStyle(
+    fontSize: 14,
+    height: 20 / 14,
+    fontWeight: FontWeight.w700,
+  );
+  static const TextStyle pointCaption = TextStyle(
+    fontSize: 13,
+    height: 19 / 13,
+    fontWeight: FontWeight.w400,
   );
   static const TextStyle wordmark = TextStyle(
     fontSize: 30,

@@ -34,6 +34,60 @@
   "languageUrdu": "Urdu",
   "@languageUrdu": { "description": "Language switch option." },
 
+  "back": "Back",
+  "@back": { "description": "Tooltip / screen-reader label of the back button in the top bar." },
+
+  "consentTitle": "Your photos stay on your phone",
+  "@consentTitle": { "description": "Screen 04 (Privacy consent) headline. This promise is contractual: the code must make it true." },
+
+  "consentSubtitle": "Saaf checks your skin, not your identity. Here’s how we look after your data.",
+  "@consentSubtitle": { "description": "Screen 04 subtitle." },
+
+  "consentPointDeviceTitle": "Saved on your device",
+  "@consentPointDeviceTitle": { "description": "Screen 04 privacy point 1 title." },
+
+  "consentPointDeviceBody": "Photos stay on your phone unless you turn on backup.",
+  "@consentPointDeviceBody": { "description": "Screen 04 privacy point 1 text." },
+
+  "consentPointNeverSoldTitle": "Never sold or shared",
+  "@consentPointNeverSoldTitle": { "description": "Screen 04 privacy point 2 title." },
+
+  "consentPointNeverSoldBody": "Brands and advertisers never see your face data.",
+  "@consentPointNeverSoldBody": { "description": "Screen 04 privacy point 2 text." },
+
+  "consentPointDeleteTitle": "Delete anytime",
+  "@consentPointDeleteTitle": { "description": "Screen 04 privacy point 3 title." },
+
+  "consentPointDeleteBody": "Remove your account and every photo in one tap.",
+  "@consentPointDeleteBody": { "description": "Screen 04 privacy point 3 text." },
+
+  "consentAgree": "I agree to the {terms} and {privacy}",
+  "@consentAgree": {
+    "description": "Consent checkbox on screen 04. {terms} and {privacy} become tappable links (the names of the two documents).",
+    "placeholders": { "terms": { "type": "String" }, "privacy": { "type": "String" } }
+  },
+
+  "consentAge": "I am 16 or older",
+  "@consentAge": { "description": "Age confirmation checkbox on screen 04." },
+
+  "consentContinue": "Agree and continue",
+  "@consentContinue": { "description": "Primary button on screen 04. Disabled until both boxes are ticked." },
+
+  "termsTitle": "Terms of Use",
+  "@termsTitle": { "description": "Name of the Terms of Use document." },
+
+  "privacyPolicyTitle": "Privacy Policy",
+  "@privacyPolicyTitle": { "description": "Name of the Privacy Policy document." },
+
+  "openDocumentAction": "Open {name}",
+  "@openDocumentAction": {
+    "description": "Screen-reader action that opens a legal document.",
+    "placeholders": { "name": { "type": "String" } }
+  },
+
+  "legalPlaceholderBody": "The full text will be published here before Saaf is released.",
+  "@legalPlaceholderBody": { "description": "Temporary body of the Terms / Privacy pages. Must be replaced by the real documents before store submission." },
+
   "notFoundTitle": "Page not found",
   "@notFoundTitle": { "description": "Title of the page shown for an unknown route." },
 

@@ -5,7 +5,10 @@ import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 enum SaafIconCircleSize { small, welcome, regular, large }
 
 /// Fills used in Figma (design.md §6 "icon-circle").
-enum SaafIconCircleTone { sage, sageTint, tan, lightSage }
+enum SaafIconCircleTone { sage, sageTint, inkTint, tan, lightSage }
+
+/// Icon colours used inside circles: the ink default, or sage (04's big shield).
+enum SaafIconCircleColor { ink, sage }
 
 /// Decorative filled circle with a centred icon at half its size. Hidden from
 /// screen readers (A11Y-2): the text next to it carries the meaning.
@@ -15,15 +18,17 @@ class SaafIconCircle extends StatelessWidget {
     super.key,
     this.size = SaafIconCircleSize.regular,
     this.tone = SaafIconCircleTone.sage,
+    this.iconColor = SaafIconCircleColor.ink,
     this.mirrorInRtl = false,
   });
-
-  /// Set for direction-bearing icons (arrows); charts and logos stay as drawn.
-  final bool mirrorInRtl;
 
   final IconData icon;
   final SaafIconCircleSize size;
   final SaafIconCircleTone tone;
+  final SaafIconCircleColor iconColor;
+
+  /// Set for direction-bearing icons (arrows); charts and logos stay as drawn.
+  final bool mirrorInRtl;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +43,13 @@ class SaafIconCircle extends StatelessWidget {
     final fill = switch (tone) {
       SaafIconCircleTone.sage => tokens.sage,
       SaafIconCircleTone.sageTint => tokens.sageTint,
+      SaafIconCircleTone.inkTint => tokens.inkTint,
       SaafIconCircleTone.tan => tokens.tan,
       SaafIconCircleTone.lightSage => tokens.lightSage,
+    };
+    final foreground = switch (iconColor) {
+      SaafIconCircleColor.ink => colors.onPrimary,
+      SaafIconCircleColor.sage => tokens.sage,
     };
 
     return ExcludeSemantics(
@@ -51,7 +61,7 @@ class SaafIconCircle extends StatelessWidget {
             child: Icon(
               icon,
               size: diameter / 2,
-              color: colors.onPrimary,
+              color: foreground,
               textDirection: mirrorInRtl ? null : TextDirection.ltr,
             ),
           ),

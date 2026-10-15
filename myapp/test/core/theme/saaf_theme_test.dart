@@ -122,6 +122,17 @@ void main() {
       },
     );
 
+    test('inkTint is the page ink @ 5 % in light and dark', () {
+      expect(
+        SaafTheme.light().extension<SaafTokens>()!.inkTint,
+        SaafPalette.ink.withValues(alpha: 0.05),
+      );
+      expect(
+        SaafTheme.dark().extension<SaafTokens>()!.inkTint,
+        SaafPalette.cornsilk.withValues(alpha: 0.05),
+      );
+    });
+
     test('exposes spacing, radius, size and motion tokens', () {
       final s = SaafTheme.light().extension<SaafTokens>()!;
       expect(s.space.gutter, 20);
