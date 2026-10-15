@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/theme/saaf_theme.dart';
+import 'package:saaf/presentation/providers/app_router_provider.dart';
 
-/// Root widget. Router and localisation are added in 2.5.
-class SaafApp extends StatelessWidget {
+/// Root widget: Saaf themes (system light/dark/high-contrast), English + Urdu
+/// localisation, go_router navigation.
+class SaafApp extends ConsumerWidget {
   const SaafApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Saaf',
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MaterialApp.router(
+      onGenerateTitle: (context) => AppLocalizations.of(context).appName,
       theme: SaafTheme.light(),
       darkTheme: SaafTheme.dark(),
       highContrastTheme: SaafTheme.highContrastLight(),
       highContrastDarkTheme: SaafTheme.highContrastDark(),
       themeMode: ThemeMode.system,
-      home: const Scaffold(body: SizedBox.shrink()),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      routerConfig: ref.watch(appRouterProvider),
     );
   }
 }

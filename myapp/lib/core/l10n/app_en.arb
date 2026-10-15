@@ -1,0 +1,18 @@
+{
+  "@@locale": "en",
+
+  "appName": "Saaf",
+  "@appName": { "description": "The app name, shown in the app switcher and wordmark." },
+
+  "welcomeTitle": "Clear skin, made simple.",
+  "@welcomeTitle": { "description": "Screen 01 (Welcome) headline." },
+
+  "notFoundTitle": "Page not found",
+  "@notFoundTitle": { "description": "Title of the page shown for an unknown route." },
+
+  "notFoundBody": "We couldn't find that page.",
+  "@notFoundBody": { "description": "Body text of the not-found page." },
+
+  "goToStart": "Go to start",
+  "@goToStart": { "description": "Button on the not-found page that returns to the first screen." }
+}
