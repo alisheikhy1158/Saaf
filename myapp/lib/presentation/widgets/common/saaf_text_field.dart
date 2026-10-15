@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
+import 'package:saaf/presentation/widgets/common/saaf_message_row.dart';
 
 /// Labelled text field (design.md §6): label above, 56 dp tall, r14, optional
 /// prefix + divider ("+92"), a sage check when [isValid], and a helper or
@@ -156,52 +157,18 @@ class SaafTextField extends StatelessWidget {
         if (hasError)
           Semantics(
             liveRegion: true,
-            child: _MessageRow(
+            child: SaafMessageRow(
               icon: Icons.error_outline,
               text: errorText!,
               color: context.colors.error,
             ),
           )
         else if (helperText != null)
-          _MessageRow(
+          SaafMessageRow(
             icon: helperIcon,
             text: helperText!,
             color: tokens.textCaption,
           ),
-      ],
-    );
-  }
-}
-
-class _MessageRow extends StatelessWidget {
-  const _MessageRow({
-    required this.icon,
-    required this.text,
-    required this.color,
-  });
-
-  final IconData? icon;
-  final String text;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.saaf;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: tokens.space.x6,
-      children: [
-        if (icon != null)
-          Padding(
-            padding: EdgeInsetsDirectional.only(top: tokens.space.x2),
-            child: Icon(icon, size: tokens.size.iconChip, color: color),
-          ),
-        Expanded(
-          child: Text(
-            text,
-            style: context.text.bodySmall?.copyWith(color: color),
-          ),
-        ),
       ],
     );
   }

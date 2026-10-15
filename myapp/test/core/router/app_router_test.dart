@@ -6,7 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/app.dart';
 import 'package:saaf/core/router/app_router.dart';
 import 'package:saaf/core/router/saaf_route.dart';
+import 'package:saaf/domain/entities/phone_number.dart';
 import 'package:saaf/presentation/providers/app_router_provider.dart';
+import 'package:saaf/presentation/providers/pending_sign_in.dart';
 
 void main() {
   group('route table', () {
@@ -53,6 +55,14 @@ void main() {
             overrides: [
               appRouterProvider.overrideWithValue(
                 buildAppRouter(initialLocation: route.path),
+              ),
+              // Verify code needs a number that is waiting for its code; without
+              // one it sends the user back to Sign up (covered in its own test).
+              pendingSignInProvider.overrideWithBuild(
+                (ref, notifier) => PendingSignIn(
+                  phone: PhoneNumber.parse('312 456 7890').valueOrNull!,
+                  resendAfter: const Duration(seconds: 30),
+                ),
               ),
             ],
             child: const SaafApp(),

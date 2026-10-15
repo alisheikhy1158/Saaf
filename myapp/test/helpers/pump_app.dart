@@ -96,9 +96,16 @@ Future<void> expectRobustLayout(
   WidgetTester tester,
   Widget Function() build, {
   bool scaffold = true,
+  List<Override> overrides = const [],
 }) async {
   for (final size in matrixSizes) {
-    await pumpSaaf(tester, build(), size: size, scaffold: scaffold);
+    await pumpSaaf(
+      tester,
+      build(),
+      size: size,
+      scaffold: scaffold,
+      overrides: overrides,
+    );
     expect(tester.takeException(), isNull, reason: 'light at $size');
   }
   await pumpSaaf(
@@ -106,10 +113,17 @@ Future<void> expectRobustLayout(
     build(),
     themeMode: ThemeMode.dark,
     scaffold: scaffold,
+    overrides: overrides,
   );
   expect(tester.takeException(), isNull, reason: 'dark');
 
-  await pumpSaaf(tester, build(), textScale: 2.0, scaffold: scaffold);
+  await pumpSaaf(
+    tester,
+    build(),
+    textScale: 2.0,
+    scaffold: scaffold,
+    overrides: overrides,
+  );
   expect(tester.takeException(), isNull, reason: 'text scale 2.0');
 
   await pumpSaaf(
@@ -117,10 +131,17 @@ Future<void> expectRobustLayout(
     build(),
     locale: const Locale('ur'),
     scaffold: scaffold,
+    overrides: overrides,
   );
   expect(tester.takeException(), isNull, reason: 'Urdu RTL');
 
-  await pumpSaaf(tester, build(), highContrast: true, scaffold: scaffold);
+  await pumpSaaf(
+    tester,
+    build(),
+    highContrast: true,
+    scaffold: scaffold,
+    overrides: overrides,
+  );
   expect(tester.takeException(), isNull, reason: 'high contrast');
 }
 

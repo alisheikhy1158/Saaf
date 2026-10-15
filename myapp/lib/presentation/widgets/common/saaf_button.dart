@@ -7,13 +7,15 @@ enum SaafButtonVariant { primary, outline, text }
 /// or text. All colours, size and shape come from `ThemeData`.
 ///
 /// While [isLoading] a spinner replaces the trailing icon and taps are ignored.
-/// A null [onPressed] disables the button.
+/// A null [onPressed] disables the button. [leading] is any widget before the
+/// label (e.g. the Google "G"); [leadingIcon] is the common icon case.
 class SaafButton extends StatelessWidget {
   const SaafButton.primary({
     required this.label,
     required this.onPressed,
     super.key,
     this.leadingIcon,
+    this.leading,
     this.trailingIcon,
     this.isLoading = false,
     this.expand = true,
@@ -24,6 +26,7 @@ class SaafButton extends StatelessWidget {
     required this.onPressed,
     super.key,
     this.leadingIcon,
+    this.leading,
     this.trailingIcon,
     this.isLoading = false,
     this.expand = true,
@@ -34,6 +37,7 @@ class SaafButton extends StatelessWidget {
     required this.onPressed,
     super.key,
     this.leadingIcon,
+    this.leading,
     this.trailingIcon,
     this.isLoading = false,
     this.expand = false,
@@ -43,6 +47,7 @@ class SaafButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final IconData? leadingIcon;
+  final Widget? leading;
 
   /// Usually `Icons.arrow_forward`; mirrored automatically in RTL.
   final IconData? trailingIcon;
@@ -63,7 +68,10 @@ class SaafButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: tokens.space.x8,
       children: [
-        if (leadingIcon != null) icon(leadingIcon!),
+        if (leading != null)
+          leading!
+        else if (leadingIcon != null)
+          icon(leadingIcon!),
         Flexible(child: Text(label, textAlign: TextAlign.center)),
         if (isLoading)
           Builder(

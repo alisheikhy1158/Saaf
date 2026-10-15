@@ -5,7 +5,7 @@ import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/presentation/features/onboarding/controllers/consent_form_controller.dart';
-import 'package:saaf/presentation/features/onboarding/widgets/consent_agree_label.dart';
+import 'package:saaf/presentation/widgets/common/linked_sentence.dart';
 import 'package:saaf/presentation/features/onboarding/widgets/privacy_point.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_check_row.dart';
@@ -101,7 +101,8 @@ class PrivacyConsentScreen extends ConsumerWidget {
               l10n.openDocumentAction(l10n.termsTitle): openTerms,
               l10n.openDocumentAction(l10n.privacyPolicyTitle): openPrivacy,
             },
-            label: ConsentAgreeLabel(
+            label: LinkedSentence(
+              sentence: l10n.consentAgree,
               onOpenTerms: openTerms,
               onOpenPrivacy: openPrivacy,
             ),

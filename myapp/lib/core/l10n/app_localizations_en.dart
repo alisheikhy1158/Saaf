@@ -147,6 +147,82 @@ class AppLocalizationsEn extends AppLocalizations {
   String get concernUnevenToneCaption => 'Patchy colour, dark circles';
 
   @override
+  String get signUpTitle => 'Let’s get you started';
+
+  @override
+  String get signUpSubtitle =>
+      'Use your mobile number. No passwords to remember.';
+
+  @override
+  String get phoneLabel => 'Mobile number';
+
+  @override
+  String get phoneHint => '3XX XXX XXXX';
+
+  @override
+  String get phoneHelper => 'We’ll text you a 6-digit code.';
+
+  @override
+  String get sendCode => 'Send code';
+
+  @override
+  String get orDivider => 'or';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String signUpLegal(String terms, String privacy) {
+    return 'By continuing you agree to Saaf’s $terms and $privacy.';
+  }
+
+  @override
+  String get signUpSendFailed =>
+      'We couldn’t send the code. Check your connection and try again.';
+
+  @override
+  String get socialSignInFailed => 'We couldn’t sign you in. Please try again.';
+
+  @override
+  String get verifyTitle => 'Enter the code';
+
+  @override
+  String verifySentTo(String phone, String edit) {
+    return 'Sent to $phone  ·  $edit';
+  }
+
+  @override
+  String get verifyEdit => 'Edit';
+
+  @override
+  String get verifyCodeLabel => 'Verification code';
+
+  @override
+  String verifyResendIn(String time) {
+    return 'Resend code in $time';
+  }
+
+  @override
+  String get verifyResend => 'Resend code';
+
+  @override
+  String get verifyButton => 'Verify';
+
+  @override
+  String get verifyWrongCode =>
+      'That code doesn’t match. Check it and try again.';
+
+  @override
+  String get verifyFailed =>
+      'We couldn’t verify the code. Check your connection and try again.';
+
+  @override
+  String get keypadDelete => 'Delete';
+
+  @override
   String get notFoundTitle => 'Page not found';
 
   @override

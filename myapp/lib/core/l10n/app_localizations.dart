@@ -350,6 +350,138 @@ abstract class AppLocalizations {
   /// **'Patchy colour, dark circles'**
   String get concernUnevenToneCaption;
 
+  /// Screen 02 (Sign up) headline.
+  ///
+  /// In en, this message translates to:
+  /// **'Let’s get you started'**
+  String get signUpTitle;
+
+  /// Screen 02 subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your mobile number. No passwords to remember.'**
+  String get signUpSubtitle;
+
+  /// Label above the phone field.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number'**
+  String get phoneLabel;
+
+  /// Placeholder pattern in the phone field (after the +92 prefix).
+  ///
+  /// In en, this message translates to:
+  /// **'3XX XXX XXXX'**
+  String get phoneHint;
+
+  /// Helper under the phone field.
+  ///
+  /// In en, this message translates to:
+  /// **'We’ll text you a 6-digit code.'**
+  String get phoneHelper;
+
+  /// Primary button on Sign up.
+  ///
+  /// In en, this message translates to:
+  /// **'Send code'**
+  String get sendCode;
+
+  /// Divider between phone sign-in and social sign-in.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get orDivider;
+
+  /// Google sign-in button.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get continueWithGoogle;
+
+  /// Sign in with Apple button (iOS only).
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Apple'**
+  String get continueWithApple;
+
+  /// Legal line at the bottom of Sign up. {terms} and {privacy} become links (document names).
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing you agree to Saaf’s {terms} and {privacy}.'**
+  String signUpLegal(String terms, String privacy);
+
+  /// Error under the phone field when the code could not be sent.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t send the code. Check your connection and try again.'**
+  String get signUpSendFailed;
+
+  /// Error shown when Google/Apple sign-in fails.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t sign you in. Please try again.'**
+  String get socialSignInFailed;
+
+  /// Screen 03 (Verify code) headline.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code'**
+  String get verifyTitle;
+
+  /// Subtitle on Verify code. {phone} is the number; {edit} becomes the Edit link.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent to {phone}  ·  {edit}'**
+  String verifySentTo(String phone, String edit);
+
+  /// Link that goes back to change the phone number.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get verifyEdit;
+
+  /// Screen-reader label of the code boxes.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code'**
+  String get verifyCodeLabel;
+
+  /// Countdown before a new code can be requested. {time} is like 0:24.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code in {time}'**
+  String verifyResendIn(String time);
+
+  /// Button that requests a new code once the countdown ends.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get verifyResend;
+
+  /// Primary button on Verify code.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get verifyButton;
+
+  /// Error when the entered code is wrong.
+  ///
+  /// In en, this message translates to:
+  /// **'That code doesn’t match. Check it and try again.'**
+  String get verifyWrongCode;
+
+  /// Error when verification fails for another reason.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t verify the code. Check your connection and try again.'**
+  String get verifyFailed;
+
+  /// Screen-reader label of the keypad delete key.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get keypadDelete;
+
   /// Title of the page shown for an unknown route.
   ///
   /// In en, this message translates to:

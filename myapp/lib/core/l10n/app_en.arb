@@ -131,6 +131,81 @@
   "concernUnevenToneCaption": "Patchy colour, dark circles",
   "@concernUnevenToneCaption": { "description": "Quiz option caption." },
 
+  "signUpTitle": "Let’s get you started",
+  "@signUpTitle": { "description": "Screen 02 (Sign up) headline." },
+
+  "signUpSubtitle": "Use your mobile number. No passwords to remember.",
+  "@signUpSubtitle": { "description": "Screen 02 subtitle." },
+
+  "phoneLabel": "Mobile number",
+  "@phoneLabel": { "description": "Label above the phone field." },
+
+  "phoneHint": "3XX XXX XXXX",
+  "@phoneHint": { "description": "Placeholder pattern in the phone field (after the +92 prefix)." },
+
+  "phoneHelper": "We’ll text you a 6-digit code.",
+  "@phoneHelper": { "description": "Helper under the phone field." },
+
+  "sendCode": "Send code",
+  "@sendCode": { "description": "Primary button on Sign up." },
+
+  "orDivider": "or",
+  "@orDivider": { "description": "Divider between phone sign-in and social sign-in." },
+
+  "continueWithGoogle": "Continue with Google",
+  "@continueWithGoogle": { "description": "Google sign-in button." },
+
+  "continueWithApple": "Continue with Apple",
+  "@continueWithApple": { "description": "Sign in with Apple button (iOS only)." },
+
+  "signUpLegal": "By continuing you agree to Saaf’s {terms} and {privacy}.",
+  "@signUpLegal": {
+    "description": "Legal line at the bottom of Sign up. {terms} and {privacy} become links (document names).",
+    "placeholders": { "terms": { "type": "String" }, "privacy": { "type": "String" } }
+  },
+
+  "signUpSendFailed": "We couldn’t send the code. Check your connection and try again.",
+  "@signUpSendFailed": { "description": "Error under the phone field when the code could not be sent." },
+
+  "socialSignInFailed": "We couldn’t sign you in. Please try again.",
+  "@socialSignInFailed": { "description": "Error shown when Google/Apple sign-in fails." },
+
+  "verifyTitle": "Enter the code",
+  "@verifyTitle": { "description": "Screen 03 (Verify code) headline." },
+
+  "verifySentTo": "Sent to {phone}  ·  {edit}",
+  "@verifySentTo": {
+    "description": "Subtitle on Verify code. {phone} is the number; {edit} becomes the Edit link.",
+    "placeholders": { "phone": { "type": "String" }, "edit": { "type": "String" } }
+  },
+
+  "verifyEdit": "Edit",
+  "@verifyEdit": { "description": "Link that goes back to change the phone number." },
+
+  "verifyCodeLabel": "Verification code",
+  "@verifyCodeLabel": { "description": "Screen-reader label of the code boxes." },
+
+  "verifyResendIn": "Resend code in {time}",
+  "@verifyResendIn": {
+    "description": "Countdown before a new code can be requested. {time} is like 0:24.",
+    "placeholders": { "time": { "type": "String" } }
+  },
+
+  "verifyResend": "Resend code",
+  "@verifyResend": { "description": "Button that requests a new code once the countdown ends." },
+
+  "verifyButton": "Verify",
+  "@verifyButton": { "description": "Primary button on Verify code." },
+
+  "verifyWrongCode": "That code doesn’t match. Check it and try again.",
+  "@verifyWrongCode": { "description": "Error when the entered code is wrong." },
+
+  "verifyFailed": "We couldn’t verify the code. Check your connection and try again.",
+  "@verifyFailed": { "description": "Error when verification fails for another reason." },
+
+  "keypadDelete": "Delete",
+  "@keypadDelete": { "description": "Screen-reader label of the keypad delete key." },
+
   "notFoundTitle": "Page not found",
   "@notFoundTitle": { "description": "Title of the page shown for an unknown route." },
 

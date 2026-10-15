@@ -149,6 +149,82 @@ class AppLocalizationsUr extends AppLocalizations {
   String get concernUnevenToneCaption => 'دھبے دار رنگ، سیاہ حلقے';
 
   @override
+  String get signUpTitle => 'آئیے شروع کرتے ہیں';
+
+  @override
+  String get signUpSubtitle =>
+      'اپنا موبائل نمبر استعمال کریں۔ کوئی پاس ورڈ یاد رکھنے کی ضرورت نہیں۔';
+
+  @override
+  String get phoneLabel => 'موبائل نمبر';
+
+  @override
+  String get phoneHint => '3XX XXX XXXX';
+
+  @override
+  String get phoneHelper => 'ہم آپ کو 6 ہندسوں کا کوڈ ایس ایم ایس کریں گے۔';
+
+  @override
+  String get sendCode => 'کوڈ بھیجیں';
+
+  @override
+  String get orDivider => 'یا';
+
+  @override
+  String get continueWithGoogle => 'گوگل کے ساتھ جاری رکھیں';
+
+  @override
+  String get continueWithApple => 'ایپل کے ساتھ جاری رکھیں';
+
+  @override
+  String signUpLegal(String terms, String privacy) {
+    return 'جاری رکھ کر آپ صاف کی $terms اور $privacy سے متفق ہوتے ہیں۔';
+  }
+
+  @override
+  String get signUpSendFailed =>
+      'ہم کوڈ نہیں بھیج سکے۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get socialSignInFailed =>
+      'ہم آپ کو سائن اِن نہیں کر سکے۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get verifyTitle => 'کوڈ درج کریں';
+
+  @override
+  String verifySentTo(String phone, String edit) {
+    return '$phone پر بھیجا گیا  ·  $edit';
+  }
+
+  @override
+  String get verifyEdit => 'تبدیل کریں';
+
+  @override
+  String get verifyCodeLabel => 'تصدیقی کوڈ';
+
+  @override
+  String verifyResendIn(String time) {
+    return '$time میں کوڈ دوبارہ بھیجیں';
+  }
+
+  @override
+  String get verifyResend => 'کوڈ دوبارہ بھیجیں';
+
+  @override
+  String get verifyButton => 'تصدیق کریں';
+
+  @override
+  String get verifyWrongCode => 'یہ کوڈ درست نہیں۔ دوبارہ چیک کر کے کوشش کریں۔';
+
+  @override
+  String get verifyFailed =>
+      'ہم کوڈ کی تصدیق نہیں کر سکے۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get keypadDelete => 'مٹائیں';
+
+  @override
   String get notFoundTitle => 'صفحہ نہیں ملا';
 
   @override
