@@ -63,7 +63,7 @@ Press F12 → device toolbar (Ctrl+Shift+M) → choose iPhone 12 Pro (390×844) 
 
 ## Phase 2 — Foundation (architecture + design system, no features yet)
 Ask Claude, one step at a time (it must read architecture.md + design.md first):
-- [ ] 2.1 Add packages with `flutter pub add` (riverpod set, go_router, drift set, flutter_secure_storage,
+- [x] 2.1 Add packages with `flutter pub add` (riverpod set, go_router, drift set, flutter_secure_storage,
       permission_handler, freezed set, intl, mocktail as dev) — Claude explains each.
 - [ ] 2.2 `analysis_options.yaml` strict rules; folder skeleton from architecture.md §2.
 - [ ] 2.3 Theme: `tokens.dart`, `SaafTokens` extension, light + dark `ThemeData`, Nunito + Noto Naskh fonts bundled.
