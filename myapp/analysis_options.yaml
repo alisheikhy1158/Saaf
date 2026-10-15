@@ -22,3 +22,4 @@ linter:
     always_declare_return_types: true
     require_trailing_commas: true
     unawaited_futures: true
+    always_use_package_imports: true

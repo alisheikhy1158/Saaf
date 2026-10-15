@@ -69,6 +69,9 @@ void main() {
       'always_declare_return_types',
       'require_trailing_commas',
       'unawaited_futures',
+      // The layer scanner (test/helpers/source_scanner.dart) only sees
+      // package: imports, so relative imports inside lib/ are banned.
+      'always_use_package_imports',
     ]) {
       test('enables lint $lint', () {
         expect(RegExp('$lint:\\s*true').hasMatch(options), isTrue);
