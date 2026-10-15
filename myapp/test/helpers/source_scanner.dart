@@ -27,6 +27,9 @@ List<String> findHardcodedValues(String source) {
   ).hasMatch(code)) {
     violations.add('TextStyle with literal fontSize');
   }
+  if (RegExp(r'\b(?:run)?[sS]pacing\s*:\s*\d').hasMatch(code)) {
+    violations.add('literal spacing / runSpacing');
+  }
   for (final pattern in [
     r'\bEdgeInsets(?:Directional)?\.\w+\(([^)]*)\)',
     r'\bSizedBox\(([^)]*)\)',

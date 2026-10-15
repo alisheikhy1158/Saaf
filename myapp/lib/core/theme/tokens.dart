@@ -128,6 +128,9 @@ class SaafSize {
   final double check = 26;
   final double checkMedium = 24;
   final double checkSmall = 22;
+  final double checkIcon = 16;
+  final double checkIconMedium = 14;
+  final double checkIconSmall = 13;
   final double dayWidth = 44;
   final double dayHeight = 68;
   final double dayDot = 5;

@@ -22,4 +22,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get goToStart => 'شروع پر جائیں';
+
+  @override
+  String get fieldValid => 'درست';
 }

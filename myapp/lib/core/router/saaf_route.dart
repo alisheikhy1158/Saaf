@@ -70,6 +70,10 @@ class SaafRoute {
     'Profile & privacy',
   );
 
+  /// Dev-only widget gallery (PLAN 2.6). Not a Figma screen, so not in [all];
+  /// the router registers it only in debug builds.
+  static const gallery = SaafRoute._(0, 'gallery', '/gallery', 'Gallery');
+
   /// In Figma order.
   static const List<SaafRoute> all = [
     welcome,

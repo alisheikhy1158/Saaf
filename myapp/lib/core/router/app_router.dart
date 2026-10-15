@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/presentation/features/auth/screens/sign_up_screen.dart';
 import 'package:saaf/presentation/features/auth/screens/verify_code_screen.dart';
 import 'package:saaf/presentation/features/coach/screens/weekly_check_in_screen.dart';
+import 'package:saaf/presentation/features/gallery/screens/gallery_screen.dart';
 import 'package:saaf/presentation/features/home/screens/home_screen.dart';
 import 'package:saaf/presentation/features/onboarding/screens/privacy_consent_screen.dart';
 import 'package:saaf/presentation/features/onboarding/screens/skin_quiz_screen.dart';
@@ -37,7 +39,8 @@ Widget _screenFor(SaafRoute route) => switch (route.name) {
 };
 
 /// Builds the app's [GoRouter]. [initialLocation] is for tests.
-GoRouter buildAppRouter({String? initialLocation}) {
+/// The hidden `/gallery` route exists only when [enableGallery] (debug builds).
+GoRouter buildAppRouter({String? initialLocation, bool? enableGallery}) {
   return GoRouter(
     initialLocation: initialLocation ?? SaafRoute.welcome.path,
     routes: [
@@ -46,6 +49,12 @@ GoRouter buildAppRouter({String? initialLocation}) {
           name: route.name,
           path: route.path,
           builder: (context, state) => _screenFor(route),
+        ),
+      if (enableGallery ?? kDebugMode)
+        GoRoute(
+          name: SaafRoute.gallery.name,
+          path: SaafRoute.gallery.path,
+          builder: (context, state) => const GalleryScreen(),
         ),
     ],
     errorBuilder: (context, state) => const NotFoundScreen(),

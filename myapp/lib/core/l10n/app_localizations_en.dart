@@ -22,4 +22,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get goToStart => 'Go to start';
+
+  @override
+  String get fieldValid => 'Valid';
 }

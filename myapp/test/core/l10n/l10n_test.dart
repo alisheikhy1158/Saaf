@@ -39,6 +39,7 @@ void main() {
     test('English copy matches Figma (01 Welcome)', () {
       expect(en['appName'], 'Saaf');
       expect(en['welcomeTitle'], 'Clear skin, made simple.');
+      expect(en['fieldValid'], 'Valid');
     });
   });
 

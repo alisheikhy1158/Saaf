@@ -112,6 +112,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
     required this.papayaTint,
     required this.borderFocus,
     required this.trackOnInk,
+    required this.controlOnInk,
     required this.onInkLabel,
     required this.onInkSecondary,
     required this.onInkMeta,
@@ -177,6 +178,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
       papayaTint: a(SaafPalette.papaya, SaafAlpha.tint),
       borderFocus: ink,
       trackOnInk: a(onInk, SaafAlpha.divider),
+      controlOnInk: a(onInk, SaafAlpha.borderControl),
       onInkLabel: a(onInk, text(SaafAlpha.textLabel)),
       onInkSecondary: a(onInk, text(SaafAlpha.textSecondary)),
       onInkMeta: a(onInk, text(SaafAlpha.textMeta)),
@@ -217,6 +219,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
 
   // Ink cards (09 progress, 07 score, 14 promo): cornsilk text ladder.
   final Color trackOnInk;
+  final Color controlOnInk;
   final Color onInkLabel;
   final Color onInkSecondary;
   final Color onInkMeta;
@@ -251,6 +254,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
     Color? papayaTint,
     Color? borderFocus,
     Color? trackOnInk,
+    Color? controlOnInk,
     Color? onInkLabel,
     Color? onInkSecondary,
     Color? onInkMeta,
@@ -279,6 +283,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
       papayaTint: papayaTint ?? this.papayaTint,
       borderFocus: borderFocus ?? this.borderFocus,
       trackOnInk: trackOnInk ?? this.trackOnInk,
+      controlOnInk: controlOnInk ?? this.controlOnInk,
       onInkLabel: onInkLabel ?? this.onInkLabel,
       onInkSecondary: onInkSecondary ?? this.onInkSecondary,
       onInkMeta: onInkMeta ?? this.onInkMeta,
@@ -317,6 +322,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
       papayaTint: l(papayaTint, other.papayaTint),
       borderFocus: l(borderFocus, other.borderFocus),
       trackOnInk: l(trackOnInk, other.trackOnInk),
+      controlOnInk: l(controlOnInk, other.controlOnInk),
       onInkLabel: l(onInkLabel, other.onInkLabel),
       onInkSecondary: l(onInkSecondary, other.onInkSecondary),
       onInkMeta: l(onInkMeta, other.onInkMeta),

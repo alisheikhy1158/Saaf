@@ -110,6 +110,18 @@ void main() {
       expect(s.borderFocus, SaafPalette.cornsilk);
     });
 
+    test(
+      'controlOnInk is cornsilk @ 12 % in every theme (06 icon buttons)',
+      () {
+        for (final theme in themes.values) {
+          expect(
+            theme.extension<SaafTokens>()!.controlOnInk,
+            SaafPalette.cornsilk.withValues(alpha: 0.12),
+          );
+        }
+      },
+    );
+
     test('exposes spacing, radius, size and motion tokens', () {
       final s = SaafTheme.light().extension<SaafTokens>()!;
       expect(s.space.gutter, 20);

@@ -14,5 +14,8 @@
   "@notFoundBody": { "description": "Body text of the not-found page." },
 
   "goToStart": "Go to start",
-  "@goToStart": { "description": "Button on the not-found page that returns to the first screen." }
+  "@goToStart": { "description": "Button on the not-found page that returns to the first screen." },
+
+  "fieldValid": "Valid",
+  "@fieldValid": { "description": "Screen-reader label of the green check shown when a text field's value is valid." }
 }

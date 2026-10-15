@@ -128,6 +128,9 @@ void main() {
       expect(z.check, 26);
       expect(z.checkMedium, 24);
       expect(z.checkSmall, 22);
+      expect(z.checkIcon, 16);
+      expect(z.checkIconMedium, 14);
+      expect(z.checkIconSmall, 13);
       expect(z.dayWidth, 44);
       expect(z.dayHeight, 68);
       expect(z.dayDot, 5);

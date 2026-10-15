@@ -127,6 +127,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go to start'**
   String get goToStart;
+
+  /// Screen-reader label of the green check shown when a text field's value is valid.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid'**
+  String get fieldValid;
 }
 
 class _AppLocalizationsDelegate

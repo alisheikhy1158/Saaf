@@ -37,6 +37,18 @@ void main() {
       expect(findHardcodedValues('Radius.circular(0.5)'), isNotEmpty);
     });
 
+    test('flags literal spacing / runSpacing', () {
+      expect(
+        findHardcodedValues('Column(spacing: 8, children: [])'),
+        isNotEmpty,
+      );
+      expect(findHardcodedValues('Wrap(runSpacing: 12.5)'), isNotEmpty);
+      expect(
+        findHardcodedValues('Row(spacing: context.saaf.space.x8)'),
+        isEmpty,
+      );
+    });
+
     test('accepts token-based values', () {
       expect(
         findHardcodedValues(
