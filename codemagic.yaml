@@ -184,9 +184,13 @@ workflows:
       - name: Build signed APK
         script: |
           cd $APP_DIR
+          # This TEST app always uses the REAL Firebase login (USE_FIREBASE=true), the real
+          # product database and, once AI_PROXY_URL is set, the real AI server.
+          # FAKE_PURCHASES = a pretend store, so the Pro-only Progress screen can be
+          # tried in this TEST app. NEVER add it to the store release workflows.
           flutter build apk --release \
             --build-number=$PROJECT_BUILD_NUMBER \
-            --dart-define=USE_FIREBASE="${USE_FIREBASE:-false}" \
+            --dart-define=USE_FIREBASE=true \
             --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
             --dart-define=FIREBASE_MESSAGING_SENDER_ID="$FIREBASE_MESSAGING_SENDER_ID" \
             --dart-define=FIREBASE_API_KEY_ANDROID="$FIREBASE_API_KEY_ANDROID" \
@@ -194,7 +198,8 @@ workflows:
             --dart-define=SUPPORT_EMAIL="$SUPPORT_EMAIL" \
             --dart-define=DELETION_URL="$DELETION_URL" \
             --dart-define=AI_PROXY_URL="$AI_PROXY_URL" \
-            --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}"
+            --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}" \
+            --dart-define=FAKE_PURCHASES=true
     artifacts:
       - myapp/build/app/outputs/flutter-apk/*.apk
     publishing:
