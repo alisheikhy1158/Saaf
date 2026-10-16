@@ -1016,6 +1016,78 @@ abstract class AppLocalizations {
   /// **'Use it anyway'**
   String get scanUseAnyway;
 
+  /// Title of the barcode scan screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan a product'**
+  String get scanProductTitle;
+
+  /// Hint under the barcode camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Point the camera at the barcode on the pack. Hold it flat and steady.'**
+  String get scanProductHint;
+
+  /// Our own explanation before the system camera dialog on the barcode screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf uses your camera only to read a product’s barcode. Nothing is saved or uploaded.'**
+  String get scanProductRationaleBody;
+
+  /// Shown when the camera is off on the barcode screen.
+  ///
+  /// In en, this message translates to:
+  /// **'You can still type the barcode number below.'**
+  String get scanProductDeniedBody;
+
+  /// Shown when the camera is blocked on the barcode screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is blocked for Saaf. Allow it in your phone’s Settings, or type the barcode number below.'**
+  String get scanProductSettingsBody;
+
+  /// Heading above the barcode number field.
+  ///
+  /// In en, this message translates to:
+  /// **'Or type the barcode number'**
+  String get scanProductManualTitle;
+
+  /// Label of the barcode number field.
+  ///
+  /// In en, this message translates to:
+  /// **'Barcode number'**
+  String get scanProductManualLabel;
+
+  /// Hint inside the barcode number field.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 3337875743563'**
+  String get scanProductManualHint;
+
+  /// Button that looks up the typed barcode.
+  ///
+  /// In en, this message translates to:
+  /// **'Look up'**
+  String get scanProductLookUp;
+
+  /// Error when the typed barcode is not valid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 8 to 14 digits printed under the barcode.'**
+  String get scanProductInvalid;
+
+  /// Demo button that stands in for the camera in Chrome.
+  ///
+  /// In en, this message translates to:
+  /// **'Pretend to scan (demo)'**
+  String get scanProductPretend;
+
+  /// Tooltip and screen-reader label of the scan button on Home.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan a product'**
+  String get homeScanTooltip;
+
   /// Button that discards the photo and shows the camera again.
   ///
   /// In en, this message translates to:
@@ -1855,6 +1927,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Where to buy'**
   String get productWhereToBuy;
+
+  /// Shown instead of a price when only a search link is known.
+  ///
+  /// In en, this message translates to:
+  /// **'Check price'**
+  String get productCheckPrice;
+
+  /// Shown above the shops when none of them has a known price.
+  ///
+  /// In en, this message translates to:
+  /// **'Prices vary by shop'**
+  String get productPricesVary;
 
   /// Label beside the section title when the prices were checked today.
   ///

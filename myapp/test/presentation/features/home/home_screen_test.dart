@@ -304,6 +304,17 @@ void main() {
       );
     });
 
+    testWidgets('the scan icon opens the product barcode scanner', (
+      tester,
+    ) async {
+      await pumpSaafApp(tester, location: '/home', overrides: _with());
+      await tester.pump();
+      await tester.tap(find.byTooltip('Scan a product'));
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byKey(const ValueKey('screen-scanProduct')), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+    });
+
     testWidgets('the bell opens the profile (reminders live there)', (
       tester,
     ) async {

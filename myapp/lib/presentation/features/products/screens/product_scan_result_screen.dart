@@ -218,7 +218,9 @@ class _Result extends ConsumerWidget {
               ),
             ),
             Text(
-              sameDay(product.pricesAsOf, today)
+              !product.hasPrices
+                  ? l10n.productPricesVary
+                  : sameDay(product.pricesAsOf, today)
                   ? l10n.productPricesToday
                   : l10n.productPricesAsOf(
                       DateFormat('d MMM', locale).format(product.pricesAsOf),
@@ -382,9 +384,10 @@ class _OfferRow extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final tokens = context.saaf;
     final locale = Localizations.localeOf(context).toString();
-    final price = l10n.priceRs(
-      NumberFormat.decimalPattern(locale).format(offer.pricePkr),
-    );
+    final known = offer.pricePkr;
+    final price = known == null
+        ? l10n.productCheckPrice
+        : l10n.priceRs(NumberFormat.decimalPattern(locale).format(known));
 
     Future<void> open() async {
       final result = await ref

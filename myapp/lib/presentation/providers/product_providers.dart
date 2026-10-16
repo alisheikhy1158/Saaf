@@ -1,7 +1,12 @@
+import 'package:flutter/foundation.dart' show ValueChanged, kIsWeb;
+import 'package:flutter/widgets.dart' show BuildContext, Widget;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saaf/core/config/env.dart';
 import 'package:saaf/data/services/plugin_external_link_service.dart';
+import 'package:saaf/data/services/open_beauty_facts_lookup.dart';
+import 'package:saaf/data/services/plugin_barcode_scanner_view.dart';
 import 'package:saaf/data/services/seed_product_lookup.dart';
+import 'package:saaf/data/services/web/fake_barcode_scanner_view.dart';
 import 'package:saaf/data/services/web/fake_external_link_service.dart';
 import 'package:saaf/domain/entities/scanned_product.dart';
 import 'package:saaf/domain/services/external_link_service.dart';
@@ -10,10 +15,22 @@ import 'package:saaf/presentation/providers/no_auto_retry.dart';
 
 part 'product_providers.g.dart';
 
-/// PLACEHOLDER: one demo product. Barcode scanning and the real product and
-/// price service come in Phase 8 (see handoff.md).
+/// Real products from Open Beauty Facts (open data, any barcode). With
+/// `FAKE_CAMERA=true` (Chrome demos) one demo product answers instead.
 @Riverpod(keepAlive: true)
-ProductLookup productLookup(Ref ref) => SeedProductLookup();
+ProductLookup productLookup(Ref ref) =>
+    Env.fakeCamera ? SeedProductLookup() : OpenBeautyFactsLookup();
+
+/// Builds the live barcode camera: the real reader on phones, a pretend one
+/// (a single "scan" button) in Chrome and for `FAKE_CAMERA` demos.
+typedef BarcodeScannerViewBuilder =
+    Widget Function(BuildContext context, ValueChanged<String> onCode);
+
+@Riverpod(keepAlive: true)
+BarcodeScannerViewBuilder barcodeScannerView(Ref ref) =>
+    (Env.fakeCamera || kIsWeb)
+    ? fakeBarcodeScannerView
+    : pluginBarcodeScannerView;
 
 @Riverpod(keepAlive: true)
 ExternalLinkService externalLinkService(Ref ref) =>

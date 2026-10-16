@@ -515,6 +515,45 @@ class AppLocalizationsUr extends AppLocalizations {
   String get scanUseAnyway => 'پھر بھی استعمال کریں';
 
   @override
+  String get scanProductTitle => 'پروڈکٹ سکین کریں';
+
+  @override
+  String get scanProductHint =>
+      'کیمرہ پیکٹ پر بنے بار کوڈ کی طرف کریں۔ اسے سیدھا اور مستحکم رکھیں۔';
+
+  @override
+  String get scanProductRationaleBody =>
+      'ثاف آپ کا کیمرہ صرف پروڈکٹ کا بار کوڈ پڑھنے کے لیے استعمال کرتا ہے۔ کچھ بھی محفوظ یا اپ لوڈ نہیں ہوتا۔';
+
+  @override
+  String get scanProductDeniedBody => 'آپ نیچے بار کوڈ کا نمبر لکھ سکتے ہیں۔';
+
+  @override
+  String get scanProductSettingsBody =>
+      'ثاف کے لیے کیمرے کی اجازت بند ہے۔ اسے اپنے فون کی سیٹنگز میں دیں، یا نیچے بار کوڈ کا نمبر لکھیں۔';
+
+  @override
+  String get scanProductManualTitle => 'یا بار کوڈ کا نمبر لکھیں';
+
+  @override
+  String get scanProductManualLabel => 'بار کوڈ نمبر';
+
+  @override
+  String get scanProductManualHint => 'مثلاً 3337875743563';
+
+  @override
+  String get scanProductLookUp => 'تلاش کریں';
+
+  @override
+  String get scanProductInvalid => 'بار کوڈ کے نیچے چھپے 8 سے 14 ہندسے لکھیں۔';
+
+  @override
+  String get scanProductPretend => 'سکین کا ڈیمو';
+
+  @override
+  String get homeScanTooltip => 'پروڈکٹ سکین کریں';
+
+  @override
   String get scanRetake => 'دوبارہ لیں';
 
   @override
@@ -1022,6 +1061,12 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get productWhereToBuy => 'کہاں سے خریدیں';
+
+  @override
+  String get productCheckPrice => 'قیمت دیکھیں';
+
+  @override
+  String get productPricesVary => 'قیمتیں دکان کے لحاظ سے مختلف ہوتی ہیں';
 
   @override
   String get productPricesToday => 'آج کی قیمتیں';

@@ -5,8 +5,8 @@ class ProductOffer {
   const ProductOffer({
     required this.store,
     required this.note,
-    required this.pricePkr,
     required this.url,
+    this.pricePkr,
     this.isLowest = false,
     this.isAffiliate = false,
   });
@@ -15,7 +15,9 @@ class ProductOffer {
 
   /// "Lowest price · 2–4 days", "In stock nearby".
   final String note;
-  final int pricePkr;
+
+  /// Null when the price is not known (a search link only).
+  final int? pricePkr;
 
   /// Opened in the phone's browser, never inside the app.
   final String url;
@@ -50,9 +52,16 @@ class ScannedProduct {
   /// When the prices were checked (shown as "Prices today" / "as of").
   final DateTime pricesAsOf;
 
-  int? get lowestPricePkr => offers.isEmpty
-      ? null
-      : offers.map((o) => o.pricePkr).reduce((a, b) => a < b ? a : b);
+  int? get lowestPricePkr {
+    final prices = [
+      for (final offer in offers)
+        if (offer.pricePkr != null) offer.pricePkr!,
+    ];
+    return prices.isEmpty ? null : prices.reduce((a, b) => a < b ? a : b);
+  }
+
+  /// At least one offer says what it costs.
+  bool get hasPrices => lowestPricePkr != null;
 
   bool get hasAffiliateLinks => offers.any((o) => o.isAffiliate);
 }

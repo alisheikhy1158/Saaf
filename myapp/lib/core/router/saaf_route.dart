@@ -84,6 +84,15 @@ class SaafRoute {
     'Privacy Policy',
   );
 
+  /// Scan a product's barcode (or type it), opened from Home. Not a Figma
+  /// screen, so not in [all].
+  static const scanProduct = SaafRoute._(
+    0,
+    'scanProduct',
+    '/scan-product',
+    'Scan a product',
+  );
+
   /// The tissue test for the skin type, opened from the skin quiz (step 1). Not
   /// a Figma screen, so not in [all].
   static const skinTypeTest = SaafRoute._(

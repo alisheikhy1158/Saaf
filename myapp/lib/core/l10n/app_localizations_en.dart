@@ -514,6 +514,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scanUseAnyway => 'Use it anyway';
 
   @override
+  String get scanProductTitle => 'Scan a product';
+
+  @override
+  String get scanProductHint =>
+      'Point the camera at the barcode on the pack. Hold it flat and steady.';
+
+  @override
+  String get scanProductRationaleBody =>
+      'Saaf uses your camera only to read a product’s barcode. Nothing is saved or uploaded.';
+
+  @override
+  String get scanProductDeniedBody =>
+      'You can still type the barcode number below.';
+
+  @override
+  String get scanProductSettingsBody =>
+      'Camera access is blocked for Saaf. Allow it in your phone’s Settings, or type the barcode number below.';
+
+  @override
+  String get scanProductManualTitle => 'Or type the barcode number';
+
+  @override
+  String get scanProductManualLabel => 'Barcode number';
+
+  @override
+  String get scanProductManualHint => 'e.g. 3337875743563';
+
+  @override
+  String get scanProductLookUp => 'Look up';
+
+  @override
+  String get scanProductInvalid =>
+      'Enter the 8 to 14 digits printed under the barcode.';
+
+  @override
+  String get scanProductPretend => 'Pretend to scan (demo)';
+
+  @override
+  String get homeScanTooltip => 'Scan a product';
+
+  @override
   String get scanRetake => 'Retake';
 
   @override
@@ -1021,6 +1062,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productWhereToBuy => 'Where to buy';
+
+  @override
+  String get productCheckPrice => 'Check price';
+
+  @override
+  String get productPricesVary => 'Prices vary by shop';
 
   @override
   String get productPricesToday => 'Prices today';

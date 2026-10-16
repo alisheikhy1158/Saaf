@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Face scan photos. The camera is optional: without one the user can still
          choose photos from the gallery, so the app is not hidden from such devices. -->
+    <!-- Product lookup (Open Beauty Facts), sign-in and the AI coach need the network.
+         Debug builds had it; release builds need it declared here. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.front" android:required="false"/>

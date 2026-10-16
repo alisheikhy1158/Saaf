@@ -115,6 +115,11 @@ class _Content extends ConsumerWidget {
               ),
             ),
             SaafIconButton(
+              icon: Icons.qr_code_scanner,
+              tooltip: l10n.homeScanTooltip,
+              onPressed: () => context.push(SaafRoute.scanProduct.path),
+            ),
+            SaafIconButton(
               icon: Icons.notifications_none,
               tooltip: l10n.routineReminders,
               // Reminders are set up in the profile (14).

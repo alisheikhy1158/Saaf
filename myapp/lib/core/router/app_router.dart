@@ -16,6 +16,7 @@ import 'package:saaf/presentation/features/onboarding/screens/skin_type_test_scr
 import 'package:saaf/presentation/features/onboarding/screens/welcome_screen.dart';
 import 'package:saaf/presentation/features/paywall/screens/paywall_screen.dart';
 import 'package:saaf/presentation/features/products/screens/product_scan_result_screen.dart';
+import 'package:saaf/presentation/features/products/screens/scan_product_screen.dart';
 import 'package:saaf/presentation/features/profile/screens/profile_screen.dart';
 import 'package:saaf/presentation/features/progress/screens/monthly_progress_screen.dart';
 import 'package:saaf/presentation/features/routine/screens/routine_screen.dart';
@@ -105,6 +106,11 @@ GoRouter buildAppRouter({
         name: SaafRoute.howWeScore.name,
         path: SaafRoute.howWeScore.path,
         builder: (context, state) => const HowWeScoreScreen(),
+      ),
+      GoRoute(
+        name: SaafRoute.scanProduct.name,
+        path: SaafRoute.scanProduct.path,
+        builder: (context, state) => const ScanProductScreen(),
       ),
       GoRoute(
         name: SaafRoute.skinTypeTest.name,
