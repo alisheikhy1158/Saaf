@@ -290,6 +290,246 @@ abstract class AppLocalizations {
   /// **'Pick up to two. You can change this later.'**
   String get quizConcernsHint;
 
+  /// Quiz step 1 question.
+  ///
+  /// In en, this message translates to:
+  /// **'How does your skin feel by midday?'**
+  String get quizSkinTypeTitle;
+
+  /// Quiz step 1 helper.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the closest match. Not sure? That’s fine.'**
+  String get quizSkinTypeHint;
+
+  /// Skin type option.
+  ///
+  /// In en, this message translates to:
+  /// **'Oily'**
+  String get skinTypeOilyTitle;
+
+  /// Skin type option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Shiny, especially on the forehead and nose'**
+  String get skinTypeOilyCaption;
+
+  /// Skin type option.
+  ///
+  /// In en, this message translates to:
+  /// **'Dry'**
+  String get skinTypeDryTitle;
+
+  /// Skin type option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Tight or flaky, even after moisturiser'**
+  String get skinTypeDryCaption;
+
+  /// Skin type option.
+  ///
+  /// In en, this message translates to:
+  /// **'Combination'**
+  String get skinTypeCombinationTitle;
+
+  /// Skin type option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Oily T-zone, drier cheeks'**
+  String get skinTypeCombinationCaption;
+
+  /// Skin type option (normal skin).
+  ///
+  /// In en, this message translates to:
+  /// **'Balanced'**
+  String get skinTypeNormalTitle;
+
+  /// Skin type option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Comfortable, neither shiny nor tight'**
+  String get skinTypeNormalCaption;
+
+  /// Skin type option.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure'**
+  String get skinTypeNotSureTitle;
+
+  /// Skin type option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'We’ll start gentle and learn with you'**
+  String get skinTypeNotSureCaption;
+
+  /// Quiz step 3 question.
+  ///
+  /// In en, this message translates to:
+  /// **'How does your skin react to new products?'**
+  String get quizSensitivityTitle;
+
+  /// Quiz step 3 helper.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick one. Strong ingredients stay away from sensitive skin.'**
+  String get quizSensitivityHint;
+
+  /// Sensitivity option.
+  ///
+  /// In en, this message translates to:
+  /// **'Rarely reacts'**
+  String get sensitivityLowTitle;
+
+  /// Sensitivity option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'New products usually feel fine'**
+  String get sensitivityLowCaption;
+
+  /// Sensitivity option.
+  ///
+  /// In en, this message translates to:
+  /// **'Sometimes reacts'**
+  String get sensitivitySometimesTitle;
+
+  /// Sensitivity option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Occasional stinging, redness or breakouts'**
+  String get sensitivitySometimesCaption;
+
+  /// Sensitivity option.
+  ///
+  /// In en, this message translates to:
+  /// **'Often reacts'**
+  String get sensitivityHighTitle;
+
+  /// Sensitivity option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Many products sting or irritate'**
+  String get sensitivityHighCaption;
+
+  /// Quiz step 4 question.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything we should keep in mind?'**
+  String get quizSafetyTitle;
+
+  /// Quiz step 4 helper. Must stay true: this data is not uploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. This stays on your phone and only helps us avoid ingredients that may not suit you.'**
+  String get quizSafetyHint;
+
+  /// Safety option.
+  ///
+  /// In en, this message translates to:
+  /// **'Pregnant or breastfeeding'**
+  String get safetyPregnantTitle;
+
+  /// Safety option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'We’ll leave out ingredients usually avoided'**
+  String get safetyPregnantCaption;
+
+  /// Safety option.
+  ///
+  /// In en, this message translates to:
+  /// **'On a prescription skin treatment'**
+  String get safetyPrescriptionTitle;
+
+  /// Safety option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'We’ll keep things gentle and suggest checking with your doctor'**
+  String get safetyPrescriptionCaption;
+
+  /// Safety option.
+  ///
+  /// In en, this message translates to:
+  /// **'A known ingredient allergy'**
+  String get safetyAllergyTitle;
+
+  /// Safety option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'For example fragrance or a specific ingredient'**
+  String get safetyAllergyCaption;
+
+  /// Safety option: nothing applies.
+  ///
+  /// In en, this message translates to:
+  /// **'None of these'**
+  String get safetyNoneTitle;
+
+  /// Safety option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to add'**
+  String get safetyNoneCaption;
+
+  /// Quiz step 5 question.
+  ///
+  /// In en, this message translates to:
+  /// **'What can you spend on skincare each month?'**
+  String get quizBudgetTitle;
+
+  /// Quiz step 5 helper.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a range. Your routine is built from products that fit it.'**
+  String get quizBudgetHint;
+
+  /// Budget option (Pakistani rupees per month).
+  ///
+  /// In en, this message translates to:
+  /// **'Under Rs 3,000'**
+  String get budgetEssentialTitle;
+
+  /// Budget option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Simple, effective basics'**
+  String get budgetEssentialCaption;
+
+  /// Budget option.
+  ///
+  /// In en, this message translates to:
+  /// **'Rs 3,000 – 6,000'**
+  String get budgetBalancedTitle;
+
+  /// Budget option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'A solid routine with a few extras'**
+  String get budgetBalancedCaption;
+
+  /// Budget option.
+  ///
+  /// In en, this message translates to:
+  /// **'Rs 6,000 – 10,000'**
+  String get budgetComfortableTitle;
+
+  /// Budget option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'More choice, including treatments'**
+  String get budgetComfortableCaption;
+
+  /// Budget option.
+  ///
+  /// In en, this message translates to:
+  /// **'Over Rs 10,000'**
+  String get budgetPremiumTitle;
+
+  /// Budget option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything that suits your skin'**
+  String get budgetPremiumCaption;
+
   /// Quiz option.
   ///
   /// In en, this message translates to:

@@ -4,8 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
-import 'package:saaf/domain/entities/skin_concern.dart';
+import 'package:saaf/domain/entities/quiz_step.dart';
 import 'package:saaf/presentation/features/onboarding/controllers/skin_quiz_controller.dart';
+import 'package:saaf/presentation/features/onboarding/quiz/quiz_step_views.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_option_tile.dart';
 import 'package:saaf/presentation/widgets/common/saaf_overline.dart';
@@ -13,61 +14,38 @@ import 'package:saaf/presentation/widgets/common/saaf_progress_bar.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
 
-/// Figma screen 05 — Skin quiz, "What bothers you most?" (node 2:305).
-///
-/// Only this question is designed so far; the rest of the "of 5" steps are
-/// still to come, so the step numbers below are fixed to Figma's 2 of 5.
+/// Skin quiz, one question per screen (Figma 05, node 2:305, is step 2 of 5; the
+/// other four steps follow the same layout). [step] is 1-based and clamped.
 class SkinQuizScreen extends ConsumerWidget {
-  const SkinQuizScreen({super.key});
+  const SkinQuizScreen({super.key, this.step = 1});
 
-  static const int _step = 2;
-  static const int _totalSteps = 5;
+  final int step;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final quizStep = QuizStep.fromNumber(step);
+    final view = quizStepViews[quizStep]!;
     final l10n = AppLocalizations.of(context);
     final tokens = context.saaf;
     final space = tokens.space;
-    final quiz = ref.watch(skinQuizControllerProvider);
-    final controller = ref.read(skinQuizControllerProvider.notifier);
+    final quiz = ref.watch(skinQuizControllerProvider(quizStep));
+    final controller = ref.read(skinQuizControllerProvider(quizStep).notifier);
 
-    void toNextScreen() => context.go(SaafRoute.selfieCapture.path);
-
-    final options = <(SkinConcern, IconData, String, String)>[
-      (
-        SkinConcern.darkSpots,
-        Icons.auto_awesome_outlined,
-        l10n.concernDarkSpotsTitle,
-        l10n.concernDarkSpotsCaption,
-      ),
-      (
-        SkinConcern.acne,
-        Icons.adjust,
-        l10n.concernAcneTitle,
-        l10n.concernAcneCaption,
-      ),
-      (
-        SkinConcern.oiliness,
-        Icons.water_drop_outlined,
-        l10n.concernOilinessTitle,
-        l10n.concernOilinessCaption,
-      ),
-      (
-        SkinConcern.dryness,
-        Icons.wb_sunny_outlined,
-        l10n.concernDrynessTitle,
-        l10n.concernDrynessCaption,
-      ),
-      (
-        SkinConcern.unevenTone,
-        Icons.layers_outlined,
-        l10n.concernUnevenToneTitle,
-        l10n.concernUnevenToneCaption,
-      ),
-    ];
+    void toNextScreen() {
+      final next = quizStep.next;
+      if (next == null) {
+        context.go(SaafRoute.selfieCapture.path);
+      } else {
+        context.push('${SaafRoute.skinQuiz.path}/${next.number}');
+      }
+    }
 
     return SaafScaffold(
-      key: ValueKey('screen-${SaafRoute.skinQuiz.name}'),
+      key: ValueKey(
+        quizStep.number == 1
+            ? 'screen-${SaafRoute.skinQuiz.name}'
+            : 'screen-${SaafRoute.skinQuiz.name}-${quizStep.number}',
+      ),
       topBar: SaafTopBar(
         leading: SaafTopBar.backButton(
           tooltip: l10n.back,
@@ -77,7 +55,7 @@ class SkinQuizScreen extends ConsumerWidget {
         ),
         center: Padding(
           padding: EdgeInsetsDirectional.symmetric(horizontal: space.x16),
-          child: const SaafProgressBar(value: _step / _totalSteps),
+          child: SaafProgressBar(value: quizStep.number / QuizStep.count),
         ),
         trailing: TextButton(
           onPressed: toNextScreen,
@@ -92,12 +70,15 @@ class SkinQuizScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(height: space.x16),
-          SaafOverline(l10n.quizStepLabel(_step, _totalSteps), strong: true),
+          SaafOverline(
+            l10n.quizStepLabel(quizStep.number, QuizStep.count),
+            strong: true,
+          ),
           SizedBox(height: space.x8),
-          Text(l10n.quizConcernsTitle, style: context.text.headlineSmall),
+          Text(view.title(l10n), style: context.text.headlineSmall),
           SizedBox(height: space.x6),
           Text(
-            l10n.quizConcernsHint,
+            view.hint(l10n),
             style: context.text.bodyMedium?.copyWith(
               color: tokens.textSecondary,
             ),
@@ -106,19 +87,20 @@ class SkinQuizScreen extends ConsumerWidget {
           Column(
             spacing: space.optionGap,
             children: [
-              for (final (concern, icon, title, caption) in options)
+              for (final option in view.options)
                 SaafOptionTile(
-                  icon: icon,
-                  title: title,
-                  caption: caption,
-                  selected: quiz.selected.contains(concern),
-                  onTap: () => controller.toggle(concern),
+                  icon: option.icon,
+                  title: option.title(l10n),
+                  caption: option.caption(l10n),
+                  selected: quiz.selected.contains(option.value),
+                  onTap: () => controller.toggle(option.value),
                 ),
             ],
           ),
         ],
       ),
       bottom: SaafButton.primary(
+        key: const ValueKey('quiz-next'),
         label: l10n.quizNext,
         trailingIcon: Icons.arrow_forward,
         isLoading: quiz.isSubmitting,

@@ -117,6 +117,136 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quizConcernsHint => 'Pick up to two. You can change this later.';
 
   @override
+  String get quizSkinTypeTitle => 'How does your skin feel by midday?';
+
+  @override
+  String get quizSkinTypeHint =>
+      'Pick the closest match. Not sure? That’s fine.';
+
+  @override
+  String get skinTypeOilyTitle => 'Oily';
+
+  @override
+  String get skinTypeOilyCaption =>
+      'Shiny, especially on the forehead and nose';
+
+  @override
+  String get skinTypeDryTitle => 'Dry';
+
+  @override
+  String get skinTypeDryCaption => 'Tight or flaky, even after moisturiser';
+
+  @override
+  String get skinTypeCombinationTitle => 'Combination';
+
+  @override
+  String get skinTypeCombinationCaption => 'Oily T-zone, drier cheeks';
+
+  @override
+  String get skinTypeNormalTitle => 'Balanced';
+
+  @override
+  String get skinTypeNormalCaption => 'Comfortable, neither shiny nor tight';
+
+  @override
+  String get skinTypeNotSureTitle => 'Not sure';
+
+  @override
+  String get skinTypeNotSureCaption => 'We’ll start gentle and learn with you';
+
+  @override
+  String get quizSensitivityTitle =>
+      'How does your skin react to new products?';
+
+  @override
+  String get quizSensitivityHint =>
+      'Pick one. Strong ingredients stay away from sensitive skin.';
+
+  @override
+  String get sensitivityLowTitle => 'Rarely reacts';
+
+  @override
+  String get sensitivityLowCaption => 'New products usually feel fine';
+
+  @override
+  String get sensitivitySometimesTitle => 'Sometimes reacts';
+
+  @override
+  String get sensitivitySometimesCaption =>
+      'Occasional stinging, redness or breakouts';
+
+  @override
+  String get sensitivityHighTitle => 'Often reacts';
+
+  @override
+  String get sensitivityHighCaption => 'Many products sting or irritate';
+
+  @override
+  String get quizSafetyTitle => 'Anything we should keep in mind?';
+
+  @override
+  String get quizSafetyHint =>
+      'Optional. This stays on your phone and only helps us avoid ingredients that may not suit you.';
+
+  @override
+  String get safetyPregnantTitle => 'Pregnant or breastfeeding';
+
+  @override
+  String get safetyPregnantCaption =>
+      'We’ll leave out ingredients usually avoided';
+
+  @override
+  String get safetyPrescriptionTitle => 'On a prescription skin treatment';
+
+  @override
+  String get safetyPrescriptionCaption =>
+      'We’ll keep things gentle and suggest checking with your doctor';
+
+  @override
+  String get safetyAllergyTitle => 'A known ingredient allergy';
+
+  @override
+  String get safetyAllergyCaption =>
+      'For example fragrance or a specific ingredient';
+
+  @override
+  String get safetyNoneTitle => 'None of these';
+
+  @override
+  String get safetyNoneCaption => 'Nothing to add';
+
+  @override
+  String get quizBudgetTitle => 'What can you spend on skincare each month?';
+
+  @override
+  String get quizBudgetHint =>
+      'Pick a range. Your routine is built from products that fit it.';
+
+  @override
+  String get budgetEssentialTitle => 'Under Rs 3,000';
+
+  @override
+  String get budgetEssentialCaption => 'Simple, effective basics';
+
+  @override
+  String get budgetBalancedTitle => 'Rs 3,000 – 6,000';
+
+  @override
+  String get budgetBalancedCaption => 'A solid routine with a few extras';
+
+  @override
+  String get budgetComfortableTitle => 'Rs 6,000 – 10,000';
+
+  @override
+  String get budgetComfortableCaption => 'More choice, including treatments';
+
+  @override
+  String get budgetPremiumTitle => 'Over Rs 10,000';
+
+  @override
+  String get budgetPremiumCaption => 'Anything that suits your skin';
+
+  @override
   String get concernDarkSpotsTitle => 'Dark spots & pigmentation';
 
   @override

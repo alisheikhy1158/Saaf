@@ -1,9 +1,9 @@
 # ADR 0001 — Backend: Firebase or Supabase
 
-- **Status:** Proposed — **the owner decides.** Nothing in the app depends on this yet: sign-in runs against
-  `FakeAuthRepository` (`lib/data/repositories/fake_auth_repository.dart`, fixed code `123456`) behind the
-  `AuthRepository` interface. Whichever backend wins, only a new implementation of that interface (plus the
-  data repositories) is written; screens and use cases do not change.
+- **Status:** **ACCEPTED 2026-10-16 — the owner chose Firebase** (this ADR originally recommended Supabase; the
+  owner overruled it, which is their call). Sign-in is implemented behind the `AuthRepository` interface; until the
+  Firebase project is configured the app keeps using `FakeAuthRepository` (fixed code `123456`). See
+  `docs/firebase-setup.md` for the console steps only the owner can do.
 - **Date:** 2026-10-16
 - **Prices, quotas and SMS coverage below are from memory and change often — verify each on the provider's
   pricing page before deciding.**
@@ -66,7 +66,13 @@ numbers) — that is the real go/no-go, not the database.
 
 ## Decision
 
-_To be filled in by the owner:_ ☐ Supabase ☐ Firebase ☐ Other: ______
+☒ **Firebase** (Auth now; Firestore/Functions/Storage as the data features arrive) ☐ Supabase ☐ Other
+
+Consequences to plan for: model the relational catalogue (products ↔ ingredients ↔ clash rules) so it fits Firestore
+— clash rules are pure domain code shipped in the app (not queried), and the catalogue can be a Firestore
+collection of denormalised product documents; write a Cloud Function that deletes a user's data across
+collections for account deletion (requires the Blaze plan); budget for phone-auth SMS and test delivery on
+Pakistani networks first.
 
 ## Consequences once decided
 1. Add the SDK with `flutter pub add`, implement `AuthRepository` (OTP, Google, Apple, sign-out, session in

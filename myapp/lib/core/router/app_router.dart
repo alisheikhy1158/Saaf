@@ -51,6 +51,16 @@ GoRouter buildAppRouter({String? initialLocation, bool? enableGallery}) {
           name: route.name,
           path: route.path,
           builder: (context, state) => _screenFor(route),
+          routes: [
+            // /skin-quiz is step 1; /skin-quiz/3 is step 3 (clamped to 1–5).
+            if (route == SaafRoute.skinQuiz)
+              GoRoute(
+                path: ':step',
+                builder: (context, state) => SkinQuizScreen(
+                  step: int.tryParse(state.pathParameters['step'] ?? '') ?? 1,
+                ),
+              ),
+          ],
         ),
       GoRoute(
         name: SaafRoute.terms.name,

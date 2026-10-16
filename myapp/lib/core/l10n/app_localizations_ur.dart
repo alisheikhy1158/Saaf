@@ -119,6 +119,135 @@ class AppLocalizationsUr extends AppLocalizations {
       'زیادہ سے زیادہ دو چنیں۔ آپ بعد میں تبدیل کر سکتے ہیں۔';
 
   @override
+  String get quizSkinTypeTitle => 'دوپہر تک آپ کی جلد کیسی محسوس ہوتی ہے؟';
+
+  @override
+  String get quizSkinTypeHint =>
+      'سب سے قریب جواب چنیں۔ یقین نہیں؟ کوئی بات نہیں۔';
+
+  @override
+  String get skinTypeOilyTitle => 'چکنی';
+
+  @override
+  String get skinTypeOilyCaption => 'چمکدار، خاص طور پر ماتھے اور ناک پر';
+
+  @override
+  String get skinTypeDryTitle => 'خشک';
+
+  @override
+  String get skinTypeDryCaption => 'موئسچرائزر کے بعد بھی کھنچاؤ یا پپڑی';
+
+  @override
+  String get skinTypeCombinationTitle => 'ملی جلی';
+
+  @override
+  String get skinTypeCombinationCaption => 'ٹی زون چکنا، گال نسبتاً خشک';
+
+  @override
+  String get skinTypeNormalTitle => 'متوازن';
+
+  @override
+  String get skinTypeNormalCaption => 'آرام دہ، نہ چمکدار نہ کھنچی ہوئی';
+
+  @override
+  String get skinTypeNotSureTitle => 'یقین نہیں';
+
+  @override
+  String get skinTypeNotSureCaption =>
+      'ہم نرمی سے شروع کریں گے اور آپ کے ساتھ سیکھیں گے';
+
+  @override
+  String get quizSensitivityTitle =>
+      'نئی مصنوعات پر آپ کی جلد کا ردِعمل کیسا ہوتا ہے؟';
+
+  @override
+  String get quizSensitivityHint =>
+      'ایک چنیں۔ حساس جلد سے تیز اجزاء دور رکھے جاتے ہیں۔';
+
+  @override
+  String get sensitivityLowTitle => 'کم ہی ردِعمل ہوتا ہے';
+
+  @override
+  String get sensitivityLowCaption => 'نئی مصنوعات عموماً ٹھیک رہتی ہیں';
+
+  @override
+  String get sensitivitySometimesTitle => 'کبھی کبھار ردِعمل ہوتا ہے';
+
+  @override
+  String get sensitivitySometimesCaption => 'کبھی جلن، سرخی یا دانے';
+
+  @override
+  String get sensitivityHighTitle => 'اکثر ردِعمل ہوتا ہے';
+
+  @override
+  String get sensitivityHighCaption => 'کئی مصنوعات سے جلن یا خارش';
+
+  @override
+  String get quizSafetyTitle => 'کیا کوئی بات ہمیں ذہن میں رکھنی چاہیے؟';
+
+  @override
+  String get quizSafetyHint =>
+      'اختیاری۔ یہ آپ کے فون پر ہی رہتا ہے اور صرف ایسے اجزاء سے بچنے میں مدد دیتا ہے جو آپ کو موافق نہ آئیں۔';
+
+  @override
+  String get safetyPregnantTitle => 'حمل یا دودھ پلانے کا دور';
+
+  @override
+  String get safetyPregnantCaption =>
+      'ہم عموماً اجتناب کیے جانے والے اجزاء شامل نہیں کریں گے';
+
+  @override
+  String get safetyPrescriptionTitle => 'جلد کا نسخے والا علاج جاری ہے';
+
+  @override
+  String get safetyPrescriptionCaption =>
+      'ہم نرم طریقہ رکھیں گے اور ڈاکٹر سے مشورے کا کہیں گے';
+
+  @override
+  String get safetyAllergyTitle => 'کسی جزو سے معلوم الرجی';
+
+  @override
+  String get safetyAllergyCaption => 'مثلاً خوشبو یا کوئی خاص جزو';
+
+  @override
+  String get safetyNoneTitle => 'ان میں سے کوئی نہیں';
+
+  @override
+  String get safetyNoneCaption => 'کچھ شامل کرنے کی ضرورت نہیں';
+
+  @override
+  String get quizBudgetTitle =>
+      'آپ ہر ماہ جلد کی دیکھ بھال پر کتنا خرچ کر سکتے ہیں؟';
+
+  @override
+  String get quizBudgetHint =>
+      'ایک حد چنیں۔ آپ کی روٹین اسی میں آنے والی مصنوعات سے بنے گی۔';
+
+  @override
+  String get budgetEssentialTitle => '3,000 روپے سے کم';
+
+  @override
+  String get budgetEssentialCaption => 'سادہ اور مؤثر بنیادی چیزیں';
+
+  @override
+  String get budgetBalancedTitle => '3,000 – 6,000 روپے';
+
+  @override
+  String get budgetBalancedCaption => 'ایک مضبوط روٹین اور کچھ اضافی چیزیں';
+
+  @override
+  String get budgetComfortableTitle => '6,000 – 10,000 روپے';
+
+  @override
+  String get budgetComfortableCaption => 'زیادہ انتخاب، علاج سمیت';
+
+  @override
+  String get budgetPremiumTitle => '10,000 روپے سے زیادہ';
+
+  @override
+  String get budgetPremiumCaption => 'جو بھی آپ کی جلد کو موافق ہو';
+
+  @override
   String get concernDarkSpotsTitle => 'داغ دھبے اور رنگت';
 
   @override
