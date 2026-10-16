@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 
 /// Circle diameters used in the Figma screens (design.md §4).
-enum SaafIconCircleSize { small, welcome, regular, large }
+enum SaafIconCircleSize { compact, small, welcome, regular, large }
 
 /// Fills used in Figma (design.md §6 "icon-circle").
 enum SaafIconCircleTone { sage, sageTint, inkTint, tan, lightSage }
@@ -35,6 +35,7 @@ class SaafIconCircle extends StatelessWidget {
     final tokens = context.saaf;
     final colors = context.colors;
     final diameter = switch (size) {
+      SaafIconCircleSize.compact => tokens.size.iconCircleCompact,
       SaafIconCircleSize.small => tokens.size.iconCircleSmall,
       SaafIconCircleSize.welcome => tokens.size.iconCircleWelcome,
       SaafIconCircleSize.regular => tokens.size.iconCircle,

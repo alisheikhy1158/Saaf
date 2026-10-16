@@ -23,7 +23,7 @@ import 'package:saaf/presentation/features/scan/screens/selfie_capture_screen.da
 import 'package:saaf/presentation/widgets/common/not_found_screen.dart';
 
 /// Which widget each route shows. Guards (auth, consent, paywall) join later.
-Widget _screenFor(SaafRoute route) => switch (route.name) {
+Widget _screenFor(SaafRoute route, GoRouterState state) => switch (route.name) {
   'welcome' => const WelcomeScreen(),
   'signUp' => const SignUpScreen(),
   'verifyCode' => const VerifyCodeScreen(),
@@ -33,7 +33,10 @@ Widget _screenFor(SaafRoute route) => switch (route.name) {
   'analysisResults' => const AnalysisResultsScreen(),
   'routine' => const RoutineScreen(),
   'home' => const HomeScreen(),
-  'productScanResult' => const ProductScanResultScreen(),
+  // The barcode comes from the address: /product-scan-result?barcode=…
+  'productScanResult' => ProductScanResultScreen(
+    barcode: state.uri.queryParameters['barcode'],
+  ),
   'weeklyCheckIn' => const WeeklyCheckInScreen(),
   'monthlyProgress' => const MonthlyProgressScreen(),
   'paywall' => const PaywallScreen(),
@@ -51,7 +54,7 @@ GoRouter buildAppRouter({String? initialLocation, bool? enableGallery}) {
         GoRoute(
           name: route.name,
           path: route.path,
-          builder: (context, state) => _screenFor(route),
+          builder: (context, state) => _screenFor(route, state),
           routes: [
             // /skin-quiz is step 1; /skin-quiz/3 is step 3 (clamped to 1–5).
             if (route == SaafRoute.skinQuiz)

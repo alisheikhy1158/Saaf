@@ -817,5 +817,273 @@
   "@homeErrorTitle": { "description": "Title when Home cannot load." },
 
   "homeErrorAction": "Try again",
-  "@homeErrorAction": { "description": "Button that loads Home again." }
+  "@homeErrorAction": { "description": "Button that loads Home again." },
+  "productScanTitle": "Scan result",
+  "@productScanTitle": { "description": "Top bar title of the product scan result (10)." },
+
+  "productShare": "Share this product",
+  "@productShare": { "description": "Tooltip of the share button on the product result." },
+
+  "productShareText": "{brand} {name}: from {price} on Saaf. Cosmetic guidance only.",
+  "@productShareText": {
+    "description": "Text shared from the product result. {price} is like Rs 1,450.",
+    "placeholders": { "brand": { "type": "String" }, "name": { "type": "String" }, "price": { "type": "String" } }
+  },
+
+  "productBarcodeMatched": "Barcode matched",
+  "@productBarcodeMatched": { "description": "Chip on the product photo." },
+
+  "productFitGood": "Good match for you",
+  "@productFitGood": { "description": "Chip: the product suits the answers of the user." },
+
+  "productFitCareful": "Use with care",
+  "@productFitCareful": { "description": "Chip: the product may not suit the user." },
+
+  "productFitAvoid": "Not recommended for you",
+  "@productFitAvoid": { "description": "Chip: the safety answers of the user say to avoid this product." },
+
+  "productAllSkin": "All skin types",
+  "@productAllSkin": { "description": "Skin-type chip for a gentle product." },
+
+  "productAcneProne": "Acne-prone",
+  "@productAcneProne": { "description": "Skin-type chip part for a product that helps acne." },
+
+  "clashNiacinamideVitaminCTitle": "Don’t mix with Vitamin C",
+  "@clashNiacinamideVitaminCTitle": { "description": "Ingredient clash title." },
+
+  "clashMoveToNight": "Use this at night if your morning routine has Vitamin C.",
+  "@clashMoveToNight": { "description": "Advice when the clash is in the morning routine and the product can be used at night." },
+
+  "clashMoveToMorning": "Use this in the morning if your night routine has Vitamin C.",
+  "@clashMoveToMorning": { "description": "Advice when the clash is in the night routine and the product can be used in the morning." },
+
+  "clashDifferentDays": "Use it on different days from your Vitamin C.",
+  "@clashDifferentDays": { "description": "Advice when the product cannot simply move to the other time of day." },
+
+  "clashRetinolExfoliantsTitle": "Don’t layer with exfoliating acids",
+  "@clashRetinolExfoliantsTitle": { "description": "Ingredient clash title." },
+
+  "clashRetinolExfoliants": "Use them on different nights to avoid irritation.",
+  "@clashRetinolExfoliants": { "description": "Advice for retinol with acids." },
+
+  "clashBenzoylRetinolTitle": "Don’t layer with benzoyl peroxide",
+  "@clashBenzoylRetinolTitle": { "description": "Ingredient clash title." },
+
+  "clashBenzoylRetinol": "Use them at different times of day to avoid irritation.",
+  "@clashBenzoylRetinol": { "description": "Advice for retinol with benzoyl peroxide." },
+
+  "productCarefulTitle": "Check before you use it",
+  "@productCarefulTitle": { "description": "Warning card title when the product may not suit the user." },
+
+  "productCarefulBody": "It may not suit your skin type or sensitivity. Test a small patch first.",
+  "@productCarefulBody": { "description": "Warning card body." },
+
+  "productAvoidTitle": "Usually avoided for you",
+  "@productAvoidTitle": { "description": "Warning card title when the safety answers say to avoid the product." },
+
+  "productAvoidBody": "Your answers say products like this are best avoided. Ask a doctor or pharmacist first.",
+  "@productAvoidBody": { "description": "Warning card body." },
+
+  "productWhereToBuy": "Where to buy",
+  "@productWhereToBuy": { "description": "Section title above the stores." },
+
+  "productPricesToday": "Prices today",
+  "@productPricesToday": { "description": "Label beside the section title when the prices were checked today." },
+
+  "productPricesAsOf": "Prices as of {date}",
+  "@productPricesAsOf": {
+    "description": "Label beside the section title when the prices are older than today.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "productBuy": "Buy",
+  "@productBuy": { "description": "Button that opens the page of the store in the browser." },
+
+  "productBuySemantics": "Buy from {store} for {price}",
+  "@productBuySemantics": {
+    "description": "Screen-reader label of a Buy button.",
+    "placeholders": { "store": { "type": "String" }, "price": { "type": "String" } }
+  },
+
+  "productAffiliate": "Some Buy links may earn Saaf a small commission. It never changes your price.",
+  "@productAffiliate": { "description": "Affiliate disclosure under the store list." },
+
+  "productDisclaimer": "Ingredient advice is general guidance, not medical advice.",
+  "@productDisclaimer": { "description": "Disclaimer at the end of the product result." },
+
+  "productLinkFailed": "We couldn’t open that link.",
+  "@productLinkFailed": { "description": "Message when a Buy link cannot be opened." },
+
+  "productNoneTitle": "No product scanned yet",
+  "@productNoneTitle": { "description": "Title when the result screen is opened without a barcode." },
+
+  "productNoneBody": "Scan a product barcode to see if it suits your skin.",
+  "@productNoneBody": { "description": "Body when the result screen is opened without a barcode." },
+
+  "productNoneAction": "Go to Home",
+  "@productNoneAction": { "description": "Button on the empty product result." },
+
+  "productNotFoundTitle": "We couldn’t find that product",
+  "@productNotFoundTitle": { "description": "Title when the barcode is not in the catalogue." },
+
+  "productNotFoundBody": "Check the barcode and try again.",
+  "@productNotFoundBody": { "description": "Body when the barcode is not in the catalogue." },
+
+  "productErrorTitle": "We couldn’t load this product",
+  "@productErrorTitle": { "description": "Title when the product lookup fails." },
+
+  "productErrorAction": "Try again",
+  "@productErrorAction": { "description": "Button that repeats the lookup." },
+  "checkInTitle": "Weekly check-in",
+  "@checkInTitle": { "description": "Top bar title of the weekly check-in (11)." },
+
+  "checkInInfo": "About check-ins",
+  "@checkInInfo": { "description": "Tooltip of the info button on the check-in." },
+
+  "checkInWeek": "Week {week} of your routine",
+  "@checkInWeek": {
+    "description": "Chip at the top of the check-in.",
+    "placeholders": { "week": { "type": "int" } }
+  },
+
+  "checkInGreeting": "Salam {name}! How has your skin felt this week?",
+  "@checkInGreeting": {
+    "description": "First coach message when the name is known.",
+    "placeholders": { "name": { "type": "String" } }
+  },
+
+  "checkInGreetingNoName": "Salam! How has your skin felt this week?",
+  "@checkInGreetingNoName": { "description": "First coach message when the name is not known." },
+
+  "checkInFeelLessOily": "Less oily than before",
+  "@checkInFeelLessOily": { "description": "Quick reply." },
+
+  "checkInFeelSame": "About the same",
+  "@checkInFeelSame": { "description": "Quick reply." },
+
+  "checkInFeelDrier": "Drier or tighter",
+  "@checkInFeelDrier": { "description": "Quick reply." },
+
+  "checkInFeelIrritated": "More irritated",
+  "@checkInFeelIrritated": { "description": "Quick reply." },
+
+  "checkInQ2Nice": "Nice. Any new breakouts since last week?",
+  "@checkInQ2Nice": { "description": "Second question after a good answer." },
+
+  "checkInQ2Thanks": "Thanks. Any new breakouts since last week?",
+  "@checkInQ2Thanks": { "description": "Second question after a neutral answer." },
+
+  "checkInQ2Noted": "Got it. Any new breakouts since last week?",
+  "@checkInQ2Noted": { "description": "Second question after a drier answer." },
+
+  "checkInQ2Sorry": "Sorry to hear that. Any new breakouts since last week?",
+  "@checkInQ2Sorry": { "description": "Second question after an irritated answer." },
+
+  "checkInBreakNone": "No new ones",
+  "@checkInBreakNone": { "description": "Quick reply." },
+
+  "checkInBreakFew": "1–2 small ones",
+  "@checkInBreakFew": { "description": "Quick reply." },
+
+  "checkInBreakMore": "A few more than before",
+  "@checkInBreakMore": { "description": "Quick reply." },
+
+  "checkInBreakSevere": "Many or painful",
+  "@checkInBreakSevere": { "description": "Quick reply." },
+
+  "checkInOnTrack": "Likely on track",
+  "@checkInOnTrack": { "description": "Result title." },
+
+  "checkInKeepGoing": "Keep going",
+  "@checkInKeepGoing": { "description": "Result title." },
+
+  "checkInAdjust": "Let’s adjust a little",
+  "@checkInAdjust": { "description": "Result title." },
+
+  "checkInSeePro": "Please check with a professional",
+  "@checkInSeePro": { "description": "Result title." },
+
+  "checkInSentenceLessOily": "Oil control is improving.",
+  "@checkInSentenceLessOily": { "description": "Result sentence about the skin feel." },
+
+  "checkInSentenceSame": "Your skin feels about the same.",
+  "@checkInSentenceSame": { "description": "Result sentence about the skin feel." },
+
+  "checkInSentenceDrier": "Your skin feels drier, which is common with new products.",
+  "@checkInSentenceDrier": { "description": "Result sentence about the skin feel." },
+
+  "checkInSentenceIrritated": "Your skin feels irritated.",
+  "@checkInSentenceIrritated": { "description": "Result sentence about the skin feel." },
+
+  "checkInSentenceNone": "No new breakouts is a good sign.",
+  "@checkInSentenceNone": { "description": "Result sentence about breakouts." },
+
+  "checkInSentenceFew": "A few small breakouts are common in week {week}.",
+  "@checkInSentenceFew": {
+    "description": "Result sentence about breakouts.",
+    "placeholders": { "week": { "type": "int" } }
+  },
+
+  "checkInSentenceMore": "More breakouts than before can happen while skin adjusts.",
+  "@checkInSentenceMore": { "description": "Result sentence about breakouts." },
+
+  "checkInSentenceSevere": "Many or painful breakouts need a professional look.",
+  "@checkInSentenceSevere": { "description": "Result sentence about breakouts." },
+
+  "checkInAdviceOnTrack": "Keep going and try not to pick.",
+  "@checkInAdviceOnTrack": { "description": "Closing sentence of an on-track result." },
+
+  "checkInAdviceKeepGoing": "Results usually take 6–8 weeks, so keep going.",
+  "@checkInAdviceKeepGoing": { "description": "Closing sentence of a keep-going result." },
+
+  "checkInAdviceAdjust": "Try a richer moisturiser and use strong products less often. If nothing changes in two weeks, ask a pharmacist.",
+  "@checkInAdviceAdjust": { "description": "Closing sentence of an adjust result." },
+
+  "checkInAdviceSeePro": "Pause any new products and ask a dermatologist or pharmacist, especially if it is painful or keeps getting worse.",
+  "@checkInAdviceSeePro": { "description": "Closing sentence of a see-a-professional result." },
+
+  "checkInNextPhoto": "Next photo check · {date}",
+  "@checkInNextPhoto": {
+    "description": "Chip in the result card. {date} is like 14 Nov.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "checkInHint": "Reply in English or Urdu…",
+  "@checkInHint": { "description": "Hint inside the reply field." },
+
+  "checkInSend": "Send",
+  "@checkInSend": { "description": "Tooltip of the send button." },
+
+  "checkInNoteSaved": "Thanks, I’ve saved your note for your next check-in.",
+  "@checkInNoteSaved": { "description": "Coach message after the user types a note once the check-in is done." },
+
+  "checkInCoachInitial": "S",
+  "@checkInCoachInitial": { "description": "Initial letter in the coach avatar." },
+
+  "checkInCoachSays": "Saaf says: {text}",
+  "@checkInCoachSays": {
+    "description": "Screen-reader label of a coach message.",
+    "placeholders": { "text": { "type": "String" } }
+  },
+
+  "checkInYouSaid": "You said: {text}",
+  "@checkInYouSaid": {
+    "description": "Screen-reader label of a message from the user.",
+    "placeholders": { "text": { "type": "String" } }
+  },
+
+  "checkInResultSemantics": "Result: {title}. {body}",
+  "@checkInResultSemantics": {
+    "description": "Screen-reader label of the result card.",
+    "placeholders": { "title": { "type": "String" }, "body": { "type": "String" } }
+  },
+
+  "checkInInfoTitle": "About check-ins",
+  "@checkInInfoTitle": { "description": "Title of the info dialog." },
+
+  "checkInInfoBody": "Your check-in uses simple rules, not AI. Your answers are kept on your phone. It cannot diagnose skin conditions: if something worries you, please see a dermatologist.",
+  "@checkInInfoBody": { "description": "Body of the info dialog." },
+
+  "checkInInfoClose": "Got it",
+  "@checkInInfoClose": { "description": "Button that closes the info dialog." }
 }

@@ -16,6 +16,7 @@ class SaafScaffold extends StatelessWidget {
     this.topBar,
     this.bottom,
     this.offlineBanner,
+    this.backgroundColor,
   });
 
   final Widget body;
@@ -23,12 +24,16 @@ class SaafScaffold extends StatelessWidget {
   final Widget? bottom;
   final Widget? offlineBanner;
 
+  /// Replaces the page colour (10 Product scan result is papaya).
+  final Color? backgroundColor;
+
   @override
   Widget build(BuildContext context) {
     final space = context.saaf.space;
     final gutter = SaafBreakpoint.gutterFor(MediaQuery.sizeOf(context).width);
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Column(
           children: [

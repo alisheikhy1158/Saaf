@@ -1615,6 +1615,486 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again'**
   String get homeErrorAction;
+
+  /// Top bar title of the product scan result (10).
+  ///
+  /// In en, this message translates to:
+  /// **'Scan result'**
+  String get productScanTitle;
+
+  /// Tooltip of the share button on the product result.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this product'**
+  String get productShare;
+
+  /// Text shared from the product result. {price} is like Rs 1,450.
+  ///
+  /// In en, this message translates to:
+  /// **'{brand} {name}: from {price} on Saaf. Cosmetic guidance only.'**
+  String productShareText(String brand, String name, String price);
+
+  /// Chip on the product photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Barcode matched'**
+  String get productBarcodeMatched;
+
+  /// Chip: the product suits the answers of the user.
+  ///
+  /// In en, this message translates to:
+  /// **'Good match for you'**
+  String get productFitGood;
+
+  /// Chip: the product may not suit the user.
+  ///
+  /// In en, this message translates to:
+  /// **'Use with care'**
+  String get productFitCareful;
+
+  /// Chip: the safety answers of the user say to avoid this product.
+  ///
+  /// In en, this message translates to:
+  /// **'Not recommended for you'**
+  String get productFitAvoid;
+
+  /// Skin-type chip for a gentle product.
+  ///
+  /// In en, this message translates to:
+  /// **'All skin types'**
+  String get productAllSkin;
+
+  /// Skin-type chip part for a product that helps acne.
+  ///
+  /// In en, this message translates to:
+  /// **'Acne-prone'**
+  String get productAcneProne;
+
+  /// Ingredient clash title.
+  ///
+  /// In en, this message translates to:
+  /// **'Don’t mix with Vitamin C'**
+  String get clashNiacinamideVitaminCTitle;
+
+  /// Advice when the clash is in the morning routine and the product can be used at night.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this at night if your morning routine has Vitamin C.'**
+  String get clashMoveToNight;
+
+  /// Advice when the clash is in the night routine and the product can be used in the morning.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this in the morning if your night routine has Vitamin C.'**
+  String get clashMoveToMorning;
+
+  /// Advice when the product cannot simply move to the other time of day.
+  ///
+  /// In en, this message translates to:
+  /// **'Use it on different days from your Vitamin C.'**
+  String get clashDifferentDays;
+
+  /// Ingredient clash title.
+  ///
+  /// In en, this message translates to:
+  /// **'Don’t layer with exfoliating acids'**
+  String get clashRetinolExfoliantsTitle;
+
+  /// Advice for retinol with acids.
+  ///
+  /// In en, this message translates to:
+  /// **'Use them on different nights to avoid irritation.'**
+  String get clashRetinolExfoliants;
+
+  /// Ingredient clash title.
+  ///
+  /// In en, this message translates to:
+  /// **'Don’t layer with benzoyl peroxide'**
+  String get clashBenzoylRetinolTitle;
+
+  /// Advice for retinol with benzoyl peroxide.
+  ///
+  /// In en, this message translates to:
+  /// **'Use them at different times of day to avoid irritation.'**
+  String get clashBenzoylRetinol;
+
+  /// Warning card title when the product may not suit the user.
+  ///
+  /// In en, this message translates to:
+  /// **'Check before you use it'**
+  String get productCarefulTitle;
+
+  /// Warning card body.
+  ///
+  /// In en, this message translates to:
+  /// **'It may not suit your skin type or sensitivity. Test a small patch first.'**
+  String get productCarefulBody;
+
+  /// Warning card title when the safety answers say to avoid the product.
+  ///
+  /// In en, this message translates to:
+  /// **'Usually avoided for you'**
+  String get productAvoidTitle;
+
+  /// Warning card body.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answers say products like this are best avoided. Ask a doctor or pharmacist first.'**
+  String get productAvoidBody;
+
+  /// Section title above the stores.
+  ///
+  /// In en, this message translates to:
+  /// **'Where to buy'**
+  String get productWhereToBuy;
+
+  /// Label beside the section title when the prices were checked today.
+  ///
+  /// In en, this message translates to:
+  /// **'Prices today'**
+  String get productPricesToday;
+
+  /// Label beside the section title when the prices are older than today.
+  ///
+  /// In en, this message translates to:
+  /// **'Prices as of {date}'**
+  String productPricesAsOf(String date);
+
+  /// Button that opens the page of the store in the browser.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get productBuy;
+
+  /// Screen-reader label of a Buy button.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy from {store} for {price}'**
+  String productBuySemantics(String store, String price);
+
+  /// Affiliate disclosure under the store list.
+  ///
+  /// In en, this message translates to:
+  /// **'Some Buy links may earn Saaf a small commission. It never changes your price.'**
+  String get productAffiliate;
+
+  /// Disclaimer at the end of the product result.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredient advice is general guidance, not medical advice.'**
+  String get productDisclaimer;
+
+  /// Message when a Buy link cannot be opened.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t open that link.'**
+  String get productLinkFailed;
+
+  /// Title when the result screen is opened without a barcode.
+  ///
+  /// In en, this message translates to:
+  /// **'No product scanned yet'**
+  String get productNoneTitle;
+
+  /// Body when the result screen is opened without a barcode.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan a product barcode to see if it suits your skin.'**
+  String get productNoneBody;
+
+  /// Button on the empty product result.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Home'**
+  String get productNoneAction;
+
+  /// Title when the barcode is not in the catalogue.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t find that product'**
+  String get productNotFoundTitle;
+
+  /// Body when the barcode is not in the catalogue.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the barcode and try again.'**
+  String get productNotFoundBody;
+
+  /// Title when the product lookup fails.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t load this product'**
+  String get productErrorTitle;
+
+  /// Button that repeats the lookup.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get productErrorAction;
+
+  /// Top bar title of the weekly check-in (11).
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly check-in'**
+  String get checkInTitle;
+
+  /// Tooltip of the info button on the check-in.
+  ///
+  /// In en, this message translates to:
+  /// **'About check-ins'**
+  String get checkInInfo;
+
+  /// Chip at the top of the check-in.
+  ///
+  /// In en, this message translates to:
+  /// **'Week {week} of your routine'**
+  String checkInWeek(int week);
+
+  /// First coach message when the name is known.
+  ///
+  /// In en, this message translates to:
+  /// **'Salam {name}! How has your skin felt this week?'**
+  String checkInGreeting(String name);
+
+  /// First coach message when the name is not known.
+  ///
+  /// In en, this message translates to:
+  /// **'Salam! How has your skin felt this week?'**
+  String get checkInGreetingNoName;
+
+  /// Quick reply.
+  ///
+  /// In en, this message translates to:
+  /// **'Less oily than before'**
+  String get checkInFeelLessOily;
+
+  /// Quick reply.
+  ///
+  /// In en, this message translates to:
+  /// **'About the same'**
+  String get checkInFeelSame;
+
+  /// Quick reply.
+  ///
+  /// In en, this message translates to:
+  /// **'Drier or tighter'**
+  String get checkInFeelDrier;
+
+  /// Quick reply.
+  ///
+  /// In en, this message translates to:
+  /// **'More irritated'**
+  String get checkInFeelIrritated;
+
+  /// Second question after a good answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Nice. Any new breakouts since last week?'**
+  String get checkInQ2Nice;
+
+  /// Second question after a neutral answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks. Any new breakouts since last week?'**
+  String get checkInQ2Thanks;
+
+  /// Second question after a drier answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it. Any new breakouts since last week?'**
+  String get checkInQ2Noted;
+
+  /// Second question after an irritated answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry to hear that. Any new breakouts since last week?'**
+  String get checkInQ2Sorry;
+
+  /// Quick reply.
+  ///
+  /// In en, this message translates to:
+  /// **'No new ones'**
+  String get checkInBreakNone;
+
+  /// Quick reply.
+  ///
+  /// In en, this message translates to:
+  /// **'1–2 small ones'**
+  String get checkInBreakFew;
+
+  /// Quick reply.
+  ///
+  /// In en, this message translates to:
+  /// **'A few more than before'**
+  String get checkInBreakMore;
+
+  /// Quick reply.
+  ///
+  /// In en, this message translates to:
+  /// **'Many or painful'**
+  String get checkInBreakSevere;
+
+  /// Result title.
+  ///
+  /// In en, this message translates to:
+  /// **'Likely on track'**
+  String get checkInOnTrack;
+
+  /// Result title.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep going'**
+  String get checkInKeepGoing;
+
+  /// Result title.
+  ///
+  /// In en, this message translates to:
+  /// **'Let’s adjust a little'**
+  String get checkInAdjust;
+
+  /// Result title.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check with a professional'**
+  String get checkInSeePro;
+
+  /// Result sentence about the skin feel.
+  ///
+  /// In en, this message translates to:
+  /// **'Oil control is improving.'**
+  String get checkInSentenceLessOily;
+
+  /// Result sentence about the skin feel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your skin feels about the same.'**
+  String get checkInSentenceSame;
+
+  /// Result sentence about the skin feel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your skin feels drier, which is common with new products.'**
+  String get checkInSentenceDrier;
+
+  /// Result sentence about the skin feel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your skin feels irritated.'**
+  String get checkInSentenceIrritated;
+
+  /// Result sentence about breakouts.
+  ///
+  /// In en, this message translates to:
+  /// **'No new breakouts is a good sign.'**
+  String get checkInSentenceNone;
+
+  /// Result sentence about breakouts.
+  ///
+  /// In en, this message translates to:
+  /// **'A few small breakouts are common in week {week}.'**
+  String checkInSentenceFew(int week);
+
+  /// Result sentence about breakouts.
+  ///
+  /// In en, this message translates to:
+  /// **'More breakouts than before can happen while skin adjusts.'**
+  String get checkInSentenceMore;
+
+  /// Result sentence about breakouts.
+  ///
+  /// In en, this message translates to:
+  /// **'Many or painful breakouts need a professional look.'**
+  String get checkInSentenceSevere;
+
+  /// Closing sentence of an on-track result.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep going and try not to pick.'**
+  String get checkInAdviceOnTrack;
+
+  /// Closing sentence of a keep-going result.
+  ///
+  /// In en, this message translates to:
+  /// **'Results usually take 6–8 weeks, so keep going.'**
+  String get checkInAdviceKeepGoing;
+
+  /// Closing sentence of an adjust result.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a richer moisturiser and use strong products less often. If nothing changes in two weeks, ask a pharmacist.'**
+  String get checkInAdviceAdjust;
+
+  /// Closing sentence of a see-a-professional result.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause any new products and ask a dermatologist or pharmacist, especially if it is painful or keeps getting worse.'**
+  String get checkInAdviceSeePro;
+
+  /// Chip in the result card. {date} is like 14 Nov.
+  ///
+  /// In en, this message translates to:
+  /// **'Next photo check · {date}'**
+  String checkInNextPhoto(String date);
+
+  /// Hint inside the reply field.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply in English or Urdu…'**
+  String get checkInHint;
+
+  /// Tooltip of the send button.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get checkInSend;
+
+  /// Coach message after the user types a note once the check-in is done.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks, I’ve saved your note for your next check-in.'**
+  String get checkInNoteSaved;
+
+  /// Initial letter in the coach avatar.
+  ///
+  /// In en, this message translates to:
+  /// **'S'**
+  String get checkInCoachInitial;
+
+  /// Screen-reader label of a coach message.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf says: {text}'**
+  String checkInCoachSays(String text);
+
+  /// Screen-reader label of a message from the user.
+  ///
+  /// In en, this message translates to:
+  /// **'You said: {text}'**
+  String checkInYouSaid(String text);
+
+  /// Screen-reader label of the result card.
+  ///
+  /// In en, this message translates to:
+  /// **'Result: {title}. {body}'**
+  String checkInResultSemantics(String title, String body);
+
+  /// Title of the info dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'About check-ins'**
+  String get checkInInfoTitle;
+
+  /// Body of the info dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Your check-in uses simple rules, not AI. Your answers are kept on your phone. It cannot diagnose skin conditions: if something worries you, please see a dermatologist.'**
+  String get checkInInfoBody;
+
+  /// Button that closes the info dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get checkInInfoClose;
 }
 
 class _AppLocalizationsDelegate

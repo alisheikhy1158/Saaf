@@ -885,4 +885,285 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get homeErrorAction => 'دوبارہ کوشش کریں';
+
+  @override
+  String get productScanTitle => 'اسکین کا نتیجہ';
+
+  @override
+  String get productShare => 'یہ پروڈکٹ شیئر کریں';
+
+  @override
+  String productShareText(String brand, String name, String price) {
+    return '$brand $name: ثاف پر $price سے۔ صرف ظاہری رہنمائی۔';
+  }
+
+  @override
+  String get productBarcodeMatched => 'بار کوڈ مل گیا';
+
+  @override
+  String get productFitGood => 'آپ کے لیے اچھا انتخاب';
+
+  @override
+  String get productFitCareful => 'احتیاط سے استعمال کریں';
+
+  @override
+  String get productFitAvoid => 'آپ کے لیے تجویز نہیں';
+
+  @override
+  String get productAllSkin => 'ہر قسم کی جلد';
+
+  @override
+  String get productAcneProne => 'دانوں والی جلد';
+
+  @override
+  String get clashNiacinamideVitaminCTitle => 'وٹامن سی کے ساتھ نہ ملائیں';
+
+  @override
+  String get clashMoveToNight =>
+      'اگر آپ کے صبح کے روٹین میں وٹامن سی ہے تو اسے رات کو استعمال کریں۔';
+
+  @override
+  String get clashMoveToMorning =>
+      'اگر آپ کے رات کے روٹین میں وٹامن سی ہے تو اسے صبح استعمال کریں۔';
+
+  @override
+  String get clashDifferentDays =>
+      'اسے اپنے وٹامن سی سے الگ دنوں میں استعمال کریں۔';
+
+  @override
+  String get clashRetinolExfoliantsTitle =>
+      'ایکسفولیئٹنگ ایسڈز کے ساتھ تہہ نہ لگائیں';
+
+  @override
+  String get clashRetinolExfoliants =>
+      'جلن سے بچنے کے لیے انہیں الگ الگ راتوں میں استعمال کریں۔';
+
+  @override
+  String get clashBenzoylRetinolTitle =>
+      'بینزائل پرآکسائیڈ کے ساتھ تہہ نہ لگائیں';
+
+  @override
+  String get clashBenzoylRetinol =>
+      'جلن سے بچنے کے لیے انہیں دن کے الگ الگ اوقات میں استعمال کریں۔';
+
+  @override
+  String get productCarefulTitle => 'استعمال سے پہلے جانچ لیں';
+
+  @override
+  String get productCarefulBody =>
+      'ہو سکتا ہے یہ آپ کی جلد کی قسم یا حساسیت کے مطابق نہ ہو۔ پہلے ذرا سی جگہ پر آزما لیں۔';
+
+  @override
+  String get productAvoidTitle => 'آپ کے لیے عموماً پرہیز';
+
+  @override
+  String get productAvoidBody =>
+      'آپ کے جوابات کے مطابق ایسی مصنوعات سے پرہیز بہتر ہے۔ پہلے ڈاکٹر یا فارماسسٹ سے پوچھیں۔';
+
+  @override
+  String get productWhereToBuy => 'کہاں سے خریدیں';
+
+  @override
+  String get productPricesToday => 'آج کی قیمتیں';
+
+  @override
+  String productPricesAsOf(String date) {
+    return '$date تک کی قیمتیں';
+  }
+
+  @override
+  String get productBuy => 'خریدیں';
+
+  @override
+  String productBuySemantics(String store, String price) {
+    return '$store سے $price میں خریدیں';
+  }
+
+  @override
+  String get productAffiliate =>
+      'کچھ خریداری کے لنکس سے ثاف کو معمولی کمیشن مل سکتا ہے۔ اس سے آپ کی قیمت نہیں بدلتی۔';
+
+  @override
+  String get productDisclaimer =>
+      'اجزاء کے بارے میں مشورہ عمومی رہنمائی ہے، طبی مشورہ نہیں۔';
+
+  @override
+  String get productLinkFailed => 'ہم یہ لنک نہیں کھول سکے۔';
+
+  @override
+  String get productNoneTitle => 'ابھی کوئی پروڈکٹ اسکین نہیں ہوئی';
+
+  @override
+  String get productNoneBody =>
+      'یہ دیکھنے کے لیے کہ کوئی پروڈکٹ آپ کی جلد کے لیے ٹھیک ہے، اس کا بار کوڈ اسکین کریں۔';
+
+  @override
+  String get productNoneAction => 'ہوم پر جائیں';
+
+  @override
+  String get productNotFoundTitle => 'ہمیں یہ پروڈکٹ نہیں ملی';
+
+  @override
+  String get productNotFoundBody => 'بار کوڈ چیک کر کے دوبارہ کوشش کریں۔';
+
+  @override
+  String get productErrorTitle => 'ہم یہ پروڈکٹ لوڈ نہیں کر سکے';
+
+  @override
+  String get productErrorAction => 'دوبارہ کوشش کریں';
+
+  @override
+  String get checkInTitle => 'ہفتہ وار جائزہ';
+
+  @override
+  String get checkInInfo => 'جائزے کے بارے میں';
+
+  @override
+  String checkInWeek(int week) {
+    return 'آپ کے روٹین کا ہفتہ $week';
+  }
+
+  @override
+  String checkInGreeting(String name) {
+    return 'سلام $name! اس ہفتے آپ کی جلد کیسی رہی؟';
+  }
+
+  @override
+  String get checkInGreetingNoName => 'سلام! اس ہفتے آپ کی جلد کیسی رہی؟';
+
+  @override
+  String get checkInFeelLessOily => 'پہلے سے کم چکنی';
+
+  @override
+  String get checkInFeelSame => 'تقریباً ویسی ہی';
+
+  @override
+  String get checkInFeelDrier => 'زیادہ خشک یا کھنچی ہوئی';
+
+  @override
+  String get checkInFeelIrritated => 'زیادہ جلن';
+
+  @override
+  String get checkInQ2Nice => 'بہت اچھا۔ پچھلے ہفتے سے کوئی نئے دانے نکلے؟';
+
+  @override
+  String get checkInQ2Thanks => 'شکریہ۔ پچھلے ہفتے سے کوئی نئے دانے نکلے؟';
+
+  @override
+  String get checkInQ2Noted => 'سمجھ گیا۔ پچھلے ہفتے سے کوئی نئے دانے نکلے؟';
+
+  @override
+  String get checkInQ2Sorry =>
+      'یہ سن کر افسوس ہوا۔ پچھلے ہفتے سے کوئی نئے دانے نکلے؟';
+
+  @override
+  String get checkInBreakNone => 'کوئی نیا نہیں';
+
+  @override
+  String get checkInBreakFew => '1 یا 2 چھوٹے';
+
+  @override
+  String get checkInBreakMore => 'پہلے سے کچھ زیادہ';
+
+  @override
+  String get checkInBreakSevere => 'بہت سے یا تکلیف دہ';
+
+  @override
+  String get checkInOnTrack => 'غالباً صحیح راستے پر';
+
+  @override
+  String get checkInKeepGoing => 'جاری رکھیں';
+
+  @override
+  String get checkInAdjust => 'تھوڑی تبدیلی کرتے ہیں';
+
+  @override
+  String get checkInSeePro => 'براہِ کرم کسی ماہر سے مشورہ کریں';
+
+  @override
+  String get checkInSentenceLessOily => 'چکناہٹ پر قابو بہتر ہو رہا ہے۔';
+
+  @override
+  String get checkInSentenceSame => 'آپ کی جلد تقریباً ویسی ہی ہے۔';
+
+  @override
+  String get checkInSentenceDrier =>
+      'آپ کی جلد زیادہ خشک ہے، جو نئی مصنوعات کے ساتھ عام بات ہے۔';
+
+  @override
+  String get checkInSentenceIrritated => 'آپ کی جلد میں جلن ہے۔';
+
+  @override
+  String get checkInSentenceNone => 'کوئی نیا دانہ نہ نکلنا اچھی علامت ہے۔';
+
+  @override
+  String checkInSentenceFew(int week) {
+    return 'ہفتہ $week میں چند چھوٹے دانے عام ہیں۔';
+  }
+
+  @override
+  String get checkInSentenceMore =>
+      'جلد کے ڈھلنے کے دوران پہلے سے زیادہ دانے نکل سکتے ہیں۔';
+
+  @override
+  String get checkInSentenceSevere =>
+      'بہت سے یا تکلیف دہ دانوں کو ماہر کو دکھانا چاہیے۔';
+
+  @override
+  String get checkInAdviceOnTrack => 'جاری رکھیں اور دانوں کو نوچنے سے بچیں۔';
+
+  @override
+  String get checkInAdviceKeepGoing =>
+      'نتائج عموماً 6 سے 8 ہفتے میں آتے ہیں، اس لیے جاری رکھیں۔';
+
+  @override
+  String get checkInAdviceAdjust =>
+      'زیادہ نرم موئسچرائزر آزمائیں اور تیز مصنوعات کم استعمال کریں۔ دو ہفتے میں فرق نہ پڑے تو فارماسسٹ سے پوچھیں۔';
+
+  @override
+  String get checkInAdviceSeePro =>
+      'کوئی بھی نئی مصنوعات روک دیں اور ماہرِ جلد یا فارماسسٹ سے پوچھیں، خاص طور پر اگر تکلیف ہو یا حالت بگڑتی جائے۔';
+
+  @override
+  String checkInNextPhoto(String date) {
+    return 'اگلی تصویر کا جائزہ · $date';
+  }
+
+  @override
+  String get checkInHint => 'اردو یا انگریزی میں جواب دیں…';
+
+  @override
+  String get checkInSend => 'بھیجیں';
+
+  @override
+  String get checkInNoteSaved =>
+      'شکریہ، میں نے آپ کا نوٹ اگلے جائزے کے لیے محفوظ کر لیا ہے۔';
+
+  @override
+  String get checkInCoachInitial => 'ث';
+
+  @override
+  String checkInCoachSays(String text) {
+    return 'ثاف کہتا ہے: $text';
+  }
+
+  @override
+  String checkInYouSaid(String text) {
+    return 'آپ نے کہا: $text';
+  }
+
+  @override
+  String checkInResultSemantics(String title, String body) {
+    return 'نتیجہ: $title۔ $body';
+  }
+
+  @override
+  String get checkInInfoTitle => 'جائزے کے بارے میں';
+
+  @override
+  String get checkInInfoBody =>
+      'آپ کا جائزہ سادہ اصولوں پر چلتا ہے، مصنوعی ذہانت پر نہیں۔ آپ کے جوابات آپ کے فون ہی میں رہتے ہیں۔ یہ جلد کی بیماریوں کی تشخیص نہیں کر سکتا: اگر کوئی بات پریشان کرے تو براہِ کرم ماہرِ جلد سے ملیں۔';
+
+  @override
+  String get checkInInfoClose => 'ٹھیک ہے';
 }

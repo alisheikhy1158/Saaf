@@ -885,4 +885,285 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeErrorAction => 'Try again';
+
+  @override
+  String get productScanTitle => 'Scan result';
+
+  @override
+  String get productShare => 'Share this product';
+
+  @override
+  String productShareText(String brand, String name, String price) {
+    return '$brand $name: from $price on Saaf. Cosmetic guidance only.';
+  }
+
+  @override
+  String get productBarcodeMatched => 'Barcode matched';
+
+  @override
+  String get productFitGood => 'Good match for you';
+
+  @override
+  String get productFitCareful => 'Use with care';
+
+  @override
+  String get productFitAvoid => 'Not recommended for you';
+
+  @override
+  String get productAllSkin => 'All skin types';
+
+  @override
+  String get productAcneProne => 'Acne-prone';
+
+  @override
+  String get clashNiacinamideVitaminCTitle => 'Don’t mix with Vitamin C';
+
+  @override
+  String get clashMoveToNight =>
+      'Use this at night if your morning routine has Vitamin C.';
+
+  @override
+  String get clashMoveToMorning =>
+      'Use this in the morning if your night routine has Vitamin C.';
+
+  @override
+  String get clashDifferentDays =>
+      'Use it on different days from your Vitamin C.';
+
+  @override
+  String get clashRetinolExfoliantsTitle =>
+      'Don’t layer with exfoliating acids';
+
+  @override
+  String get clashRetinolExfoliants =>
+      'Use them on different nights to avoid irritation.';
+
+  @override
+  String get clashBenzoylRetinolTitle => 'Don’t layer with benzoyl peroxide';
+
+  @override
+  String get clashBenzoylRetinol =>
+      'Use them at different times of day to avoid irritation.';
+
+  @override
+  String get productCarefulTitle => 'Check before you use it';
+
+  @override
+  String get productCarefulBody =>
+      'It may not suit your skin type or sensitivity. Test a small patch first.';
+
+  @override
+  String get productAvoidTitle => 'Usually avoided for you';
+
+  @override
+  String get productAvoidBody =>
+      'Your answers say products like this are best avoided. Ask a doctor or pharmacist first.';
+
+  @override
+  String get productWhereToBuy => 'Where to buy';
+
+  @override
+  String get productPricesToday => 'Prices today';
+
+  @override
+  String productPricesAsOf(String date) {
+    return 'Prices as of $date';
+  }
+
+  @override
+  String get productBuy => 'Buy';
+
+  @override
+  String productBuySemantics(String store, String price) {
+    return 'Buy from $store for $price';
+  }
+
+  @override
+  String get productAffiliate =>
+      'Some Buy links may earn Saaf a small commission. It never changes your price.';
+
+  @override
+  String get productDisclaimer =>
+      'Ingredient advice is general guidance, not medical advice.';
+
+  @override
+  String get productLinkFailed => 'We couldn’t open that link.';
+
+  @override
+  String get productNoneTitle => 'No product scanned yet';
+
+  @override
+  String get productNoneBody =>
+      'Scan a product barcode to see if it suits your skin.';
+
+  @override
+  String get productNoneAction => 'Go to Home';
+
+  @override
+  String get productNotFoundTitle => 'We couldn’t find that product';
+
+  @override
+  String get productNotFoundBody => 'Check the barcode and try again.';
+
+  @override
+  String get productErrorTitle => 'We couldn’t load this product';
+
+  @override
+  String get productErrorAction => 'Try again';
+
+  @override
+  String get checkInTitle => 'Weekly check-in';
+
+  @override
+  String get checkInInfo => 'About check-ins';
+
+  @override
+  String checkInWeek(int week) {
+    return 'Week $week of your routine';
+  }
+
+  @override
+  String checkInGreeting(String name) {
+    return 'Salam $name! How has your skin felt this week?';
+  }
+
+  @override
+  String get checkInGreetingNoName =>
+      'Salam! How has your skin felt this week?';
+
+  @override
+  String get checkInFeelLessOily => 'Less oily than before';
+
+  @override
+  String get checkInFeelSame => 'About the same';
+
+  @override
+  String get checkInFeelDrier => 'Drier or tighter';
+
+  @override
+  String get checkInFeelIrritated => 'More irritated';
+
+  @override
+  String get checkInQ2Nice => 'Nice. Any new breakouts since last week?';
+
+  @override
+  String get checkInQ2Thanks => 'Thanks. Any new breakouts since last week?';
+
+  @override
+  String get checkInQ2Noted => 'Got it. Any new breakouts since last week?';
+
+  @override
+  String get checkInQ2Sorry =>
+      'Sorry to hear that. Any new breakouts since last week?';
+
+  @override
+  String get checkInBreakNone => 'No new ones';
+
+  @override
+  String get checkInBreakFew => '1–2 small ones';
+
+  @override
+  String get checkInBreakMore => 'A few more than before';
+
+  @override
+  String get checkInBreakSevere => 'Many or painful';
+
+  @override
+  String get checkInOnTrack => 'Likely on track';
+
+  @override
+  String get checkInKeepGoing => 'Keep going';
+
+  @override
+  String get checkInAdjust => 'Let’s adjust a little';
+
+  @override
+  String get checkInSeePro => 'Please check with a professional';
+
+  @override
+  String get checkInSentenceLessOily => 'Oil control is improving.';
+
+  @override
+  String get checkInSentenceSame => 'Your skin feels about the same.';
+
+  @override
+  String get checkInSentenceDrier =>
+      'Your skin feels drier, which is common with new products.';
+
+  @override
+  String get checkInSentenceIrritated => 'Your skin feels irritated.';
+
+  @override
+  String get checkInSentenceNone => 'No new breakouts is a good sign.';
+
+  @override
+  String checkInSentenceFew(int week) {
+    return 'A few small breakouts are common in week $week.';
+  }
+
+  @override
+  String get checkInSentenceMore =>
+      'More breakouts than before can happen while skin adjusts.';
+
+  @override
+  String get checkInSentenceSevere =>
+      'Many or painful breakouts need a professional look.';
+
+  @override
+  String get checkInAdviceOnTrack => 'Keep going and try not to pick.';
+
+  @override
+  String get checkInAdviceKeepGoing =>
+      'Results usually take 6–8 weeks, so keep going.';
+
+  @override
+  String get checkInAdviceAdjust =>
+      'Try a richer moisturiser and use strong products less often. If nothing changes in two weeks, ask a pharmacist.';
+
+  @override
+  String get checkInAdviceSeePro =>
+      'Pause any new products and ask a dermatologist or pharmacist, especially if it is painful or keeps getting worse.';
+
+  @override
+  String checkInNextPhoto(String date) {
+    return 'Next photo check · $date';
+  }
+
+  @override
+  String get checkInHint => 'Reply in English or Urdu…';
+
+  @override
+  String get checkInSend => 'Send';
+
+  @override
+  String get checkInNoteSaved =>
+      'Thanks, I’ve saved your note for your next check-in.';
+
+  @override
+  String get checkInCoachInitial => 'S';
+
+  @override
+  String checkInCoachSays(String text) {
+    return 'Saaf says: $text';
+  }
+
+  @override
+  String checkInYouSaid(String text) {
+    return 'You said: $text';
+  }
+
+  @override
+  String checkInResultSemantics(String title, String body) {
+    return 'Result: $title. $body';
+  }
+
+  @override
+  String get checkInInfoTitle => 'About check-ins';
+
+  @override
+  String get checkInInfoBody =>
+      'Your check-in uses simple rules, not AI. Your answers are kept on your phone. It cannot diagnose skin conditions: if something worries you, please see a dermatologist.';
+
+  @override
+  String get checkInInfoClose => 'Got it';
 }

@@ -3,22 +3,28 @@ import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/core/theme/tokens.dart';
 
 /// Placeholder picture of a product (Figma 08 "Product image"): a small bottle
-/// on a faint papaya square, 48 dp, r12. Decorative: the product name next to it
+/// on a faint papaya square, 48 dp, r12 (any [size], corners scale with it). Decorative: the product name next to it
 /// carries the meaning, so screen readers skip it (A11Y-2).
 class SaafProductThumbnail extends StatelessWidget {
-  const SaafProductThumbnail({super.key});
+  const SaafProductThumbnail({super.key, this.size});
+
+  /// Defaults to the 48 dp list size; the 10 hero uses 150 dp.
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.saaf;
     final colors = context.colors;
+    final dimension = size ?? tokens.size.thumbnail;
+    // The corner radius is the same fraction of the picture at every size.
+    final radius = dimension * tokens.radius.r12 / tokens.size.thumbnail;
     return ExcludeSemantics(
       child: SizedBox.square(
-        dimension: tokens.size.thumbnail,
+        dimension: dimension,
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: tokens.papayaTint,
-            borderRadius: BorderRadius.circular(tokens.radius.r12),
+            borderRadius: BorderRadius.circular(radius),
           ),
           child: CustomPaint(
             painter: _BottlePainter(

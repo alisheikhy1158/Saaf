@@ -181,6 +181,7 @@ class SaafRadius {
 
   final double r3 = 3;
   final double r4 = 4;
+  final double r6 = 6;
   final double r7 = 7;
   final double r12 = 12;
   final double r14 = 14;
@@ -204,6 +205,7 @@ class SaafSize {
   final double iconButton = 40;
   final double iconCircle = 40;
   final double iconCircleSmall = 36;
+  final double iconCircleCompact = 32;
   final double iconCircleWelcome = 38;
   final double iconCircleLarge = 64;
   final double avatar = 64;
@@ -234,6 +236,11 @@ class SaafSize {
   final double progressRing = 76;
   final double progressRingStroke = 7;
   final double progressBarWide = 176;
+  final double productPhoto = 180;
+  final double chatBubbleMaxWidth = 262;
+  final double chatAvatar = 30;
+  final double sendButton = 44;
+  final double productImage = 150;
   final double borderThin = 1;
   final double borderFocus = 1.5;
   final double borderSelectedPlan = 2;
@@ -424,6 +431,13 @@ abstract final class SaafType {
     fontSize: 11,
     height: 14 / 11,
     fontWeight: FontWeight.w400,
+  );
+
+  /// 10 product title ("Niacinamide 10% + Zinc Serum").
+  static const TextStyle productTitle = TextStyle(
+    fontSize: 25,
+    height: 34 / 25,
+    fontWeight: FontWeight.w800,
   );
 
   /// 07 score-card headline ("Good base, two things to work on").

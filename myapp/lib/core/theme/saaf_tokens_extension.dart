@@ -26,6 +26,7 @@ class SaafTextStyles {
     required this.scoreValue,
     required this.scoreLabel,
     required this.cardHeadline,
+    required this.productTitle,
     required this.otpDigit,
     required this.keypadKey,
   });
@@ -48,6 +49,7 @@ class SaafTextStyles {
   final TextStyle scoreValue;
   final TextStyle scoreLabel;
   final TextStyle cardHeadline;
+  final TextStyle productTitle;
   final TextStyle otpDigit;
   final TextStyle keypadKey;
 
@@ -82,6 +84,7 @@ class SaafTextStyles {
       scoreValue: _style(SaafType.scoreValue, primary),
       scoreLabel: _style(SaafType.scoreLabel, primary),
       cardHeadline: _style(SaafType.cardHeadline, primary),
+      productTitle: _style(SaafType.productTitle, primary),
       otpDigit: _style(SaafType.otpDigit, primary),
       keypadKey: _style(SaafType.keypadKey, primary),
     );
@@ -108,6 +111,7 @@ class SaafTextStyles {
       scoreValue: l(scoreValue, other.scoreValue),
       scoreLabel: l(scoreLabel, other.scoreLabel),
       cardHeadline: l(cardHeadline, other.cardHeadline),
+      productTitle: l(productTitle, other.productTitle),
       otpDigit: l(otpDigit, other.otpDigit),
       keypadKey: l(keypadKey, other.keypadKey),
     );

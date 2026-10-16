@@ -13,6 +13,9 @@ enum SaafChipTone {
   /// The page's text colour as fill, the page colour as text: the "Move to
   /// softer light" chip on 06 (cornsilk on the dark screen).
   strong,
+
+  /// No fill, a hairline border: the skin-type chip on 10.
+  outline,
 }
 
 /// Display pill (r18). Pair meaning with an [icon] or text, never colour alone
@@ -48,6 +51,7 @@ class SaafChip extends StatelessWidget {
       SaafChipTone.onDark => (tokens.controlOnInk, colors.onInverseSurface),
       SaafChipTone.sageTint => (tokens.sageTint, colors.onSurface),
       SaafChipTone.strong => (colors.onSurface, colors.surface),
+      SaafChipTone.outline => (Colors.transparent, colors.onSurface),
     };
 
     final textStyle = (small ? tokens.styles.micro : context.text.labelMedium)
@@ -58,6 +62,12 @@ class SaafChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: fill,
           borderRadius: BorderRadius.circular(tokens.radius.r18),
+          border: tone == SaafChipTone.outline
+              ? Border.all(
+                  color: tokens.borderStrong,
+                  width: tokens.size.borderThin,
+                )
+              : null,
         ),
         child: Padding(
           padding: EdgeInsetsDirectional.symmetric(

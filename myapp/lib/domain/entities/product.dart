@@ -1,3 +1,4 @@
+import 'package:saaf/domain/entities/ingredient.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
 
@@ -18,6 +19,7 @@ class Product {
     required this.times,
     this.skinTypes = const {},
     this.targets = const {},
+    this.ingredients = const {},
     this.isStrongActive = false,
     this.avoidInPregnancy = false,
     this.fragranceFree = false,
@@ -36,6 +38,9 @@ class Product {
 
   /// Concerns it helps with.
   final Set<SkinConcern> targets;
+
+  /// The active ingredients that matter for clashes (not the full INCI list).
+  final Set<Ingredient> ingredients;
 
   /// A strong active ingredient (retinoid, vitamin C, salicylic acid…): only
   /// suggested to someone with a matching concern, never with sensitive skin or

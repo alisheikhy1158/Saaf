@@ -1,3 +1,4 @@
+import 'package:saaf/domain/entities/ingredient.dart';
 import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
@@ -52,6 +53,7 @@ class SeedProductCatalog implements ProductCatalog {
       category: ProductCategory.treatment,
       pricePkr: 1450,
       times: _both,
+      ingredients: {Ingredient.niacinamide},
       targets: {
         SkinConcern.darkSpots,
         SkinConcern.oiliness,
@@ -65,6 +67,7 @@ class SeedProductCatalog implements ProductCatalog {
       category: ProductCategory.treatment,
       pricePkr: 1900,
       times: _morning,
+      ingredients: {Ingredient.vitaminC},
       targets: {SkinConcern.darkSpots, SkinConcern.unevenTone},
       isStrongActive: true,
     ),
@@ -74,6 +77,7 @@ class SeedProductCatalog implements ProductCatalog {
       category: ProductCategory.treatment,
       pricePkr: 1300,
       times: _both,
+      ingredients: {Ingredient.hyaluronicAcid},
       targets: {SkinConcern.dryness},
       fragranceFree: true,
     ),
@@ -83,6 +87,7 @@ class SeedProductCatalog implements ProductCatalog {
       category: ProductCategory.treatment,
       pricePkr: 1200,
       times: _night,
+      ingredients: {Ingredient.salicylicAcid},
       targets: {SkinConcern.acne, SkinConcern.oiliness},
       isStrongActive: true,
       avoidInPregnancy: true,
@@ -93,6 +98,7 @@ class SeedProductCatalog implements ProductCatalog {
       category: ProductCategory.treatment,
       pricePkr: 2200,
       times: _night,
+      ingredients: {Ingredient.retinol},
       targets: {
         SkinConcern.darkSpots,
         SkinConcern.acne,
@@ -107,6 +113,7 @@ class SeedProductCatalog implements ProductCatalog {
       category: ProductCategory.treatment,
       pricePkr: 1800,
       times: _night,
+      ingredients: {Ingredient.azelaicAcid},
       targets: {
         SkinConcern.darkSpots,
         SkinConcern.acne,
@@ -120,6 +127,7 @@ class SeedProductCatalog implements ProductCatalog {
       category: ProductCategory.treatment,
       pricePkr: 1700,
       times: _night,
+      ingredients: {Ingredient.ceramides},
       targets: {SkinConcern.dryness},
       fragranceFree: true,
     ),
