@@ -1,6 +1,9 @@
 // Covers: Phase 7 — what the user said and did survives a restart, and account
 // deletion wipes the database (store requirement A-1)
+import 'dart:ui' show Locale;
+
 import 'package:drift/native.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/data/local/app_database.dart';
@@ -9,12 +12,14 @@ import 'package:saaf/data/services/web/in_memory_photo_store.dart';
 import 'package:saaf/domain/entities/completed_scan.dart';
 import 'package:saaf/domain/entities/consent_record.dart';
 import 'package:saaf/domain/entities/face_pose.dart';
+import 'package:saaf/domain/entities/reminder_settings.dart';
 import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/entities/stored_photo.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/database_providers.dart';
+import 'package:saaf/presentation/providers/locale_controller.dart';
 import 'package:saaf/presentation/providers/onboarding_status.dart';
 import 'package:saaf/presentation/providers/profile_providers.dart';
 import 'package:saaf/presentation/providers/progress_providers.dart';
@@ -153,4 +158,38 @@ void main() {
       expect(again.read(quizDoneProvider), isFalse);
     },
   );
+
+  test('reminders, language and appearance are remembered', () async {
+    final first = start();
+    first
+        .read(reminderSettingsControllerProvider.notifier)
+        .set(
+          const ReminderSettings(morning: ReminderTime(7, 30), nightOn: false),
+        );
+    first.read(themeModeControllerProvider.notifier).set(ThemeMode.dark);
+    first.read(localeControllerProvider.notifier).setLocale(const Locale('ur'));
+    await settle();
+
+    final second = start();
+    second.listen(reminderSettingsControllerProvider, (_, _) {});
+    second.listen(themeModeControllerProvider, (_, _) {});
+    second.listen(localeControllerProvider, (_, _) {});
+    await settle();
+    final reminders = second.read(reminderSettingsControllerProvider);
+    expect(reminders.morning, const ReminderTime(7, 30));
+    expect(reminders.nightOn, isFalse);
+    expect(second.read(themeModeControllerProvider), ThemeMode.dark);
+    expect(second.read(localeControllerProvider), const Locale('ur'));
+  });
+
+  test('following the phone language is remembered as "no choice"', () async {
+    final first = start();
+    first.read(localeControllerProvider.notifier).setLocale(const Locale('ur'));
+    first.read(localeControllerProvider.notifier).setLocale(null);
+    await settle();
+    final second = start();
+    second.listen(localeControllerProvider, (_, _) {});
+    await settle();
+    expect(second.read(localeControllerProvider), isNull);
+  });
 }

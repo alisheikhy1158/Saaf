@@ -1505,8 +1505,36 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get remindersNote =>
-      'آپ کے اوقات محفوظ ہو گئے ہیں۔ یاد دہانی کے نوٹیفکیشن ایک آئندہ اپ ڈیٹ میں آئیں گے۔';
+  String get remindersNote => 'ثاف ہر روز ان اوقات پر آپ کو یاد دلاتا ہے۔';
+
+  @override
+  String get remindersRationaleTitle => 'نوٹیفکیشن کی اجازت دیں';
+
+  @override
+  String get remindersRationaleBody =>
+      'ثاف آپ کے منتخب کردہ اوقات پر صبح کے روٹین کی ایک اور رات کے روٹین کی ایک نرم یاد دہانی بھیجتا ہے۔ اس کے علاوہ کچھ نہیں۔';
+
+  @override
+  String get remindersDeniedNote =>
+      'نوٹیفکیشن بند ہیں، اس لیے یاد دہانی نہیں بھیجی جا سکتی۔ آپ کسی بھی وقت دوبارہ کوشش کر سکتے ہیں۔';
+
+  @override
+  String get remindersBlockedNote =>
+      'ثاف کے لیے نوٹیفکیشن بلاک ہیں۔ یاد دہانی کے لیے انہیں اپنے فون کی سیٹنگز میں اجازت دیں۔';
+
+  @override
+  String get reminderNotificationMorningTitle => 'صبح کے روٹین کا وقت';
+
+  @override
+  String get reminderNotificationMorningBody =>
+      'چہرہ دھوئیں، موئسچرائزر اور سن اسکرین لگائیں۔ بس چند منٹ لگتے ہیں۔';
+
+  @override
+  String get reminderNotificationNightTitle => 'رات کے روٹین کا وقت';
+
+  @override
+  String get reminderNotificationNightBody =>
+      'چہرہ دھوئیں اور موئسچرائزر لگائیں، پھر آرام سے سو جائیں۔';
 
   @override
   String get backupTitle => 'تصاویر کا بیک اپ';

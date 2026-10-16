@@ -8,7 +8,12 @@ import 'package:saaf/app.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/app_router.dart';
 import 'package:saaf/core/theme/saaf_theme.dart';
+import 'package:saaf/data/services/web/fake_notification_permission_service.dart';
+import 'package:saaf/domain/entities/notification_permission.dart';
+import 'package:saaf/domain/services/notification_permission_service.dart';
+import 'package:saaf/domain/services/reminder_scheduler.dart';
 import 'package:saaf/presentation/providers/app_router_provider.dart';
+import 'package:saaf/presentation/providers/notification_providers.dart';
 
 /// The responsive matrix from design.md §7 / test-strategy.md §4.
 const List<Size> matrixSizes = [
@@ -16,6 +21,21 @@ const List<Size> matrixSizes = [
   Size(390, 844), // phone (Figma frame)
   Size(768, 1024), // iPad portrait
   Size(1280, 800), // tablet landscape / unfolded
+];
+
+/// No test talks to a real phone: notifications are pretend, with a permission
+/// nobody has asked for yet, unless a test passes its own fakes.
+List<Override> _phoneFakes(
+  NotificationPermissionService? permissions,
+  ReminderScheduler? scheduler,
+) => [
+  notificationPermissionServiceProvider.overrideWithValue(
+    permissions ??
+        FakeNotificationPermissionService(NotificationPermission.denied),
+  ),
+  reminderSchedulerProvider.overrideWithValue(
+    scheduler ?? FakeReminderScheduler(),
+  ),
 ];
 
 /// Pumps [child] inside ProviderScope + MaterialApp with the Saaf themes and
@@ -31,6 +51,8 @@ Future<void> pumpSaaf(
   bool highContrast = false,
   TargetPlatform? platform,
   bool scaffold = true,
+  NotificationPermissionService? permissions,
+  ReminderScheduler? scheduler,
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
@@ -47,7 +69,7 @@ Future<void> pumpSaaf(
 
   await tester.pumpWidget(
     ProviderScope(
-      overrides: overrides,
+      overrides: [..._phoneFakes(permissions, scheduler), ...overrides],
       child: MaterialApp(
         theme: SaafTheme.light(),
         darkTheme: SaafTheme.dark(),
@@ -71,6 +93,8 @@ Future<void> pumpSaafApp(
   String location = '/welcome',
   Size size = const Size(390, 844),
   List<Override> overrides = const [],
+  NotificationPermissionService? permissions,
+  ReminderScheduler? scheduler,
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
@@ -78,6 +102,7 @@ Future<void> pumpSaafApp(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        ..._phoneFakes(permissions, scheduler),
         appRouterProvider.overrideWithValue(
           buildAppRouter(initialLocation: location),
         ),

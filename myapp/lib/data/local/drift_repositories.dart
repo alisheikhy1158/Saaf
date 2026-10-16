@@ -17,6 +17,7 @@ import 'package:saaf/domain/repositories/consent_repository.dart';
 import 'package:saaf/domain/repositories/onboarding_repository.dart';
 import 'package:saaf/domain/repositories/routine_log_repository.dart';
 import 'package:saaf/domain/repositories/scan_history_repository.dart';
+import 'package:saaf/domain/repositories/settings_repository.dart';
 import 'package:saaf/domain/repositories/skin_profile_repository.dart';
 
 /// Reads an enum stored by name; an unknown or missing name is null (a value
@@ -258,4 +259,33 @@ class DriftOnboardingRepository implements OnboardingRepository {
       .insertOnConflictUpdate(
         FlagRowsCompanion.insert(name: _quizKey, value: done),
       );
+}
+
+class DriftSettingsRepository implements SettingsRepository {
+  DriftSettingsRepository(this._db);
+
+  final AppDatabase _db;
+
+  @override
+  Future<String?> read(String name) async {
+    final row = await (_db.select(
+      _db.settingRows,
+    )..where((r) => r.name.equals(name))).getSingleOrNull();
+    return row?.value;
+  }
+
+  @override
+  Future<void> write(String name, String? value) async {
+    if (value == null) {
+      await (_db.delete(
+        _db.settingRows,
+      )..where((r) => r.name.equals(name))).go();
+      return;
+    }
+    await _db
+        .into(_db.settingRows)
+        .insertOnConflictUpdate(
+          SettingRowsCompanion.insert(name: name, value: value),
+        );
+  }
 }

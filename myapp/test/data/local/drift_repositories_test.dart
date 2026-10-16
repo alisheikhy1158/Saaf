@@ -200,4 +200,16 @@ void main() {
       expect(await repo.quizDone(), isFalse);
     });
   });
+
+  group('settings', () {
+    test('read, replace and forget', () async {
+      final repo = DriftSettingsRepository(db);
+      expect(await repo.read('language'), isNull);
+      await repo.write('language', 'ur');
+      await repo.write('language', 'en');
+      expect(await repo.read('language'), 'en');
+      await repo.write('language', null);
+      expect(await repo.read('language'), isNull);
+    });
+  });
 }

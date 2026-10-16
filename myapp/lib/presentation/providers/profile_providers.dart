@@ -13,6 +13,7 @@ import 'package:saaf/presentation/providers/onboarding_status.dart';
 import 'package:saaf/presentation/providers/pending_sign_in.dart';
 import 'package:saaf/presentation/providers/progress_providers.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
+import 'package:saaf/presentation/providers/settings_providers.dart';
 import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 
 part 'profile_providers.g.dart';
@@ -21,19 +22,46 @@ part 'profile_providers.g.dart';
 /// Phase 7, notifications with the permission flow).
 @Riverpod(keepAlive: true)
 class ReminderSettingsController extends _$ReminderSettingsController {
-  @override
-  ReminderSettings build() => const ReminderSettings();
+  bool _changed = false;
 
-  void set(ReminderSettings settings) => state = settings;
+  @override
+  ReminderSettings build() {
+    ref.read(settingsRepositoryProvider).read(SettingNames.reminders).then((
+      text,
+    ) {
+      if (ref.mounted && !_changed) state = ReminderSettings.decode(text);
+    });
+    return const ReminderSettings();
+  }
+
+  void set(ReminderSettings settings) {
+    _changed = true;
+    state = settings;
+    ref
+        .read(settingsRepositoryProvider)
+        .write(SettingNames.reminders, settings.encode());
+  }
 }
 
 /// Light, dark, or whatever the phone uses.
 @Riverpod(keepAlive: true)
 class ThemeModeController extends _$ThemeModeController {
-  @override
-  ThemeMode build() => ThemeMode.system;
+  bool _changed = false;
 
-  void set(ThemeMode mode) => state = mode;
+  @override
+  ThemeMode build() {
+    ref.read(settingsRepositoryProvider).read(SettingNames.theme).then((name) {
+      final saved = ThemeMode.values.where((m) => m.name == name).firstOrNull;
+      if (ref.mounted && !_changed && saved != null) state = saved;
+    });
+    return ThemeMode.system;
+  }
+
+  void set(ThemeMode mode) {
+    _changed = true;
+    state = mode;
+    ref.read(settingsRepositoryProvider).write(SettingNames.theme, mode.name);
+  }
 }
 
 @riverpod

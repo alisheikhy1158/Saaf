@@ -1426,8 +1426,32 @@
     "placeholders": { "name": { "type": "String" } }
   },
 
-  "remindersNote": "Your times are saved. Reminder notifications arrive in a later update.",
+  "remindersNote": "Saaf reminds you every day at these times.",
   "@remindersNote": { "description": "Footer of the reminders sheet." },
+
+  "remindersRationaleTitle": "Allow notifications",
+  "@remindersRationaleTitle": { "description": "Title of our own explanation shown before the system notification dialog." },
+
+  "remindersRationaleBody": "Saaf sends one gentle reminder for your morning routine and one for your night routine, at the times you choose. Nothing else.",
+  "@remindersRationaleBody": { "description": "Body of our notification explanation." },
+
+  "remindersDeniedNote": "Notifications are off, so reminders can’t be sent. You can try again any time.",
+  "@remindersDeniedNote": { "description": "Shown in the reminders sheet after the user refused notifications." },
+
+  "remindersBlockedNote": "Notifications are blocked for Saaf. Allow them in your phone’s Settings to get reminders.",
+  "@remindersBlockedNote": { "description": "Shown in the reminders sheet when notifications are blocked in the phone's settings." },
+
+  "reminderNotificationMorningTitle": "Time for your morning routine",
+  "@reminderNotificationMorningTitle": { "description": "Title of the daily morning notification." },
+
+  "reminderNotificationMorningBody": "Cleanse, moisturise and put on sunscreen. It only takes a few minutes.",
+  "@reminderNotificationMorningBody": { "description": "Body of the daily morning notification." },
+
+  "reminderNotificationNightTitle": "Time for your night routine",
+  "@reminderNotificationNightTitle": { "description": "Title of the daily night notification." },
+
+  "reminderNotificationNightBody": "Cleanse and moisturise, then rest well.",
+  "@reminderNotificationNightBody": { "description": "Body of the daily night notification." },
 
   "backupTitle": "Photo backup",
   "@backupTitle": { "description": "Title of the photo backup sheet." },

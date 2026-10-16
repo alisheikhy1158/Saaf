@@ -73,6 +73,16 @@ class FlagRows extends Table {
   Set<Column<Object>> get primaryKey => {name};
 }
 
+/// Small settings by name (reminders, language, appearance). Added in
+/// schema version 2.
+class SettingRows extends Table {
+  TextColumn get name => text()();
+  TextColumn get value => text()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {name};
+}
+
 /// The phone's own database (OFF-1): the single source of truth for everything
 /// the user has told or done. Nothing here is sent anywhere.
 @DriftDatabase(
@@ -84,16 +94,20 @@ class FlagRows extends Table {
     RoutineLogRows,
     CheckInRows,
     FlagRows,
+    SettingRows,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      if (from < 2) await m.createTable(settingRows);
+    },
     beforeOpen: (details) async {
       // Photos reference scans; keep that honest.
       await customStatement('PRAGMA foreign_keys = ON');

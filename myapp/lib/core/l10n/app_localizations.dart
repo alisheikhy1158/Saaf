@@ -2669,8 +2669,56 @@ abstract class AppLocalizations {
   /// Footer of the reminders sheet.
   ///
   /// In en, this message translates to:
-  /// **'Your times are saved. Reminder notifications arrive in a later update.'**
+  /// **'Saaf reminds you every day at these times.'**
   String get remindersNote;
+
+  /// Title of our own explanation shown before the system notification dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications'**
+  String get remindersRationaleTitle;
+
+  /// Body of our notification explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf sends one gentle reminder for your morning routine and one for your night routine, at the times you choose. Nothing else.'**
+  String get remindersRationaleBody;
+
+  /// Shown in the reminders sheet after the user refused notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off, so reminders can’t be sent. You can try again any time.'**
+  String get remindersDeniedNote;
+
+  /// Shown in the reminders sheet when notifications are blocked in the phone's settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are blocked for Saaf. Allow them in your phone’s Settings to get reminders.'**
+  String get remindersBlockedNote;
+
+  /// Title of the daily morning notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Time for your morning routine'**
+  String get reminderNotificationMorningTitle;
+
+  /// Body of the daily morning notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleanse, moisturise and put on sunscreen. It only takes a few minutes.'**
+  String get reminderNotificationMorningBody;
+
+  /// Title of the daily night notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Time for your night routine'**
+  String get reminderNotificationNightTitle;
+
+  /// Body of the daily night notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleanse and moisturise, then rest well.'**
+  String get reminderNotificationNightBody;
 
   /// Title of the photo backup sheet.
   ///

@@ -6,8 +6,8 @@
 - **Phase / step:** ALL 14 Figma screens are built and tested (01–14) plus router, theme, l10n (English + Urdu), fakes for every
   plugin. GitHub: https://github.com/alisheikhy1158/Saaf (main). It is a complete, demo-able app on fakes; nothing is real-backend yet.
 - **Next exact step (needs the owner):** Firebase console setup (docs/firebase-setup.md), Apple/Google/Codemagic accounts, then a
-  Codemagic build to test the camera, permissions and share on real phones. Engineering next: Phase 7 rest (notifications; drift on web needs `sqlite3.wasm` + `drift_worker.js` in `web/`, OFF-6), Phase 8 (barcode scanner + real product/price service), Phase 9 (RevenueCat), real analyser.
-- **Tests:** 1165 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
+  Codemagic build to test the camera, permissions and share on real phones. Engineering next: Phase 7 rest (drift on web needs `sqlite3.wasm` + `drift_worker.js` in `web/`, OFF-6; outbox/sync OFF-2), Phase 8 (barcode scanner + real product/price service), Phase 9 (RevenueCat), real analyser.
+- **Tests:** 1201 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
 
 ## Decisions made
 - Bundle ID `com.saafapp.saaf`. Unified Material 3 styled like Figma; Figma wins (design.md §0). Backend: **Firebase** (ADR 0001).
@@ -21,9 +21,10 @@
 - **PLACEHOLDERS to replace before release:** `DemoSkinAnalyzer` (estimates from quiz answers, never reads the photos),
   `FakeCaptureQualityMonitor` (pretend light/centred/steady hints + 2 s auto-capture), `SeedProductCatalog` + `SeedProductLookup`
   (generic products, made-up prices/stores; ingredient flags need dermatologist review), `FakeSubscriptionRepository`, "How we score" text,
-  `ReminderSettings` (times saved, but NO notifications are scheduled yet), Profile "Photo backup" (always off).
-- Router guard (`core/router/app_guard.dart`): signed in -> consent -> quiz before the app opens; off in tests unless `guard:` is passed. `ConsentStatus`/`QuizDone` live in `onboarding_status.dart` (quiz-done is in memory, so persist it with drift).
-- **Drift DB** (`data/local/app_database.dart`, repos in `drift_repositories.dart`) stores consent, skin profile, scans (metadata), routine log, check-ins and quiz-done on phones; `main()` opens it and overrides `appDatabaseProvider`; null (tests, Chrome) = in-memory repos. Delete account wipes it. Still in memory: reminders, theme, language, outbox/sync (OFF-2), schema migrations beyond v1.
+  Profile "Photo backup" (always off).
+- Router guard (`core/router/app_guard.dart`): signed in -> consent -> quiz before the app opens; off in tests unless `guard:` is passed. `ConsentStatus`/`QuizDone` live in `onboarding_status.dart` (quiz-done is persisted).
+- **Drift DB** (`data/local/app_database.dart`, repos in `drift_repositories.dart`) stores consent, skin profile, scans (metadata), routine log, check-ins and quiz-done on phones; `main()` opens it and overrides `appDatabaseProvider`; null (tests, Chrome) = in-memory repos. Delete account wipes it. Schema v2 adds `SettingRows` (reminders, language, theme via `SettingsRepository`/`settings_providers.dart`). Still missing: outbox/sync (OFF-2).
+- **Reminders are real:** `NotificationAccess` (check -> our rationale dialog on the Profile sheet -> system request -> denied/Settings), `SyncReminders` + `reminderSyncProvider` (watched by `SaafApp`; re-runs on settings/language change and app resume) schedule two daily inexact notifications via `flutter_local_notifications` + `timezone` (`PluginReminderScheduler`, texts localised EN/UR). Chrome/`FAKE_CAMERA` use fakes. Row on Profile still shows the saved times even if notifications are not allowed; the sheet explains and offers "Allow"/"Open Settings".
 - In-memory repos Urdu = mine, needs native review.
 - Profile "Skin profile"/"Monthly budget" reopen the quiz; the quiz ends on the camera screen (could return to Profile instead).
 
@@ -36,7 +37,7 @@
 
 ## Native files edited (only verifiable via Codemagic)
 - iOS: deployment target 15, `Runner.entitlements`, `Podfile` (`PERMISSION_CAMERA=1`), `Info.plist` `NSCameraUsageDescription`.
-- Android: `AndroidManifest.xml` CAMERA + optional camera features. `codemagic.yaml`: Firebase/legal `--dart-define`s.
+- iOS `Podfile` also `PERMISSION_NOTIFICATIONS=1`. Android: `AndroidManifest.xml` CAMERA + optional camera features, POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED + the two flutter_local_notifications receivers; `app/build.gradle.kts` core-library desugaring (needed by the plugin). Notifications untested on a real phone until a Codemagic build. `codemagic.yaml`: Firebase/legal `--dart-define`s.
 
 ## Open problems / questions for the user
 - docs/firebase-setup.md; SMS delivery on Pakistani networks is go/no-go. Developer/Play/Codemagic accounts. Test camera on real phones.
@@ -47,3 +48,4 @@
 - 2026-10-17: 5-step quiz, legal drafts, Firebase auth. 586 tests.
 - 2026-10-18: screens 06–09 (scan, results, routine, home). 896 tests.
 - 2026-10-19: screens 10–14 (product result, check-in, progress, paywall, profile + delete account). 1132 tests.
+- 2026-10-20: router guard, drift persistence (+settings), real reminders (permission + scheduled notifications). 1201 tests.

@@ -1507,8 +1507,37 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get remindersNote =>
-      'Your times are saved. Reminder notifications arrive in a later update.';
+  String get remindersNote => 'Saaf reminds you every day at these times.';
+
+  @override
+  String get remindersRationaleTitle => 'Allow notifications';
+
+  @override
+  String get remindersRationaleBody =>
+      'Saaf sends one gentle reminder for your morning routine and one for your night routine, at the times you choose. Nothing else.';
+
+  @override
+  String get remindersDeniedNote =>
+      'Notifications are off, so reminders can’t be sent. You can try again any time.';
+
+  @override
+  String get remindersBlockedNote =>
+      'Notifications are blocked for Saaf. Allow them in your phone’s Settings to get reminders.';
+
+  @override
+  String get reminderNotificationMorningTitle =>
+      'Time for your morning routine';
+
+  @override
+  String get reminderNotificationMorningBody =>
+      'Cleanse, moisturise and put on sunscreen. It only takes a few minutes.';
+
+  @override
+  String get reminderNotificationNightTitle => 'Time for your night routine';
+
+  @override
+  String get reminderNotificationNightBody =>
+      'Cleanse and moisturise, then rest well.';
 
   @override
   String get backupTitle => 'Photo backup';

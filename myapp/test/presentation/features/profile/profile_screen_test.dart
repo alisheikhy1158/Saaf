@@ -221,9 +221,7 @@ void main() {
       expect(find.text('Morning routine'), findsOneWidget);
       expect(find.text('Night routine'), findsOneWidget);
       expect(
-        find.text(
-          'Your times are saved. Reminder notifications arrive in a later update.',
-        ),
+        find.text('Saaf reminds you every day at these times.'),
         findsOneWidget,
       );
       await _tap(tester, find.byType(Switch).last);

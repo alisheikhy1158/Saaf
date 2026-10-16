@@ -10,8 +10,10 @@ import 'package:saaf/domain/entities/reminder_settings.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
+import 'package:saaf/domain/usecases/notification_access.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/locale_controller.dart';
+import 'package:saaf/presentation/providers/notification_providers.dart';
 import 'package:saaf/presentation/providers/profile_providers.dart';
 import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 import 'package:saaf/presentation/providers/subscription_providers.dart';
@@ -537,11 +539,80 @@ class _BackupSheet extends StatelessWidget {
   }
 }
 
-class _RemindersSheet extends ConsumerWidget {
+class _RemindersSheet extends ConsumerStatefulWidget {
   const _RemindersSheet();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_RemindersSheet> createState() => _RemindersSheetState();
+}
+
+class _RemindersSheetState extends ConsumerState<_RemindersSheet> {
+  /// What the phone says about notifications (null until it has answered).
+  NotificationAccessOutcome? _access;
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(notificationAccessProvider).check().then((outcome) {
+      if (mounted) setState(() => _access = outcome);
+    });
+  }
+
+  /// Our explanation first, then the system dialog; true when reminders may be
+  /// sent. A refusal never blocks the app: the sheet just explains (store-
+  /// compliance §1).
+  Future<bool> _ensureAccess() async {
+    final access = ref.read(notificationAccessProvider);
+    var outcome = await access.check();
+    if (outcome == NotificationAccessOutcome.needsRationale) {
+      if (!mounted) return false;
+      final go = await _askWhy();
+      if (go != true) {
+        if (mounted) setState(() => _access = outcome);
+        return false;
+      }
+      outcome = await access.request();
+    }
+    if (!mounted) return false;
+    setState(() => _access = outcome);
+    return outcome == NotificationAccessOutcome.granted;
+  }
+
+  Future<bool?> _askWhy() {
+    final l10n = AppLocalizations.of(context);
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.remindersRationaleTitle),
+        content: Text(l10n.remindersRationaleBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.scanNotNow),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.scanContinue),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _switchTo(
+    bool on,
+    ReminderSettings Function(bool) change,
+  ) async {
+    if (on && !await _ensureAccess()) return;
+    ref.read(reminderSettingsControllerProvider.notifier).set(change(on));
+  }
+
+  Future<void> _allow() async {
+    if (await _ensureAccess()) ref.invalidate(reminderSyncProvider);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final tokens = context.saaf;
     final settings = ref.watch(reminderSettingsControllerProvider);
@@ -589,6 +660,13 @@ class _RemindersSheet extends ConsumerWidget {
       ],
     );
 
+    final access = _access;
+    final anyOn = settings.morningOn || settings.nightOn;
+    final blocked = access == NotificationAccessOutcome.needsSettings;
+    final needsAllowing =
+        access != null && access != NotificationAccessOutcome.granted;
+    final showNotice = needsAllowing && (anyOn || blocked);
+
     return _SheetFrame(
       title: l10n.remindersTitle,
       children: [
@@ -596,7 +674,8 @@ class _RemindersSheet extends ConsumerWidget {
           name: l10n.remindersMorning,
           on: settings.morningOn,
           time: settings.morning,
-          onChanged: (v) => controller.set(settings.copyWith(morningOn: v)),
+          onChanged: (v) =>
+              _switchTo(v, (on) => settings.copyWith(morningOn: on)),
           onPickTime: () => pick(
             settings.morning,
             (t) => controller.set(settings.copyWith(morning: t)),
@@ -606,12 +685,29 @@ class _RemindersSheet extends ConsumerWidget {
           name: l10n.remindersNight,
           on: settings.nightOn,
           time: settings.night,
-          onChanged: (v) => controller.set(settings.copyWith(nightOn: v)),
+          onChanged: (v) =>
+              _switchTo(v, (on) => settings.copyWith(nightOn: on)),
           onPickTime: () => pick(
             settings.night,
             (t) => controller.set(settings.copyWith(night: t)),
           ),
         ),
+        if (showNotice) ...[
+          Text(switch (access) {
+            NotificationAccessOutcome.needsSettings =>
+              l10n.remindersBlockedNote,
+            NotificationAccessOutcome.denied => l10n.remindersDeniedNote,
+            _ => l10n.remindersRationaleBody,
+          }, style: context.text.bodyMedium?.copyWith(color: tokens.textLabel)),
+          SaafButton.outline(
+            label: blocked
+                ? l10n.scanOpenSettings
+                : l10n.remindersRationaleTitle,
+            onPressed: blocked
+                ? () => ref.read(notificationAccessProvider).openSettings()
+                : _allow,
+          ),
+        ],
         Text(
           l10n.remindersNote,
           style: tokens.styles.legal.copyWith(color: tokens.textMeta),

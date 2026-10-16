@@ -49,4 +49,38 @@ void main() {
       expect(changed.morningOn, isTrue);
     });
   });
+
+  group('storage text', () {
+    test('round trips every field', () {
+      const settings = ReminderSettings(
+        morning: ReminderTime(7, 15),
+        night: ReminderTime(23, 5),
+        morningOn: false,
+      );
+      final back = ReminderSettings.decode(settings.encode());
+      expect(back.morning, const ReminderTime(7, 15));
+      expect(back.night, const ReminderTime(23, 5));
+      expect(back.morningOn, isFalse);
+      expect(back.nightOn, isTrue);
+    });
+
+    test('nothing stored, or text that makes no sense, gives the defaults', () {
+      for (final bad in [
+        null,
+        '',
+        'x',
+        '1,2,3',
+        '8,0,1,22,30',
+        'a,b,c,d,e,f',
+        '25,0,1,22,30,1',
+        '8,61,1,22,30,1',
+      ]) {
+        expect(
+          ReminderSettings.decode(bad).summary('Off'),
+          '8:00 · 22:30',
+          reason: '$bad',
+        );
+      }
+    });
+  });
 }
