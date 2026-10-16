@@ -7,8 +7,8 @@
   plugin. GitHub: https://github.com/alisheikhy1158/Saaf (main). It is a complete, demo-able app on fakes; nothing is real-backend yet.
 - **Next exact step (needs the owner):** Firebase console setup (docs/firebase-setup.md), Apple/Google/Codemagic accounts, then a
   Codemagic build to test the camera, permissions and share on real phones. Engineering next: Phase 7 (drift persistence +
-  notifications), Phase 8 (barcode scanner + real product/price service), Phase 9 (RevenueCat), router guards, real analyser.
-- **Tests:** 1132 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
+  notifications), Phase 8 (barcode scanner + real product/price service), Phase 9 (RevenueCat), real analyser.
+- **Tests:** 1144 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
 
 ## Decisions made
 - Bundle ID `com.saafapp.saaf`. Unified Material 3 styled like Figma; Figma wins (design.md §0). Backend: **Firebase** (ADR 0001).
@@ -23,6 +23,7 @@
   `FakeCaptureQualityMonitor` (pretend light/centred/steady hints + 2 s auto-capture), `SeedProductCatalog` + `SeedProductLookup`
   (generic products, made-up prices/stores; ingredient flags need dermatologist review), `FakeSubscriptionRepository`, "How we score" text,
   `ReminderSettings` (times saved, but NO notifications are scheduled yet), Profile "Photo backup" (always off).
+- Router guard (`core/router/app_guard.dart`): signed in -> consent -> quiz before the app opens; off in tests unless `guard:` is passed. `ConsentStatus`/`QuizDone` live in `onboarding_status.dart` (quiz-done is in memory, so persist it with drift).
 - In-memory repos (consent, skin profile, scan history, routine log, check-ins, reminders, theme, language) until drift. Urdu = mine, needs native review.
 - Profile "Skin profile"/"Monthly budget" reopen the quiz; the quiz ends on the camera screen (could return to Profile instead).
 
@@ -40,7 +41,7 @@
 ## Open problems / questions for the user
 - docs/firebase-setup.md; SMS delivery on Pakistani networks is go/no-go. Developer/Play/Codemagic accounts. Test camera on real phones.
 - Before release: lawyer review of Terms/Privacy (`LEGAL_REVIEWED`), support email, public deletion page, native Urdu review,
-  dermatologist review of the product rules, replace every PLACEHOLDER above, add router guards (consent + quiz), Cloud Function for account deletion.
+  dermatologist review of the product rules, replace every PLACEHOLDER above, Cloud Function for account deletion.
 
 ## Log
 - 2026-10-17: 5-step quiz, legal drafts, Firebase auth. 586 tests.

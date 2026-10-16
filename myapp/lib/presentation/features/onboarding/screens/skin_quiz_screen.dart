@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:saaf/presentation/providers/onboarding_status.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
@@ -34,6 +35,7 @@ class SkinQuizScreen extends ConsumerWidget {
     void toNextScreen() {
       final next = quizStep.next;
       if (next == null) {
+        ref.read(quizDoneProvider.notifier).markDone();
         context.go(SaafRoute.selfieCapture.path);
       } else {
         context.push('${SaafRoute.skinQuiz.path}/${next.number}');

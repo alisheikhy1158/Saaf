@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:saaf/core/router/app_guard.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/presentation/features/auth/screens/sign_up_screen.dart';
 import 'package:saaf/presentation/features/auth/screens/verify_code_screen.dart';
@@ -44,11 +45,42 @@ Widget _screenFor(SaafRoute route, GoRouterState state) => switch (route.name) {
   _ => throw StateError('No screen registered for route ${route.name}'),
 };
 
+/// What the router guard needs to know right now.
+class AppGuardState {
+  const AppGuardState({
+    required this.signedIn,
+    required this.consented,
+    required this.quizDone,
+  });
+
+  final bool signedIn;
+  final bool? consented;
+  final bool quizDone;
+}
+
 /// Builds the app's [GoRouter]. [initialLocation] is for tests.
 /// The hidden `/gallery` route exists only when [enableGallery] (debug builds).
-GoRouter buildAppRouter({String? initialLocation, bool? enableGallery}) {
+GoRouter buildAppRouter({
+  String? initialLocation,
+  bool? enableGallery,
+  AppGuardState Function()? guard,
+  Listenable? refreshListenable,
+}) {
   return GoRouter(
     initialLocation: initialLocation ?? SaafRoute.welcome.path,
+    refreshListenable: refreshListenable,
+    // Without a [guard] (tests) every page is open.
+    redirect: guard == null
+        ? null
+        : (context, state) {
+            final g = guard();
+            return guardRedirect(
+              path: state.uri.path,
+              signedIn: g.signedIn,
+              consented: g.consented,
+              quizDone: g.quizDone,
+            );
+          },
     routes: [
       for (final route in SaafRoute.all)
         GoRoute(

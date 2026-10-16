@@ -8,6 +8,7 @@ import 'package:saaf/presentation/providers/check_in_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/home_providers.dart';
+import 'package:saaf/presentation/providers/onboarding_status.dart';
 import 'package:saaf/presentation/providers/pending_sign_in.dart';
 import 'package:saaf/presentation/providers/progress_providers.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
@@ -84,7 +85,9 @@ class AccountController extends _$AccountController {
       ..invalidate(routineLogRepositoryProvider)
       ..invalidate(consentRepositoryProvider)
       ..invalidate(reminderSettingsControllerProvider)
-      ..invalidate(pendingSignInProvider);
+      ..invalidate(pendingSignInProvider)
+      ..invalidate(consentStatusProvider)
+      ..invalidate(quizDoneProvider);
     ref.read(authSessionControllerProvider.notifier).set(null);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:saaf/presentation/providers/onboarding_status.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
@@ -122,6 +123,7 @@ class PrivacyConsentScreen extends ConsumerWidget {
                 ? () async {
                     final saved = await controller.submit();
                     if (saved && context.mounted) {
+                      ref.read(consentStatusProvider.notifier).markGiven();
                       context.go(SaafRoute.skinQuiz.path);
                     }
                   }

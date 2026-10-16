@@ -50,4 +50,10 @@ void authSessionSync(Ref ref) {
             ref.read(authSessionControllerProvider.notifier).set(session),
       );
   ref.onDispose(subscription.cancel);
+  // A returning user may already be signed in (Firebase keeps the session).
+  ref.read(authRepositoryProvider).currentSession().then((session) {
+    if (ref.mounted && session != null) {
+      ref.read(authSessionControllerProvider.notifier).set(session);
+    }
+  });
 }
