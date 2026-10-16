@@ -57,7 +57,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get consentPointDeviceBody =>
-      'چہرے کے سکین کی تصاویر آپ کے فون پر ہی رہتی ہیں، جب تک آپ بیک اپ آن نہ کریں۔ اے آئی کوچ کو صرف وہی تصویر ملتی ہے جو آپ خود لگائیں۔';
+      'چہرے کے سکین کی تصاویر آپ کے فون پر ہی رہتی ہیں، جب تک آپ بیک اپ آن نہ کریں۔ اے آئی کوچ کو صرف وہی تصاویر ملتی ہیں جو آپ خود بھیجیں۔';
 
   @override
   String get consentPointNeverSoldTitle => 'نہ فروخت، نہ شیئر';
@@ -574,14 +574,14 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get aiConsentIntro =>
-      'اپنے روٹین، اجزاء یا پروڈکٹس کے بارے میں پوچھیں، یا اپنی جلد کی تصویر لگائیں۔ جواب ایک اے آئی ماڈل لکھتا ہے۔';
+      'اپنے روٹین، اجزاء یا پروڈکٹس کے بارے میں پوچھیں، اپنی جلد کی تصویر لگائیں، یا اسے اپنی پیش رفت کی تصاویر دکھائیں۔ جواب ایک اے آئی ماڈل لکھتا ہے۔';
 
   @override
   String get aiConsentShareTitle => 'کیا بھیجا جاتا ہے';
 
   @override
   String get aiConsentShareBody =>
-      'آپ کا پیغام، آپ کی لگائی ہوئی کوئی تصویر، اور چند باتیں: آپ کی جلد کی قسم، مسائل، حساسیت، بجٹ اور آپ کے روٹین کی پروڈکٹس کے نام۔ آپ کا نام، فون نمبر، یا حمل، دوائی اور الرجی کے جوابات ہرگز نہیں۔';
+      'آپ کا پیغام، آپ کی لگائی ہوئی یا پیش رفت کے جائزے کے لیے چنی ہوئی کوئی تصویر، اور چند باتیں: آپ کی جلد کی قسم، مسائل، حساسیت، بجٹ اور آپ کے روٹین کی پروڈکٹس کے نام۔ آپ کا نام، فون نمبر، سائیڈ کی تصاویر، یا حمل، دوائی اور الرجی کے جوابات ہرگز نہیں۔';
 
   @override
   String get aiConsentWhoTitle => 'کس کو ملتا ہے';
@@ -726,6 +726,74 @@ class AppLocalizationsUr extends AppLocalizations {
   String get aiSheetSwitch => 'اے آئی کوچ کے ساتھ شیئر کریں';
 
   @override
+  String progressNextScan(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days دن',
+      one: '1 دن',
+    );
+    return 'اگلا اسکین $_temp0 میں';
+  }
+
+  @override
+  String get progressScanDue => 'آپ کا 2 ہفتے کا اسکین واجب ہے';
+
+  @override
+  String get progressScanNow => 'ابھی اسکین کریں';
+
+  @override
+  String get progressAiTitle => 'اے آئی پیش رفت کا جائزہ';
+
+  @override
+  String get progressAiBody =>
+      'اے آئی کوچ کو شروع سے اب تک کی آپ کی تصاویر دیکھنے دیں اور بتانے دیں کہ کیا بدلا۔';
+
+  @override
+  String get progressAiButton => 'اے آئی سے میری پیش رفت کا جائزہ لیں';
+
+  @override
+  String get progressAiSetup => 'اے آئی کوچ سیٹ اپ کریں';
+
+  @override
+  String get progressAiConfirmTitle => 'کیا یہ تصاویر اے آئی کو بھیجیں؟';
+
+  @override
+  String get progressAiConfirmBody =>
+      'صرف نیچے دی گئی سامنے کی تصاویر اے آئی کوچ (Groq، ثاف کے سرور کے ذریعے) کو بھیجی جاتی ہیں تاکہ وہ بتائے کیا بدلا۔ آپ کی سائیڈ کی تصاویر آپ کے فون پر رہتی ہیں۔';
+
+  @override
+  String get progressAiSend => 'بھیجیں';
+
+  @override
+  String get progressAiPhotoError =>
+      'ہم آپ کی تصاویر تیار نہیں کر سکے۔ براہِ کرم دوبارہ کوشش کریں۔';
+
+  @override
+  String progressAiPhotoSemantics(String date) {
+    return '$date کی تصویر';
+  }
+
+  @override
+  String get aiReviewQuestion =>
+      'براہِ کرم وقت کے ساتھ میرے چہرے کی تصاویر کا موازنہ کریں اور عمومی طور پر بتائیں کہ میری جلد میں کیا بدلا اور اب مجھے کیا کرنا چاہیے۔';
+
+  @override
+  String aiReviewFirst(int n, String date) {
+    return 'تصویر $n میرا پہلا اسکین ہے، جو $date کو لیا گیا۔';
+  }
+
+  @override
+  String aiReviewMiddle(int n, String date) {
+    return 'تصویر $n $date کو لی گئی۔';
+  }
+
+  @override
+  String aiReviewLatest(int n, String date) {
+    return 'تصویر $n میرا تازہ ترین اسکین ہے، جو $date کو لیا گیا۔';
+  }
+
+  @override
   String get scanRetake => 'دوبارہ لیں';
 
   @override
@@ -750,7 +818,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get scanPrivacyNote =>
-      'تصاویر آپ کے فون ہی میں رہتی ہیں اور کبھی اپ لوڈ نہیں ہوتیں۔';
+      'تصاویر آپ کے فون ہی میں رہتی ہیں، جب تک آپ انہیں اے آئی کوچ کو بھیجنے کا انتخاب نہ کریں۔';
 
   @override
   String get scanRationaleTitle => 'کیمرے کی اجازت دیں';
@@ -932,7 +1000,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get howWeScorePhotos =>
-      'تینوں تصاویر آپ کے فون ہی میں رہتی ہیں۔ اسکور بنانے کے لیے انہیں کبھی اپ لوڈ نہیں کیا جاتا۔';
+      'تینوں تصاویر آپ کے فون ہی میں رہتی ہیں اور اسکور وہیں بنتا ہے۔ وہ اے آئی کوچ کو صرف تب جاتی ہیں جب آپ خود انتخاب کریں۔';
 
   @override
   String get howWeScoreMedicalTitle => 'طبی مشورہ نہیں';
@@ -1041,7 +1109,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get routineResultsBodyNoDate =>
-      'روزانہ استعمال کریں اور مہینے میں ایک بار اپنی پیش رفت دیکھیں۔';
+      'روزانہ استعمال کریں اور ہر دو ہفتے بعد اپنی پیش رفت دیکھیں۔';
 
   @override
   String get routineStart => 'میرا روٹین شروع کریں';
@@ -1448,10 +1516,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get paywallProChip => 'ثاف پرو';
 
   @override
-  String get paywallTitle => 'ہر مہینے\nحقیقی تبدیلی دیکھیں';
+  String get paywallTitle => 'ہر دو ہفتے\nحقیقی تبدیلی دیکھیں';
 
   @override
-  String get paywallBenefitPhotos => 'ماہانہ ہم آہنگ تصاویر کا موازنہ';
+  String get paywallBenefitPhotos => 'ہر 2 ہفتے بعد ہم آہنگ تصاویر کا موازنہ';
 
   @override
   String get paywallBenefitScans => 'جلد اور پروڈکٹ کے لامحدود اسکین';
@@ -1562,8 +1630,8 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String progressMonth(int month) {
-    return 'مہینہ $month';
+  String progressWeek(int week) {
+    return 'ہفتہ $week';
   }
 
   @override
@@ -1573,8 +1641,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String get progressShare => 'اپنی پیش رفت شیئر کریں';
 
   @override
-  String progressShareText(int month, String first, String second) {
-    return 'میری ثاف پیش رفت، مہینہ $month: $first، $second۔ یہ صرف ظاہری رہنمائی ہے، طبی مشورہ نہیں۔';
+  String progressShareText(int week, String first, String second) {
+    return 'میری ثاف پیش رفت، ہفتہ $week: $first، $second۔ یہ صرف ظاہری رہنمائی ہے، طبی مشورہ نہیں۔';
   }
 
   @override
@@ -1628,11 +1696,11 @@ class AppLocalizationsUr extends AppLocalizations {
       'کچھ حصے پچھلی بار سے تھوڑے خراب لگ رہے ہیں۔ اپنا روٹین اور دھوپ سے بچاؤ دیکھیں، اور فکر ہو تو ماہرِ جلد سے ملیں۔';
 
   @override
-  String get progressLockedTitle => 'ماہانہ پیش رفت ثاف پرو کا حصہ ہے';
+  String get progressLockedTitle => 'پیش رفت کی ٹریکنگ ثاف پرو کا حصہ ہے';
 
   @override
   String get progressLockedBody =>
-      'ہم آہنگ تصاویر کا مہینہ بہ مہینہ موازنہ کریں اور دیکھیں کیا بدل رہا ہے۔';
+      'ہر دو ہفتے بعد ہم آہنگ تصاویر کا موازنہ کریں اور دیکھیں کیا بدل رہا ہے۔';
 
   @override
   String get progressLockedAction => 'ثاف پرو دیکھیں';
@@ -1642,7 +1710,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get progressEmptyBody =>
-      'اگلے مہینے چہرے کا ایک اور اسکین لیں، ثاف دکھائے گا کیا بدلا۔';
+      'دو ہفتے بعد چہرے کا ایک اور اسکین لیں، ثاف دکھائے گا کیا بدلا۔';
 
   @override
   String get progressEmptyAction => 'اسکین لیں';
@@ -1676,7 +1744,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get profilePlanFree => 'آپ مفت پلان پر ہیں';
 
   @override
-  String get profilePlanFreeBody => 'ماہانہ تصاویر کی ٹریکنگ کھولیں';
+  String get profilePlanFreeBody => 'ہر 2 ہفتے بعد تصاویر کی ٹریکنگ کھولیں';
 
   @override
   String get profileGoPro => 'پرو لیں';
@@ -1950,7 +2018,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get backupBody =>
-      'آپ کے چہرے کی تصاویر صرف اس فون پر رہتی ہیں اور کبھی اپ لوڈ نہیں ہوتیں۔ اس ورژن میں کلاؤڈ بیک اپ دستیاب نہیں۔';
+      'آپ کے چہرے کی تصاویر صرف اس فون پر رہتی ہیں۔ واحد استثنا وہ تصاویر ہیں جو آپ اے آئی جائزے کے لیے خود بھیجیں۔ اس ورژن میں کلاؤڈ بیک اپ دستیاب نہیں۔';
 
   @override
   String get deleteTitle => 'اکاؤنٹ حذف کریں؟';

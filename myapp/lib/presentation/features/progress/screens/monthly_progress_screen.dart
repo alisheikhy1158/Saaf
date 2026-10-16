@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +11,10 @@ import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/domain/entities/completed_scan.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/usecases/compare_progress.dart';
+import 'package:saaf/presentation/providers/ai_chat_controller.dart';
+import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/analysis_providers.dart';
+import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/progress_providers.dart';
 import 'package:saaf/presentation/providers/subscription_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_before_after_slider.dart';
@@ -21,7 +27,8 @@ import 'package:saaf/presentation/widgets/common/saaf_overline.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_status_message.dart';
 
-/// Figma 12 Monthly progress (a Saaf Pro feature): the latest face scan against
+/// Figma 12 Progress (a Saaf Pro feature; scans every two weeks, so it was
+/// "Monthly progress" in the design): the latest face scan against
 /// the one before it on a before / after slider, the two biggest changes and a
 /// short coach summary. Free users see what Pro adds; with fewer than two scans
 /// the screen explains what is needed.
@@ -111,7 +118,7 @@ class _Content extends ConsumerWidget {
         .read(shareServiceProvider)
         .shareText(
           l10n.progressShareText(
-            view.month,
+            view.week,
             _changeText(l10n, biggest[0]),
             _changeText(l10n, biggest[1]),
           ),
@@ -128,7 +135,7 @@ class _Content extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: space.x4,
                 children: [
-                  SaafOverline(l10n.progressMonth(view.month), strong: true),
+                  SaafOverline(l10n.progressWeek(view.week), strong: true),
                   Semantics(
                     header: true,
                     child: Text(
@@ -215,6 +222,10 @@ class _Content extends ConsumerWidget {
             ),
           ),
         ),
+        SizedBox(height: space.x12),
+        _NextScan(latest: view.after.takenAt),
+        SizedBox(height: space.x16),
+        _AiReviewCard(view: view),
         SizedBox(height: space.x16),
         SaafButton.outline(
           label: l10n.progressCheckIn,
@@ -305,6 +316,246 @@ class _ChangeCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// "Next scan in 5 days", or "Your 2-week scan is due" with a Scan now button.
+class _NextScan extends ConsumerWidget {
+  const _NextScan({required this.latest});
+
+  final DateTime latest;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    final days = daysUntilNextScan(latest, ref.watch(clockProvider).now());
+
+    if (days > 0) {
+      return Text(
+        l10n.progressNextScan(days),
+        textAlign: TextAlign.center,
+        style: tokens.styles.meta.copyWith(color: tokens.textCaption),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: tokens.space.x8,
+      children: [
+        Text(
+          l10n.progressScanDue,
+          textAlign: TextAlign.center,
+          style: context.text.titleSmall,
+        ),
+        SaafButton.primary(
+          label: l10n.progressScanNow,
+          onPressed: () => context.go(SaafRoute.selfieCapture.path),
+        ),
+      ],
+    );
+  }
+}
+
+/// Lets the user send their first, previous and latest FRONT photos to the AI
+/// coach for a plain-words review. Nothing is sent until they have seen the
+/// photos and who receives them and tapped Send (store-compliance §5); before
+/// they have agreed to the AI coach the button leads to its permission screen.
+class _AiReviewCard extends ConsumerWidget {
+  const _AiReviewCard({required this.view});
+
+  final ProgressView view;
+
+  /// The distinct scans to review, oldest first (at most three).
+  List<CompletedScan> get _scans =>
+      [
+        for (final scan in [view.first, view.before, view.after]) scan,
+      ].fold<List<CompletedScan>>([], (list, scan) {
+        if (list.every((s) => s.id != scan.id)) list.add(scan);
+        return list;
+      });
+
+  Future<void> _review(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context);
+
+    // The front photo of each scan, as it is on the phone.
+    final shots = <({CompletedScan scan, Uint8List bytes})>[];
+    for (final scan in _scans) {
+      final photo = frontPhotoOf(scan);
+      final bytes = photo == null
+          ? null
+          : await ref.read(scanPhotoBytesProvider(photo).future);
+      if (bytes != null) shots.add((scan: scan, bytes: bytes));
+    }
+    if (!context.mounted) return;
+    if (shots.isEmpty) {
+      _say(context, l10n.progressAiPhotoError);
+      return;
+    }
+
+    final go = await showDialog<bool>(
+      context: context,
+      builder: (context) => _ConfirmSend(shots: shots),
+    );
+    if (go != true || !context.mounted) return;
+
+    final shrinker = ref.read(photoShrinkerProvider);
+    final small = <({CompletedScan scan, Uint8List bytes})>[];
+    for (final shot in shots) {
+      final bytes = await shrinker.shrink(shot.bytes);
+      if (bytes != null) small.add((scan: shot.scan, bytes: bytes));
+    }
+    if (!context.mounted) return;
+    if (small.isEmpty) {
+      _say(context, l10n.progressAiPhotoError);
+      return;
+    }
+
+    String date(DateTime d) => DateFormat('d MMM', locale.toString()).format(d);
+    final lines = [
+      for (final (i, shot) in small.indexed)
+        i == 0
+            ? l10n.aiReviewFirst(1, date(shot.scan.takenAt))
+            : i == small.length - 1
+            ? l10n.aiReviewLatest(i + 1, date(shot.scan.takenAt))
+            : l10n.aiReviewMiddle(i + 1, date(shot.scan.takenAt)),
+    ];
+    final question = '${l10n.aiReviewQuestion} ${lines.join(' ')}';
+
+    // Show the chat at once; the answer arrives there.
+    unawaited(context.push(SaafRoute.aiCoach.path));
+    await ref
+        .read(aiChatControllerProvider.notifier)
+        .reviewProgress(
+          photos: [for (final shot in small) shot.bytes],
+          question: question,
+          languageCode: locale.languageCode,
+        );
+  }
+
+  void _say(BuildContext context, String text) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    final agreed = ref.watch(aiConsentStateProvider) == true;
+
+    return SaafCard(
+      padding: EdgeInsetsDirectional.all(tokens.space.x16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: tokens.space.x8,
+        children: [
+          Row(
+            spacing: tokens.space.x8,
+            children: [
+              ExcludeSemantics(
+                child: Icon(Icons.auto_awesome, size: tokens.size.iconSmall),
+              ),
+              Expanded(
+                child: Semantics(
+                  header: true,
+                  child: Text(
+                    l10n.progressAiTitle,
+                    style: context.text.titleSmall,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Text(
+            l10n.progressAiBody,
+            style: context.text.bodyMedium?.copyWith(color: tokens.textLabel),
+          ),
+          agreed
+              ? SaafButton.primary(
+                  label: l10n.progressAiButton,
+                  onPressed: () => _review(context, ref),
+                )
+              : SaafButton.outline(
+                  label: l10n.progressAiSetup,
+                  onPressed: () => context.push(SaafRoute.aiCoach.path),
+                ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The photos that will be sent, who receives them, and Cancel / Send.
+class _ConfirmSend extends StatelessWidget {
+  const _ConfirmSend({required this.shots});
+
+  final List<({CompletedScan scan, Uint8List bytes})> shots;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    final locale = Localizations.localeOf(context).toString();
+
+    return AlertDialog(
+      title: Text(l10n.progressAiConfirmTitle),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: tokens.space.x12,
+          children: [
+            Text(l10n.progressAiConfirmBody),
+            Wrap(
+              spacing: tokens.space.x8,
+              runSpacing: tokens.space.x8,
+              children: [
+                for (final (i, shot) in shots.indexed)
+                  Semantics(
+                    label: l10n.progressAiPhotoSemantics(
+                      DateFormat('d MMM', locale).format(shot.scan.takenAt),
+                    ),
+                    child: Column(
+                      spacing: tokens.space.x2,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            tokens.radius.r14,
+                          ),
+                          child: Image.memory(
+                            shot.bytes,
+                            key: ValueKey('review-photo-$i'),
+                            width: tokens.size.avatar,
+                            height: tokens.size.avatar,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => SizedBox.square(
+                              dimension: tokens.size.avatar,
+                              child: const Icon(Icons.image_outlined),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          DateFormat('d MMM', locale).format(shot.scan.takenAt),
+                          style: tokens.styles.legal,
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(l10n.commonCancel),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(l10n.progressAiSend),
+        ),
+      ],
     );
   }
 }

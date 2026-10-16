@@ -134,6 +134,25 @@ class AiChatController extends _$AiChatController {
     }
   }
 
+  /// Sends the user's chosen progress photos (first, previous, latest) with
+  /// [question] to the coach. The screen has already shown them what is sent
+  /// and asked; this still refuses without the saved permission. True when the
+  /// question was sent (whether or not an answer came back).
+  Future<bool> reviewProgress({
+    required List<Uint8List> photos,
+    required String question,
+    required String languageCode,
+  }) async {
+    if (state.sending || photos.isEmpty) return false;
+    if (ref.read(aiConsentStateProvider) != true) return false;
+    state = state.copyWith(
+      pendingPhotos: photos.take(AskCoach.maxPhotos).toList(),
+      photoFailed: false,
+    );
+    await send(question, languageCode: languageCode);
+    return true;
+  }
+
   /// Sends the last question again after a failure (the question is not
   /// duplicated in the chat).
   Future<void> retry({required String languageCode}) async {

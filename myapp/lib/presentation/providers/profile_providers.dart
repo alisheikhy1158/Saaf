@@ -5,7 +5,7 @@ import 'package:saaf/domain/entities/profile_details.dart';
 import 'package:saaf/domain/entities/reminder_settings.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/usecases/delete_account.dart';
-import 'package:saaf/presentation/features/coach/controllers/ai_chat_controller.dart';
+import 'package:saaf/presentation/providers/ai_chat_controller.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/check_in_providers.dart';

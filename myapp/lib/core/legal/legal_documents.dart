@@ -237,8 +237,9 @@ abstract final class LegalDocuments {
               'are never uploaded unless you turn on backup, which is off by '
               'default. If you turn it on, your photos are copied to your account '
               'storage and deleted with your account. Your photos are never sent '
-              'anywhere else, except photos you choose to attach to a question '
-              'in the optional AI coach (see section 6). If we ever add another '
+              'anywhere else, except photos you choose to attach to a question, '
+              'or the progress photos you choose to send for an AI progress '
+              'review, in the optional AI coach (see section 6). If we ever add another '
               'feature that sends a photo or skin data elsewhere, we will ask '
               'for your permission first, and say who receives it.',
         ],
@@ -282,7 +283,10 @@ abstract final class LegalDocuments {
               'the message you type, the photos you attach, and a few facts so '
               'the advice fits you: your skin type, skin concerns, sensitivity, '
               'monthly budget band and the names of the products in your '
-              'routine. We never send your name, phone number or email, or your '
+              'routine. In an AI progress review you can send your first, previous and '
+              'latest FRONT photos together, after seeing exactly which photos '
+              'will be sent; your side photos are never sent. We never send your '
+              'name, phone number or email, or your '
               'safety answers (pregnancy or breastfeeding, prescription skin '
               'treatment, ingredient allergy).',
           'Our server, run on Cloudflare, checks that you are signed in and '

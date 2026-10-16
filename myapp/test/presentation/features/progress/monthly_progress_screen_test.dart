@@ -1,4 +1,4 @@
-// Covers: Figma 12 Monthly progress (node 3:613): Pro gate, before / after
+// Covers: Figma 12 Progress (every two weeks; was Monthly progress) (node 3:613): Pro gate, before / after
 // slider, two change cards, coach summary; design.md §9 (empty / error states),
 // PRV-2 (photos are never shared), A11Y-1/2/3/5/6/8
 import 'package:flutter/material.dart';
@@ -114,7 +114,10 @@ void main() {
   group('Pro gate', () {
     testWidgets('free users are told it is part of Saaf Pro', (tester) async {
       await _open(tester, overrides: _with(pro: false));
-      expect(find.text('Monthly progress is part of Saaf Pro'), findsOneWidget);
+      expect(
+        find.text('Progress tracking is part of Saaf Pro'),
+        findsOneWidget,
+      );
       expect(find.text('See Saaf Pro'), findsOneWidget);
       expect(find.text('Your progress'), findsNothing);
     });
@@ -152,12 +155,12 @@ void main() {
   });
 
   group('comparison', () {
-    testWidgets('header: month, title, dates and the photo count', (
+    testWidgets('header: week, title, dates and the photo count', (
       tester,
     ) async {
       final view = await _view();
       await _open(tester, overrides: _with(view: view));
-      expect(find.text('MONTH 1'), findsOneWidget);
+      expect(find.text('WEEK 4'), findsOneWidget);
       expect(find.text('Your progress'), findsOneWidget);
       expect(find.text('14 Sep → 14 Oct  ·  2 aligned photos'), findsOneWidget);
     });
@@ -253,7 +256,7 @@ void main() {
       await tester.tap(find.byTooltip('Share your progress'));
       await tester.pump();
       expect(_share.shared, hasLength(1));
-      expect(_share.shared.single, contains('month 1'));
+      expect(_share.shared.single, contains('week 4'));
       expect(_share.shared.single, contains('Dark spots −18%'));
     });
 

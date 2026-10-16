@@ -63,7 +63,7 @@ void main() {
       expect(find.text('Saaf Pro'), findsOneWidget);
       expect(find.textContaining('See real change,'), findsOneWidget);
       for (final benefit in [
-        'Monthly aligned photo comparisons',
+        'Aligned photo comparisons every 2 weeks',
         'Unlimited skin and product scans',
         'Price-drop alerts on your products',
         'Weekly coach check-ins and reports',

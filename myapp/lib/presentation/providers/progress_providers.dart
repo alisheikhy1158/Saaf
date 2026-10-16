@@ -55,7 +55,8 @@ Future<Uint8List?> scanPhotoBytes(Ref ref, StoredPhoto photo) async {
   return result.valueOrNull;
 }
 
-/// What Home's Progress tab compares: the latest scan with the one before it.
+/// What the Progress tab compares: the latest scan with the one before it (scans
+/// are taken every two weeks).
 class ProgressView {
   const ProgressView({
     required this.progress,
@@ -68,10 +69,10 @@ class ProgressView {
   final CompletedScan before;
   final CompletedScan after;
 
-  /// The very first scan, for "month N".
+  /// The very first scan, for "week N" and the AI review.
   final CompletedScan first;
 
-  int get month => monthNumber(first.takenAt, after.takenAt);
+  int get week => weekNumber(first.takenAt, after.takenAt);
 }
 
 /// The comparison, or null while there are fewer than two scans.

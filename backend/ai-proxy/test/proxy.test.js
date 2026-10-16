@@ -174,6 +174,13 @@ test('prompt: safety rules and the user facts are there', () => {
   }
 });
 
+test('prompt: knows how to compare progress photos honestly', () => {
+  const text = buildSystemPrompt({ language: 'en', skinType: null, concerns: [], sensitivity: null, budget: null, routine: [] });
+  for (const must of ['Progress review', 'oldest first', 'light, angle', 'it looks like', '6 to 8 weeks']) {
+    assert.ok(text.includes(must), must);
+  }
+});
+
 test('prompt: an empty profile still works', () => {
   const text = buildSystemPrompt({ language: 'en', skinType: null, concerns: [], sensitivity: null, budget: null, routine: [] });
   assert.ok(text.includes('has not filled in'));

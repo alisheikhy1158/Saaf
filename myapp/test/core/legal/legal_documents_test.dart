@@ -158,6 +158,15 @@ void main() {
       expect(text, contains('safety answers'));
     });
 
+    test(
+      'explains the progress review and that side photos are never sent',
+      () {
+        expect(text, contains('ai progress review'));
+        expect(text, contains('front photos'));
+        expect(text, contains('side photos are never sent'));
+      },
+    );
+
     test('says how to stop and that answers can be wrong', () {
       expect(text, contains('stop sharing at any time'));
       expect(text, contains('not medical advice'));

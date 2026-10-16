@@ -252,7 +252,9 @@ void main() {
       await _open(tester, permission: CameraPermission.denied);
       expect(find.text('Allow camera access'), findsOneWidget);
       expect(
-        find.text('Photos stay on your phone and are never uploaded.'),
+        find.text(
+          'Photos stay on your phone unless you choose to send them to the AI coach.',
+        ),
         findsOneWidget,
       );
       expect(find.bySemanticsLabel('Take photo'), findsNothing);

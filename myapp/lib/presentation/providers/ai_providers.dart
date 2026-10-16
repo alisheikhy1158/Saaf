@@ -3,11 +3,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saaf/core/config/env.dart';
 import 'package:saaf/data/services/firebase_id_token_provider.dart';
 import 'package:saaf/data/services/http_ai_coach_service.dart';
+import 'package:saaf/data/services/image_photo_shrinker.dart';
 import 'package:saaf/data/services/plugin_ai_photo_picker.dart';
 import 'package:saaf/data/services/web/fake_ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
+import 'package:saaf/domain/services/photo_shrinker.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/usecases/ask_coach.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
@@ -38,6 +40,9 @@ AiCoachService aiCoachService(Ref ref) => _pretendAi
 AiPhotoPicker aiPhotoPicker(Ref ref) => (kIsWeb || Env.fakeCamera)
     ? const FakeAiPhotoPicker()
     : PluginAiPhotoPicker();
+
+@Riverpod(keepAlive: true)
+PhotoShrinker photoShrinker(Ref ref) => const ImagePhotoShrinker();
 
 @Riverpod(keepAlive: true)
 AiConsent aiConsentStore(Ref ref) =>

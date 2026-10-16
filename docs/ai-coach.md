@@ -18,6 +18,14 @@ phone  ──(Firebase sign-in token + chat)──▶  Cloudflare Worker  ──
 | the typed message, up to 3 photos the user attaches, the last 10 messages of the chat | name, phone number, email |
 | skin type, concerns, sensitivity, budget band, names of the routine's products | **safety answers** (pregnancy/breastfeeding, prescription treatment, allergy), face-scan photos |
 
+**Progress review (Progress screen).** Scans are now every **two weeks**. The Progress screen has an "AI progress review"
+card: the user sees thumbnails of their **first, previous and latest FRONT photos**, who receives them (Groq, through our
+server) and taps **Send**. The photos are shrunk to 1024 px JPEG on the phone (`ImagePhotoShrinker`); the originals are
+never touched; **side photos are never sent**. The answer appears in the AI chat (so it has the AI label, the report
+button and Try again). The server's instructions tell the model to compare honestly, warn that light/angle/filters change
+how skin looks, and not to praise or alarm without reason. The rule-based "scores" are NOT sent: they come from the
+placeholder analyser and would mislead the model.
+
 The safety answers are health data and the quiz promises they never leave the phone. The coach asks about pregnancy and
 allergies **in the chat** before suggesting a strong active.
 

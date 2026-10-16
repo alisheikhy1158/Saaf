@@ -46,7 +46,7 @@
   "consentPointDeviceTitle": "Saved on your device",
   "@consentPointDeviceTitle": { "description": "Screen 04 privacy point 1 title." },
 
-  "consentPointDeviceBody": "Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets a photo you choose to attach.",
+  "consentPointDeviceBody": "Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets photos you choose to send.",
   "@consentPointDeviceBody": { "description": "Screen 04 privacy point 1 text." },
 
   "consentPointNeverSoldTitle": "Never sold or shared",
@@ -503,13 +503,13 @@
   "aiConsentTitle": "Before you chat with the AI coach",
   "@aiConsentTitle": {"description": "Title of the permission screen of the AI coach."},
 
-  "aiConsentIntro": "Ask about your routine, ingredients or products, or attach a photo of your skin. An AI model writes the answer.",
+  "aiConsentIntro": "Ask about your routine, ingredients or products, attach a photo of your skin, or let it review your progress photos. An AI model writes the answer.",
   "@aiConsentIntro": {"description": "Introduction on the AI coach permission screen."},
 
   "aiConsentShareTitle": "What is sent",
   "@aiConsentShareTitle": {"description": "Heading on the AI permission screen."},
 
-  "aiConsentShareBody": "Your message, any photo you attach, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, or your pregnancy, medication and allergy answers.",
+  "aiConsentShareBody": "Your message, any photo you attach or choose to send for a progress review, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.",
   "@aiConsentShareBody": {"description": "What is sent to the AI."},
 
   "aiConsentWhoTitle": "Who receives it",
@@ -635,6 +635,54 @@
   "aiSheetSwitch": "Share with the AI coach",
   "@aiSheetSwitch": {"description": "Label of the AI sharing switch."},
 
+  "progressNextScan": "Next scan in {days, plural, =1{1 day} other{{days} days}}",
+  "@progressNextScan": {"description": "Shown on the progress screen: days until the next 2-week scan.", "placeholders": {"days": {"type": "int"}}},
+
+  "progressScanDue": "Your 2-week scan is due",
+  "@progressScanDue": {"description": "Shown when a new face scan is due."},
+
+  "progressScanNow": "Scan now",
+  "@progressScanNow": {"description": "Button that starts the face scan."},
+
+  "progressAiTitle": "AI progress review",
+  "@progressAiTitle": {"description": "Title of the AI review card on the progress screen."},
+
+  "progressAiBody": "Let the AI coach look at your photos from the start until now and explain what has changed.",
+  "@progressAiBody": {"description": "Body of the AI review card."},
+
+  "progressAiButton": "Review my progress with AI",
+  "@progressAiButton": {"description": "Button that opens the AI review confirmation."},
+
+  "progressAiSetup": "Set up the AI coach",
+  "@progressAiSetup": {"description": "Button shown before the user has agreed to the AI coach."},
+
+  "progressAiConfirmTitle": "Send these photos to the AI?",
+  "@progressAiConfirmTitle": {"description": "Title of the confirmation before sending progress photos."},
+
+  "progressAiConfirmBody": "Only the front photos below are sent, to the AI coach (Groq, through Saaf’s server), to describe what changed. Your side photos stay on your phone.",
+  "@progressAiConfirmBody": {"description": "Body of the confirmation before sending progress photos; says who receives them."},
+
+  "progressAiSend": "Send",
+  "@progressAiSend": {"description": "Button that sends the progress photos to the AI."},
+
+  "progressAiPhotoError": "We couldn’t prepare your photos. Please try again.",
+  "@progressAiPhotoError": {"description": "Shown when the progress photos could not be prepared."},
+
+  "progressAiPhotoSemantics": "Photo from {date}",
+  "@progressAiPhotoSemantics": {"description": "Screen-reader label of a photo in the send confirmation.", "placeholders": {"date": {"type": "String"}}},
+
+  "aiReviewQuestion": "Please compare my face photos over time and tell me, in general terms, what has changed in my skin and what I should do next.",
+  "@aiReviewQuestion": {"description": "The question sent for an AI progress review (shown in the chat)."},
+
+  "aiReviewFirst": "Photo {n} is my first scan, taken {date}.",
+  "@aiReviewFirst": {"description": "Describes the first progress photo.", "placeholders": {"n": {"type": "int"}, "date": {"type": "String"}}},
+
+  "aiReviewMiddle": "Photo {n} was taken {date}.",
+  "@aiReviewMiddle": {"description": "Describes a middle progress photo.", "placeholders": {"n": {"type": "int"}, "date": {"type": "String"}}},
+
+  "aiReviewLatest": "Photo {n} is my latest scan, taken {date}.",
+  "@aiReviewLatest": {"description": "Describes the latest progress photo.", "placeholders": {"n": {"type": "int"}, "date": {"type": "String"}}},
+
   "scanRetake": "Retake",
   "@scanRetake": { "description": "Button that discards the photo and shows the camera again." },
 
@@ -656,7 +704,7 @@
   "scanCaptureFailed": "The photo didn’t work. Please try again.",
   "@scanCaptureFailed": { "description": "Error when taking a photo fails." },
 
-  "scanPrivacyNote": "Photos stay on your phone and are never uploaded.",
+  "scanPrivacyNote": "Photos stay on your phone unless you choose to send them to the AI coach.",
   "@scanPrivacyNote": { "description": "Reassurance shown in the camera permission sheet and under the review buttons." },
 
   "scanRationaleTitle": "Allow camera access",
@@ -830,7 +878,7 @@
   "howWeScorePhotosTitle": "Your photos",
   "@howWeScorePhotosTitle": { "description": "Section heading." },
 
-  "howWeScorePhotos": "The three photos stay on your phone. They are never uploaded to work out your score.",
+  "howWeScorePhotos": "The three photos stay on your phone and your score is worked out there. They go to the AI coach only if you choose that.",
   "@howWeScorePhotos": { "description": "Paragraph about photo privacy." },
 
   "howWeScoreMedicalTitle": "Not medical advice",
@@ -940,7 +988,7 @@
     "placeholders": { "date": { "type": "String" } }
   },
 
-  "routineResultsBodyNoDate": "Use it every day and check your progress once a month.",
+  "routineResultsBodyNoDate": "Use it every day and check your progress every two weeks.",
   "@routineResultsBodyNoDate": { "description": "Body of the info card when there is no scan date yet." },
 
   "routineStart": "Start my routine",
@@ -1335,10 +1383,10 @@
   "paywallProChip": "Saaf Pro",
   "@paywallProChip": { "description": "Chip at the top of the paywall (13)." },
 
-  "paywallTitle": "See real change,\nmonth by month",
+  "paywallTitle": "See real change,\nevery two weeks",
   "@paywallTitle": { "description": "Paywall headline. \n is a line break." },
 
-  "paywallBenefitPhotos": "Monthly aligned photo comparisons",
+  "paywallBenefitPhotos": "Aligned photo comparisons every 2 weeks",
   "@paywallBenefitPhotos": { "description": "Benefit." },
 
   "paywallBenefitScans": "Unlimited skin and product scans",
@@ -1448,10 +1496,10 @@
     "description": "Body when the user already has Pro.",
     "placeholders": { "store": { "type": "String" } }
   },
-  "progressMonth": "MONTH {month}",
-  "@progressMonth": {
-    "description": "Small caps line above the progress title (12).",
-    "placeholders": { "month": { "type": "int" } }
+  "progressWeek": "WEEK {week}",
+  "@progressWeek": {
+    "description": "Overline above the progress title: the week of using Saaf (scans are every two weeks).",
+    "placeholders": { "week": { "type": "int" } }
   },
 
   "progressTitle": "Your progress",
@@ -1460,10 +1508,10 @@
   "progressShare": "Share your progress",
   "@progressShare": { "description": "Tooltip of the share button." },
 
-  "progressShareText": "My Saaf progress, month {month}: {first}, {second}. A cosmetic guide, not medical advice.",
+  "progressShareText": "My Saaf progress, week {week}: {first}, {second}. A cosmetic guide, not medical advice.",
   "@progressShareText": {
     "description": "Text shared from the progress screen. Never includes photos.",
-    "placeholders": { "month": { "type": "int" }, "first": { "type": "String" }, "second": { "type": "String" } }
+    "placeholders": { "week": { "type": "int" }, "first": { "type": "String" }, "second": { "type": "String" } }
   },
 
   "progressRange": "{from} → {to}  ·  {count, plural, =1{1 aligned photo} other{{count} aligned photos}}",
@@ -1517,10 +1565,10 @@
   "progressSummarySlipping": "Some areas look a little worse than last time. Check your routine and sun protection, and see a dermatologist if you are worried.",
   "@progressSummarySlipping": { "description": "Summary when something got worse." },
 
-  "progressLockedTitle": "Monthly progress is part of Saaf Pro",
+  "progressLockedTitle": "Progress tracking is part of Saaf Pro",
   "@progressLockedTitle": { "description": "Title shown to users without Saaf Pro." },
 
-  "progressLockedBody": "Compare aligned photos month by month and see what is changing.",
+  "progressLockedBody": "Compare aligned photos every two weeks and see what is changing.",
   "@progressLockedBody": { "description": "Body shown to users without Saaf Pro." },
 
   "progressLockedAction": "See Saaf Pro",
@@ -1529,7 +1577,7 @@
   "progressEmptyTitle": "Your first comparison is on its way",
   "@progressEmptyTitle": { "description": "Title when there are fewer than two scans." },
 
-  "progressEmptyBody": "Take another face scan next month and Saaf will show what changed.",
+  "progressEmptyBody": "Take another face scan in two weeks and Saaf will show what changed.",
   "@progressEmptyBody": { "description": "Body when there are fewer than two scans." },
 
   "progressEmptyAction": "Take a scan",
@@ -1564,7 +1612,7 @@
   "profilePlanFree": "You’re on the free plan",
   "@profilePlanFree": { "description": "Promo card title for free users." },
 
-  "profilePlanFreeBody": "Unlock monthly photo tracking",
+  "profilePlanFreeBody": "Unlock photo tracking every 2 weeks",
   "@profilePlanFreeBody": { "description": "Promo card body for free users." },
 
   "profileGoPro": "Go Pro",
@@ -1819,7 +1867,7 @@
   "backupTitle": "Photo backup",
   "@backupTitle": { "description": "Title of the photo backup sheet." },
 
-  "backupBody": "Your face photos stay only on this phone and are never uploaded. Cloud backup is not available in this version.",
+  "backupBody": "Your face photos stay only on this phone. The one exception is photos you choose to send for an AI review. Cloud backup is not available in this version.",
   "@backupBody": { "description": "Body of the photo backup sheet." },
 
   "deleteTitle": "Delete your account?",

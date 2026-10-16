@@ -10,7 +10,7 @@ import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/usecases/ask_coach.dart';
-import 'package:saaf/presentation/features/coach/controllers/ai_chat_controller.dart';
+import 'package:saaf/presentation/providers/ai_chat_controller.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';

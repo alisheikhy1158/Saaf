@@ -109,14 +109,29 @@ class CompareProgress {
   }
 }
 
-/// Which month of using Saaf a comparison is: 30 days is still month 1, 60 days
-/// is month 2. Never below 1.
-int monthNumber(DateTime first, DateTime latest) {
+/// How often a new face scan is due, in days (every two weeks).
+const int scanEveryDays = 14;
+
+/// Which week of using Saaf a comparison is: two weeks apart is week 2, four
+/// weeks is week 4. Never below 1.
+int weekNumber(DateTime first, DateTime latest) {
   final days = DateTime.utc(
     latest.year,
     latest.month,
     latest.day,
   ).difference(DateTime.utc(first.year, first.month, first.day)).inDays;
-  final month = days ~/ 30;
-  return month < 1 ? 1 : month;
+  final week = days ~/ 7;
+  return week < 1 ? 1 : week;
+}
+
+/// Whole days left until the next scan is due, counted from the day of the
+/// [latest] scan; 0 when it is due today or overdue.
+int daysUntilNextScan(DateTime latest, DateTime now) {
+  final passed = DateTime.utc(
+    now.year,
+    now.month,
+    now.day,
+  ).difference(DateTime.utc(latest.year, latest.month, latest.day)).inDays;
+  final left = scanEveryDays - (passed < 0 ? 0 : passed);
+  return left < 0 ? 0 : left;
 }

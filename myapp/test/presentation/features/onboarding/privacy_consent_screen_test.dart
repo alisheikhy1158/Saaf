@@ -76,7 +76,7 @@ void main() {
       );
       for (final text in [
         'Saved on your device',
-        'Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets a photo you choose to attach.',
+        'Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets photos you choose to send.',
         'Never sold or shared',
         'Brands and advertisers never see your face data.',
         'Delete anytime',

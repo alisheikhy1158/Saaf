@@ -134,7 +134,7 @@ void main() {
     testWidgets('free users are offered Pro', (tester) async {
       await _open(tester);
       expect(find.text('You’re on the free plan'), findsOneWidget);
-      expect(find.text('Unlock monthly photo tracking'), findsOneWidget);
+      expect(find.text('Unlock photo tracking every 2 weeks'), findsOneWidget);
       expect(find.text('Go Pro'), findsOneWidget);
     });
 

@@ -161,15 +161,40 @@ void main() {
     });
   });
 
-  group('month number', () {
-    test('30 days is still month 1, 60 days is month 2', () {
-      expect(monthNumber(DateTime(2026, 9, 14), DateTime(2026, 10, 14)), 1);
-      expect(monthNumber(DateTime(2026, 8, 14), DateTime(2026, 10, 14)), 2);
+  // Scans are taken every two weeks (changed from monthly after the first
+  // phone test), so progress is counted in weeks.
+  group('week number', () {
+    test('two weeks apart is week 2, four weeks is week 4', () {
+      expect(weekNumber(DateTime(2026, 10, 1), DateTime(2026, 10, 15)), 2);
+      expect(weekNumber(DateTime(2026, 10, 1), DateTime(2026, 10, 29)), 4);
     });
 
-    test('never below month 1', () {
-      expect(monthNumber(DateTime(2026, 10, 14), DateTime(2026, 10, 15)), 1);
-      expect(monthNumber(DateTime(2026, 10, 14), DateTime(2026, 10, 1)), 1);
+    test('a few days after the first scan is still week 1', () {
+      expect(weekNumber(DateTime(2026, 10, 1), DateTime(2026, 10, 4)), 1);
+      expect(weekNumber(DateTime(2026, 10, 1), DateTime(2026, 10, 1)), 1);
+    });
+
+    test('never below week 1, even if the dates are the wrong way round', () {
+      expect(weekNumber(DateTime(2026, 10, 14), DateTime(2026, 10, 1)), 1);
+    });
+  });
+
+  group('next scan', () {
+    final latest = DateTime(2026, 10, 1, 9);
+
+    test('is due two weeks after the last one', () {
+      expect(daysUntilNextScan(latest, DateTime(2026, 10, 1, 20)), 14);
+      expect(daysUntilNextScan(latest, DateTime(2026, 10, 10, 8)), 5);
+      expect(daysUntilNextScan(latest, DateTime(2026, 10, 14, 23)), 1);
+    });
+
+    test('0 means it is due today or overdue, never negative', () {
+      expect(daysUntilNextScan(latest, DateTime(2026, 10, 15, 8)), 0);
+      expect(daysUntilNextScan(latest, DateTime(2026, 11, 20)), 0);
+    });
+
+    test('a scan "from the future" is not due yet', () {
+      expect(daysUntilNextScan(latest, DateTime(2026, 9, 20)), 14);
     });
   });
 }

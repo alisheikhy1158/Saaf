@@ -134,7 +134,7 @@ void main() {
     ) async {
       await _open(tester);
       expect(
-        find.text('Use it every day and check your progress once a month.'),
+        find.text('Use it every day and check your progress every two weeks.'),
         findsOneWidget,
       );
     });

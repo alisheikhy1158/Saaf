@@ -57,7 +57,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consentPointDeviceBody =>
-      'Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets a photo you choose to attach.';
+      'Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets photos you choose to send.';
 
   @override
   String get consentPointNeverSoldTitle => 'Never sold or shared';
@@ -575,14 +575,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiConsentIntro =>
-      'Ask about your routine, ingredients or products, or attach a photo of your skin. An AI model writes the answer.';
+      'Ask about your routine, ingredients or products, attach a photo of your skin, or let it review your progress photos. An AI model writes the answer.';
 
   @override
   String get aiConsentShareTitle => 'What is sent';
 
   @override
   String get aiConsentShareBody =>
-      'Your message, any photo you attach, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, or your pregnancy, medication and allergy answers.';
+      'Your message, any photo you attach or choose to send for a progress review, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.';
 
   @override
   String get aiConsentWhoTitle => 'Who receives it';
@@ -723,6 +723,74 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiSheetSwitch => 'Share with the AI coach';
 
   @override
+  String progressNextScan(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days',
+      one: '1 day',
+    );
+    return 'Next scan in $_temp0';
+  }
+
+  @override
+  String get progressScanDue => 'Your 2-week scan is due';
+
+  @override
+  String get progressScanNow => 'Scan now';
+
+  @override
+  String get progressAiTitle => 'AI progress review';
+
+  @override
+  String get progressAiBody =>
+      'Let the AI coach look at your photos from the start until now and explain what has changed.';
+
+  @override
+  String get progressAiButton => 'Review my progress with AI';
+
+  @override
+  String get progressAiSetup => 'Set up the AI coach';
+
+  @override
+  String get progressAiConfirmTitle => 'Send these photos to the AI?';
+
+  @override
+  String get progressAiConfirmBody =>
+      'Only the front photos below are sent, to the AI coach (Groq, through Saaf’s server), to describe what changed. Your side photos stay on your phone.';
+
+  @override
+  String get progressAiSend => 'Send';
+
+  @override
+  String get progressAiPhotoError =>
+      'We couldn’t prepare your photos. Please try again.';
+
+  @override
+  String progressAiPhotoSemantics(String date) {
+    return 'Photo from $date';
+  }
+
+  @override
+  String get aiReviewQuestion =>
+      'Please compare my face photos over time and tell me, in general terms, what has changed in my skin and what I should do next.';
+
+  @override
+  String aiReviewFirst(int n, String date) {
+    return 'Photo $n is my first scan, taken $date.';
+  }
+
+  @override
+  String aiReviewMiddle(int n, String date) {
+    return 'Photo $n was taken $date.';
+  }
+
+  @override
+  String aiReviewLatest(int n, String date) {
+    return 'Photo $n is my latest scan, taken $date.';
+  }
+
+  @override
   String get scanRetake => 'Retake';
 
   @override
@@ -747,7 +815,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanPrivacyNote =>
-      'Photos stay on your phone and are never uploaded.';
+      'Photos stay on your phone unless you choose to send them to the AI coach.';
 
   @override
   String get scanRationaleTitle => 'Allow camera access';
@@ -929,7 +997,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get howWeScorePhotos =>
-      'The three photos stay on your phone. They are never uploaded to work out your score.';
+      'The three photos stay on your phone and your score is worked out there. They go to the AI coach only if you choose that.';
 
   @override
   String get howWeScoreMedicalTitle => 'Not medical advice';
@@ -1039,7 +1107,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get routineResultsBodyNoDate =>
-      'Use it every day and check your progress once a month.';
+      'Use it every day and check your progress every two weeks.';
 
   @override
   String get routineStart => 'Start my routine';
@@ -1446,10 +1514,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paywallProChip => 'Saaf Pro';
 
   @override
-  String get paywallTitle => 'See real change,\nmonth by month';
+  String get paywallTitle => 'See real change,\nevery two weeks';
 
   @override
-  String get paywallBenefitPhotos => 'Monthly aligned photo comparisons';
+  String get paywallBenefitPhotos => 'Aligned photo comparisons every 2 weeks';
 
   @override
   String get paywallBenefitScans => 'Unlimited skin and product scans';
@@ -1561,8 +1629,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String progressMonth(int month) {
-    return 'MONTH $month';
+  String progressWeek(int week) {
+    return 'WEEK $week';
   }
 
   @override
@@ -1572,8 +1640,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressShare => 'Share your progress';
 
   @override
-  String progressShareText(int month, String first, String second) {
-    return 'My Saaf progress, month $month: $first, $second. A cosmetic guide, not medical advice.';
+  String progressShareText(int week, String first, String second) {
+    return 'My Saaf progress, week $week: $first, $second. A cosmetic guide, not medical advice.';
   }
 
   @override
@@ -1628,11 +1696,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Some areas look a little worse than last time. Check your routine and sun protection, and see a dermatologist if you are worried.';
 
   @override
-  String get progressLockedTitle => 'Monthly progress is part of Saaf Pro';
+  String get progressLockedTitle => 'Progress tracking is part of Saaf Pro';
 
   @override
   String get progressLockedBody =>
-      'Compare aligned photos month by month and see what is changing.';
+      'Compare aligned photos every two weeks and see what is changing.';
 
   @override
   String get progressLockedAction => 'See Saaf Pro';
@@ -1642,7 +1710,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get progressEmptyBody =>
-      'Take another face scan next month and Saaf will show what changed.';
+      'Take another face scan in two weeks and Saaf will show what changed.';
 
   @override
   String get progressEmptyAction => 'Take a scan';
@@ -1676,7 +1744,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profilePlanFree => 'You’re on the free plan';
 
   @override
-  String get profilePlanFreeBody => 'Unlock monthly photo tracking';
+  String get profilePlanFreeBody => 'Unlock photo tracking every 2 weeks';
 
   @override
   String get profileGoPro => 'Go Pro';
@@ -1950,7 +2018,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backupBody =>
-      'Your face photos stay only on this phone and are never uploaded. Cloud backup is not available in this version.';
+      'Your face photos stay only on this phone. The one exception is photos you choose to send for an AI review. Cloud backup is not available in this version.';
 
   @override
   String get deleteTitle => 'Delete your account?';

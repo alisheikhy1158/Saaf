@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// Screen 04 privacy point 1 text.
   ///
   /// In en, this message translates to:
-  /// **'Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets a photo you choose to attach.'**
+  /// **'Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets photos you choose to send.'**
   String get consentPointDeviceBody;
 
   /// Screen 04 privacy point 2 title.
@@ -1127,7 +1127,7 @@ abstract class AppLocalizations {
   /// Introduction on the AI coach permission screen.
   ///
   /// In en, this message translates to:
-  /// **'Ask about your routine, ingredients or products, or attach a photo of your skin. An AI model writes the answer.'**
+  /// **'Ask about your routine, ingredients or products, attach a photo of your skin, or let it review your progress photos. An AI model writes the answer.'**
   String get aiConsentIntro;
 
   /// Heading on the AI permission screen.
@@ -1139,7 +1139,7 @@ abstract class AppLocalizations {
   /// What is sent to the AI.
   ///
   /// In en, this message translates to:
-  /// **'Your message, any photo you attach, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, or your pregnancy, medication and allergy answers.'**
+  /// **'Your message, any photo you attach or choose to send for a progress review, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.'**
   String get aiConsentShareBody;
 
   /// Heading on the AI permission screen.
@@ -1388,6 +1388,102 @@ abstract class AppLocalizations {
   /// **'Share with the AI coach'**
   String get aiSheetSwitch;
 
+  /// Shown on the progress screen: days until the next 2-week scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Next scan in {days, plural, =1{1 day} other{{days} days}}'**
+  String progressNextScan(int days);
+
+  /// Shown when a new face scan is due.
+  ///
+  /// In en, this message translates to:
+  /// **'Your 2-week scan is due'**
+  String get progressScanDue;
+
+  /// Button that starts the face scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan now'**
+  String get progressScanNow;
+
+  /// Title of the AI review card on the progress screen.
+  ///
+  /// In en, this message translates to:
+  /// **'AI progress review'**
+  String get progressAiTitle;
+
+  /// Body of the AI review card.
+  ///
+  /// In en, this message translates to:
+  /// **'Let the AI coach look at your photos from the start until now and explain what has changed.'**
+  String get progressAiBody;
+
+  /// Button that opens the AI review confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Review my progress with AI'**
+  String get progressAiButton;
+
+  /// Button shown before the user has agreed to the AI coach.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up the AI coach'**
+  String get progressAiSetup;
+
+  /// Title of the confirmation before sending progress photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Send these photos to the AI?'**
+  String get progressAiConfirmTitle;
+
+  /// Body of the confirmation before sending progress photos; says who receives them.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the front photos below are sent, to the AI coach (Groq, through Saaf’s server), to describe what changed. Your side photos stay on your phone.'**
+  String get progressAiConfirmBody;
+
+  /// Button that sends the progress photos to the AI.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get progressAiSend;
+
+  /// Shown when the progress photos could not be prepared.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t prepare your photos. Please try again.'**
+  String get progressAiPhotoError;
+
+  /// Screen-reader label of a photo in the send confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo from {date}'**
+  String progressAiPhotoSemantics(String date);
+
+  /// The question sent for an AI progress review (shown in the chat).
+  ///
+  /// In en, this message translates to:
+  /// **'Please compare my face photos over time and tell me, in general terms, what has changed in my skin and what I should do next.'**
+  String get aiReviewQuestion;
+
+  /// Describes the first progress photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {n} is my first scan, taken {date}.'**
+  String aiReviewFirst(int n, String date);
+
+  /// Describes a middle progress photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {n} was taken {date}.'**
+  String aiReviewMiddle(int n, String date);
+
+  /// Describes the latest progress photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {n} is my latest scan, taken {date}.'**
+  String aiReviewLatest(int n, String date);
+
   /// Button that discards the photo and shows the camera again.
   ///
   /// In en, this message translates to:
@@ -1433,7 +1529,7 @@ abstract class AppLocalizations {
   /// Reassurance shown in the camera permission sheet and under the review buttons.
   ///
   /// In en, this message translates to:
-  /// **'Photos stay on your phone and are never uploaded.'**
+  /// **'Photos stay on your phone unless you choose to send them to the AI coach.'**
   String get scanPrivacyNote;
 
   /// Title of our own explanation shown before the system camera dialog.
@@ -1751,7 +1847,7 @@ abstract class AppLocalizations {
   /// Paragraph about photo privacy.
   ///
   /// In en, this message translates to:
-  /// **'The three photos stay on your phone. They are never uploaded to work out your score.'**
+  /// **'The three photos stay on your phone and your score is worked out there. They go to the AI coach only if you choose that.'**
   String get howWeScorePhotos;
 
   /// Section heading.
@@ -1919,7 +2015,7 @@ abstract class AppLocalizations {
   /// Body of the info card when there is no scan date yet.
   ///
   /// In en, this message translates to:
-  /// **'Use it every day and check your progress once a month.'**
+  /// **'Use it every day and check your progress every two weeks.'**
   String get routineResultsBodyNoDate;
 
   /// Primary button on the routine screen.
@@ -2598,13 +2694,13 @@ abstract class AppLocalizations {
   ///  is a line break.
   ///
   /// In en, this message translates to:
-  /// **'See real change,\nmonth by month'**
+  /// **'See real change,\nevery two weeks'**
   String get paywallTitle;
 
   /// Benefit.
   ///
   /// In en, this message translates to:
-  /// **'Monthly aligned photo comparisons'**
+  /// **'Aligned photo comparisons every 2 weeks'**
   String get paywallBenefitPhotos;
 
   /// Benefit.
@@ -2786,11 +2882,11 @@ abstract class AppLocalizations {
   /// **'Thank you for supporting Saaf. You can manage your plan in {store}.'**
   String paywallAlreadyProBody(String store);
 
-  /// Small caps line above the progress title (12).
+  /// Overline above the progress title: the week of using Saaf (scans are every two weeks).
   ///
   /// In en, this message translates to:
-  /// **'MONTH {month}'**
-  String progressMonth(int month);
+  /// **'WEEK {week}'**
+  String progressWeek(int week);
 
   /// Title of the monthly progress screen.
   ///
@@ -2807,8 +2903,8 @@ abstract class AppLocalizations {
   /// Text shared from the progress screen. Never includes photos.
   ///
   /// In en, this message translates to:
-  /// **'My Saaf progress, month {month}: {first}, {second}. A cosmetic guide, not medical advice.'**
-  String progressShareText(int month, String first, String second);
+  /// **'My Saaf progress, week {week}: {first}, {second}. A cosmetic guide, not medical advice.'**
+  String progressShareText(int week, String first, String second);
 
   /// Dates and photo count under the title.
   ///
@@ -2873,13 +2969,13 @@ abstract class AppLocalizations {
   /// Title shown to users without Saaf Pro.
   ///
   /// In en, this message translates to:
-  /// **'Monthly progress is part of Saaf Pro'**
+  /// **'Progress tracking is part of Saaf Pro'**
   String get progressLockedTitle;
 
   /// Body shown to users without Saaf Pro.
   ///
   /// In en, this message translates to:
-  /// **'Compare aligned photos month by month and see what is changing.'**
+  /// **'Compare aligned photos every two weeks and see what is changing.'**
   String get progressLockedBody;
 
   /// Button that opens the paywall.
@@ -2897,7 +2993,7 @@ abstract class AppLocalizations {
   /// Body when there are fewer than two scans.
   ///
   /// In en, this message translates to:
-  /// **'Take another face scan next month and Saaf will show what changed.'**
+  /// **'Take another face scan in two weeks and Saaf will show what changed.'**
   String get progressEmptyBody;
 
   /// Button that opens the camera screen.
@@ -2957,7 +3053,7 @@ abstract class AppLocalizations {
   /// Promo card body for free users.
   ///
   /// In en, this message translates to:
-  /// **'Unlock monthly photo tracking'**
+  /// **'Unlock photo tracking every 2 weeks'**
   String get profilePlanFreeBody;
 
   /// Button on the promo card.
@@ -3455,7 +3551,7 @@ abstract class AppLocalizations {
   /// Body of the photo backup sheet.
   ///
   /// In en, this message translates to:
-  /// **'Your face photos stay only on this phone and are never uploaded. Cloud backup is not available in this version.'**
+  /// **'Your face photos stay only on this phone. The one exception is photos you choose to send for an AI review. Cloud backup is not available in this version.'**
   String get backupBody;
 
   /// Title of the delete dialog.

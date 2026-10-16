@@ -12,7 +12,7 @@ import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
-import 'package:saaf/presentation/features/coach/controllers/ai_chat_controller.dart';
+import 'package:saaf/presentation/providers/ai_chat_controller.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
 
@@ -299,5 +299,79 @@ void main() {
     expect(state().messages, isEmpty);
     expect(state().pendingPhotos, isEmpty);
     expect(state().failure, isNull);
+  });
+
+  group('progress review (the user chose to send their photos)', () {
+    Uint8List photo(int n) => Uint8List.fromList([n, n, n]);
+
+    test(
+      'puts the photos and the question in the chat and sends them',
+      () async {
+        final ok = await chat().reviewProgress(
+          photos: [photo(1), photo(2), photo(3)],
+          question: 'Please compare my photos.',
+          languageCode: 'en',
+        );
+        expect(ok, isTrue);
+        expect(service.asked.single.photos, 3);
+        expect(service.asked.single.question, 'Please compare my photos.');
+        expect(state().messages.first.photoCount, 3);
+        expect(state().messages.last.role, AiRole.assistant);
+        expect(state().pendingPhotos, isEmpty);
+      },
+    );
+
+    test('at most three photos go', () async {
+      await chat().reviewProgress(
+        photos: [photo(1), photo(2), photo(3), photo(4)],
+        question: 'Compare',
+        languageCode: 'en',
+      );
+      expect(service.asked.single.photos, 3);
+    });
+
+    test('photos already waiting in the chat are replaced', () async {
+      await chat().attach(AiPhotoSource.gallery);
+      await chat().reviewProgress(
+        photos: [photo(1)],
+        question: 'Compare',
+        languageCode: 'en',
+      );
+      expect(service.asked.single.photos, 1);
+    });
+
+    test('without permission nothing is sent', () async {
+      await c.read(aiConsentStateProvider.notifier).withdraw();
+      final ok = await chat().reviewProgress(
+        photos: [photo(1)],
+        question: 'Compare',
+        languageCode: 'en',
+      );
+      expect(ok, isFalse);
+      expect(service.asked, isEmpty);
+    });
+
+    test('with no photos there is nothing to review', () async {
+      final ok = await chat().reviewProgress(
+        photos: const [],
+        question: 'Compare',
+        languageCode: 'en',
+      );
+      expect(ok, isFalse);
+      expect(service.asked, isEmpty);
+    });
+
+    test('if it fails, Try again keeps the photos', () async {
+      service.answers.add(const Err(NetworkFailure()));
+      await chat().reviewProgress(
+        photos: [photo(1), photo(2)],
+        question: 'Compare',
+        languageCode: 'en',
+      );
+      expect(state().failure, const NetworkFailure());
+      await chat().retry(languageCode: 'en');
+      expect(service.asked.last.photos, 2);
+      expect(state().failure, isNull);
+    });
   });
 }

@@ -7,15 +7,17 @@
   "Android test app", needs Mac minutes; see Native notes). GitHub: https://github.com/alisheikhy1158/Saaf (main).
 - **Waiting on the owner:** push + rebuild "Android test app", test on the Android 15 phone (checklist below); AI coach needs the
   server (docs/ai-coach.md: Groq key + Cloudflare, then `AI_PROXY_URL` + `USE_FIREBASE=true` in Codemagic `app_config`).
-- **Tests:** 1508 Flutter + 32 backend (`cd backend/ai-proxy; node --test`) · **Analyze:** 0 issues · Flutter 3.47.7
-- **NOT pushed yet:** 5 local commits (profile edit, tissue test, scan checks, products, AI coach). Push triggers a CI run.
+- **Tests:** 1538 Flutter + 33 backend (`cd backend/ai-proxy; node --test`) · **Analyze:** 0 issues · Flutter 3.47.7
+- Scans are now **every 2 weeks** ("WEEK N", next-scan countdown on Progress). Progress has an **AI progress review** (first,
+  previous, latest FRONT photos, shown to the user and sent only on Send; see docs/ai-coach.md).
 
 ## Phone-test checklist (new, unverified on a device)
 1. Scan: face/light/angle chips and hints react; shutter locked until green; side photos need ~20–55° turn. **If "turn left" is
    mirrored, flip `_yawSign` in `domain/usecases/analyse_frame.dart`** (and `mirrored` in `mlkit_capture_quality_monitor.dart` for iOS).
    Bad photos (also from gallery) show a warning with "Use it anyway". 2. Scan a product (Home icon): real barcode -> Open Beauty
    Facts; typed number works without camera. 3. Profile: edit one answer; name/age sheet; AI sharing row. 4. Tissue test on quiz step 1.
-5. Reminders sheet + notifications. 6. AI coach is a labelled DEMO until the server is deployed.
+5. Reminders sheet + notifications. 6. AI coach and the AI progress review are a labelled DEMO until the server is deployed.
+7. Progress: week label, next-scan text, review card -> photos dialog -> chat. (No scan-due notification yet.)
 
 ## Decisions made
 - Bundle ID `com.saafapp.saaf`. Material 3 like Figma (design.md §0). Backend: **Firebase** (project `saaf-01`, see memory file).
