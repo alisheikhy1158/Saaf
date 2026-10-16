@@ -13,18 +13,18 @@ DAILY_LIMIT = "30"
 MODEL_TEXT = "openai/gpt-oss-120b"
 MODEL_VISION = "qwen/qwen3.8-27b"
 
-# OPTIONAL, recommended: a place to keep the daily counters and the reports.
+# A place to keep the daily counters and the reports (created with wrangler).
 # Create them with:  npx wrangler kv namespace create LIMITS
 #                    npx wrangler kv namespace create REPORTS
 # then paste the ids here and remove the leading "#".
 #
-# [[kv_namespaces]]
-# binding = "LIMITS"
-# id = "PASTE_ID_HERE"
-#
-# [[kv_namespaces]]
-# binding = "REPORTS"
-# id = "PASTE_ID_HERE"
+[[kv_namespaces]]
+binding = "LIMITS"
+id = "87df12c9879e4ef0919d233c779abf77"
+
+[[kv_namespaces]]
+binding = "REPORTS"
+id = "92a56d2997464610b2b0c0ed776b8947"
 
 # The secret key is NOT stored here. Set it with:
 #   npx wrangler secret put GROQ_API_KEY
