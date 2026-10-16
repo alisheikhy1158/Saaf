@@ -10,6 +10,10 @@ abstract final class Env {
   /// scan screens in Chrome without a webcam: `--dart-define=FAKE_CAMERA=true`.
   static const bool fakeCamera = bool.fromEnvironment('FAKE_CAMERA');
 
+  /// Pretend store: "buying" Saaf Pro is free. For Chrome demos only; debug
+  /// builds use it too. `--dart-define=FAKE_PURCHASES=true`.
+  static const bool fakePurchases = bool.fromEnvironment('FAKE_PURCHASES');
+
   static const String firebaseProjectId = String.fromEnvironment(
     'FIREBASE_PROJECT_ID',
   );

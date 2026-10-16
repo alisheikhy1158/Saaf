@@ -1166,4 +1166,380 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get checkInInfoClose => 'ٹھیک ہے';
+
+  @override
+  String get paywallProChip => 'ثاف پرو';
+
+  @override
+  String get paywallTitle => 'ہر مہینے\nحقیقی تبدیلی دیکھیں';
+
+  @override
+  String get paywallBenefitPhotos => 'ماہانہ ہم آہنگ تصاویر کا موازنہ';
+
+  @override
+  String get paywallBenefitScans => 'جلد اور پروڈکٹ کے لامحدود اسکین';
+
+  @override
+  String get paywallBenefitAlerts => 'آپ کی مصنوعات کی قیمت گرنے پر الرٹ';
+
+  @override
+  String get paywallBenefitCoach => 'ہفتہ وار کوچ جائزے اور رپورٹس';
+
+  @override
+  String get planYearly => 'سالانہ';
+
+  @override
+  String get planMonthly => 'ماہانہ';
+
+  @override
+  String planSave(int percent) {
+    return '$percent% بچت';
+  }
+
+  @override
+  String planPerMonthBilledYearly(String price) {
+    return '$price ماہانہ، سالانہ بل';
+  }
+
+  @override
+  String get planCancelAnytime => 'کسی بھی وقت منسوخ کریں';
+
+  @override
+  String planSemantics(String title, String price, String caption) {
+    return '$title۔ $price۔ $caption';
+  }
+
+  @override
+  String paywallStartTrial(int days) {
+    return '$days دن کا مفت ٹرائل شروع کریں';
+  }
+
+  @override
+  String get paywallSubscribe => 'سبسکرائب کریں';
+
+  @override
+  String get paywallPeriodYear => 'سال';
+
+  @override
+  String get paywallPeriodMonth => 'مہینہ';
+
+  @override
+  String get paywallStoreApple => 'ایپ اسٹور';
+
+  @override
+  String get paywallStoreGoogle => 'گوگل پلے';
+
+  @override
+  String get paywallStoreOther => 'آپ کے اسٹور کی سیٹنگز';
+
+  @override
+  String paywallFinePrintTrial(
+    int days,
+    String price,
+    String period,
+    String store,
+  ) {
+    return '$days دن مفت، پھر $price فی $period۔ $store میں کسی بھی وقت منسوخ کریں۔';
+  }
+
+  @override
+  String paywallFinePrint(String price, String period, String store) {
+    return '$price فی $period۔ خودکار تجدید ہوتی ہے۔ $store میں کسی بھی وقت منسوخ کریں۔';
+  }
+
+  @override
+  String get paywallRestore => 'خریداری بحال کریں';
+
+  @override
+  String get paywallRestored => 'ثاف پرو میں خوش آمدید۔';
+
+  @override
+  String get paywallNothingToRestore => 'پچھلی کوئی خریداری نہیں ملی۔';
+
+  @override
+  String get paywallRestoreFailed =>
+      'ہم آپ کی خریداریاں چیک نہیں کر سکے۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get paywallPurchaseFailed =>
+      'ہم خریداری مکمل نہیں کر سکے۔ آپ سے کوئی رقم نہیں لی گئی۔';
+
+  @override
+  String get paywallClose => 'بند کریں';
+
+  @override
+  String get paywallUnavailableTitle => 'سبسکرپشنز ابھی دستیاب نہیں';
+
+  @override
+  String get paywallUnavailableBody => 'براہِ کرم بعد میں دوبارہ کوشش کریں۔';
+
+  @override
+  String get paywallRetry => 'دوبارہ کوشش کریں';
+
+  @override
+  String get paywallAlreadyProTitle => 'آپ ثاف پرو پر ہیں';
+
+  @override
+  String paywallAlreadyProBody(String store) {
+    return 'ثاف کا ساتھ دینے کا شکریہ۔ آپ اپنا پلان $store میں سنبھال سکتے ہیں۔';
+  }
+
+  @override
+  String progressMonth(int month) {
+    return 'مہینہ $month';
+  }
+
+  @override
+  String get progressTitle => 'آپ کی پیش رفت';
+
+  @override
+  String get progressShare => 'اپنی پیش رفت شیئر کریں';
+
+  @override
+  String progressShareText(int month, String first, String second) {
+    return 'میری ثاف پیش رفت، مہینہ $month: $first، $second۔ یہ صرف ظاہری رہنمائی ہے، طبی مشورہ نہیں۔';
+  }
+
+  @override
+  String progressRange(String from, String to, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ہم آہنگ تصاویر',
+    );
+    return '$from → $to  ·  $_temp0';
+  }
+
+  @override
+  String progressBefore(String date) {
+    return 'پہلے · $date';
+  }
+
+  @override
+  String progressAfter(String date) {
+    return 'بعد · $date';
+  }
+
+  @override
+  String get progressCompare => 'پہلے اور بعد کا موازنہ';
+
+  @override
+  String progressVs(String date) {
+    return 'بمقابلہ $date';
+  }
+
+  @override
+  String progressChangeSemantics(String name, String change, String since) {
+    return '$name: $change $since';
+  }
+
+  @override
+  String get progressCoach => 'کوچ کا خلاصہ';
+
+  @override
+  String progressSummaryImproving(String metric) {
+    return 'اچھی خبر: $metric بہتر ہوا ہے۔ روزانہ دھوپ سے بچاؤ اس پیش رفت کو قائم رکھتا ہے، اس لیے جاری رکھیں۔';
+  }
+
+  @override
+  String progressSummarySteady(String date) {
+    return '$date کے بعد سے آپ کی جلد مستحکم لگتی ہے۔ نتائج عموماً 6 سے 8 ہفتے میں آتے ہیں، اس لیے جاری رکھیں۔';
+  }
+
+  @override
+  String get progressSummarySlipping =>
+      'کچھ حصے پچھلی بار سے تھوڑے خراب لگ رہے ہیں۔ اپنا روٹین اور دھوپ سے بچاؤ دیکھیں، اور فکر ہو تو ماہرِ جلد سے ملیں۔';
+
+  @override
+  String get progressLockedTitle => 'ماہانہ پیش رفت ثاف پرو کا حصہ ہے';
+
+  @override
+  String get progressLockedBody =>
+      'ہم آہنگ تصاویر کا مہینہ بہ مہینہ موازنہ کریں اور دیکھیں کیا بدل رہا ہے۔';
+
+  @override
+  String get progressLockedAction => 'ثاف پرو دیکھیں';
+
+  @override
+  String get progressEmptyTitle => 'آپ کا پہلا موازنہ آنے والا ہے';
+
+  @override
+  String get progressEmptyBody =>
+      'اگلے مہینے چہرے کا ایک اور اسکین لیں، ثاف دکھائے گا کیا بدلا۔';
+
+  @override
+  String get progressEmptyAction => 'اسکین لیں';
+
+  @override
+  String get progressErrorTitle => 'ہم آپ کی پیش رفت لوڈ نہیں کر سکے';
+
+  @override
+  String get progressErrorAction => 'دوبارہ کوشش کریں';
+
+  @override
+  String get progressCheckIn => 'اپنا ہفتہ وار جائزہ شروع کریں';
+
+  @override
+  String get profileTitle => 'پروفائل';
+
+  @override
+  String get profileNameFallback => 'ثاف ممبر';
+
+  @override
+  String profilePhoneFallback(String digits) {
+    return 'فون نمبر جس کے آخر میں $digits';
+  }
+
+  @override
+  String profileSkinType(String type) {
+    return '$type جلد';
+  }
+
+  @override
+  String get profilePlanFree => 'آپ مفت پلان پر ہیں';
+
+  @override
+  String get profilePlanFreeBody => 'ماہانہ تصاویر کی ٹریکنگ کھولیں';
+
+  @override
+  String get profileGoPro => 'پرو لیں';
+
+  @override
+  String get profilePlanPro => 'آپ ثاف پرو پر ہیں';
+
+  @override
+  String get profilePlanProBody => 'ثاف کا ساتھ دینے کا شکریہ';
+
+  @override
+  String get profileManage => 'سنبھالیں';
+
+  @override
+  String get profileSectionRoutine => 'روٹین';
+
+  @override
+  String get profileSectionPrivacy => 'رازداری';
+
+  @override
+  String get profileSectionApp => 'ایپ';
+
+  @override
+  String get profileRowSkin => 'جلد کا پروفائل';
+
+  @override
+  String get profileRowBudget => 'ماہانہ بجٹ';
+
+  @override
+  String get profileRowReminders => 'یاد دہانیاں';
+
+  @override
+  String get profileRowLanguage => 'زبان';
+
+  @override
+  String get profileRowAppearance => 'ظاہری شکل';
+
+  @override
+  String get profileRowBackup => 'تصاویر کا بیک اپ';
+
+  @override
+  String get profileRowDelete => 'میرا اکاؤنٹ حذف کریں';
+
+  @override
+  String get profileRowLogout => 'لاگ آؤٹ';
+
+  @override
+  String profileRowSemantics(String title, String value) {
+    return '$title، $value';
+  }
+
+  @override
+  String get profileValueNotSet => 'طے نہیں';
+
+  @override
+  String get profileValueOff => 'بند';
+
+  @override
+  String get profileValueNoLimit => 'کوئی حد نہیں';
+
+  @override
+  String get profileLangEnglish => 'English';
+
+  @override
+  String get profileLangUrdu => 'اردو';
+
+  @override
+  String get profileThemeSystem => 'سسٹم';
+
+  @override
+  String get profileThemeLight => 'روشن';
+
+  @override
+  String get profileThemeDark => 'گہرا';
+
+  @override
+  String get commonDone => 'مکمل';
+
+  @override
+  String get commonCancel => 'منسوخ کریں';
+
+  @override
+  String get languageTitle => 'زبان';
+
+  @override
+  String get languageSemantics => 'زبان';
+
+  @override
+  String get appearanceTitle => 'ظاہری شکل';
+
+  @override
+  String get remindersTitle => 'یاد دہانیاں';
+
+  @override
+  String get remindersMorning => 'صبح کا روٹین';
+
+  @override
+  String get remindersNight => 'رات کا روٹین';
+
+  @override
+  String remindersChange(String name) {
+    return '$name کا وقت بدلیں';
+  }
+
+  @override
+  String get remindersNote =>
+      'آپ کے اوقات محفوظ ہو گئے ہیں۔ یاد دہانی کے نوٹیفکیشن ایک آئندہ اپ ڈیٹ میں آئیں گے۔';
+
+  @override
+  String get backupTitle => 'تصاویر کا بیک اپ';
+
+  @override
+  String get backupBody =>
+      'آپ کے چہرے کی تصاویر صرف اس فون پر رہتی ہیں اور کبھی اپ لوڈ نہیں ہوتیں۔ اس ورژن میں کلاؤڈ بیک اپ دستیاب نہیں۔';
+
+  @override
+  String get deleteTitle => 'اکاؤنٹ حذف کریں؟';
+
+  @override
+  String get deleteBody =>
+      'اس سے آپ کا اکاؤنٹ اور ثاف نے اس فون پر آپ کے بارے میں جو کچھ رکھا ہے وہ سب ہٹ جائے گا: آپ کے اسکین اور تصاویر، جوابات، روٹین اور جائزے۔ یہ واپس نہیں ہو سکتا۔';
+
+  @override
+  String get deleteConfirm => 'سب کچھ حذف کریں';
+
+  @override
+  String get deleteFailedRecent =>
+      'آپ کی حفاظت کے لیے، براہِ کرم دوبارہ لاگ اِن کریں اور پھر اکاؤنٹ حذف کریں۔';
+
+  @override
+  String get deleteFailed =>
+      'ہم آپ کا اکاؤنٹ حذف نہیں کر سکے۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get logoutTitle => 'لاگ آؤٹ کریں؟';
+
+  @override
+  String get logoutBody =>
+      'آپ اپنے فون نمبر، گوگل یا ایپل سے دوبارہ لاگ اِن کر سکتے ہیں۔';
+
+  @override
+  String get logoutConfirm => 'لاگ آؤٹ';
 }

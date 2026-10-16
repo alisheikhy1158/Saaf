@@ -47,6 +47,15 @@ class RecordingAuthRepository implements AuthRepository {
   @override
   Stream<AuthSession?> get sessionChanges => const Stream.empty();
 
+  Result<void> deleteResult = const Ok<void>(null);
+  int deleteCalls = 0;
+
+  @override
+  Future<Result<void>> deleteAccount() async {
+    deleteCalls++;
+    return deleteResult;
+  }
+
   @override
   Future<void> signOut() async {}
 }

@@ -25,4 +25,9 @@ abstract interface class AuthRepository {
 
   /// Ends the session and wipes tokens (SEC-7).
   Future<void> signOut();
+
+  /// Deletes the account with the backend (store requirement A-1). Fails with
+  /// `UnknownFailure('requires-recent-login')` when the user must sign in
+  /// again first; nothing is deleted then.
+  Future<Result<void>> deleteAccount();
 }

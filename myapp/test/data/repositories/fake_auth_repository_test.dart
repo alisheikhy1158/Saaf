@@ -44,4 +44,14 @@ void main() {
     await repository.signOut();
     expect(await repository.currentSession(), isNull);
   });
+
+  test('deleting the account signs out too', () async {
+    final repository = FakeAuthRepository();
+    await repository.verifyOtp(
+      phone: phone,
+      code: FakeAuthRepository.fixedCode,
+    );
+    expect((await repository.deleteAccount()).isOk, isTrue);
+    expect(await repository.currentSession(), isNull);
+  });
 }

@@ -165,6 +165,28 @@ class FirebaseAuthRepository implements AuthRepository {
     _announce(null);
   }
 
+  @override
+  Future<Result<void>> deleteAccount() async {
+    try {
+      final auth = await _authProvider();
+      final user = auth.currentUser;
+      if (user == null) return const Ok<void>(null);
+      await user.delete();
+      _verificationId = null;
+      _resendToken = null;
+      _webConfirmation = null;
+      _announce(null);
+      return const Ok<void>(null);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        return const Err(UnknownFailure('requires-recent-login'));
+      }
+      return Err(mapFirebaseAuthError(e));
+    } on Object {
+      return const Err(UnknownFailure('deleteAccount'));
+    }
+  }
+
   void _announce(AuthSession? session) => _changes.add(session);
 
   static AuthSession? _sessionFrom(User? user) {

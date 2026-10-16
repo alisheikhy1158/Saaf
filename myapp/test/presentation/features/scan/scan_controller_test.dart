@@ -23,6 +23,7 @@ import 'package:saaf/presentation/features/scan/controllers/scan_controller.dart
 import 'package:saaf/presentation/features/scan/state/scan_state.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
+import 'package:saaf/presentation/providers/progress_providers.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
 
 class _Clock implements Clock {
@@ -304,6 +305,8 @@ void main() {
 
       final scan = c.read(completedScanProvider);
       expect(scan, isNotNull);
+      // It is also kept in the history the progress comparison uses.
+      expect(c.read(scanHistoryProvider), [scan]);
       expect(scan!.photos.map((p) => p.pose), FacePose.values);
       for (final photo in scan.photos) {
         expect((await store.load(photo)).isOk, isTrue);

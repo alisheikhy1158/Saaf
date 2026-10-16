@@ -11,6 +11,7 @@ import 'package:saaf/domain/usecases/camera_access.dart';
 import 'package:saaf/presentation/features/scan/state/scan_state.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
+import 'package:saaf/presentation/providers/progress_providers.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
 
 part 'scan_controller.g.dart';
@@ -266,15 +267,13 @@ class ScanController extends _$ScanController {
       );
       return;
     }
-    ref
-        .read(completedScanProvider.notifier)
-        .set(
-          CompletedScan(
-            id: session.id,
-            takenAt: session.startedAt,
-            photos: photos,
-          ),
-        );
+    final scan = CompletedScan(
+      id: session.id,
+      takenAt: session.startedAt,
+      photos: photos,
+    );
+    ref.read(completedScanProvider.notifier).set(scan);
+    ref.read(scanHistoryProvider.notifier).add(scan);
     state = state.copyWith(phase: ScanPhase.done);
   }
 

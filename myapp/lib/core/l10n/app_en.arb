@@ -1085,5 +1085,377 @@
   "@checkInInfoBody": { "description": "Body of the info dialog." },
 
   "checkInInfoClose": "Got it",
-  "@checkInInfoClose": { "description": "Button that closes the info dialog." }
+  "@checkInInfoClose": { "description": "Button that closes the info dialog." },
+  "paywallProChip": "Saaf Pro",
+  "@paywallProChip": { "description": "Chip at the top of the paywall (13)." },
+
+  "paywallTitle": "See real change,\nmonth by month",
+  "@paywallTitle": { "description": "Paywall headline. \n is a line break." },
+
+  "paywallBenefitPhotos": "Monthly aligned photo comparisons",
+  "@paywallBenefitPhotos": { "description": "Benefit." },
+
+  "paywallBenefitScans": "Unlimited skin and product scans",
+  "@paywallBenefitScans": { "description": "Benefit." },
+
+  "paywallBenefitAlerts": "Price-drop alerts on your products",
+  "@paywallBenefitAlerts": { "description": "Benefit." },
+
+  "paywallBenefitCoach": "Weekly coach check-ins and reports",
+  "@paywallBenefitCoach": { "description": "Benefit." },
+
+  "planYearly": "Yearly",
+  "@planYearly": { "description": "Plan name." },
+
+  "planMonthly": "Monthly",
+  "@planMonthly": { "description": "Plan name." },
+
+  "planSave": "Save {percent}%",
+  "@planSave": {
+    "description": "Chip on the yearly plan.",
+    "placeholders": { "percent": { "type": "int" } }
+  },
+
+  "planPerMonthBilledYearly": "{price}/month, billed yearly",
+  "@planPerMonthBilledYearly": {
+    "description": "Caption of the yearly plan. {price} is the store's monthly equivalent.",
+    "placeholders": { "price": { "type": "String" } }
+  },
+
+  "planCancelAnytime": "Cancel anytime",
+  "@planCancelAnytime": { "description": "Caption of the monthly plan." },
+
+  "planSemantics": "{title}. {price}. {caption}",
+  "@planSemantics": {
+    "description": "Screen-reader label of a plan tile.",
+    "placeholders": { "title": { "type": "String" }, "price": { "type": "String" }, "caption": { "type": "String" } }
+  },
+
+  "paywallStartTrial": "Start {days}-day free trial",
+  "@paywallStartTrial": {
+    "description": "Primary button when the plan has a free trial.",
+    "placeholders": { "days": { "type": "int" } }
+  },
+
+  "paywallSubscribe": "Subscribe",
+  "@paywallSubscribe": { "description": "Primary button when the plan has no free trial." },
+
+  "paywallPeriodYear": "year",
+  "@paywallPeriodYear": { "description": "Used in the fine print: Rs 3,999/year." },
+
+  "paywallPeriodMonth": "month",
+  "@paywallPeriodMonth": { "description": "Used in the fine print: Rs 599/month." },
+
+  "paywallStoreApple": "the App Store",
+  "@paywallStoreApple": { "description": "Where to cancel on iPhone." },
+
+  "paywallStoreGoogle": "Google Play",
+  "@paywallStoreGoogle": { "description": "Where to cancel on Android." },
+
+  "paywallStoreOther": "your store settings",
+  "@paywallStoreOther": { "description": "Where to cancel elsewhere." },
+
+  "paywallFinePrintTrial": "Free for {days} days, then {price}/{period}. Cancel anytime in {store}.",
+  "@paywallFinePrintTrial": {
+    "description": "Fine print under the button when there is a free trial.",
+    "placeholders": { "days": { "type": "int" }, "price": { "type": "String" }, "period": { "type": "String" }, "store": { "type": "String" } }
+  },
+
+  "paywallFinePrint": "{price}/{period}. Renews automatically. Cancel anytime in {store}.",
+  "@paywallFinePrint": {
+    "description": "Fine print under the button when there is no free trial.",
+    "placeholders": { "price": { "type": "String" }, "period": { "type": "String" }, "store": { "type": "String" } }
+  },
+
+  "paywallRestore": "Restore purchases",
+  "@paywallRestore": { "description": "Button that asks the store for earlier purchases." },
+
+  "paywallRestored": "Welcome back to Saaf Pro.",
+  "@paywallRestored": { "description": "Message when a purchase was restored." },
+
+  "paywallNothingToRestore": "No earlier purchase found.",
+  "@paywallNothingToRestore": { "description": "Message when there is nothing to restore." },
+
+  "paywallRestoreFailed": "We couldn’t check your purchases. Please try again.",
+  "@paywallRestoreFailed": { "description": "Message when restoring fails." },
+
+  "paywallPurchaseFailed": "We couldn’t complete the purchase. You have not been charged.",
+  "@paywallPurchaseFailed": { "description": "Message when buying fails." },
+
+  "paywallClose": "Close",
+  "@paywallClose": { "description": "Tooltip of the X button on the paywall." },
+
+  "paywallUnavailableTitle": "Subscriptions aren’t available right now",
+  "@paywallUnavailableTitle": { "description": "Title when no plans can be loaded." },
+
+  "paywallUnavailableBody": "Please try again later.",
+  "@paywallUnavailableBody": { "description": "Body when no plans can be loaded." },
+
+  "paywallRetry": "Try again",
+  "@paywallRetry": { "description": "Button that loads the plans again." },
+
+  "paywallAlreadyProTitle": "You’re on Saaf Pro",
+  "@paywallAlreadyProTitle": { "description": "Title when the user already has Pro." },
+
+  "paywallAlreadyProBody": "Thank you for supporting Saaf. You can manage your plan in {store}.",
+  "@paywallAlreadyProBody": {
+    "description": "Body when the user already has Pro.",
+    "placeholders": { "store": { "type": "String" } }
+  },
+  "progressMonth": "MONTH {month}",
+  "@progressMonth": {
+    "description": "Small caps line above the progress title (12).",
+    "placeholders": { "month": { "type": "int" } }
+  },
+
+  "progressTitle": "Your progress",
+  "@progressTitle": { "description": "Title of the monthly progress screen." },
+
+  "progressShare": "Share your progress",
+  "@progressShare": { "description": "Tooltip of the share button." },
+
+  "progressShareText": "My Saaf progress, month {month}: {first}, {second}. A cosmetic guide, not medical advice.",
+  "@progressShareText": {
+    "description": "Text shared from the progress screen. Never includes photos.",
+    "placeholders": { "month": { "type": "int" }, "first": { "type": "String" }, "second": { "type": "String" } }
+  },
+
+  "progressRange": "{from} → {to}  ·  {count, plural, =1{1 aligned photo} other{{count} aligned photos}}",
+  "@progressRange": {
+    "description": "Dates and photo count under the title.",
+    "placeholders": { "from": { "type": "String" }, "to": { "type": "String" }, "count": { "type": "int" } }
+  },
+
+  "progressBefore": "Before · {date}",
+  "@progressBefore": {
+    "description": "Chip on the earlier photo.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "progressAfter": "After · {date}",
+  "@progressAfter": {
+    "description": "Chip on the later photo.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "progressCompare": "Compare before and after",
+  "@progressCompare": { "description": "Screen-reader name of the slider." },
+
+  "progressVs": "vs {date}",
+  "@progressVs": {
+    "description": "Caption of a change card, the date of the earlier scan.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "progressChangeSemantics": "{name}: {change} {since}",
+  "@progressChangeSemantics": {
+    "description": "Screen-reader label of a change card.",
+    "placeholders": { "name": { "type": "String" }, "change": { "type": "String" }, "since": { "type": "String" } }
+  },
+
+  "progressCoach": "Coach summary",
+  "@progressCoach": { "description": "Label of the summary card." },
+
+  "progressSummaryImproving": "Good news: {metric} improved. Daily sun protection keeps the progress, so keep it up.",
+  "@progressSummaryImproving": {
+    "description": "Summary when something improved. {metric} is a measure name.",
+    "placeholders": { "metric": { "type": "String" } }
+  },
+
+  "progressSummarySteady": "Your skin looks steady since {date}. Results often take 6–8 weeks, so keep going.",
+  "@progressSummarySteady": {
+    "description": "Summary when nothing changed much.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "progressSummarySlipping": "Some areas look a little worse than last time. Check your routine and sun protection, and see a dermatologist if you are worried.",
+  "@progressSummarySlipping": { "description": "Summary when something got worse." },
+
+  "progressLockedTitle": "Monthly progress is part of Saaf Pro",
+  "@progressLockedTitle": { "description": "Title shown to users without Saaf Pro." },
+
+  "progressLockedBody": "Compare aligned photos month by month and see what is changing.",
+  "@progressLockedBody": { "description": "Body shown to users without Saaf Pro." },
+
+  "progressLockedAction": "See Saaf Pro",
+  "@progressLockedAction": { "description": "Button that opens the paywall." },
+
+  "progressEmptyTitle": "Your first comparison is on its way",
+  "@progressEmptyTitle": { "description": "Title when there are fewer than two scans." },
+
+  "progressEmptyBody": "Take another face scan next month and Saaf will show what changed.",
+  "@progressEmptyBody": { "description": "Body when there are fewer than two scans." },
+
+  "progressEmptyAction": "Take a scan",
+  "@progressEmptyAction": { "description": "Button that opens the camera screen." },
+
+  "progressErrorTitle": "We couldn’t load your progress",
+  "@progressErrorTitle": { "description": "Title when the comparison fails." },
+
+  "progressErrorAction": "Try again",
+  "@progressErrorAction": { "description": "Button that repeats the comparison." },
+
+  "progressCheckIn": "Start your weekly check-in",
+  "@progressCheckIn": { "description": "Button that opens the weekly check-in." },
+  "profileTitle": "Profile",
+  "@profileTitle": { "description": "Title of the profile screen (14)." },
+
+  "profileNameFallback": "Saaf member",
+  "@profileNameFallback": { "description": "Name shown when the user has no name." },
+
+  "profilePhoneFallback": "Phone ending {digits}",
+  "@profilePhoneFallback": {
+    "description": "Shown instead of a name when only a phone number is known.",
+    "placeholders": { "digits": { "type": "String" } }
+  },
+
+  "profileSkinType": "{type} skin",
+  "@profileSkinType": {
+    "description": "Skin type in the identity line, e.g. 'Oily skin'.",
+    "placeholders": { "type": { "type": "String" } }
+  },
+
+  "profilePlanFree": "You’re on the free plan",
+  "@profilePlanFree": { "description": "Promo card title for free users." },
+
+  "profilePlanFreeBody": "Unlock monthly photo tracking",
+  "@profilePlanFreeBody": { "description": "Promo card body for free users." },
+
+  "profileGoPro": "Go Pro",
+  "@profileGoPro": { "description": "Button on the promo card." },
+
+  "profilePlanPro": "You’re on Saaf Pro",
+  "@profilePlanPro": { "description": "Promo card title for Pro users." },
+
+  "profilePlanProBody": "Thank you for supporting Saaf",
+  "@profilePlanProBody": { "description": "Promo card body for Pro users." },
+
+  "profileManage": "Manage",
+  "@profileManage": { "description": "Button on the promo card for Pro users." },
+
+  "profileSectionRoutine": "Routine",
+  "@profileSectionRoutine": { "description": "Section heading." },
+
+  "profileSectionPrivacy": "Privacy",
+  "@profileSectionPrivacy": { "description": "Section heading." },
+
+  "profileSectionApp": "App",
+  "@profileSectionApp": { "description": "Section heading." },
+
+  "profileRowSkin": "Skin profile",
+  "@profileRowSkin": { "description": "Settings row." },
+
+  "profileRowBudget": "Monthly budget",
+  "@profileRowBudget": { "description": "Settings row." },
+
+  "profileRowReminders": "Reminders",
+  "@profileRowReminders": { "description": "Settings row." },
+
+  "profileRowLanguage": "Language",
+  "@profileRowLanguage": { "description": "Settings row." },
+
+  "profileRowAppearance": "Appearance",
+  "@profileRowAppearance": { "description": "Settings row." },
+
+  "profileRowBackup": "Photo backup",
+  "@profileRowBackup": { "description": "Settings row." },
+
+  "profileRowDelete": "Delete my account",
+  "@profileRowDelete": { "description": "Settings row." },
+
+  "profileRowLogout": "Log out",
+  "@profileRowLogout": { "description": "Settings row." },
+
+  "profileRowSemantics": "{title}, {value}",
+  "@profileRowSemantics": {
+    "description": "Screen-reader label of a settings row with a value.",
+    "placeholders": { "title": { "type": "String" }, "value": { "type": "String" } }
+  },
+
+  "profileValueNotSet": "Not set",
+  "@profileValueNotSet": { "description": "Row value when the user has not answered." },
+
+  "profileValueOff": "Off",
+  "@profileValueOff": { "description": "Row value for something that is off." },
+
+  "profileValueNoLimit": "No limit",
+  "@profileValueNoLimit": { "description": "Budget row value for the highest band." },
+
+  "profileLangEnglish": "English",
+  "@profileLangEnglish": { "description": "Language name." },
+
+  "profileLangUrdu": "اردو",
+  "@profileLangUrdu": { "description": "Language name in its own script." },
+
+  "profileThemeSystem": "System",
+  "@profileThemeSystem": { "description": "Appearance option: follow the phone." },
+
+  "profileThemeLight": "Light",
+  "@profileThemeLight": { "description": "Appearance option." },
+
+  "profileThemeDark": "Dark",
+  "@profileThemeDark": { "description": "Appearance option." },
+
+  "commonDone": "Done",
+  "@commonDone": { "description": "Button that closes a sheet." },
+
+  "commonCancel": "Cancel",
+  "@commonCancel": { "description": "Button that cancels a dialog." },
+
+  "languageTitle": "Language",
+  "@languageTitle": { "description": "Title of the language sheet." },
+
+  "languageSemantics": "Language",
+  "@languageSemantics": { "description": "Screen-reader name of the language switch." },
+
+  "appearanceTitle": "Appearance",
+  "@appearanceTitle": { "description": "Title of the appearance sheet." },
+
+  "remindersTitle": "Reminders",
+  "@remindersTitle": { "description": "Title of the reminders sheet." },
+
+  "remindersMorning": "Morning routine",
+  "@remindersMorning": { "description": "Reminder name." },
+
+  "remindersNight": "Night routine",
+  "@remindersNight": { "description": "Reminder name." },
+
+  "remindersChange": "Change the time of {name}",
+  "@remindersChange": {
+    "description": "Tooltip and screen-reader label of a reminder time button.",
+    "placeholders": { "name": { "type": "String" } }
+  },
+
+  "remindersNote": "Your times are saved. Reminder notifications arrive in a later update.",
+  "@remindersNote": { "description": "Footer of the reminders sheet." },
+
+  "backupTitle": "Photo backup",
+  "@backupTitle": { "description": "Title of the photo backup sheet." },
+
+  "backupBody": "Your face photos stay only on this phone and are never uploaded. Cloud backup is not available in this version.",
+  "@backupBody": { "description": "Body of the photo backup sheet." },
+
+  "deleteTitle": "Delete your account?",
+  "@deleteTitle": { "description": "Title of the delete dialog." },
+
+  "deleteBody": "This removes your account and everything Saaf keeps about you on this phone: your scans and photos, your answers, your routine and your check-ins. This cannot be undone.",
+  "@deleteBody": { "description": "Body of the delete dialog." },
+
+  "deleteConfirm": "Delete everything",
+  "@deleteConfirm": { "description": "Destructive button of the delete dialog." },
+
+  "deleteFailedRecent": "For your security, please log in again and then delete your account.",
+  "@deleteFailedRecent": { "description": "Message when the login is too old to delete the account." },
+
+  "deleteFailed": "We couldn’t delete your account. Please try again.",
+  "@deleteFailed": { "description": "Message when deleting fails." },
+
+  "logoutTitle": "Log out?",
+  "@logoutTitle": { "description": "Title of the log-out dialog." },
+
+  "logoutBody": "You can log back in with your phone number, Google or Apple.",
+  "@logoutBody": { "description": "Body of the log-out dialog." },
+
+  "logoutConfirm": "Log out",
+  "@logoutConfirm": { "description": "Button of the log-out dialog." }
 }

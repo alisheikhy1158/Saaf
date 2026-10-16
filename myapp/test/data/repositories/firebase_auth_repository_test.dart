@@ -387,6 +387,51 @@ void main() {
     });
   });
 
+  group('deleteAccount', () {
+    test('deletes the Firebase user and announces no session', () async {
+      final user = MockUser();
+      when(() => user.delete()).thenAnswer((_) async {});
+      when(() => auth.currentUser).thenReturn(user);
+      final sessions = <AuthSession?>[];
+      final sub = repository.sessionChanges.listen(sessions.add);
+      final result = await repository.deleteAccount();
+      await Future<void>.delayed(Duration.zero);
+      await sub.cancel();
+      expect(result.isOk, isTrue);
+      verify(() => user.delete()).called(1);
+      expect(sessions, [null]);
+    });
+
+    test('nobody signed in: nothing to delete, still fine', () async {
+      when(() => auth.currentUser).thenReturn(null);
+      expect((await repository.deleteAccount()).isOk, isTrue);
+    });
+
+    test('an old login is asked to sign in again first', () async {
+      final user = MockUser();
+      when(
+        () => user.delete(),
+      ).thenThrow(FirebaseAuthException(code: 'requires-recent-login'));
+      when(() => auth.currentUser).thenReturn(user);
+      expect(
+        (await repository.deleteAccount()).failureOrNull,
+        const UnknownFailure('requires-recent-login'),
+      );
+    });
+
+    test('a network error is a NetworkFailure', () async {
+      final user = MockUser();
+      when(
+        () => user.delete(),
+      ).thenThrow(FirebaseAuthException(code: 'network-request-failed'));
+      when(() => auth.currentUser).thenReturn(user);
+      expect(
+        (await repository.deleteAccount()).failureOrNull,
+        const NetworkFailure(),
+      );
+    });
+  });
+
   group('mapFirebaseAuthError', () {
     const table = <String, Failure>{
       'network-request-failed': NetworkFailure(),

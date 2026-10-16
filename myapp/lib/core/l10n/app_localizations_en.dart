@@ -1166,4 +1166,382 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get checkInInfoClose => 'Got it';
+
+  @override
+  String get paywallProChip => 'Saaf Pro';
+
+  @override
+  String get paywallTitle => 'See real change,\nmonth by month';
+
+  @override
+  String get paywallBenefitPhotos => 'Monthly aligned photo comparisons';
+
+  @override
+  String get paywallBenefitScans => 'Unlimited skin and product scans';
+
+  @override
+  String get paywallBenefitAlerts => 'Price-drop alerts on your products';
+
+  @override
+  String get paywallBenefitCoach => 'Weekly coach check-ins and reports';
+
+  @override
+  String get planYearly => 'Yearly';
+
+  @override
+  String get planMonthly => 'Monthly';
+
+  @override
+  String planSave(int percent) {
+    return 'Save $percent%';
+  }
+
+  @override
+  String planPerMonthBilledYearly(String price) {
+    return '$price/month, billed yearly';
+  }
+
+  @override
+  String get planCancelAnytime => 'Cancel anytime';
+
+  @override
+  String planSemantics(String title, String price, String caption) {
+    return '$title. $price. $caption';
+  }
+
+  @override
+  String paywallStartTrial(int days) {
+    return 'Start $days-day free trial';
+  }
+
+  @override
+  String get paywallSubscribe => 'Subscribe';
+
+  @override
+  String get paywallPeriodYear => 'year';
+
+  @override
+  String get paywallPeriodMonth => 'month';
+
+  @override
+  String get paywallStoreApple => 'the App Store';
+
+  @override
+  String get paywallStoreGoogle => 'Google Play';
+
+  @override
+  String get paywallStoreOther => 'your store settings';
+
+  @override
+  String paywallFinePrintTrial(
+    int days,
+    String price,
+    String period,
+    String store,
+  ) {
+    return 'Free for $days days, then $price/$period. Cancel anytime in $store.';
+  }
+
+  @override
+  String paywallFinePrint(String price, String period, String store) {
+    return '$price/$period. Renews automatically. Cancel anytime in $store.';
+  }
+
+  @override
+  String get paywallRestore => 'Restore purchases';
+
+  @override
+  String get paywallRestored => 'Welcome back to Saaf Pro.';
+
+  @override
+  String get paywallNothingToRestore => 'No earlier purchase found.';
+
+  @override
+  String get paywallRestoreFailed =>
+      'We couldn’t check your purchases. Please try again.';
+
+  @override
+  String get paywallPurchaseFailed =>
+      'We couldn’t complete the purchase. You have not been charged.';
+
+  @override
+  String get paywallClose => 'Close';
+
+  @override
+  String get paywallUnavailableTitle =>
+      'Subscriptions aren’t available right now';
+
+  @override
+  String get paywallUnavailableBody => 'Please try again later.';
+
+  @override
+  String get paywallRetry => 'Try again';
+
+  @override
+  String get paywallAlreadyProTitle => 'You’re on Saaf Pro';
+
+  @override
+  String paywallAlreadyProBody(String store) {
+    return 'Thank you for supporting Saaf. You can manage your plan in $store.';
+  }
+
+  @override
+  String progressMonth(int month) {
+    return 'MONTH $month';
+  }
+
+  @override
+  String get progressTitle => 'Your progress';
+
+  @override
+  String get progressShare => 'Share your progress';
+
+  @override
+  String progressShareText(int month, String first, String second) {
+    return 'My Saaf progress, month $month: $first, $second. A cosmetic guide, not medical advice.';
+  }
+
+  @override
+  String progressRange(String from, String to, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aligned photos',
+      one: '1 aligned photo',
+    );
+    return '$from → $to  ·  $_temp0';
+  }
+
+  @override
+  String progressBefore(String date) {
+    return 'Before · $date';
+  }
+
+  @override
+  String progressAfter(String date) {
+    return 'After · $date';
+  }
+
+  @override
+  String get progressCompare => 'Compare before and after';
+
+  @override
+  String progressVs(String date) {
+    return 'vs $date';
+  }
+
+  @override
+  String progressChangeSemantics(String name, String change, String since) {
+    return '$name: $change $since';
+  }
+
+  @override
+  String get progressCoach => 'Coach summary';
+
+  @override
+  String progressSummaryImproving(String metric) {
+    return 'Good news: $metric improved. Daily sun protection keeps the progress, so keep it up.';
+  }
+
+  @override
+  String progressSummarySteady(String date) {
+    return 'Your skin looks steady since $date. Results often take 6–8 weeks, so keep going.';
+  }
+
+  @override
+  String get progressSummarySlipping =>
+      'Some areas look a little worse than last time. Check your routine and sun protection, and see a dermatologist if you are worried.';
+
+  @override
+  String get progressLockedTitle => 'Monthly progress is part of Saaf Pro';
+
+  @override
+  String get progressLockedBody =>
+      'Compare aligned photos month by month and see what is changing.';
+
+  @override
+  String get progressLockedAction => 'See Saaf Pro';
+
+  @override
+  String get progressEmptyTitle => 'Your first comparison is on its way';
+
+  @override
+  String get progressEmptyBody =>
+      'Take another face scan next month and Saaf will show what changed.';
+
+  @override
+  String get progressEmptyAction => 'Take a scan';
+
+  @override
+  String get progressErrorTitle => 'We couldn’t load your progress';
+
+  @override
+  String get progressErrorAction => 'Try again';
+
+  @override
+  String get progressCheckIn => 'Start your weekly check-in';
+
+  @override
+  String get profileTitle => 'Profile';
+
+  @override
+  String get profileNameFallback => 'Saaf member';
+
+  @override
+  String profilePhoneFallback(String digits) {
+    return 'Phone ending $digits';
+  }
+
+  @override
+  String profileSkinType(String type) {
+    return '$type skin';
+  }
+
+  @override
+  String get profilePlanFree => 'You’re on the free plan';
+
+  @override
+  String get profilePlanFreeBody => 'Unlock monthly photo tracking';
+
+  @override
+  String get profileGoPro => 'Go Pro';
+
+  @override
+  String get profilePlanPro => 'You’re on Saaf Pro';
+
+  @override
+  String get profilePlanProBody => 'Thank you for supporting Saaf';
+
+  @override
+  String get profileManage => 'Manage';
+
+  @override
+  String get profileSectionRoutine => 'Routine';
+
+  @override
+  String get profileSectionPrivacy => 'Privacy';
+
+  @override
+  String get profileSectionApp => 'App';
+
+  @override
+  String get profileRowSkin => 'Skin profile';
+
+  @override
+  String get profileRowBudget => 'Monthly budget';
+
+  @override
+  String get profileRowReminders => 'Reminders';
+
+  @override
+  String get profileRowLanguage => 'Language';
+
+  @override
+  String get profileRowAppearance => 'Appearance';
+
+  @override
+  String get profileRowBackup => 'Photo backup';
+
+  @override
+  String get profileRowDelete => 'Delete my account';
+
+  @override
+  String get profileRowLogout => 'Log out';
+
+  @override
+  String profileRowSemantics(String title, String value) {
+    return '$title, $value';
+  }
+
+  @override
+  String get profileValueNotSet => 'Not set';
+
+  @override
+  String get profileValueOff => 'Off';
+
+  @override
+  String get profileValueNoLimit => 'No limit';
+
+  @override
+  String get profileLangEnglish => 'English';
+
+  @override
+  String get profileLangUrdu => 'اردو';
+
+  @override
+  String get profileThemeSystem => 'System';
+
+  @override
+  String get profileThemeLight => 'Light';
+
+  @override
+  String get profileThemeDark => 'Dark';
+
+  @override
+  String get commonDone => 'Done';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get languageTitle => 'Language';
+
+  @override
+  String get languageSemantics => 'Language';
+
+  @override
+  String get appearanceTitle => 'Appearance';
+
+  @override
+  String get remindersTitle => 'Reminders';
+
+  @override
+  String get remindersMorning => 'Morning routine';
+
+  @override
+  String get remindersNight => 'Night routine';
+
+  @override
+  String remindersChange(String name) {
+    return 'Change the time of $name';
+  }
+
+  @override
+  String get remindersNote =>
+      'Your times are saved. Reminder notifications arrive in a later update.';
+
+  @override
+  String get backupTitle => 'Photo backup';
+
+  @override
+  String get backupBody =>
+      'Your face photos stay only on this phone and are never uploaded. Cloud backup is not available in this version.';
+
+  @override
+  String get deleteTitle => 'Delete your account?';
+
+  @override
+  String get deleteBody =>
+      'This removes your account and everything Saaf keeps about you on this phone: your scans and photos, your answers, your routine and your check-ins. This cannot be undone.';
+
+  @override
+  String get deleteConfirm => 'Delete everything';
+
+  @override
+  String get deleteFailedRecent =>
+      'For your security, please log in again and then delete your account.';
+
+  @override
+  String get deleteFailed =>
+      'We couldn’t delete your account. Please try again.';
+
+  @override
+  String get logoutTitle => 'Log out?';
+
+  @override
+  String get logoutBody =>
+      'You can log back in with your phone number, Google or Apple.';
+
+  @override
+  String get logoutConfirm => 'Log out';
 }

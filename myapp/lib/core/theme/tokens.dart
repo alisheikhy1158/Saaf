@@ -237,6 +237,9 @@ class SaafSize {
   final double progressRingStroke = 7;
   final double progressBarWide = 176;
   final double productPhoto = 180;
+  final double compareHeight = 300;
+  final double compareHandle = 44;
+  final double compareLine = 2;
   final double chatBubbleMaxWidth = 262;
   final double chatAvatar = 30;
   final double sendButton = 44;

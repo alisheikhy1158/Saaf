@@ -2095,6 +2095,642 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Got it'**
   String get checkInInfoClose;
+
+  /// Chip at the top of the paywall (13).
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf Pro'**
+  String get paywallProChip;
+
+  /// Paywall headline.
+  ///  is a line break.
+  ///
+  /// In en, this message translates to:
+  /// **'See real change,\nmonth by month'**
+  String get paywallTitle;
+
+  /// Benefit.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly aligned photo comparisons'**
+  String get paywallBenefitPhotos;
+
+  /// Benefit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited skin and product scans'**
+  String get paywallBenefitScans;
+
+  /// Benefit.
+  ///
+  /// In en, this message translates to:
+  /// **'Price-drop alerts on your products'**
+  String get paywallBenefitAlerts;
+
+  /// Benefit.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly coach check-ins and reports'**
+  String get paywallBenefitCoach;
+
+  /// Plan name.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get planYearly;
+
+  /// Plan name.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get planMonthly;
+
+  /// Chip on the yearly plan.
+  ///
+  /// In en, this message translates to:
+  /// **'Save {percent}%'**
+  String planSave(int percent);
+
+  /// Caption of the yearly plan. {price} is the store's monthly equivalent.
+  ///
+  /// In en, this message translates to:
+  /// **'{price}/month, billed yearly'**
+  String planPerMonthBilledYearly(String price);
+
+  /// Caption of the monthly plan.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel anytime'**
+  String get planCancelAnytime;
+
+  /// Screen-reader label of a plan tile.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}. {price}. {caption}'**
+  String planSemantics(String title, String price, String caption);
+
+  /// Primary button when the plan has a free trial.
+  ///
+  /// In en, this message translates to:
+  /// **'Start {days}-day free trial'**
+  String paywallStartTrial(int days);
+
+  /// Primary button when the plan has no free trial.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe'**
+  String get paywallSubscribe;
+
+  /// Used in the fine print: Rs 3,999/year.
+  ///
+  /// In en, this message translates to:
+  /// **'year'**
+  String get paywallPeriodYear;
+
+  /// Used in the fine print: Rs 599/month.
+  ///
+  /// In en, this message translates to:
+  /// **'month'**
+  String get paywallPeriodMonth;
+
+  /// Where to cancel on iPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'the App Store'**
+  String get paywallStoreApple;
+
+  /// Where to cancel on Android.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Play'**
+  String get paywallStoreGoogle;
+
+  /// Where to cancel elsewhere.
+  ///
+  /// In en, this message translates to:
+  /// **'your store settings'**
+  String get paywallStoreOther;
+
+  /// Fine print under the button when there is a free trial.
+  ///
+  /// In en, this message translates to:
+  /// **'Free for {days} days, then {price}/{period}. Cancel anytime in {store}.'**
+  String paywallFinePrintTrial(
+    int days,
+    String price,
+    String period,
+    String store,
+  );
+
+  /// Fine print under the button when there is no free trial.
+  ///
+  /// In en, this message translates to:
+  /// **'{price}/{period}. Renews automatically. Cancel anytime in {store}.'**
+  String paywallFinePrint(String price, String period, String store);
+
+  /// Button that asks the store for earlier purchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get paywallRestore;
+
+  /// Message when a purchase was restored.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back to Saaf Pro.'**
+  String get paywallRestored;
+
+  /// Message when there is nothing to restore.
+  ///
+  /// In en, this message translates to:
+  /// **'No earlier purchase found.'**
+  String get paywallNothingToRestore;
+
+  /// Message when restoring fails.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t check your purchases. Please try again.'**
+  String get paywallRestoreFailed;
+
+  /// Message when buying fails.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t complete the purchase. You have not been charged.'**
+  String get paywallPurchaseFailed;
+
+  /// Tooltip of the X button on the paywall.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get paywallClose;
+
+  /// Title when no plans can be loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions aren’t available right now'**
+  String get paywallUnavailableTitle;
+
+  /// Body when no plans can be loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Please try again later.'**
+  String get paywallUnavailableBody;
+
+  /// Button that loads the plans again.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get paywallRetry;
+
+  /// Title when the user already has Pro.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re on Saaf Pro'**
+  String get paywallAlreadyProTitle;
+
+  /// Body when the user already has Pro.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for supporting Saaf. You can manage your plan in {store}.'**
+  String paywallAlreadyProBody(String store);
+
+  /// Small caps line above the progress title (12).
+  ///
+  /// In en, this message translates to:
+  /// **'MONTH {month}'**
+  String progressMonth(int month);
+
+  /// Title of the monthly progress screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress'**
+  String get progressTitle;
+
+  /// Tooltip of the share button.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your progress'**
+  String get progressShare;
+
+  /// Text shared from the progress screen. Never includes photos.
+  ///
+  /// In en, this message translates to:
+  /// **'My Saaf progress, month {month}: {first}, {second}. A cosmetic guide, not medical advice.'**
+  String progressShareText(int month, String first, String second);
+
+  /// Dates and photo count under the title.
+  ///
+  /// In en, this message translates to:
+  /// **'{from} → {to}  ·  {count, plural, =1{1 aligned photo} other{{count} aligned photos}}'**
+  String progressRange(String from, String to, int count);
+
+  /// Chip on the earlier photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Before · {date}'**
+  String progressBefore(String date);
+
+  /// Chip on the later photo.
+  ///
+  /// In en, this message translates to:
+  /// **'After · {date}'**
+  String progressAfter(String date);
+
+  /// Screen-reader name of the slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare before and after'**
+  String get progressCompare;
+
+  /// Caption of a change card, the date of the earlier scan.
+  ///
+  /// In en, this message translates to:
+  /// **'vs {date}'**
+  String progressVs(String date);
+
+  /// Screen-reader label of a change card.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {change} {since}'**
+  String progressChangeSemantics(String name, String change, String since);
+
+  /// Label of the summary card.
+  ///
+  /// In en, this message translates to:
+  /// **'Coach summary'**
+  String get progressCoach;
+
+  /// Summary when something improved. {metric} is a measure name.
+  ///
+  /// In en, this message translates to:
+  /// **'Good news: {metric} improved. Daily sun protection keeps the progress, so keep it up.'**
+  String progressSummaryImproving(String metric);
+
+  /// Summary when nothing changed much.
+  ///
+  /// In en, this message translates to:
+  /// **'Your skin looks steady since {date}. Results often take 6–8 weeks, so keep going.'**
+  String progressSummarySteady(String date);
+
+  /// Summary when something got worse.
+  ///
+  /// In en, this message translates to:
+  /// **'Some areas look a little worse than last time. Check your routine and sun protection, and see a dermatologist if you are worried.'**
+  String get progressSummarySlipping;
+
+  /// Title shown to users without Saaf Pro.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly progress is part of Saaf Pro'**
+  String get progressLockedTitle;
+
+  /// Body shown to users without Saaf Pro.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare aligned photos month by month and see what is changing.'**
+  String get progressLockedBody;
+
+  /// Button that opens the paywall.
+  ///
+  /// In en, this message translates to:
+  /// **'See Saaf Pro'**
+  String get progressLockedAction;
+
+  /// Title when there are fewer than two scans.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first comparison is on its way'**
+  String get progressEmptyTitle;
+
+  /// Body when there are fewer than two scans.
+  ///
+  /// In en, this message translates to:
+  /// **'Take another face scan next month and Saaf will show what changed.'**
+  String get progressEmptyBody;
+
+  /// Button that opens the camera screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a scan'**
+  String get progressEmptyAction;
+
+  /// Title when the comparison fails.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t load your progress'**
+  String get progressErrorTitle;
+
+  /// Button that repeats the comparison.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get progressErrorAction;
+
+  /// Button that opens the weekly check-in.
+  ///
+  /// In en, this message translates to:
+  /// **'Start your weekly check-in'**
+  String get progressCheckIn;
+
+  /// Title of the profile screen (14).
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTitle;
+
+  /// Name shown when the user has no name.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf member'**
+  String get profileNameFallback;
+
+  /// Shown instead of a name when only a phone number is known.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone ending {digits}'**
+  String profilePhoneFallback(String digits);
+
+  /// Skin type in the identity line, e.g. 'Oily skin'.
+  ///
+  /// In en, this message translates to:
+  /// **'{type} skin'**
+  String profileSkinType(String type);
+
+  /// Promo card title for free users.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re on the free plan'**
+  String get profilePlanFree;
+
+  /// Promo card body for free users.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock monthly photo tracking'**
+  String get profilePlanFreeBody;
+
+  /// Button on the promo card.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro'**
+  String get profileGoPro;
+
+  /// Promo card title for Pro users.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re on Saaf Pro'**
+  String get profilePlanPro;
+
+  /// Promo card body for Pro users.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for supporting Saaf'**
+  String get profilePlanProBody;
+
+  /// Button on the promo card for Pro users.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get profileManage;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Routine'**
+  String get profileSectionRoutine;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get profileSectionPrivacy;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get profileSectionApp;
+
+  /// Settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin profile'**
+  String get profileRowSkin;
+
+  /// Settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly budget'**
+  String get profileRowBudget;
+
+  /// Settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get profileRowReminders;
+
+  /// Settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get profileRowLanguage;
+
+  /// Settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get profileRowAppearance;
+
+  /// Settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo backup'**
+  String get profileRowBackup;
+
+  /// Settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account'**
+  String get profileRowDelete;
+
+  /// Settings row.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get profileRowLogout;
+
+  /// Screen-reader label of a settings row with a value.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}, {value}'**
+  String profileRowSemantics(String title, String value);
+
+  /// Row value when the user has not answered.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get profileValueNotSet;
+
+  /// Row value for something that is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get profileValueOff;
+
+  /// Budget row value for the highest band.
+  ///
+  /// In en, this message translates to:
+  /// **'No limit'**
+  String get profileValueNoLimit;
+
+  /// Language name.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get profileLangEnglish;
+
+  /// Language name in its own script.
+  ///
+  /// In en, this message translates to:
+  /// **'اردو'**
+  String get profileLangUrdu;
+
+  /// Appearance option: follow the phone.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get profileThemeSystem;
+
+  /// Appearance option.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get profileThemeLight;
+
+  /// Appearance option.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get profileThemeDark;
+
+  /// Button that closes a sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get commonDone;
+
+  /// Button that cancels a dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// Title of the language sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageTitle;
+
+  /// Screen-reader name of the language switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageSemantics;
+
+  /// Title of the appearance sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceTitle;
+
+  /// Title of the reminders sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get remindersTitle;
+
+  /// Reminder name.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning routine'**
+  String get remindersMorning;
+
+  /// Reminder name.
+  ///
+  /// In en, this message translates to:
+  /// **'Night routine'**
+  String get remindersNight;
+
+  /// Tooltip and screen-reader label of a reminder time button.
+  ///
+  /// In en, this message translates to:
+  /// **'Change the time of {name}'**
+  String remindersChange(String name);
+
+  /// Footer of the reminders sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Your times are saved. Reminder notifications arrive in a later update.'**
+  String get remindersNote;
+
+  /// Title of the photo backup sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo backup'**
+  String get backupTitle;
+
+  /// Body of the photo backup sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Your face photos stay only on this phone and are never uploaded. Cloud backup is not available in this version.'**
+  String get backupBody;
+
+  /// Title of the delete dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteTitle;
+
+  /// Body of the delete dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes your account and everything Saaf keeps about you on this phone: your scans and photos, your answers, your routine and your check-ins. This cannot be undone.'**
+  String get deleteBody;
+
+  /// Destructive button of the delete dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete everything'**
+  String get deleteConfirm;
+
+  /// Message when the login is too old to delete the account.
+  ///
+  /// In en, this message translates to:
+  /// **'For your security, please log in again and then delete your account.'**
+  String get deleteFailedRecent;
+
+  /// Message when deleting fails.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t delete your account. Please try again.'**
+  String get deleteFailed;
+
+  /// Title of the log-out dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out?'**
+  String get logoutTitle;
+
+  /// Body of the log-out dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'You can log back in with your phone number, Google or Apple.'**
+  String get logoutBody;
+
+  /// Button of the log-out dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logoutConfirm;
 }
 
 class _AppLocalizationsDelegate
