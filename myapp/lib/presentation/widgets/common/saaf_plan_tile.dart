@@ -29,6 +29,9 @@ class SaafPlanTile extends StatelessWidget {
   /// Small chip next to the title, e.g. "Save 44%".
   final String? badge;
 
+  /// Most of the tile's width the price may take before it shrinks.
+  static const double _priceShare = 0.4;
+
   @override
   Widget build(BuildContext context) {
     final tokens = context.saaf;
@@ -65,44 +68,51 @@ class SaafPlanTile extends StatelessWidget {
                   horizontal: tokens.space.planPaddingH,
                   vertical: tokens.space.planPaddingV,
                 ),
-                child: Row(
-                  spacing: tokens.space.benefitGap,
-                  children: [
-                    SaafCheck(checked: selected, shape: SaafCheckShape.circle),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: tokens.space.x4,
-                        children: [
-                          Wrap(
-                            spacing: tokens.space.x8,
-                            runSpacing: tokens.space.x4,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Text(title, style: context.text.labelLarge),
-                              if (badge != null)
-                                SaafChip(
-                                  label: badge!,
-                                  small: true,
-                                  tone: SaafChipTone.sageTint,
-                                ),
-                            ],
-                          ),
-                          Text(caption, style: context.text.bodySmall),
-                        ],
+                child: LayoutBuilder(
+                  builder: (context, box) => Row(
+                    spacing: tokens.space.benefitGap,
+                    children: [
+                      SaafCheck(
+                        checked: selected,
+                        shape: SaafCheckShape.circle,
                       ),
-                    ),
-                    // Shrinks a little at very large text sizes instead of overflowing.
-                    Flexible(
-                      flex: 2,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: Text(price, style: context.text.titleSmall),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: tokens.space.x4,
+                          children: [
+                            Wrap(
+                              spacing: tokens.space.x8,
+                              runSpacing: tokens.space.x4,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                Text(title, style: context.text.labelLarge),
+                                if (badge != null)
+                                  SaafChip(
+                                    label: badge!,
+                                    small: true,
+                                    tone: SaafChipTone.sageTint,
+                                  ),
+                              ],
+                            ),
+                            Text(caption, style: context.text.bodySmall),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      // The price keeps its size unless it would take more than
+                      // two fifths of the tile (very large text): then it shrinks.
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: box.maxWidth * _priceShare,
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: Text(price, style: context.text.titleSmall),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -483,6 +483,7 @@ class _ReplyField extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsetsDirectional.only(start: tokens.space.x20),
                 child: TextField(
+                  textAlignVertical: TextAlignVertical.center,
                   controller: controller,
                   textInputAction: TextInputAction.send,
                   onSubmitted: (_) => onSend(),
@@ -499,6 +500,8 @@ class _ReplyField extends StatelessWidget {
                     focusedBorder: InputBorder.none,
                     filled: false,
                     isDense: true,
+                    // The theme's 56 dp minimum would pin the text to the top.
+                    constraints: const BoxConstraints(),
                     contentPadding: EdgeInsetsDirectional.zero,
                   ),
                 ),
