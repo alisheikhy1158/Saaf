@@ -2624,6 +2624,150 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get commonCancel;
 
+  /// Button on the skin type quiz step that opens the tissue test.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure? Try the tissue test'**
+  String get quizTissueEntry;
+
+  /// Title of the tissue test screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Tissue test'**
+  String get tissueTitle;
+
+  /// Introduction of the tissue test.
+  ///
+  /// In en, this message translates to:
+  /// **'A simple way to see how oily your skin is. It takes a minute, plus a short wait.'**
+  String get tissueIntro;
+
+  /// Tissue test step 1.
+  ///
+  /// In en, this message translates to:
+  /// **'Wash your face with a gentle cleanser and pat it dry. Don’t put anything on it.'**
+  String get tissueStep1;
+
+  /// Tissue test step 2.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait about 30 minutes to an hour, so your skin settles back to normal.'**
+  String get tissueStep2;
+
+  /// Tissue test step 3.
+  ///
+  /// In en, this message translates to:
+  /// **'Press a clean tissue or blotting paper lightly on your forehead, nose and cheeks, one at a time.'**
+  String get tissueStep3;
+
+  /// Tissue test step 4.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the tissue up to the light and look for oily marks.'**
+  String get tissueStep4;
+
+  /// Button that moves to the tissue test questions.
+  ///
+  /// In en, this message translates to:
+  /// **'I’ve done the test'**
+  String get tissueDone;
+
+  /// Heading above the tissue test questions.
+  ///
+  /// In en, this message translates to:
+  /// **'What did you see?'**
+  String get tissueQuestionTitle;
+
+  /// Explains the tissue test questions.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch on each place where the tissue had an oily mark. Leave all off if it stayed clean.'**
+  String get tissueQuestionHint;
+
+  /// Tissue test option.
+  ///
+  /// In en, this message translates to:
+  /// **'Oil mark from my forehead'**
+  String get tissueForehead;
+
+  /// Tissue test option.
+  ///
+  /// In en, this message translates to:
+  /// **'Oil mark from my nose'**
+  String get tissueNose;
+
+  /// Tissue test option.
+  ///
+  /// In en, this message translates to:
+  /// **'Oil mark from my cheeks'**
+  String get tissueCheeks;
+
+  /// Tissue test option.
+  ///
+  /// In en, this message translates to:
+  /// **'My skin feels tight or flaky'**
+  String get tissueTight;
+
+  /// Caption under each tissue test option.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap if this applies'**
+  String get tissueOptionCaption;
+
+  /// Result heading; the type is a lower-case skin type name.
+  ///
+  /// In en, this message translates to:
+  /// **'Your skin looks {type}'**
+  String tissueResultTitle(String type);
+
+  /// Explanation of the oily result.
+  ///
+  /// In en, this message translates to:
+  /// **'Oil on your forehead and cheeks suggests oily skin.'**
+  String get tissueResultOily;
+
+  /// Explanation of the combination result.
+  ///
+  /// In en, this message translates to:
+  /// **'Oil only on the forehead and nose, with clearer cheeks, suggests combination skin.'**
+  String get tissueResultCombination;
+
+  /// Explanation of the normal result.
+  ///
+  /// In en, this message translates to:
+  /// **'A clean tissue and comfortable skin suggests normal skin.'**
+  String get tissueResultNormal;
+
+  /// Explanation of the dry result.
+  ///
+  /// In en, this message translates to:
+  /// **'A clean tissue with tight or flaky skin suggests dry skin.'**
+  String get tissueResultDry;
+
+  /// Shown when the tissue test result is unclear.
+  ///
+  /// In en, this message translates to:
+  /// **'Oil on your cheeks but not your forehead or nose is unusual. Try the test again on another day.'**
+  String get tissueResultUnclear;
+
+  /// Result heading when the tissue test is unclear.
+  ///
+  /// In en, this message translates to:
+  /// **'We can’t tell yet'**
+  String get tissueUnclearTitle;
+
+  /// Button that sets the skin type from the tissue test.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this result'**
+  String get tissueUse;
+
+  /// Reminder under the tissue test result.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a guide, not a diagnosis. Skin changes with the weather and the time of the month, so repeat it on another day if you’re unsure.'**
+  String get tissueCaveat;
+
   /// Button that saves what was changed.
   ///
   /// In en, this message translates to:

@@ -1484,6 +1484,92 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get quizTissueEntry => 'Not sure? Try the tissue test';
+
+  @override
+  String get tissueTitle => 'Tissue test';
+
+  @override
+  String get tissueIntro =>
+      'A simple way to see how oily your skin is. It takes a minute, plus a short wait.';
+
+  @override
+  String get tissueStep1 =>
+      'Wash your face with a gentle cleanser and pat it dry. Don’t put anything on it.';
+
+  @override
+  String get tissueStep2 =>
+      'Wait about 30 minutes to an hour, so your skin settles back to normal.';
+
+  @override
+  String get tissueStep3 =>
+      'Press a clean tissue or blotting paper lightly on your forehead, nose and cheeks, one at a time.';
+
+  @override
+  String get tissueStep4 =>
+      'Hold the tissue up to the light and look for oily marks.';
+
+  @override
+  String get tissueDone => 'I’ve done the test';
+
+  @override
+  String get tissueQuestionTitle => 'What did you see?';
+
+  @override
+  String get tissueQuestionHint =>
+      'Switch on each place where the tissue had an oily mark. Leave all off if it stayed clean.';
+
+  @override
+  String get tissueForehead => 'Oil mark from my forehead';
+
+  @override
+  String get tissueNose => 'Oil mark from my nose';
+
+  @override
+  String get tissueCheeks => 'Oil mark from my cheeks';
+
+  @override
+  String get tissueTight => 'My skin feels tight or flaky';
+
+  @override
+  String get tissueOptionCaption => 'Tap if this applies';
+
+  @override
+  String tissueResultTitle(String type) {
+    return 'Your skin looks $type';
+  }
+
+  @override
+  String get tissueResultOily =>
+      'Oil on your forehead and cheeks suggests oily skin.';
+
+  @override
+  String get tissueResultCombination =>
+      'Oil only on the forehead and nose, with clearer cheeks, suggests combination skin.';
+
+  @override
+  String get tissueResultNormal =>
+      'A clean tissue and comfortable skin suggests normal skin.';
+
+  @override
+  String get tissueResultDry =>
+      'A clean tissue with tight or flaky skin suggests dry skin.';
+
+  @override
+  String get tissueResultUnclear =>
+      'Oil on your cheeks but not your forehead or nose is unusual. Try the test again on another day.';
+
+  @override
+  String get tissueUnclearTitle => 'We can’t tell yet';
+
+  @override
+  String get tissueUse => 'Use this result';
+
+  @override
+  String get tissueCaveat =>
+      'This is a guide, not a diagnosis. Skin changes with the weather and the time of the month, so repeat it on another day if you’re unsure.';
+
+  @override
   String get commonSave => 'Save';
 
   @override

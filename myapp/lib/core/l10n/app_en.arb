@@ -1402,6 +1402,78 @@
   "commonCancel": "Cancel",
   "@commonCancel": { "description": "Button that cancels a dialog." },
 
+  "quizTissueEntry": "Not sure? Try the tissue test",
+  "@quizTissueEntry": {"description": "Button on the skin type quiz step that opens the tissue test."},
+
+  "tissueTitle": "Tissue test",
+  "@tissueTitle": {"description": "Title of the tissue test screen."},
+
+  "tissueIntro": "A simple way to see how oily your skin is. It takes a minute, plus a short wait.",
+  "@tissueIntro": {"description": "Introduction of the tissue test."},
+
+  "tissueStep1": "Wash your face with a gentle cleanser and pat it dry. Don’t put anything on it.",
+  "@tissueStep1": {"description": "Tissue test step 1."},
+
+  "tissueStep2": "Wait about 30 minutes to an hour, so your skin settles back to normal.",
+  "@tissueStep2": {"description": "Tissue test step 2."},
+
+  "tissueStep3": "Press a clean tissue or blotting paper lightly on your forehead, nose and cheeks, one at a time.",
+  "@tissueStep3": {"description": "Tissue test step 3."},
+
+  "tissueStep4": "Hold the tissue up to the light and look for oily marks.",
+  "@tissueStep4": {"description": "Tissue test step 4."},
+
+  "tissueDone": "I’ve done the test",
+  "@tissueDone": {"description": "Button that moves to the tissue test questions."},
+
+  "tissueQuestionTitle": "What did you see?",
+  "@tissueQuestionTitle": {"description": "Heading above the tissue test questions."},
+
+  "tissueQuestionHint": "Switch on each place where the tissue had an oily mark. Leave all off if it stayed clean.",
+  "@tissueQuestionHint": {"description": "Explains the tissue test questions."},
+
+  "tissueForehead": "Oil mark from my forehead",
+  "@tissueForehead": {"description": "Tissue test option."},
+
+  "tissueNose": "Oil mark from my nose",
+  "@tissueNose": {"description": "Tissue test option."},
+
+  "tissueCheeks": "Oil mark from my cheeks",
+  "@tissueCheeks": {"description": "Tissue test option."},
+
+  "tissueTight": "My skin feels tight or flaky",
+  "@tissueTight": {"description": "Tissue test option."},
+
+  "tissueOptionCaption": "Tap if this applies",
+  "@tissueOptionCaption": {"description": "Caption under each tissue test option."},
+
+  "tissueResultTitle": "Your skin looks {type}",
+  "@tissueResultTitle": {"description": "Result heading; the type is a lower-case skin type name.", "placeholders": {"type": {"type": "String"}}},
+
+  "tissueResultOily": "Oil on your forehead and cheeks suggests oily skin.",
+  "@tissueResultOily": {"description": "Explanation of the oily result."},
+
+  "tissueResultCombination": "Oil only on the forehead and nose, with clearer cheeks, suggests combination skin.",
+  "@tissueResultCombination": {"description": "Explanation of the combination result."},
+
+  "tissueResultNormal": "A clean tissue and comfortable skin suggests normal skin.",
+  "@tissueResultNormal": {"description": "Explanation of the normal result."},
+
+  "tissueResultDry": "A clean tissue with tight or flaky skin suggests dry skin.",
+  "@tissueResultDry": {"description": "Explanation of the dry result."},
+
+  "tissueResultUnclear": "Oil on your cheeks but not your forehead or nose is unusual. Try the test again on another day.",
+  "@tissueResultUnclear": {"description": "Shown when the tissue test result is unclear."},
+
+  "tissueUnclearTitle": "We can’t tell yet",
+  "@tissueUnclearTitle": {"description": "Result heading when the tissue test is unclear."},
+
+  "tissueUse": "Use this result",
+  "@tissueUse": {"description": "Button that sets the skin type from the tissue test."},
+
+  "tissueCaveat": "This is a guide, not a diagnosis. Skin changes with the weather and the time of the month, so repeat it on another day if you’re unsure.",
+  "@tissueCaveat": {"description": "Reminder under the tissue test result."},
+
   "commonSave": "Save",
   "@commonSave": { "description": "Button that saves what was changed." },
 

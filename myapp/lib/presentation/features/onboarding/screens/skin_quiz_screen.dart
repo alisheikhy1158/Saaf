@@ -6,6 +6,7 @@ import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/domain/entities/quiz_step.dart';
+import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/presentation/features/onboarding/controllers/skin_quiz_controller.dart';
 import 'package:saaf/presentation/features/onboarding/quiz/quiz_step_views.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
@@ -110,6 +111,18 @@ class SkinQuizScreen extends ConsumerWidget {
                   caption: option.caption(l10n),
                   selected: quiz.selected.contains(option.value),
                   onTap: () => controller.toggle(option.value),
+                ),
+              if (quizStep == QuizStep.skinType)
+                SaafButton.text(
+                  key: const ValueKey('quiz-tissue-test'),
+                  label: l10n.quizTissueEntry,
+                  leadingIcon: Icons.science_outlined,
+                  onPressed: () async {
+                    final type = await context.push<SkinType>(
+                      SaafRoute.skinTypeTest.path,
+                    );
+                    if (type != null) controller.toggle(type);
+                  },
                 ),
             ],
           ),

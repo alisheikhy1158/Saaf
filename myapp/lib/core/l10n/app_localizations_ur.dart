@@ -1482,6 +1482,92 @@ class AppLocalizationsUr extends AppLocalizations {
   String get commonCancel => 'منسوخ کریں';
 
   @override
+  String get quizTissueEntry => 'یقین نہیں؟ ٹشو ٹیسٹ آزمائیں';
+
+  @override
+  String get tissueTitle => 'ٹشو ٹیسٹ';
+
+  @override
+  String get tissueIntro =>
+      'یہ دیکھنے کا آسان طریقہ کہ آپ کی جلد کتنی چکنی ہے۔ اس میں ایک منٹ لگتا ہے، اور کچھ دیر انتظار کرنا ہوتا ہے۔';
+
+  @override
+  String get tissueStep1 =>
+      'ہلکے کلینزر سے چہرہ دھوئیں اور تھپتھپا کر خشک کریں۔ اس پر کچھ نہ لگائیں۔';
+
+  @override
+  String get tissueStep2 =>
+      'تقریباً 30 منٹ سے ایک گھنٹہ انتظار کریں تاکہ آپ کی جلد اپنی قدرتی حالت میں آ جائے۔';
+
+  @override
+  String get tissueStep3 =>
+      'صاف ٹشو یا بلاٹنگ پیپر کو ہلکے سے ماتھے، ناک اور گالوں پر ایک ایک کر کے دبائیں۔';
+
+  @override
+  String get tissueStep4 =>
+      'ٹشو کو روشنی کے سامنے کریں اور چکنائی کے نشان دیکھیں۔';
+
+  @override
+  String get tissueDone => 'میں نے ٹیسٹ کر لیا';
+
+  @override
+  String get tissueQuestionTitle => 'آپ نے کیا دیکھا؟';
+
+  @override
+  String get tissueQuestionHint =>
+      'جہاں ٹشو پر چکنائی کا نشان آیا وہ چنیں۔ اگر ٹشو صاف رہا تو کچھ نہ چنیں۔';
+
+  @override
+  String get tissueForehead => 'ماتھے سے چکنائی کا نشان';
+
+  @override
+  String get tissueNose => 'ناک سے چکنائی کا نشان';
+
+  @override
+  String get tissueCheeks => 'گالوں سے چکنائی کا نشان';
+
+  @override
+  String get tissueTight => 'میری جلد کھنچی ہوئی یا پپڑی دار محسوس ہوتی ہے';
+
+  @override
+  String get tissueOptionCaption => 'اگر یہ آپ پر لاگو ہو تو دبائیں';
+
+  @override
+  String tissueResultTitle(String type) {
+    return 'آپ کی جلد $type لگتی ہے';
+  }
+
+  @override
+  String get tissueResultOily =>
+      'ماتھے اور گالوں پر چکنائی سے لگتا ہے کہ آپ کی جلد چکنی ہے۔';
+
+  @override
+  String get tissueResultCombination =>
+      'صرف ماتھے اور ناک پر چکنائی اور صاف گالوں سے لگتا ہے کہ آپ کی جلد مخلوط ہے۔';
+
+  @override
+  String get tissueResultNormal =>
+      'صاف ٹشو اور آرام دہ جلد سے لگتا ہے کہ آپ کی جلد نارمل ہے۔';
+
+  @override
+  String get tissueResultDry =>
+      'صاف ٹشو کے ساتھ کھنچی ہوئی یا پپڑی دار جلد سے لگتا ہے کہ آپ کی جلد خشک ہے۔';
+
+  @override
+  String get tissueResultUnclear =>
+      'گالوں پر چکنائی مگر ماتھے اور ناک پر نہ ہونا غیر معمولی ہے۔ کسی اور دن ٹیسٹ دوبارہ کریں۔';
+
+  @override
+  String get tissueUnclearTitle => 'ابھی ہم بتا نہیں سکتے';
+
+  @override
+  String get tissueUse => 'یہ نتیجہ استعمال کریں';
+
+  @override
+  String get tissueCaveat =>
+      'یہ ایک رہنمائی ہے، تشخیص نہیں۔ موسم اور مہینے کے وقت کے ساتھ جلد بدلتی ہے، اس لیے یقین نہ ہو تو کسی اور دن دہرائیں۔';
+
+  @override
   String get commonSave => 'محفوظ کریں';
 
   @override

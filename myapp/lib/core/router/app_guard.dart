@@ -12,7 +12,11 @@ String? guardRedirect({
 }) {
   const signInPages = {'/welcome', '/sign-up', '/verify-code'};
   const legalPages = {'/terms', '/privacy-policy'};
-  final isQuiz = path == '/skin-quiz' || path.startsWith('/skin-quiz/');
+  // The tissue test is part of the skin quiz.
+  final isQuiz =
+      path == '/skin-quiz' ||
+      path.startsWith('/skin-quiz/') ||
+      path == '/skin-type-test';
 
   if (!signedIn) {
     return signInPages.contains(path) || legalPages.contains(path)

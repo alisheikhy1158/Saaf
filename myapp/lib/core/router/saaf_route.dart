@@ -84,6 +84,15 @@ class SaafRoute {
     'Privacy Policy',
   );
 
+  /// The tissue test for the skin type, opened from the skin quiz (step 1). Not
+  /// a Figma screen, so not in [all].
+  static const skinTypeTest = SaafRoute._(
+    0,
+    'skinTypeTest',
+    '/skin-type-test',
+    'Skin type test',
+  );
+
   /// "How we score", opened from the results screen (07). Not a Figma screen,
   /// so not in [all].
   static const howWeScore = SaafRoute._(

@@ -12,6 +12,7 @@ import 'package:saaf/presentation/features/legal/screens/privacy_policy_screen.d
 import 'package:saaf/presentation/features/legal/screens/terms_screen.dart';
 import 'package:saaf/presentation/features/onboarding/screens/privacy_consent_screen.dart';
 import 'package:saaf/presentation/features/onboarding/screens/skin_quiz_screen.dart';
+import 'package:saaf/presentation/features/onboarding/screens/skin_type_test_screen.dart';
 import 'package:saaf/presentation/features/onboarding/screens/welcome_screen.dart';
 import 'package:saaf/presentation/features/paywall/screens/paywall_screen.dart';
 import 'package:saaf/presentation/features/products/screens/product_scan_result_screen.dart';
@@ -104,6 +105,11 @@ GoRouter buildAppRouter({
         name: SaafRoute.howWeScore.name,
         path: SaafRoute.howWeScore.path,
         builder: (context, state) => const HowWeScoreScreen(),
+      ),
+      GoRoute(
+        name: SaafRoute.skinTypeTest.name,
+        path: SaafRoute.skinTypeTest.path,
+        builder: (context, state) => const SkinTypeTestScreen(),
       ),
       GoRoute(
         name: SaafRoute.terms.name,

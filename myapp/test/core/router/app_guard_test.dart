@@ -117,4 +117,17 @@ void main() {
       expect(go('/sign-up', quizDone: false), '/skin-quiz');
     });
   });
+  group('the tissue test belongs to the skin quiz', () {
+    test('is open while the quiz is not done yet', () {
+      expect(go('/skin-type-test', quizDone: false), isNull);
+    });
+
+    test('is closed to people who have not consented', () {
+      expect(go('/skin-type-test', consented: false), '/privacy-consent');
+    });
+
+    test('is closed when signed out', () {
+      expect(go('/skin-type-test', signedIn: false), '/welcome');
+    });
+  });
 }
