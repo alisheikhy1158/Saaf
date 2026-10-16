@@ -153,3 +153,59 @@ Future<void> expectTapTargetsAccessible(WidgetTester tester) async {
   await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
   handle.dispose();
 }
+
+/// Like [expectRobustLayout] for screens that load something first (a provider
+/// future, a camera): each configuration starts from a fresh screen and gets
+/// [settlePumps] frames to reach its real content, and [after] can move it on
+/// (e.g. tap a button) before the overflow check.
+Future<void> expectRobustLayoutSettled(
+  WidgetTester tester,
+  Widget Function() build, {
+  bool scaffold = true,
+  List<Override> overrides = const [],
+  int settlePumps = 2,
+  Future<void> Function()? after,
+}) async {
+  final configs = <(String, Size, ThemeMode, double, Locale, bool)>[
+    for (final size in matrixSizes)
+      ('$size', size, ThemeMode.light, 1, const Locale('en'), false),
+    ('dark', matrixSizes[1], ThemeMode.dark, 1, const Locale('en'), false),
+    (
+      'text scale 2.0',
+      matrixSizes[1],
+      ThemeMode.light,
+      2,
+      const Locale('en'),
+      false,
+    ),
+    ('Urdu RTL', matrixSizes[1], ThemeMode.light, 1, const Locale('ur'), false),
+    (
+      'high contrast',
+      matrixSizes[1],
+      ThemeMode.light,
+      1,
+      const Locale('en'),
+      true,
+    ),
+  ];
+  for (final (name, size, mode, scale, locale, contrast) in configs) {
+    // Drop the previous screen (and its provider state) first.
+    await tester.pumpWidget(const SizedBox());
+    await pumpSaaf(
+      tester,
+      build(),
+      size: size,
+      themeMode: mode,
+      textScale: scale,
+      locale: locale,
+      highContrast: contrast,
+      scaffold: scaffold,
+      overrides: overrides,
+    );
+    for (var i = 0; i < settlePumps; i++) {
+      await tester.pump();
+    }
+    await after?.call();
+    expect(tester.takeException(), isNull, reason: name);
+  }
+}

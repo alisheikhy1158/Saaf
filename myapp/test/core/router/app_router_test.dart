@@ -88,6 +88,24 @@ void main() {
       expect(find.byKey(const ValueKey('screen-welcome')), findsOneWidget);
     });
 
+    testWidgets('/how-we-score shows the score explanation', (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            appRouterProvider.overrideWithValue(
+              buildAppRouter(initialLocation: SaafRoute.howWeScore.path),
+            ),
+          ],
+          child: const SaafApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(ValueKey('screen-${SaafRoute.howWeScore.name}')),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('an unknown path shows a friendly not-found page', (
       tester,
     ) async {

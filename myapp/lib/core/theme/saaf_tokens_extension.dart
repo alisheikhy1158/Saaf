@@ -23,6 +23,9 @@ class SaafTextStyles {
     required this.pointCaption,
     required this.avatarInitial,
     required this.ringValue,
+    required this.scoreValue,
+    required this.scoreLabel,
+    required this.cardHeadline,
     required this.otpDigit,
     required this.keypadKey,
   });
@@ -42,6 +45,9 @@ class SaafTextStyles {
   final TextStyle pointCaption;
   final TextStyle avatarInitial;
   final TextStyle ringValue;
+  final TextStyle scoreValue;
+  final TextStyle scoreLabel;
+  final TextStyle cardHeadline;
   final TextStyle otpDigit;
   final TextStyle keypadKey;
 
@@ -73,6 +79,9 @@ class SaafTextStyles {
       pointCaption: _style(SaafType.pointCaption, secondary),
       avatarInitial: _style(SaafType.avatarInitial, primary),
       ringValue: _style(SaafType.ringValue, primary),
+      scoreValue: _style(SaafType.scoreValue, primary),
+      scoreLabel: _style(SaafType.scoreLabel, primary),
+      cardHeadline: _style(SaafType.cardHeadline, primary),
       otpDigit: _style(SaafType.otpDigit, primary),
       keypadKey: _style(SaafType.keypadKey, primary),
     );
@@ -96,6 +105,9 @@ class SaafTextStyles {
       pointCaption: l(pointCaption, other.pointCaption),
       avatarInitial: l(avatarInitial, other.avatarInitial),
       ringValue: l(ringValue, other.ringValue),
+      scoreValue: l(scoreValue, other.scoreValue),
+      scoreLabel: l(scoreLabel, other.scoreLabel),
+      cardHeadline: l(cardHeadline, other.cardHeadline),
       otpDigit: l(otpDigit, other.otpDigit),
       keypadKey: l(keypadKey, other.keypadKey),
     );

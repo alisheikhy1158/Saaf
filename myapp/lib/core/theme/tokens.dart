@@ -161,6 +161,7 @@ class SaafRadius {
   const SaafRadius();
 
   final double r3 = 3;
+  final double r4 = 4;
   final double r7 = 7;
   final double r12 = 12;
   final double r14 = 14;
@@ -208,6 +209,9 @@ class SaafSize {
   final double iconCamera = 22;
   final double keypadIcon = 24;
   final double progressBar = 6;
+  final double progressBarThick = 8;
+  final double scoreRing = 104;
+  final double scoreRingStroke = 8;
   final double progressRing = 76;
   final double borderThin = 1;
   final double borderFocus = 1.5;
@@ -385,6 +389,27 @@ abstract final class SaafType {
     height: 1.4,
     fontWeight: FontWeight.w800,
     letterSpacing: 12 * 0.08,
+  );
+
+  /// 07 score ring value ("76").
+  static const TextStyle scoreValue = TextStyle(
+    fontSize: 29,
+    height: 33 / 29,
+    fontWeight: FontWeight.w800,
+  );
+
+  /// 07 "Skin score" caption under the ring value.
+  static const TextStyle scoreLabel = TextStyle(
+    fontSize: 11,
+    height: 14 / 11,
+    fontWeight: FontWeight.w400,
+  );
+
+  /// 07 score-card headline ("Good base, two things to work on").
+  static const TextStyle cardHeadline = TextStyle(
+    fontSize: 17,
+    height: 22 / 17,
+    fontWeight: FontWeight.w800,
   );
   static const TextStyle micro = TextStyle(
     fontSize: 11,

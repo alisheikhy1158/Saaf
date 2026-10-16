@@ -46,6 +46,25 @@ void main() {
     }
   });
 
+  testWidgets(
+    'strong tone is cornsilk with ink text on the dark camera screen',
+    (tester) async {
+      await pumpSaaf(
+        tester,
+        const Center(
+          child: SaafChip(
+            label: 'Move to softer light',
+            tone: SaafChipTone.strong,
+          ),
+        ),
+        themeMode: ThemeMode.dark,
+      );
+      expect(decorationOf(tester).color, SaafPalette.cornsilk);
+      final text = tester.widget<Text>(find.text('Move to softer light'));
+      expect(text.style?.color, SaafPalette.ink);
+    },
+  );
+
   testWidgets('on-dark tone is cornsilk at 12 % opacity', (tester) async {
     await pumpSaaf(
       tester,

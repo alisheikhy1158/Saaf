@@ -1027,6 +1027,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close other apps that use the camera and try again, or choose photos from your gallery.'**
   String get scanFailedBody;
+
+  /// Small caps line above the results title. {date} is like 15 OCT 2026.
+  ///
+  /// In en, this message translates to:
+  /// **'SCAN · {date}'**
+  String resultsOverline(String date);
+
+  /// Title of the analysis results screen (07).
+  ///
+  /// In en, this message translates to:
+  /// **'Here’s your skin today'**
+  String get resultsTitle;
+
+  /// Tooltip of the share button on the results screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your result'**
+  String get resultsShare;
+
+  /// Caption under the score number in the ring.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin score'**
+  String get resultsScoreLabel;
+
+  /// Screen-reader label of the score ring.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin score {score} out of 100'**
+  String resultsScoreSemantics(int score);
+
+  /// Score-card headline when the score is 75 or more.
+  ///
+  /// In en, this message translates to:
+  /// **'Good base, two things to work on'**
+  String get resultsHeadlineGood;
+
+  /// Score-card headline when the score is 50 to 74.
+  ///
+  /// In en, this message translates to:
+  /// **'A fair start, two things to work on'**
+  String get resultsHeadlineFair;
+
+  /// Score-card headline when the score is below 50.
+  ///
+  /// In en, this message translates to:
+  /// **'Your skin needs some care. Start with two things'**
+  String get resultsHeadlineNeedsCare;
+
+  /// Score-card line naming the two areas to work on first.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} and {second} are your main focus.'**
+  String resultsFocus(String first, String second);
+
+  /// Section title above the four measures.
+  ///
+  /// In en, this message translates to:
+  /// **'Concerns'**
+  String get resultsConcerns;
+
+  /// Link beside the Concerns title that opens the explanation page.
+  ///
+  /// In en, this message translates to:
+  /// **'How we score'**
+  String get resultsHowWeScore;
+
+  /// Measure name.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark spots'**
+  String get metricDarkSpots;
+
+  /// Measure name.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakouts'**
+  String get metricBreakouts;
+
+  /// Measure name.
+  ///
+  /// In en, this message translates to:
+  /// **'Oiliness'**
+  String get metricOiliness;
+
+  /// Measure name.
+  ///
+  /// In en, this message translates to:
+  /// **'Hydration'**
+  String get metricHydration;
+
+  /// Rating of a concern that is small.
+  ///
+  /// In en, this message translates to:
+  /// **'Mild'**
+  String get ratingMild;
+
+  /// Rating of a concern that is in the middle.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get ratingModerate;
+
+  /// Rating of a concern that is large.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get ratingHigh;
+
+  /// Rating of hydration that is low.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get ratingLow;
+
+  /// Rating of hydration that is in the middle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get ratingFair;
+
+  /// Rating of hydration that is good.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get ratingGood;
+
+  /// Screen-reader label of one measure card, e.g. 'Dark spots: Moderate'.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {rating}'**
+  String metricSemantics(String name, String rating);
+
+  /// Disclaimer under the measures.
+  ///
+  /// In en, this message translates to:
+  /// **'A cosmetic screening, not a medical diagnosis. See a dermatologist for anything that worries you.'**
+  String get resultsDisclaimer;
+
+  /// Primary button on the results screen.
+  ///
+  /// In en, this message translates to:
+  /// **'See my routine'**
+  String get resultsSeeRoutine;
+
+  /// Title shown on the results screen when there is no finished scan.
+  ///
+  /// In en, this message translates to:
+  /// **'No scan yet'**
+  String get resultsEmptyTitle;
+
+  /// Body shown when there is no finished scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Take your three face photos to see how your skin looks today.'**
+  String get resultsEmptyBody;
+
+  /// Button that opens the camera screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a scan'**
+  String get resultsEmptyAction;
+
+  /// Title shown when the analysis fails.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t read your results'**
+  String get resultsErrorTitle;
+
+  /// Button that runs the analysis again.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get resultsErrorAction;
+
+  /// Text shared from the results screen. Never includes photos.
+  ///
+  /// In en, this message translates to:
+  /// **'My Saaf skin score: {score}/100. Main focus: {focus}. A cosmetic screening, not medical advice.'**
+  String resultsShareText(int score, String focus);
+
+  /// Title of the explanation page.
+  ///
+  /// In en, this message translates to:
+  /// **'How we score'**
+  String get howWeScoreTitle;
+
+  /// Intro paragraph of the explanation page.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Saaf skin score is a number from 40 to 100 that sums up how your skin looks today. It is a guide for choosing a routine, not a medical measurement.'**
+  String get howWeScoreIntro;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'What we look at'**
+  String get howWeScoreLooksTitle;
+
+  /// Bullet.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark spots: uneven colour and marks left by the sun or by acne.'**
+  String get howWeScoreSpots;
+
+  /// Bullet.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakouts: pimples, blackheads and bumps.'**
+  String get howWeScoreBreakouts;
+
+  /// Bullet.
+  ///
+  /// In en, this message translates to:
+  /// **'Oiliness: shine and visible pores, mostly on the forehead and nose.'**
+  String get howWeScoreOil;
+
+  /// Bullet.
+  ///
+  /// In en, this message translates to:
+  /// **'Hydration: how comfortable and smooth your skin looks. This is the only measure where more is better.'**
+  String get howWeScoreHydration;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'How the number is made'**
+  String get howWeScoreMathTitle;
+
+  /// Paragraph explaining the score.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark spots, breakouts and oiliness can take up to 40 points off between them. Low hydration can take off up to 20 more. A skin with none of these scores 100.'**
+  String get howWeScoreMath;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photos'**
+  String get howWeScorePhotosTitle;
+
+  /// Paragraph about photo privacy.
+  ///
+  /// In en, this message translates to:
+  /// **'The three photos stay on your phone. They are never uploaded to work out your score.'**
+  String get howWeScorePhotos;
+
+  /// Section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'Not medical advice'**
+  String get howWeScoreMedicalTitle;
+
+  /// Paragraph with the medical disclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf cannot diagnose skin conditions. If a spot changes, bleeds, itches or worries you, please see a dermatologist.'**
+  String get howWeScoreMedical;
 }
 
 class _AppLocalizationsDelegate

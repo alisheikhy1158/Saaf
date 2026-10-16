@@ -84,6 +84,15 @@ class SaafRoute {
     'Privacy Policy',
   );
 
+  /// "How we score", opened from the results screen (07). Not a Figma screen,
+  /// so not in [all].
+  static const howWeScore = SaafRoute._(
+    0,
+    'howWeScore',
+    '/how-we-score',
+    'How we score',
+  );
+
   /// In Figma order.
   static const List<SaafRoute> all = [
     welcome,

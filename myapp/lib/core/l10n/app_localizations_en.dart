@@ -519,4 +519,153 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get scanFailedBody =>
       'Close other apps that use the camera and try again, or choose photos from your gallery.';
+
+  @override
+  String resultsOverline(String date) {
+    return 'SCAN · $date';
+  }
+
+  @override
+  String get resultsTitle => 'Here’s your skin today';
+
+  @override
+  String get resultsShare => 'Share your result';
+
+  @override
+  String get resultsScoreLabel => 'Skin score';
+
+  @override
+  String resultsScoreSemantics(int score) {
+    return 'Skin score $score out of 100';
+  }
+
+  @override
+  String get resultsHeadlineGood => 'Good base, two things to work on';
+
+  @override
+  String get resultsHeadlineFair => 'A fair start, two things to work on';
+
+  @override
+  String get resultsHeadlineNeedsCare =>
+      'Your skin needs some care. Start with two things';
+
+  @override
+  String resultsFocus(String first, String second) {
+    return '$first and $second are your main focus.';
+  }
+
+  @override
+  String get resultsConcerns => 'Concerns';
+
+  @override
+  String get resultsHowWeScore => 'How we score';
+
+  @override
+  String get metricDarkSpots => 'Dark spots';
+
+  @override
+  String get metricBreakouts => 'Breakouts';
+
+  @override
+  String get metricOiliness => 'Oiliness';
+
+  @override
+  String get metricHydration => 'Hydration';
+
+  @override
+  String get ratingMild => 'Mild';
+
+  @override
+  String get ratingModerate => 'Moderate';
+
+  @override
+  String get ratingHigh => 'High';
+
+  @override
+  String get ratingLow => 'Low';
+
+  @override
+  String get ratingFair => 'Fair';
+
+  @override
+  String get ratingGood => 'Good';
+
+  @override
+  String metricSemantics(String name, String rating) {
+    return '$name: $rating';
+  }
+
+  @override
+  String get resultsDisclaimer =>
+      'A cosmetic screening, not a medical diagnosis. See a dermatologist for anything that worries you.';
+
+  @override
+  String get resultsSeeRoutine => 'See my routine';
+
+  @override
+  String get resultsEmptyTitle => 'No scan yet';
+
+  @override
+  String get resultsEmptyBody =>
+      'Take your three face photos to see how your skin looks today.';
+
+  @override
+  String get resultsEmptyAction => 'Start a scan';
+
+  @override
+  String get resultsErrorTitle => 'We couldn’t read your results';
+
+  @override
+  String get resultsErrorAction => 'Try again';
+
+  @override
+  String resultsShareText(int score, String focus) {
+    return 'My Saaf skin score: $score/100. Main focus: $focus. A cosmetic screening, not medical advice.';
+  }
+
+  @override
+  String get howWeScoreTitle => 'How we score';
+
+  @override
+  String get howWeScoreIntro =>
+      'Your Saaf skin score is a number from 40 to 100 that sums up how your skin looks today. It is a guide for choosing a routine, not a medical measurement.';
+
+  @override
+  String get howWeScoreLooksTitle => 'What we look at';
+
+  @override
+  String get howWeScoreSpots =>
+      'Dark spots: uneven colour and marks left by the sun or by acne.';
+
+  @override
+  String get howWeScoreBreakouts => 'Breakouts: pimples, blackheads and bumps.';
+
+  @override
+  String get howWeScoreOil =>
+      'Oiliness: shine and visible pores, mostly on the forehead and nose.';
+
+  @override
+  String get howWeScoreHydration =>
+      'Hydration: how comfortable and smooth your skin looks. This is the only measure where more is better.';
+
+  @override
+  String get howWeScoreMathTitle => 'How the number is made';
+
+  @override
+  String get howWeScoreMath =>
+      'Dark spots, breakouts and oiliness can take up to 40 points off between them. Low hydration can take off up to 20 more. A skin with none of these scores 100.';
+
+  @override
+  String get howWeScorePhotosTitle => 'Your photos';
+
+  @override
+  String get howWeScorePhotos =>
+      'The three photos stay on your phone. They are never uploaded to work out your score.';
+
+  @override
+  String get howWeScoreMedicalTitle => 'Not medical advice';
+
+  @override
+  String get howWeScoreMedical =>
+      'Saaf cannot diagnose skin conditions. If a spot changes, bleeds, itches or worries you, please see a dermatologist.';
 }

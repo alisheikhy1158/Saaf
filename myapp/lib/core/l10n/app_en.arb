@@ -453,5 +453,149 @@
   "@scanFailedTitle": { "description": "Title shown when the camera could not start." },
 
   "scanFailedBody": "Close other apps that use the camera and try again, or choose photos from your gallery.",
-  "@scanFailedBody": { "description": "Body shown when the camera could not start." }
+  "@scanFailedBody": { "description": "Body shown when the camera could not start." },
+
+  "resultsOverline": "SCAN · {date}",
+  "@resultsOverline": {
+    "description": "Small caps line above the results title. {date} is like 15 OCT 2026.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "resultsTitle": "Here’s your skin today",
+  "@resultsTitle": { "description": "Title of the analysis results screen (07)." },
+
+  "resultsShare": "Share your result",
+  "@resultsShare": { "description": "Tooltip of the share button on the results screen." },
+
+  "resultsScoreLabel": "Skin score",
+  "@resultsScoreLabel": { "description": "Caption under the score number in the ring." },
+
+  "resultsScoreSemantics": "Skin score {score} out of 100",
+  "@resultsScoreSemantics": {
+    "description": "Screen-reader label of the score ring.",
+    "placeholders": { "score": { "type": "int" } }
+  },
+
+  "resultsHeadlineGood": "Good base, two things to work on",
+  "@resultsHeadlineGood": { "description": "Score-card headline when the score is 75 or more." },
+
+  "resultsHeadlineFair": "A fair start, two things to work on",
+  "@resultsHeadlineFair": { "description": "Score-card headline when the score is 50 to 74." },
+
+  "resultsHeadlineNeedsCare": "Your skin needs some care. Start with two things",
+  "@resultsHeadlineNeedsCare": { "description": "Score-card headline when the score is below 50." },
+
+  "resultsFocus": "{first} and {second} are your main focus.",
+  "@resultsFocus": {
+    "description": "Score-card line naming the two areas to work on first.",
+    "placeholders": { "first": { "type": "String" }, "second": { "type": "String" } }
+  },
+
+  "resultsConcerns": "Concerns",
+  "@resultsConcerns": { "description": "Section title above the four measures." },
+
+  "resultsHowWeScore": "How we score",
+  "@resultsHowWeScore": { "description": "Link beside the Concerns title that opens the explanation page." },
+
+  "metricDarkSpots": "Dark spots",
+  "@metricDarkSpots": { "description": "Measure name." },
+
+  "metricBreakouts": "Breakouts",
+  "@metricBreakouts": { "description": "Measure name." },
+
+  "metricOiliness": "Oiliness",
+  "@metricOiliness": { "description": "Measure name." },
+
+  "metricHydration": "Hydration",
+  "@metricHydration": { "description": "Measure name." },
+
+  "ratingMild": "Mild",
+  "@ratingMild": { "description": "Rating of a concern that is small." },
+
+  "ratingModerate": "Moderate",
+  "@ratingModerate": { "description": "Rating of a concern that is in the middle." },
+
+  "ratingHigh": "High",
+  "@ratingHigh": { "description": "Rating of a concern that is large." },
+
+  "ratingLow": "Low",
+  "@ratingLow": { "description": "Rating of hydration that is low." },
+
+  "ratingFair": "Fair",
+  "@ratingFair": { "description": "Rating of hydration that is in the middle." },
+
+  "ratingGood": "Good",
+  "@ratingGood": { "description": "Rating of hydration that is good." },
+
+  "metricSemantics": "{name}: {rating}",
+  "@metricSemantics": {
+    "description": "Screen-reader label of one measure card, e.g. 'Dark spots: Moderate'.",
+    "placeholders": { "name": { "type": "String" }, "rating": { "type": "String" } }
+  },
+
+  "resultsDisclaimer": "A cosmetic screening, not a medical diagnosis. See a dermatologist for anything that worries you.",
+  "@resultsDisclaimer": { "description": "Disclaimer under the measures." },
+
+  "resultsSeeRoutine": "See my routine",
+  "@resultsSeeRoutine": { "description": "Primary button on the results screen." },
+
+  "resultsEmptyTitle": "No scan yet",
+  "@resultsEmptyTitle": { "description": "Title shown on the results screen when there is no finished scan." },
+
+  "resultsEmptyBody": "Take your three face photos to see how your skin looks today.",
+  "@resultsEmptyBody": { "description": "Body shown when there is no finished scan." },
+
+  "resultsEmptyAction": "Start a scan",
+  "@resultsEmptyAction": { "description": "Button that opens the camera screen." },
+
+  "resultsErrorTitle": "We couldn’t read your results",
+  "@resultsErrorTitle": { "description": "Title shown when the analysis fails." },
+
+  "resultsErrorAction": "Try again",
+  "@resultsErrorAction": { "description": "Button that runs the analysis again." },
+
+  "resultsShareText": "My Saaf skin score: {score}/100. Main focus: {focus}. A cosmetic screening, not medical advice.",
+  "@resultsShareText": {
+    "description": "Text shared from the results screen. Never includes photos.",
+    "placeholders": { "score": { "type": "int" }, "focus": { "type": "String" } }
+  },
+
+  "howWeScoreTitle": "How we score",
+  "@howWeScoreTitle": { "description": "Title of the explanation page." },
+
+  "howWeScoreIntro": "Your Saaf skin score is a number from 40 to 100 that sums up how your skin looks today. It is a guide for choosing a routine, not a medical measurement.",
+  "@howWeScoreIntro": { "description": "Intro paragraph of the explanation page." },
+
+  "howWeScoreLooksTitle": "What we look at",
+  "@howWeScoreLooksTitle": { "description": "Section heading." },
+
+  "howWeScoreSpots": "Dark spots: uneven colour and marks left by the sun or by acne.",
+  "@howWeScoreSpots": { "description": "Bullet." },
+
+  "howWeScoreBreakouts": "Breakouts: pimples, blackheads and bumps.",
+  "@howWeScoreBreakouts": { "description": "Bullet." },
+
+  "howWeScoreOil": "Oiliness: shine and visible pores, mostly on the forehead and nose.",
+  "@howWeScoreOil": { "description": "Bullet." },
+
+  "howWeScoreHydration": "Hydration: how comfortable and smooth your skin looks. This is the only measure where more is better.",
+  "@howWeScoreHydration": { "description": "Bullet." },
+
+  "howWeScoreMathTitle": "How the number is made",
+  "@howWeScoreMathTitle": { "description": "Section heading." },
+
+  "howWeScoreMath": "Dark spots, breakouts and oiliness can take up to 40 points off between them. Low hydration can take off up to 20 more. A skin with none of these scores 100.",
+  "@howWeScoreMath": { "description": "Paragraph explaining the score." },
+
+  "howWeScorePhotosTitle": "Your photos",
+  "@howWeScorePhotosTitle": { "description": "Section heading." },
+
+  "howWeScorePhotos": "The three photos stay on your phone. They are never uploaded to work out your score.",
+  "@howWeScorePhotos": { "description": "Paragraph about photo privacy." },
+
+  "howWeScoreMedicalTitle": "Not medical advice",
+  "@howWeScoreMedicalTitle": { "description": "Section heading." },
+
+  "howWeScoreMedical": "Saaf cannot diagnose skin conditions. If a spot changes, bleeds, itches or worries you, please see a dermatologist.",
+  "@howWeScoreMedical": { "description": "Paragraph with the medical disclaimer." }
 }

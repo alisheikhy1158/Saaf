@@ -520,4 +520,153 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get scanFailedBody =>
       'کیمرہ استعمال کرنے والی دوسری ایپس بند کریں اور دوبارہ کوشش کریں، یا گیلری سے تصاویر منتخب کریں۔';
+
+  @override
+  String resultsOverline(String date) {
+    return 'اسکین · $date';
+  }
+
+  @override
+  String get resultsTitle => 'آج آپ کی جلد کی کیفیت';
+
+  @override
+  String get resultsShare => 'اپنا نتیجہ شیئر کریں';
+
+  @override
+  String get resultsScoreLabel => 'جلد کا اسکور';
+
+  @override
+  String resultsScoreSemantics(int score) {
+    return 'جلد کا اسکور 100 میں سے $score';
+  }
+
+  @override
+  String get resultsHeadlineGood => 'بنیاد اچھی ہے، دو چیزوں پر کام کرنا ہے';
+
+  @override
+  String get resultsHeadlineFair => 'اچھی شروعات ہے، دو چیزوں پر کام کرنا ہے';
+
+  @override
+  String get resultsHeadlineNeedsCare =>
+      'آپ کی جلد کو کچھ توجہ چاہیے۔ دو چیزوں سے شروع کریں';
+
+  @override
+  String resultsFocus(String first, String second) {
+    return '$first اور $second آپ کی بنیادی توجہ ہیں۔';
+  }
+
+  @override
+  String get resultsConcerns => 'مسائل';
+
+  @override
+  String get resultsHowWeScore => 'ہم اسکور کیسے دیتے ہیں';
+
+  @override
+  String get metricDarkSpots => 'داغ دھبے';
+
+  @override
+  String get metricBreakouts => 'دانے';
+
+  @override
+  String get metricOiliness => 'چکناہٹ';
+
+  @override
+  String get metricHydration => 'نمی';
+
+  @override
+  String get ratingMild => 'ہلکا';
+
+  @override
+  String get ratingModerate => 'درمیانہ';
+
+  @override
+  String get ratingHigh => 'زیادہ';
+
+  @override
+  String get ratingLow => 'کم';
+
+  @override
+  String get ratingFair => 'ٹھیک ٹھاک';
+
+  @override
+  String get ratingGood => 'اچھی';
+
+  @override
+  String metricSemantics(String name, String rating) {
+    return '$name: $rating';
+  }
+
+  @override
+  String get resultsDisclaimer =>
+      'یہ صرف ظاہری جانچ ہے، طبی تشخیص نہیں۔ جو بات آپ کو پریشان کرے اس کے لیے ماہرِ جلد سے ملیں۔';
+
+  @override
+  String get resultsSeeRoutine => 'میرا روٹین دیکھیں';
+
+  @override
+  String get resultsEmptyTitle => 'ابھی کوئی اسکین نہیں';
+
+  @override
+  String get resultsEmptyBody =>
+      'آج آپ کی جلد کیسی ہے یہ دیکھنے کے لیے چہرے کی تین تصاویر لیں۔';
+
+  @override
+  String get resultsEmptyAction => 'اسکین شروع کریں';
+
+  @override
+  String get resultsErrorTitle => 'ہم آپ کا نتیجہ نہیں پڑھ سکے';
+
+  @override
+  String get resultsErrorAction => 'دوبارہ کوشش کریں';
+
+  @override
+  String resultsShareText(int score, String focus) {
+    return 'میرا ثاف جلد کا اسکور: 100 میں سے $score۔ بنیادی توجہ: $focus۔ یہ صرف ظاہری جانچ ہے، طبی مشورہ نہیں۔';
+  }
+
+  @override
+  String get howWeScoreTitle => 'ہم اسکور کیسے دیتے ہیں';
+
+  @override
+  String get howWeScoreIntro =>
+      'آپ کا ثاف جلد کا اسکور 40 سے 100 کے درمیان ایک عدد ہے جو بتاتا ہے کہ آج آپ کی جلد کیسی دکھائی دیتی ہے۔ یہ روٹین چننے میں رہنمائی ہے، طبی پیمائش نہیں۔';
+
+  @override
+  String get howWeScoreLooksTitle => 'ہم کیا دیکھتے ہیں';
+
+  @override
+  String get howWeScoreSpots =>
+      'داغ دھبے: ناہموار رنگت اور دھوپ یا دانوں کے نشان۔';
+
+  @override
+  String get howWeScoreBreakouts => 'دانے: پھنسیاں، بلیک ہیڈز اور ابھار۔';
+
+  @override
+  String get howWeScoreOil =>
+      'چکناہٹ: چمک اور نظر آنے والے مسام، خاص طور پر ماتھے اور ناک پر۔';
+
+  @override
+  String get howWeScoreHydration =>
+      'نمی: آپ کی جلد کتنی نرم اور ہموار دکھتی ہے۔ یہ واحد پیمانہ ہے جس میں زیادہ بہتر ہے۔';
+
+  @override
+  String get howWeScoreMathTitle => 'عدد کیسے بنتا ہے';
+
+  @override
+  String get howWeScoreMath =>
+      'داغ دھبے، دانے اور چکناہٹ مل کر زیادہ سے زیادہ 40 پوائنٹ کم کر سکتے ہیں۔ نمی کی کمی مزید 20 تک کم کر سکتی ہے۔ جس جلد میں ان میں سے کچھ نہ ہو اس کا اسکور 100 ہے۔';
+
+  @override
+  String get howWeScorePhotosTitle => 'آپ کی تصاویر';
+
+  @override
+  String get howWeScorePhotos =>
+      'تینوں تصاویر آپ کے فون ہی میں رہتی ہیں۔ اسکور بنانے کے لیے انہیں کبھی اپ لوڈ نہیں کیا جاتا۔';
+
+  @override
+  String get howWeScoreMedicalTitle => 'طبی مشورہ نہیں';
+
+  @override
+  String get howWeScoreMedical =>
+      'ثاف جلد کی بیماریوں کی تشخیص نہیں کر سکتا۔ اگر کوئی نشان بدلے، خون آئے، خارش ہو یا آپ کو پریشان کرے تو براہِ کرم ماہرِ جلد سے ملیں۔';
 }

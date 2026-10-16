@@ -18,6 +18,7 @@ import 'package:saaf/presentation/features/profile/screens/profile_screen.dart';
 import 'package:saaf/presentation/features/progress/screens/monthly_progress_screen.dart';
 import 'package:saaf/presentation/features/routine/screens/routine_screen.dart';
 import 'package:saaf/presentation/features/scan/screens/analysis_results_screen.dart';
+import 'package:saaf/presentation/features/scan/screens/how_we_score_screen.dart';
 import 'package:saaf/presentation/features/scan/screens/selfie_capture_screen.dart';
 import 'package:saaf/presentation/widgets/common/not_found_screen.dart';
 
@@ -62,6 +63,11 @@ GoRouter buildAppRouter({String? initialLocation, bool? enableGallery}) {
               ),
           ],
         ),
+      GoRoute(
+        name: SaafRoute.howWeScore.name,
+        path: SaafRoute.howWeScore.path,
+        builder: (context, state) => const HowWeScoreScreen(),
+      ),
       GoRoute(
         name: SaafRoute.terms.name,
         path: SaafRoute.terms.path,

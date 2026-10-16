@@ -191,6 +191,60 @@ void main() {
     });
   });
 
+  group('finishing', () {
+    testWidgets('three photos, then "Analyse my skin" opens the results', (
+      tester,
+    ) async {
+      await pumpSaafApp(
+        tester,
+        location: '/selfie-capture',
+        overrides: _overrides(),
+      );
+      await tester.pump();
+      await tester.pump();
+      for (var i = 0; i < 2; i++) {
+        await _tap(tester, find.bySemanticsLabel('Take photo'));
+        await _tap(tester, find.text('Use this photo'));
+      }
+      await _tap(tester, find.bySemanticsLabel('Take photo'));
+      await _tap(tester, find.text('Analyse my skin'));
+      await tester.pump(const Duration(seconds: 1));
+      expect(
+        find.byKey(const ValueKey('screen-analysisResults')),
+        findsOneWidget,
+      );
+      // The results are worked out from the saved scan.
+      expect(find.text('Here’s your skin today'), findsOneWidget);
+    });
+
+    testWidgets('the X leaves the scan for Home', (tester) async {
+      await pumpSaafApp(
+        tester,
+        location: '/selfie-capture',
+        overrides: _overrides(),
+      );
+      await tester.pump();
+      await tester.tap(find.byTooltip('Close'));
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+    });
+
+    testWidgets('"Not now" on the camera explanation leaves for Home', (
+      tester,
+    ) async {
+      await pumpSaafApp(
+        tester,
+        location: '/selfie-capture',
+        overrides: _overrides(permission: CameraPermission.denied),
+      );
+      await tester.pump();
+      await tester.pump();
+      await _tap(tester, find.text('Not now'));
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+    });
+  });
+
   group('permission', () {
     testWidgets('explains before the system asks, then opens the camera', (
       tester,

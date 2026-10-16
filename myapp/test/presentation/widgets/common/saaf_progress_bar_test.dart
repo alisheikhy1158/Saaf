@@ -36,6 +36,33 @@ void main() {
     expect(decoration.color?.a, closeTo(0.08, 0.01));
   });
 
+  testWidgets('the thick variant (07 concern bars) is 8 dp with r4 corners', (
+    tester,
+  ) async {
+    await pumpSaaf(
+      tester,
+      const Align(
+        alignment: Alignment.topLeft,
+        child: SizedBox(
+          width: 200,
+          child: SaafProgressBar(value: 0.5, thick: true),
+        ),
+      ),
+    );
+    expect(tester.getSize(find.byType(SaafProgressBar)), const Size(200, 8));
+    final track = tester.widget<DecoratedBox>(
+      find.byKey(const ValueKey('saaf-progress-track')),
+    );
+    expect(
+      (track.decoration as BoxDecoration).borderRadius,
+      BorderRadius.circular(4),
+    );
+    expect(
+      tester.getSize(find.byKey(const ValueKey('saaf-progress-fill'))),
+      const Size(100, 8),
+    );
+  });
+
   testWidgets('the sage fill is value × width', (tester) async {
     await pumpBar(tester, 0.4);
     expect(
