@@ -159,6 +159,45 @@ workflows:
         submit_as_draft: true          # required while the Play app is still in draft state
 
   # ---------------------------------------------------------------------------
+  # Manual only (press "Start new build"): a signed APK you can install on an
+  # Android phone to try the real camera, notifications and Firebase login.
+  # Needs no Google Play account. Not published anywhere.
+  android-test-build:
+    name: Android test app (.apk to install on a phone)
+    instance_type: mac_mini_m2
+    max_build_duration: 45
+    environment:
+      flutter: stable
+      android_signing:
+        - saaf_upload_keystore
+      groups:
+        - app_config
+      vars:
+        APP_DIR: myapp
+    scripts:
+      - name: Point Gradle at the Flutter SDK (cloud machine)
+        script: echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/$APP_DIR/android/local.properties"
+      - *flutter_setup
+      - *quality_gate
+      - name: Build signed APK
+        script: |
+          cd $APP_DIR
+          flutter build apk --release \
+            --build-number=$PROJECT_BUILD_NUMBER \
+            --dart-define=USE_FIREBASE="${USE_FIREBASE:-false}" \
+            --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
+            --dart-define=FIREBASE_MESSAGING_SENDER_ID="$FIREBASE_MESSAGING_SENDER_ID" \
+            --dart-define=FIREBASE_API_KEY_ANDROID="$FIREBASE_API_KEY_ANDROID" \
+            --dart-define=FIREBASE_APP_ID_ANDROID="$FIREBASE_APP_ID_ANDROID" \
+            --dart-define=SUPPORT_EMAIL="$SUPPORT_EMAIL" \
+            --dart-define=DELETION_URL="$DELETION_URL" \
+            --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}"
+    artifacts:
+      - myapp/build/app/outputs/flutter-apk/*.apk
+    publishing:
+      <<: *email_me
+
+  # ---------------------------------------------------------------------------
   ios-release:
     name: iOS release (.ipa -> TestFlight)
     instance_type: mac_mini_m2         # iOS builds need macOS — it runs in Codemagic's cloud, not on your PC
