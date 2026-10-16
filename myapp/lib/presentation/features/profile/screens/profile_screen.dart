@@ -16,6 +16,7 @@ import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/usecases/notification_access.dart';
+import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/locale_controller.dart';
 import 'package:saaf/presentation/providers/notification_providers.dart';
@@ -49,6 +50,7 @@ class ProfileScreen extends ConsumerWidget {
     final isPro = ref.watch(proStatusProvider);
     final reminders = ref.watch(reminderSettingsControllerProvider);
     final themeMode = ref.watch(themeModeControllerProvider);
+    final aiSharing = ref.watch(aiConsentStateProvider);
 
     final details = ref.watch(profileDetailsControllerProvider);
     final name = details.name ?? session?.displayName;
@@ -139,6 +141,14 @@ class ProfileScreen extends ConsumerWidget {
             SizedBox(height: space.x8),
             SaafSettingsGroup(
               rows: [
+                SaafSettingsRow(
+                  icon: Icons.auto_awesome,
+                  title: l10n.profileRowAi,
+                  value: aiSharing == true
+                      ? l10n.profileValueOn
+                      : l10n.profileValueOff,
+                  onTap: () => _showSheet(context, const _AiSharingSheet()),
+                ),
                 SaafSettingsRow(
                   icon: Icons.cloud_outlined,
                   title: l10n.profileRowBackup,
@@ -920,6 +930,43 @@ class _DetailsSheetState extends ConsumerState<_DetailsSheet> {
           SizedBox(height: tokens.space.x2),
         ],
       ),
+    );
+  }
+}
+
+/// Switch AI coach sharing on or off (off also clears the conversation).
+class _AiSharingSheet extends ConsumerWidget {
+  const _AiSharingSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    final on = ref.watch(aiConsentStateProvider) == true;
+
+    return _SheetFrame(
+      title: l10n.aiSheetTitle,
+      children: [
+        Text(
+          l10n.aiSheetBody,
+          style: context.text.bodyMedium?.copyWith(color: tokens.textLabel),
+        ),
+        Row(
+          spacing: tokens.space.rowGap,
+          children: [
+            Expanded(
+              child: Text(l10n.aiSheetSwitch, style: tokens.styles.rowTitle),
+            ),
+            Switch(
+              value: on,
+              onChanged: (value) {
+                final notifier = ref.read(aiConsentStateProvider.notifier);
+                value ? notifier.give() : notifier.withdraw();
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

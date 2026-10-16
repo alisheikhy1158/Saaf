@@ -84,6 +84,9 @@ class SaafRoute {
     'Privacy Policy',
   );
 
+  /// The AI skin coach, opened from Home. Not a Figma screen, so not in [all].
+  static const aiCoach = SaafRoute._(0, 'aiCoach', '/ai-coach', 'AI coach');
+
   /// Scan a product's barcode (or type it), opened from Home. Not a Figma
   /// screen, so not in [all].
   static const scanProduct = SaafRoute._(

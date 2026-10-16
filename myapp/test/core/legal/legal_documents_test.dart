@@ -136,4 +136,46 @@ void main() {
       expect(LegalConfig.current.isReviewed, isFalse);
     });
   });
+
+  group('the AI coach is disclosed (Apple 5.1.2(i), Play AI policy)', () {
+    final text = allText(privacy);
+    final heading = privacy.sections.map((s) => s.heading.toLowerCase());
+
+    test('has its own section and says it is optional', () {
+      expect(heading.any((h) => h.contains('ai coach')), isTrue);
+      expect(text, contains('the ai coach is optional'));
+    });
+
+    test('says who receives the data', () {
+      expect(text, contains('groq'));
+      expect(text, contains('cloudflare'));
+      expect(text, contains('open-source'));
+    });
+
+    test('says what is sent and what is never sent', () {
+      expect(text, contains('photos you attach'));
+      expect(text, contains('we never send your name'));
+      expect(text, contains('safety answers'));
+    });
+
+    test('says how to stop and that answers can be wrong', () {
+      expect(text, contains('stop sharing at any time'));
+      expect(text, contains('not medical advice'));
+    });
+
+    test('the sections stay numbered 1, 2, 3, ... in order', () {
+      for (final (i, section) in privacy.sections.indexed) {
+        expect(
+          section.heading,
+          startsWith('${i + 1}. '),
+          reason: section.heading,
+        );
+      }
+    });
+
+    test('the photo promise is still honest about the AI coach', () {
+      expect(text, contains('never uploaded unless you turn on backup'));
+      expect(text, contains('except photos you choose to attach'));
+    });
+  });
 }

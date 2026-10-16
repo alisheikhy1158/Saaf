@@ -54,6 +54,7 @@
 #       FIREBASE_API_KEY_ANDROID, FIREBASE_APP_ID_ANDROID,
 #       FIREBASE_API_KEY_IOS, FIREBASE_APP_ID_IOS      (see docs/firebase-setup.md)
 #       SUPPORT_EMAIL, DELETION_URL, LEGAL_REVIEWED    (see lib/core/config/legal_config.dart)
+#       AI_PROXY_URL (address of the AI coach server, see docs/ai-coach.md; empty = AI coach off)
 #    They are passed to Flutter with --dart-define and read in lib/core/config/env.dart.
 #
 # E) Make sure myapp/android/app/build.gradle.kts reads the CM_KEYSTORE_* env vars
@@ -146,6 +147,7 @@ workflows:
             --dart-define=FIREBASE_APP_ID_ANDROID="$FIREBASE_APP_ID_ANDROID" \
             --dart-define=SUPPORT_EMAIL="$SUPPORT_EMAIL" \
             --dart-define=DELETION_URL="$DELETION_URL" \
+            --dart-define=AI_PROXY_URL="$AI_PROXY_URL" \
             --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}"
     artifacts:
       - myapp/build/app/outputs/bundle/release/*.aab
@@ -191,6 +193,7 @@ workflows:
             --dart-define=FIREBASE_APP_ID_ANDROID="$FIREBASE_APP_ID_ANDROID" \
             --dart-define=SUPPORT_EMAIL="$SUPPORT_EMAIL" \
             --dart-define=DELETION_URL="$DELETION_URL" \
+            --dart-define=AI_PROXY_URL="$AI_PROXY_URL" \
             --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}"
     artifacts:
       - myapp/build/app/outputs/flutter-apk/*.apk
@@ -257,6 +260,7 @@ workflows:
             --dart-define=FIREBASE_APP_ID_IOS="$FIREBASE_APP_ID_IOS" \
             --dart-define=SUPPORT_EMAIL="$SUPPORT_EMAIL" \
             --dart-define=DELETION_URL="$DELETION_URL" \
+            --dart-define=AI_PROXY_URL="$AI_PROXY_URL" \
             --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}"
     artifacts:
       - myapp/build/ios/ipa/*.ipa

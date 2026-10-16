@@ -46,7 +46,7 @@
   "consentPointDeviceTitle": "Saved on your device",
   "@consentPointDeviceTitle": { "description": "Screen 04 privacy point 1 title." },
 
-  "consentPointDeviceBody": "Photos stay on your phone unless you turn on backup.",
+  "consentPointDeviceBody": "Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets a photo you choose to attach.",
   "@consentPointDeviceBody": { "description": "Screen 04 privacy point 1 text." },
 
   "consentPointNeverSoldTitle": "Never sold or shared",
@@ -484,6 +484,156 @@
 
   "homeScanTooltip": "Scan a product",
   "@homeScanTooltip": { "description": "Tooltip and screen-reader label of the scan button on Home." },
+
+  "aiTitle": "Ask Saaf AI",
+  "@aiTitle": {"description": "Title of the AI coach screen."},
+
+  "aiMenuTooltip": "More",
+  "@aiMenuTooltip": {"description": "Tooltip of the AI coach menu button."},
+
+  "aiMenuNewChat": "New chat",
+  "@aiMenuNewChat": {"description": "Menu item that clears the AI conversation."},
+
+  "aiMenuStop": "Stop sharing with AI",
+  "@aiMenuStop": {"description": "Menu item that withdraws permission to send chats to the AI."},
+
+  "aiDisclaimer": "AI answers can be wrong and are not medical advice. See a dermatologist for painful, spreading or worrying skin changes.",
+  "@aiDisclaimer": {"description": "Reminder shown above every AI conversation."},
+
+  "aiConsentTitle": "Before you chat with the AI coach",
+  "@aiConsentTitle": {"description": "Title of the permission screen of the AI coach."},
+
+  "aiConsentIntro": "Ask about your routine, ingredients or products, or attach a photo of your skin. An AI model writes the answer.",
+  "@aiConsentIntro": {"description": "Introduction on the AI coach permission screen."},
+
+  "aiConsentShareTitle": "What is sent",
+  "@aiConsentShareTitle": {"description": "Heading on the AI permission screen."},
+
+  "aiConsentShareBody": "Your message, any photo you attach, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, or your pregnancy, medication and allergy answers.",
+  "@aiConsentShareBody": {"description": "What is sent to the AI."},
+
+  "aiConsentWhoTitle": "Who receives it",
+  "@aiConsentWhoTitle": {"description": "Heading on the AI permission screen."},
+
+  "aiConsentWhoBody": "Our server passes it to Groq, which runs an open-source AI model to write the reply. Groq handles it under its own privacy terms. Saaf does not keep your chats on its server.",
+  "@aiConsentWhoBody": {"description": "Who receives the data."},
+
+  "aiConsentChoice": "You can stop sharing at any time in Profile.",
+  "@aiConsentChoice": {"description": "Reassurance on the AI permission screen."},
+
+  "aiConsentAgree": "I agree, start chatting",
+  "@aiConsentAgree": {"description": "Button that gives permission to share chats with the AI."},
+
+  "aiPolicyLink": "Read the Privacy Policy",
+  "@aiPolicyLink": {"description": "Link to the Privacy Policy from the AI permission screen."},
+
+  "aiEmptyTitle": "Ask me about your skin care",
+  "@aiEmptyTitle": {"description": "Heading of an empty AI conversation."},
+
+  "aiEmptyBody": "I can explain ingredients, check your routine and look at photos you attach.",
+  "@aiEmptyBody": {"description": "Text of an empty AI conversation."},
+
+  "aiSuggestRoutine": "Is my routine right for me?",
+  "@aiSuggestRoutine": {"description": "Suggested question."},
+
+  "aiSuggestDarkSpots": "How do I fade dark spots safely?",
+  "@aiSuggestDarkSpots": {"description": "Suggested question."},
+
+  "aiSuggestClash": "Can I use vitamin C and niacinamide together?",
+  "@aiSuggestClash": {"description": "Suggested question."},
+
+  "aiSuggestSunscreen": "How do I choose a sunscreen?",
+  "@aiSuggestSunscreen": {"description": "Suggested question."},
+
+  "aiInputHint": "Ask about your skin or routine",
+  "@aiInputHint": {"description": "Hint inside the AI message box."},
+
+  "aiSend": "Send",
+  "@aiSend": {"description": "Tooltip of the send button in the AI chat."},
+
+  "aiAttach": "Attach a photo",
+  "@aiAttach": {"description": "Tooltip of the attach-photo button in the AI chat."},
+
+  "aiTakePhoto": "Take a photo",
+  "@aiTakePhoto": {"description": "Option that takes a photo for the AI chat."},
+
+  "aiChoosePhoto": "Choose from gallery",
+  "@aiChoosePhoto": {"description": "Option that picks a photo for the AI chat."},
+
+  "aiRemovePhoto": "Remove photo",
+  "@aiRemovePhoto": {"description": "Tooltip of the remove button on an attached photo."},
+
+  "aiPhotosAttached": "{count, plural, =1{1 photo} other{{count} photos}}",
+  "@aiPhotosAttached": {"description": "Shown on a message that has photos.", "placeholders": {"count": {"type": "int"}}},
+
+  "aiPhotoFailed": "We couldn’t get that photo. Please try again.",
+  "@aiPhotoFailed": {"description": "Shown when a photo could not be attached."},
+
+  "aiThinking": "Thinking…",
+  "@aiThinking": {"description": "Shown while the AI writes its answer."},
+
+  "aiAnswerLabel": "AI answer",
+  "@aiAnswerLabel": {"description": "Label on every AI reply."},
+
+  "aiReport": "Report this answer",
+  "@aiReport": {"description": "Tooltip of the report button on an AI reply."},
+
+  "aiReportTitle": "What is wrong with this answer?",
+  "@aiReportTitle": {"description": "Title of the report sheet."},
+
+  "aiReportHarmful": "Harmful or unsafe",
+  "@aiReportHarmful": {"description": "Report reason."},
+
+  "aiReportWrong": "Wrong or misleading",
+  "@aiReportWrong": {"description": "Report reason."},
+
+  "aiReportOffensive": "Offensive",
+  "@aiReportOffensive": {"description": "Report reason."},
+
+  "aiReportOther": "Something else",
+  "@aiReportOther": {"description": "Report reason."},
+
+  "aiReported": "Reported",
+  "@aiReported": {"description": "Shown on a reply that was reported."},
+
+  "aiReportThanks": "Thank you. We will review this answer.",
+  "@aiReportThanks": {"description": "Shown after a report was sent."},
+
+  "aiReportFailed": "We couldn’t send your report. Please try again.",
+  "@aiReportFailed": {"description": "Shown when a report could not be sent."},
+
+  "aiErrorNetwork": "No connection. Check your internet and try again.",
+  "@aiErrorNetwork": {"description": "AI error: no connection."},
+
+  "aiErrorLimit": "You’ve reached today’s limit. Please try again tomorrow.",
+  "@aiErrorLimit": {"description": "AI error: daily limit."},
+
+  "aiErrorUnavailable": "The AI coach isn’t available right now. Please try again later.",
+  "@aiErrorUnavailable": {"description": "AI error: service down."},
+
+  "aiErrorSignIn": "Please sign in again to use the AI coach.",
+  "@aiErrorSignIn": {"description": "AI error: not signed in."},
+
+  "aiErrorGeneric": "Something went wrong. Please try again.",
+  "@aiErrorGeneric": {"description": "AI error: anything else."},
+
+  "homeAiTooltip": "Ask the AI coach",
+  "@homeAiTooltip": {"description": "Tooltip of the AI coach button on Home."},
+
+  "profileRowAi": "AI coach sharing",
+  "@profileRowAi": {"description": "Settings row for sharing chats with the AI coach."},
+
+  "profileValueOn": "On",
+  "@profileValueOn": {"description": "Value of a setting that is on."},
+
+  "aiSheetTitle": "AI coach sharing",
+  "@aiSheetTitle": {"description": "Title of the sheet that switches AI sharing on or off."},
+
+  "aiSheetBody": "When on, your questions and the photos you attach are sent to the AI coach, as described in the Privacy Policy. Turning it off also clears the conversation.",
+  "@aiSheetBody": {"description": "Explanation in the AI sharing sheet."},
+
+  "aiSheetSwitch": "Share with the AI coach",
+  "@aiSheetSwitch": {"description": "Label of the AI sharing switch."},
 
   "scanRetake": "Retake",
   "@scanRetake": { "description": "Button that discards the photo and shows the camera again." },

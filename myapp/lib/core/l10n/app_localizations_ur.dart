@@ -57,7 +57,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get consentPointDeviceBody =>
-      'تصاویر آپ کے فون پر ہی رہتی ہیں، جب تک آپ بیک اپ آن نہ کریں۔';
+      'چہرے کے سکین کی تصاویر آپ کے فون پر ہی رہتی ہیں، جب تک آپ بیک اپ آن نہ کریں۔ اے آئی کوچ کو صرف وہی تصویر ملتی ہے جو آپ خود لگائیں۔';
 
   @override
   String get consentPointNeverSoldTitle => 'نہ فروخت، نہ شیئر';
@@ -552,6 +552,178 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get homeScanTooltip => 'پروڈکٹ سکین کریں';
+
+  @override
+  String get aiTitle => 'ثاف اے آئی سے پوچھیں';
+
+  @override
+  String get aiMenuTooltip => 'مزید';
+
+  @override
+  String get aiMenuNewChat => 'نئی گفتگو';
+
+  @override
+  String get aiMenuStop => 'اے آئی کے ساتھ شیئرنگ بند کریں';
+
+  @override
+  String get aiDisclaimer =>
+      'اے آئی کے جوابات غلط ہو سکتے ہیں اور طبی مشورہ نہیں ہیں۔ تکلیف دہ، پھیلتی ہوئی یا فکر انگیز جلدی تبدیلیوں کے لیے ڈرماٹولوجسٹ سے ملیں۔';
+
+  @override
+  String get aiConsentTitle => 'اے آئی کوچ سے بات کرنے سے پہلے';
+
+  @override
+  String get aiConsentIntro =>
+      'اپنے روٹین، اجزاء یا پروڈکٹس کے بارے میں پوچھیں، یا اپنی جلد کی تصویر لگائیں۔ جواب ایک اے آئی ماڈل لکھتا ہے۔';
+
+  @override
+  String get aiConsentShareTitle => 'کیا بھیجا جاتا ہے';
+
+  @override
+  String get aiConsentShareBody =>
+      'آپ کا پیغام، آپ کی لگائی ہوئی کوئی تصویر، اور چند باتیں: آپ کی جلد کی قسم، مسائل، حساسیت، بجٹ اور آپ کے روٹین کی پروڈکٹس کے نام۔ آپ کا نام، فون نمبر، یا حمل، دوائی اور الرجی کے جوابات ہرگز نہیں۔';
+
+  @override
+  String get aiConsentWhoTitle => 'کس کو ملتا ہے';
+
+  @override
+  String get aiConsentWhoBody =>
+      'ہمارا سرور اسے Groq کو دیتا ہے، جو جواب لکھنے کے لیے ایک اوپن سورس اے آئی ماڈل چلاتی ہے۔ Groq اسے اپنی پرائیویسی شرائط کے تحت سنبھالتی ہے۔ ثاف آپ کی گفتگو اپنے سرور پر محفوظ نہیں کرتا۔';
+
+  @override
+  String get aiConsentChoice =>
+      'آپ کسی بھی وقت پروفائل میں شیئرنگ بند کر سکتے ہیں۔';
+
+  @override
+  String get aiConsentAgree => 'میں متفق ہوں، گفتگو شروع کریں';
+
+  @override
+  String get aiPolicyLink => 'پرائیویسی پالیسی پڑھیں';
+
+  @override
+  String get aiEmptyTitle => 'اپنی اسکن کیئر کے بارے میں پوچھیں';
+
+  @override
+  String get aiEmptyBody =>
+      'میں اجزاء سمجھا سکتی ہوں، آپ کا روٹین دیکھ سکتی ہوں اور آپ کی لگائی ہوئی تصاویر دیکھ سکتی ہوں۔';
+
+  @override
+  String get aiSuggestRoutine => 'کیا میرا روٹین میرے لیے ٹھیک ہے؟';
+
+  @override
+  String get aiSuggestDarkSpots => 'داغ دھبے محفوظ طریقے سے کیسے ہلکے کروں؟';
+
+  @override
+  String get aiSuggestClash =>
+      'کیا میں وٹامن سی اور نیاسینامائڈ اکٹھے استعمال کر سکتی ہوں؟';
+
+  @override
+  String get aiSuggestSunscreen => 'سن اسکرین کیسے چنوں؟';
+
+  @override
+  String get aiInputHint => 'اپنی جلد یا روٹین کے بارے میں پوچھیں';
+
+  @override
+  String get aiSend => 'بھیجیں';
+
+  @override
+  String get aiAttach => 'تصویر لگائیں';
+
+  @override
+  String get aiTakePhoto => 'تصویر کھینچیں';
+
+  @override
+  String get aiChoosePhoto => 'گیلری سے چنیں';
+
+  @override
+  String get aiRemovePhoto => 'تصویر ہٹائیں';
+
+  @override
+  String aiPhotosAttached(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تصاویر',
+      one: '1 تصویر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get aiPhotoFailed =>
+      'ہم وہ تصویر حاصل نہیں کر سکے۔ براہِ کرم دوبارہ کوشش کریں۔';
+
+  @override
+  String get aiThinking => 'سوچ رہی ہوں…';
+
+  @override
+  String get aiAnswerLabel => 'اے آئی کا جواب';
+
+  @override
+  String get aiReport => 'اس جواب کی رپورٹ کریں';
+
+  @override
+  String get aiReportTitle => 'اس جواب میں کیا خرابی ہے؟';
+
+  @override
+  String get aiReportHarmful => 'نقصان دہ یا غیر محفوظ';
+
+  @override
+  String get aiReportWrong => 'غلط یا گمراہ کن';
+
+  @override
+  String get aiReportOffensive => 'نازیبا';
+
+  @override
+  String get aiReportOther => 'کچھ اور';
+
+  @override
+  String get aiReported => 'رپورٹ ہو گیا';
+
+  @override
+  String get aiReportThanks => 'شکریہ۔ ہم اس جواب کا جائزہ لیں گے۔';
+
+  @override
+  String get aiReportFailed =>
+      'ہم آپ کی رپورٹ نہیں بھیج سکے۔ براہِ کرم دوبارہ کوشش کریں۔';
+
+  @override
+  String get aiErrorNetwork =>
+      'کنکشن نہیں ہے۔ اپنا انٹرنیٹ دیکھیں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get aiErrorLimit =>
+      'آپ آج کی حد تک پہنچ گئے ہیں۔ براہِ کرم کل دوبارہ کوشش کریں۔';
+
+  @override
+  String get aiErrorUnavailable =>
+      'اے آئی کوچ ابھی دستیاب نہیں۔ براہِ کرم بعد میں کوشش کریں۔';
+
+  @override
+  String get aiErrorSignIn =>
+      'اے آئی کوچ استعمال کرنے کے لیے براہِ کرم دوبارہ سائن ان کریں۔';
+
+  @override
+  String get aiErrorGeneric => 'کچھ غلط ہو گیا۔ براہِ کرم دوبارہ کوشش کریں۔';
+
+  @override
+  String get homeAiTooltip => 'اے آئی کوچ سے پوچھیں';
+
+  @override
+  String get profileRowAi => 'اے آئی کوچ کے ساتھ شیئرنگ';
+
+  @override
+  String get profileValueOn => 'آن';
+
+  @override
+  String get aiSheetTitle => 'اے آئی کوچ کے ساتھ شیئرنگ';
+
+  @override
+  String get aiSheetBody =>
+      'آن ہونے پر آپ کے سوالات اور لگائی گئی تصاویر پرائیویسی پالیسی کے مطابق اے آئی کوچ کو بھیجی جاتی ہیں۔ بند کرنے سے گفتگو بھی صاف ہو جاتی ہے۔';
+
+  @override
+  String get aiSheetSwitch => 'اے آئی کوچ کے ساتھ شیئر کریں';
 
   @override
   String get scanRetake => 'دوبارہ لیں';

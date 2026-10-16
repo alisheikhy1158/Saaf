@@ -14,6 +14,11 @@ abstract final class Env {
   /// builds use it too. `--dart-define=FAKE_PURCHASES=true`.
   static const bool fakePurchases = bool.fromEnvironment('FAKE_PURCHASES');
 
+  /// Address of our AI proxy (a small server in front of the AI model; it holds
+  /// the secret key, the app never does). Empty on builds without it.
+  /// `--dart-define=AI_PROXY_URL=https://saaf-ai.<you>.workers.dev`
+  static const String aiProxyUrl = String.fromEnvironment('AI_PROXY_URL');
+
   static const String firebaseProjectId = String.fromEnvironment(
     'FIREBASE_PROJECT_ID',
   );

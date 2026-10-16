@@ -43,6 +43,11 @@ void main() {
         const PurchaseCancelled(),
         const UnknownFailure('x'),
         const ValidationFailure('terms'),
+        // Added with the AI coach (Phase 7 feedback round).
+        const ConsentMissing(),
+        const RateLimited(),
+        const ServiceUnavailable(),
+        const Unauthorised(),
       ];
       // An exhaustive switch compiles only if the hierarchy is sealed.
       for (final failure in failures) {
@@ -53,6 +58,10 @@ void main() {
           PurchaseCancelled() => 'purchase',
           UnknownFailure() => 'unknown',
           ValidationFailure() => 'validation',
+          ConsentMissing() => 'consent',
+          RateLimited() => 'rate',
+          ServiceUnavailable() => 'unavailable',
+          Unauthorised() => 'unauthorised',
         };
         expect(label, isNotEmpty);
       }

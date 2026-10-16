@@ -1,0 +1,30 @@
+# Cloudflare Worker settings for the Saaf AI proxy (see docs/ai-coach.md).
+name = "saaf-ai"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+# The Firebase project whose sign-in tokens are accepted.
+FIREBASE_PROJECT_ID = "saaf-01"
+# Questions one signed-in user may ask per day.
+DAILY_LIMIT = "30"
+# Models (Groq model ids). Change here when Groq retires one: no app update needed.
+# Check the live list: https://console.groq.com/docs/models
+MODEL_TEXT = "openai/gpt-oss-120b"
+MODEL_VISION = "qwen/qwen3.8-27b"
+
+# OPTIONAL, recommended: a place to keep the daily counters and the reports.
+# Create them with:  npx wrangler kv namespace create LIMITS
+#                    npx wrangler kv namespace create REPORTS
+# then paste the ids here and remove the leading "#".
+#
+# [[kv_namespaces]]
+# binding = "LIMITS"
+# id = "PASTE_ID_HERE"
+#
+# [[kv_namespaces]]
+# binding = "REPORTS"
+# id = "PASTE_ID_HERE"
+
+# The secret key is NOT stored here. Set it with:
+#   npx wrangler secret put GROQ_API_KEY

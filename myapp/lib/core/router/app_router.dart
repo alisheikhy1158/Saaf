@@ -7,6 +7,7 @@ import 'package:saaf/presentation/features/auth/screens/sign_up_screen.dart';
 import 'package:saaf/presentation/features/auth/screens/verify_code_screen.dart';
 import 'package:saaf/presentation/features/coach/screens/weekly_check_in_screen.dart';
 import 'package:saaf/presentation/features/gallery/screens/gallery_screen.dart';
+import 'package:saaf/presentation/features/coach/screens/ai_coach_screen.dart';
 import 'package:saaf/presentation/features/home/screens/home_screen.dart';
 import 'package:saaf/presentation/features/legal/screens/privacy_policy_screen.dart';
 import 'package:saaf/presentation/features/legal/screens/terms_screen.dart';
@@ -106,6 +107,11 @@ GoRouter buildAppRouter({
         name: SaafRoute.howWeScore.name,
         path: SaafRoute.howWeScore.path,
         builder: (context, state) => const HowWeScoreScreen(),
+      ),
+      GoRoute(
+        name: SaafRoute.aiCoach.name,
+        path: SaafRoute.aiCoach.path,
+        builder: (context, state) => const AiCoachScreen(),
       ),
       GoRoute(
         name: SaafRoute.scanProduct.name,

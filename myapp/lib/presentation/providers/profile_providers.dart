@@ -3,7 +3,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/profile_details.dart';
 import 'package:saaf/domain/entities/reminder_settings.dart';
+import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/usecases/delete_account.dart';
+import 'package:saaf/presentation/features/coach/controllers/ai_chat_controller.dart';
+import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/check_in_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
@@ -141,8 +144,13 @@ class AccountController extends _$AccountController {
     await ref.read(appDatabaseProvider)?.wipe();
     await ref.read(settingsRepositoryProvider).write(SettingNames.name, null);
     await ref.read(settingsRepositoryProvider).write(SettingNames.age, null);
+    await ref
+        .read(settingsRepositoryProvider)
+        .write(AiConsent.settingName, null);
     ref
       ..invalidate(profileDetailsControllerProvider)
+      ..invalidate(aiConsentStateProvider)
+      ..invalidate(aiChatControllerProvider)
       ..invalidate(skinProfileControllerProvider)
       ..invalidate(skinProfileRepositoryProvider)
       ..invalidate(completedScanProvider)

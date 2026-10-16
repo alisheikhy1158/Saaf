@@ -135,4 +135,40 @@ void main() {
   ) async {
     await expectRobustLayout(tester, scaffold, scaffold: false);
   });
+
+  group('fixedBody (a chat: the body scrolls by itself)', () {
+    Widget chat() => SaafScaffold(
+      fixedBody: true,
+      body: ListView(
+        key: bodyKey,
+        children: [for (var i = 0; i < 60; i++) Text('line $i')],
+      ),
+      bottom: const SizedBox(key: ctaKey, height: 56, width: double.infinity),
+    );
+
+    testWidgets('the body takes the space and the bottom stays pinned', (
+      tester,
+    ) async {
+      await pumpSaaf(tester, chat(), scaffold: false);
+      expect(tester.takeException(), isNull);
+      final body = tester.getRect(find.byKey(bodyKey));
+      final cta = tester.getRect(find.byKey(ctaKey));
+      expect(cta.bottom, lessThanOrEqualTo(844));
+      expect(body.bottom, lessThanOrEqualTo(cta.top));
+      // Scrolling the list does not move the pinned bottom.
+      await tester.drag(find.byKey(bodyKey), const Offset(0, -400));
+      await tester.pump();
+      expect(tester.getRect(find.byKey(ctaKey)), cta);
+    });
+
+    testWidgets('survives the smallest phone', (tester) async {
+      await pumpSaaf(
+        tester,
+        chat(),
+        size: const Size(320, 480),
+        scaffold: false,
+      );
+      expect(tester.takeException(), isNull);
+    });
+  });
 }

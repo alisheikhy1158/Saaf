@@ -1,0 +1,103 @@
+# AI skin coach — how it works and how to switch it on
+
+The **AI coach** lets a user ask about their routine, ingredients or products, and attach a photo of their skin. An
+open-source model on **Groq** writes the answer. The app never holds an AI key: it talks to a tiny server of ours
+(`backend/ai-proxy`, a Cloudflare Worker) which checks the user's Firebase sign-in, adds the secret key and the safety
+instructions, and keeps a daily limit.
+
+```
+phone  ──(Firebase sign-in token + chat)──▶  Cloudflare Worker  ──(secret key)──▶  Groq  ──▶  open-source model
+          nothing else about the user                keeps no chats                (gpt-oss-120b for text,
+                                                                                    qwen3.8-27b for photos)
+```
+
+## What the app sends (and never sends)
+
+| Sent | Never sent |
+|---|---|
+| the typed message, up to 3 photos the user attaches, the last 10 messages of the chat | name, phone number, email |
+| skin type, concerns, sensitivity, budget band, names of the routine's products | **safety answers** (pregnancy/breastfeeding, prescription treatment, allergy), face-scan photos |
+
+The safety answers are health data and the quiz promises they never leave the phone. The coach asks about pregnancy and
+allergies **in the chat** before suggesting a strong active.
+
+## Store compliance (docs/store-compliance.md §5)
+
+- **Explicit permission first** (Apple 5.1.2(i)): the first time, a screen says what is sent and that **Groq** receives it
+  (through our Cloudflare server); the user must tap "I agree". It can be withdrawn in *Profile → AI coach sharing* or in
+  the chat menu; withdrawing wipes the conversation. Deleting the account removes the permission.
+- **Report button** (Google Play AI-generated content policy): every answer is labelled "AI answer" and has a flag button;
+  reports go to `/v1/report` and are kept 90 days (no name) in the `REPORTS` store.
+- **Guardrails**: the server's instructions forbid diagnosis, prescription drugs, steroids, hydroquinone, mercury and
+  skin bleaching, ask about pregnancy/allergies first, and send worrying symptoms to a dermatologist. A standing line
+  in the chat says "not medical advice".
+- The **Privacy Policy** (section 6) and the consent screen describe it. Also tell the stores:
+  - App Store privacy labels: *User Content (photos, other user content)* and *Usage data* are shared with a third party
+    for app functionality, not linked to tracking.
+  - Play *Data safety*: photos and in-app messages **shared** with a service provider (Groq), optional, processed
+    ephemerally, encrypted in transit.
+- Lawyer review of the new Privacy Policy text is still needed (see `LEGAL_REVIEWED`).
+
+## Switching it on (owner steps, about 30 minutes)
+
+You need: a **Groq** account and a **Cloudflare** account (both have free plans), and **Node.js** (already on your PC).
+Run the commands below in a terminal opened in `D:\Saaf\backend\ai-proxy`.
+
+1. **Groq key.** https://console.groq.com → *API Keys* → create one → copy it (it is shown once). Treat it like a password;
+   never put it in chat, in the repo or in the app.
+2. **Install the tools** (downloads Cloudflare's `wrangler` tool into this folder):
+   ```
+   npm install
+   ```
+3. **Log in to Cloudflare** (opens your browser):
+   ```
+   npx wrangler login
+   ```
+4. **Create the two small stores** (daily counters, reports) and paste each printed `id` into `wrangler.toml`
+   (remove the `#` in front of the two `[[kv_namespaces]]` blocks):
+   ```
+   npx wrangler kv namespace create LIMITS
+   npx wrangler kv namespace create REPORTS
+   ```
+5. **Give it the secret key** (it asks you to paste it):
+   ```
+   npx wrangler secret put GROQ_API_KEY
+   ```
+6. **Check the tests pass, then publish**:
+   ```
+   npm test
+   npx wrangler deploy
+   ```
+   It prints your address, like `https://saaf-ai.<your-name>.workers.dev`. Open `<address>/health` in a browser: it
+   should say `{"ok":true}`.
+7. **Tell the app the address**: Codemagic → app → Environment variables → group `app_config` → add
+   `AI_PROXY_URL` = your address (no trailing slash). Real sign-in must also be on (`USE_FIREBASE=true`), because the
+   server only accepts Firebase tokens. Rebuild.
+
+Without step 7 a store build shows "The AI coach isn't available right now" (it never pretends). Chrome, debug builds and
+`USE_FIREBASE=false` builds use a **demo** coach that says it is a demo.
+
+## Costs and limits
+
+- Groq (check https://console.groq.com/docs/models for current prices): `openai/gpt-oss-120b` about $0.15 / $0.60 per
+  million input / output tokens; `qwen/qwen3.8-27b` (reads photos) about $0.80 / $4.00; each photo counts as about 2,048
+  input tokens. A typical question costs a fraction of a cent. Set a **spend limit** in the Groq console.
+- Cloudflare Workers free plan: 100,000 requests a day.
+- Per user: `DAILY_LIMIT` questions a day (default 30, in `wrangler.toml`). The app shows "You've reached today's limit".
+
+## Keeping it working
+
+- **Models change.** Groq retires models (its docs list them). Change `MODEL_TEXT` / `MODEL_VISION` in `wrangler.toml`
+  and run `npx wrangler deploy`: **no app update needed**. `qwen/qwen3.8-27b` was a *preview* model when this was built;
+  check `https://console.groq.com/docs/models` before launch and pick a production vision model if one exists.
+- **Reports.** Read them with `npx wrangler kv key list --binding REPORTS` and `npx wrangler kv key get --binding REPORTS <key>`.
+  Review them regularly; remove or fix prompts in `src/prompt.js` if a pattern shows up.
+- **Prompts** live in `backend/ai-proxy/src/prompt.js`; change, run `npm test`, deploy.
+- Nothing is logged except errors. Do not add logging of questions, photos or answers.
+
+## Not done yet / ideas
+
+- No streaming (the answer appears all at once, usually in a few seconds).
+- No Pro gate: free users get the daily limit. Decide in Phase 9 whether more is a Pro feature.
+- Prompt Guard / a moderation model in front of the main model is a possible hardening step.
+- A native Urdu speaker should read the Urdu text and a few Urdu answers.

@@ -215,6 +215,8 @@ abstract final class LegalDocuments {
               'identifiers.',
           'A record that you accepted our Terms and this policy, with the date '
               'and version.',
+          'If you use the optional AI coach: the questions you type and the '
+              'photos you attach there (see section 6).',
         ],
       ),
       const LegalSection(
@@ -234,9 +236,11 @@ abstract final class LegalDocuments {
               'photos are not sent to us or to anyone else to be analysed. Photos '
               'are never uploaded unless you turn on backup, which is off by '
               'default. If you turn it on, your photos are copied to your account '
-              'storage and deleted with your account. If we ever add a feature '
-              'that sends a photo or skin data elsewhere, we will ask for your '
-              'permission first, and say who receives it.',
+              'storage and deleted with your account. Your photos are never sent '
+              'anywhere else, except photos you choose to attach to a question '
+              'in the optional AI coach (see section 6). If we ever add another '
+              'feature that sends a photo or skin data elsewhere, we will ask '
+              'for your permission first, and say who receives it.',
         ],
       ),
       const LegalSection(
@@ -263,10 +267,44 @@ abstract final class LegalDocuments {
           'Apple and Google: Sign in with Apple, Google sign-in, and payment for '
               'subscriptions.',
           'RevenueCat: keeps track of whether your subscription is active.',
+          'Only if you use the AI coach: Cloudflare, which runs the small '
+              'server that passes your question on, and Groq, which runs the '
+              'open-source AI model that writes the reply (see section 6).',
+          'Open Beauty Facts, a free open database: when you scan a product '
+              'barcode, only the barcode number is sent to look the product up.',
         ],
       ),
       const LegalSection(
-        '6. Where your data is handled',
+        '6. The AI coach (optional)',
+        paragraphs: [
+          'The AI coach is optional. It only works after you read a short '
+              'notice in the app and agree. If you then ask a question, we send: '
+              'the message you type, the photos you attach, and a few facts so '
+              'the advice fits you: your skin type, skin concerns, sensitivity, '
+              'monthly budget band and the names of the products in your '
+              'routine. We never send your name, phone number or email, or your '
+              'safety answers (pregnancy or breastfeeding, prescription skin '
+              'treatment, ingredient allergy).',
+          'Our server, run on Cloudflare, checks that you are signed in and '
+              'passes your question to Groq, which runs an open-source AI model '
+              'to write the reply. Groq handles it under its own privacy terms. '
+              'We do not store your questions, photos or the replies on our '
+              'server, and the conversation stays in the app only until you '
+              'close it or start a new chat. If you report a reply, we keep that '
+              'reply and your reason so we can review it.',
+          'Photos of your face are sensitive, so only attach a photo if you are '
+              'comfortable sending it. AI replies can be wrong and are not '
+              'medical advice; see a dermatologist for painful, spreading or '
+              'worrying skin changes.',
+        ],
+        bullets: [
+          'You can stop sharing at any time in Profile. This also clears the '
+              'conversation.',
+          'Deleting your account removes the permission you gave.',
+        ],
+      ),
+      const LegalSection(
+        '7. Where your data is handled',
         paragraphs: [
           'Our providers run servers in several countries, so your data may be '
               'handled outside Pakistan. They protect it with security measures '
@@ -274,7 +312,7 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '7. How long we keep it',
+        '8. How long we keep it',
         paragraphs: [
           'We retain your account data until you delete your account. Photos and '
               'safety answers stay on your phone until you delete them or '
@@ -286,7 +324,7 @@ abstract final class LegalDocuments {
         ],
       ),
       LegalSection(
-        '8. Your choices and rights',
+        '9. Your choices and rights',
         paragraphs: [
           'You can access and correct your profile in the app, turn photo backup '
               'on or off, and take back permissions (such as the camera) in your '
@@ -305,7 +343,7 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '9. Security',
+        '10. Security',
         paragraphs: [
           'Data is sent over encrypted connections, and sign-in tokens are kept '
               'in your phone\'s secure storage. No system is perfectly secure, so '
@@ -313,14 +351,14 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '10. Children',
+        '11. Children',
         paragraphs: [
           'Saaf is not for anyone under 16. If we learn that a younger person has '
               'an account, we will delete it.',
         ],
       ),
       const LegalSection(
-        '11. The law that applies',
+        '12. The law that applies',
         paragraphs: [
           'We handle your data with your consent and to provide Saaf to you, '
               'following good-practice principles: asking before collecting, '
@@ -330,14 +368,14 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '12. Changes to this policy',
+        '13. Changes to this policy',
         paragraphs: [
           'If we change how we handle your data in a material way, we will tell '
               'you in the app and ask for your consent again before the change '
               'applies to you.',
         ],
       ),
-      LegalSection('13. Contact us', paragraphs: [_contact(c)]),
+      LegalSection('14. Contact us', paragraphs: [_contact(c)]),
     ],
   );
 }

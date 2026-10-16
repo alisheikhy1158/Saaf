@@ -115,6 +115,11 @@ class _Content extends ConsumerWidget {
               ),
             ),
             SaafIconButton(
+              icon: Icons.auto_awesome,
+              tooltip: l10n.homeAiTooltip,
+              onPressed: () => context.push(SaafRoute.aiCoach.path),
+            ),
+            SaafIconButton(
               icon: Icons.qr_code_scanner,
               tooltip: l10n.homeScanTooltip,
               onPressed: () => context.push(SaafRoute.scanProduct.path),

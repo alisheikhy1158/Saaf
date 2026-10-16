@@ -17,6 +17,7 @@ class SaafScaffold extends StatelessWidget {
     this.bottom,
     this.offlineBanner,
     this.backgroundColor,
+    this.fixedBody = false,
   });
 
   final Widget body;
@@ -26,6 +27,11 @@ class SaafScaffold extends StatelessWidget {
 
   /// Replaces the page colour (10 Product scan result is papaya).
   final Color? backgroundColor;
+
+  /// The body fills the space between the top bar and [bottom] and scrolls by
+  /// itself (a chat list), with [bottom] pinned under it. By default the whole
+  /// page scrolls together.
+  final bool fixedBody;
 
   @override
   Widget build(BuildContext context) {
@@ -57,34 +63,51 @@ class SaafScaffold extends StatelessWidget {
                         // everything fits (min-height + spaceBetween), otherwise
                         // the whole column scrolls. Uses no intrinsic sizing, so
                         // bodies may contain a LayoutBuilder.
-                        Expanded(
-                          child: LayoutBuilder(
-                            builder: (context, viewport) =>
-                                SingleChildScrollView(
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      minHeight: viewport.maxHeight,
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        body,
-                                        Padding(
-                                          padding: EdgeInsetsDirectional.only(
-                                            top: space.x16,
-                                            bottom: space.pageBottom,
+                        if (fixedBody)
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Expanded(child: body),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.only(
+                                    top: space.x8,
+                                    bottom: space.x8,
+                                  ),
+                                  child: bottom,
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          Expanded(
+                            child: LayoutBuilder(
+                              builder: (context, viewport) =>
+                                  SingleChildScrollView(
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        minHeight: viewport.maxHeight,
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          body,
+                                          Padding(
+                                            padding: EdgeInsetsDirectional.only(
+                                              top: space.x16,
+                                              bottom: space.pageBottom,
+                                            ),
+                                            child: bottom,
                                           ),
-                                          child: bottom,
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),

@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// Screen 04 privacy point 1 text.
   ///
   /// In en, this message translates to:
-  /// **'Photos stay on your phone unless you turn on backup.'**
+  /// **'Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets a photo you choose to attach.'**
   String get consentPointDeviceBody;
 
   /// Screen 04 privacy point 2 title.
@@ -1087,6 +1087,306 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scan a product'**
   String get homeScanTooltip;
+
+  /// Title of the AI coach screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask Saaf AI'**
+  String get aiTitle;
+
+  /// Tooltip of the AI coach menu button.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get aiMenuTooltip;
+
+  /// Menu item that clears the AI conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'New chat'**
+  String get aiMenuNewChat;
+
+  /// Menu item that withdraws permission to send chats to the AI.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop sharing with AI'**
+  String get aiMenuStop;
+
+  /// Reminder shown above every AI conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'AI answers can be wrong and are not medical advice. See a dermatologist for painful, spreading or worrying skin changes.'**
+  String get aiDisclaimer;
+
+  /// Title of the permission screen of the AI coach.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you chat with the AI coach'**
+  String get aiConsentTitle;
+
+  /// Introduction on the AI coach permission screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about your routine, ingredients or products, or attach a photo of your skin. An AI model writes the answer.'**
+  String get aiConsentIntro;
+
+  /// Heading on the AI permission screen.
+  ///
+  /// In en, this message translates to:
+  /// **'What is sent'**
+  String get aiConsentShareTitle;
+
+  /// What is sent to the AI.
+  ///
+  /// In en, this message translates to:
+  /// **'Your message, any photo you attach, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, or your pregnancy, medication and allergy answers.'**
+  String get aiConsentShareBody;
+
+  /// Heading on the AI permission screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Who receives it'**
+  String get aiConsentWhoTitle;
+
+  /// Who receives the data.
+  ///
+  /// In en, this message translates to:
+  /// **'Our server passes it to Groq, which runs an open-source AI model to write the reply. Groq handles it under its own privacy terms. Saaf does not keep your chats on its server.'**
+  String get aiConsentWhoBody;
+
+  /// Reassurance on the AI permission screen.
+  ///
+  /// In en, this message translates to:
+  /// **'You can stop sharing at any time in Profile.'**
+  String get aiConsentChoice;
+
+  /// Button that gives permission to share chats with the AI.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree, start chatting'**
+  String get aiConsentAgree;
+
+  /// Link to the Privacy Policy from the AI permission screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the Privacy Policy'**
+  String get aiPolicyLink;
+
+  /// Heading of an empty AI conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask me about your skin care'**
+  String get aiEmptyTitle;
+
+  /// Text of an empty AI conversation.
+  ///
+  /// In en, this message translates to:
+  /// **'I can explain ingredients, check your routine and look at photos you attach.'**
+  String get aiEmptyBody;
+
+  /// Suggested question.
+  ///
+  /// In en, this message translates to:
+  /// **'Is my routine right for me?'**
+  String get aiSuggestRoutine;
+
+  /// Suggested question.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I fade dark spots safely?'**
+  String get aiSuggestDarkSpots;
+
+  /// Suggested question.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I use vitamin C and niacinamide together?'**
+  String get aiSuggestClash;
+
+  /// Suggested question.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I choose a sunscreen?'**
+  String get aiSuggestSunscreen;
+
+  /// Hint inside the AI message box.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about your skin or routine'**
+  String get aiInputHint;
+
+  /// Tooltip of the send button in the AI chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get aiSend;
+
+  /// Tooltip of the attach-photo button in the AI chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach a photo'**
+  String get aiAttach;
+
+  /// Option that takes a photo for the AI chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get aiTakePhoto;
+
+  /// Option that picks a photo for the AI chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get aiChoosePhoto;
+
+  /// Tooltip of the remove button on an attached photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get aiRemovePhoto;
+
+  /// Shown on a message that has photos.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 photo} other{{count} photos}}'**
+  String aiPhotosAttached(int count);
+
+  /// Shown when a photo could not be attached.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t get that photo. Please try again.'**
+  String get aiPhotoFailed;
+
+  /// Shown while the AI writes its answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking…'**
+  String get aiThinking;
+
+  /// Label on every AI reply.
+  ///
+  /// In en, this message translates to:
+  /// **'AI answer'**
+  String get aiAnswerLabel;
+
+  /// Tooltip of the report button on an AI reply.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this answer'**
+  String get aiReport;
+
+  /// Title of the report sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'What is wrong with this answer?'**
+  String get aiReportTitle;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Harmful or unsafe'**
+  String get aiReportHarmful;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong or misleading'**
+  String get aiReportWrong;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Offensive'**
+  String get aiReportOffensive;
+
+  /// Report reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get aiReportOther;
+
+  /// Shown on a reply that was reported.
+  ///
+  /// In en, this message translates to:
+  /// **'Reported'**
+  String get aiReported;
+
+  /// Shown after a report was sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you. We will review this answer.'**
+  String get aiReportThanks;
+
+  /// Shown when a report could not be sent.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t send your report. Please try again.'**
+  String get aiReportFailed;
+
+  /// AI error: no connection.
+  ///
+  /// In en, this message translates to:
+  /// **'No connection. Check your internet and try again.'**
+  String get aiErrorNetwork;
+
+  /// AI error: daily limit.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve reached today’s limit. Please try again tomorrow.'**
+  String get aiErrorLimit;
+
+  /// AI error: service down.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI coach isn’t available right now. Please try again later.'**
+  String get aiErrorUnavailable;
+
+  /// AI error: not signed in.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again to use the AI coach.'**
+  String get aiErrorSignIn;
+
+  /// AI error: anything else.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get aiErrorGeneric;
+
+  /// Tooltip of the AI coach button on Home.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the AI coach'**
+  String get homeAiTooltip;
+
+  /// Settings row for sharing chats with the AI coach.
+  ///
+  /// In en, this message translates to:
+  /// **'AI coach sharing'**
+  String get profileRowAi;
+
+  /// Value of a setting that is on.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get profileValueOn;
+
+  /// Title of the sheet that switches AI sharing on or off.
+  ///
+  /// In en, this message translates to:
+  /// **'AI coach sharing'**
+  String get aiSheetTitle;
+
+  /// Explanation in the AI sharing sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'When on, your questions and the photos you attach are sent to the AI coach, as described in the Privacy Policy. Turning it off also clears the conversation.'**
+  String get aiSheetBody;
+
+  /// Label of the AI sharing switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Share with the AI coach'**
+  String get aiSheetSwitch;
 
   /// Button that discards the photo and shows the camera again.
   ///

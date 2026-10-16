@@ -1,0 +1,4 @@
+node_modules/
+.wrangler/
+# Local secrets for `wrangler dev` (never commit): GROQ_API_KEY=...
+.dev.vars

@@ -29,6 +29,27 @@ final class NetworkFailure extends Failure {
   const NetworkFailure();
 }
 
+/// The AI coach was asked something without the user's explicit permission to
+/// share their messages (store-compliance §5).
+final class ConsentMissing extends Failure {
+  const ConsentMissing();
+}
+
+/// Too many requests (the AI coach's daily limit).
+final class RateLimited extends Failure {
+  const RateLimited();
+}
+
+/// The service is down or not set up on this build.
+final class ServiceUnavailable extends Failure {
+  const ServiceUnavailable();
+}
+
+/// The user is not signed in (or the sign-in has expired).
+final class Unauthorised extends Failure {
+  const Unauthorised();
+}
+
 final class PermissionDenied extends Failure {
   const PermissionDenied();
 }

@@ -57,7 +57,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consentPointDeviceBody =>
-      'Photos stay on your phone unless you turn on backup.';
+      'Your face-scan photos stay on your phone unless you turn on backup. The AI coach only gets a photo you choose to attach.';
 
   @override
   String get consentPointNeverSoldTitle => 'Never sold or shared';
@@ -553,6 +553,174 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeScanTooltip => 'Scan a product';
+
+  @override
+  String get aiTitle => 'Ask Saaf AI';
+
+  @override
+  String get aiMenuTooltip => 'More';
+
+  @override
+  String get aiMenuNewChat => 'New chat';
+
+  @override
+  String get aiMenuStop => 'Stop sharing with AI';
+
+  @override
+  String get aiDisclaimer =>
+      'AI answers can be wrong and are not medical advice. See a dermatologist for painful, spreading or worrying skin changes.';
+
+  @override
+  String get aiConsentTitle => 'Before you chat with the AI coach';
+
+  @override
+  String get aiConsentIntro =>
+      'Ask about your routine, ingredients or products, or attach a photo of your skin. An AI model writes the answer.';
+
+  @override
+  String get aiConsentShareTitle => 'What is sent';
+
+  @override
+  String get aiConsentShareBody =>
+      'Your message, any photo you attach, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, or your pregnancy, medication and allergy answers.';
+
+  @override
+  String get aiConsentWhoTitle => 'Who receives it';
+
+  @override
+  String get aiConsentWhoBody =>
+      'Our server passes it to Groq, which runs an open-source AI model to write the reply. Groq handles it under its own privacy terms. Saaf does not keep your chats on its server.';
+
+  @override
+  String get aiConsentChoice => 'You can stop sharing at any time in Profile.';
+
+  @override
+  String get aiConsentAgree => 'I agree, start chatting';
+
+  @override
+  String get aiPolicyLink => 'Read the Privacy Policy';
+
+  @override
+  String get aiEmptyTitle => 'Ask me about your skin care';
+
+  @override
+  String get aiEmptyBody =>
+      'I can explain ingredients, check your routine and look at photos you attach.';
+
+  @override
+  String get aiSuggestRoutine => 'Is my routine right for me?';
+
+  @override
+  String get aiSuggestDarkSpots => 'How do I fade dark spots safely?';
+
+  @override
+  String get aiSuggestClash => 'Can I use vitamin C and niacinamide together?';
+
+  @override
+  String get aiSuggestSunscreen => 'How do I choose a sunscreen?';
+
+  @override
+  String get aiInputHint => 'Ask about your skin or routine';
+
+  @override
+  String get aiSend => 'Send';
+
+  @override
+  String get aiAttach => 'Attach a photo';
+
+  @override
+  String get aiTakePhoto => 'Take a photo';
+
+  @override
+  String get aiChoosePhoto => 'Choose from gallery';
+
+  @override
+  String get aiRemovePhoto => 'Remove photo';
+
+  @override
+  String aiPhotosAttached(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count photos',
+      one: '1 photo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get aiPhotoFailed => 'We couldn’t get that photo. Please try again.';
+
+  @override
+  String get aiThinking => 'Thinking…';
+
+  @override
+  String get aiAnswerLabel => 'AI answer';
+
+  @override
+  String get aiReport => 'Report this answer';
+
+  @override
+  String get aiReportTitle => 'What is wrong with this answer?';
+
+  @override
+  String get aiReportHarmful => 'Harmful or unsafe';
+
+  @override
+  String get aiReportWrong => 'Wrong or misleading';
+
+  @override
+  String get aiReportOffensive => 'Offensive';
+
+  @override
+  String get aiReportOther => 'Something else';
+
+  @override
+  String get aiReported => 'Reported';
+
+  @override
+  String get aiReportThanks => 'Thank you. We will review this answer.';
+
+  @override
+  String get aiReportFailed =>
+      'We couldn’t send your report. Please try again.';
+
+  @override
+  String get aiErrorNetwork =>
+      'No connection. Check your internet and try again.';
+
+  @override
+  String get aiErrorLimit =>
+      'You’ve reached today’s limit. Please try again tomorrow.';
+
+  @override
+  String get aiErrorUnavailable =>
+      'The AI coach isn’t available right now. Please try again later.';
+
+  @override
+  String get aiErrorSignIn => 'Please sign in again to use the AI coach.';
+
+  @override
+  String get aiErrorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get homeAiTooltip => 'Ask the AI coach';
+
+  @override
+  String get profileRowAi => 'AI coach sharing';
+
+  @override
+  String get profileValueOn => 'On';
+
+  @override
+  String get aiSheetTitle => 'AI coach sharing';
+
+  @override
+  String get aiSheetBody =>
+      'When on, your questions and the photos you attach are sent to the AI coach, as described in the Privacy Policy. Turning it off also clears the conversation.';
+
+  @override
+  String get aiSheetSwitch => 'Share with the AI coach';
 
   @override
   String get scanRetake => 'Retake';
