@@ -499,10 +499,10 @@ class _ReplyField extends StatelessWidget {
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     filled: false,
-                    isDense: true,
-                    // The theme's 56 dp minimum would pin the text to the top.
-                    constraints: const BoxConstraints(),
-                    contentPadding: EdgeInsetsDirectional.zero,
+                    // Keeps the theme's 56 dp height; the padding centres the text.
+                    contentPadding: EdgeInsetsDirectional.symmetric(
+                      vertical: tokens.space.x16,
+                    ),
                   ),
                 ),
               ),
