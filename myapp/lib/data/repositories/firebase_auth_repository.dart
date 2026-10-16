@@ -170,9 +170,11 @@ class FirebaseAuthRepository implements AuthRepository {
   static AuthSession? _sessionFrom(User? user) {
     if (user == null) return null;
     final phone = user.phoneNumber;
+    final name = user.displayName?.trim();
     return AuthSession(
       userId: user.uid,
       phoneE164: phone == null || phone.isEmpty ? null : phone,
+      displayName: name == null || name.isEmpty ? null : name,
     );
   }
 }

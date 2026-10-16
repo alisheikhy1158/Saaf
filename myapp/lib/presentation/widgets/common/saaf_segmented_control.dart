@@ -11,8 +11,14 @@ class SaafSegment {
   final IconData? icon;
 }
 
+/// The look of the selected segment: sage with ink text (01 language), or ink
+/// with cornsilk text (08 Morning / Night).
+enum SaafSegmentTone { sage, ink }
+
 /// Segmented control (design.md §6): ink@4 % track (r26, padding 4, gap 4),
-/// equal-width segments (r22, 12×10), selected = sage fill + ink text.
+/// equal-width segments (r22, 12×10), selected = sage fill + ink text
+/// ([tone] ink: ink fill + cornsilk text). With [iconOnEvery] every segment
+/// shows its icon, not just the selected one (08).
 ///
 /// The drawn control is 46 dp tall like Figma; the tappable row behind it is
 /// 48 dp tall so hit areas meet §9.1.
@@ -23,6 +29,8 @@ class SaafSegmentedControl extends StatelessWidget {
     required this.onChanged,
     required this.semanticLabel,
     super.key,
+    this.tone = SaafSegmentTone.sage,
+    this.iconOnEvery = false,
   });
 
   final List<SaafSegment> segments;
@@ -31,6 +39,8 @@ class SaafSegmentedControl extends StatelessWidget {
 
   /// Names the group for screen readers (e.g. "Language").
   final String semanticLabel;
+  final SaafSegmentTone tone;
+  final bool iconOnEvery;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +64,8 @@ class SaafSegmentedControl extends StatelessWidget {
                   key: ValueKey('saaf-segment-$i'),
                   segment: segments[i],
                   selected: i == selectedIndex,
+                  tone: tone,
+                  iconOnEvery: iconOnEvery,
                 ),
               ),
           ],
@@ -104,21 +116,29 @@ class _SegmentVisual extends StatelessWidget {
   const _SegmentVisual({
     required this.segment,
     required this.selected,
+    required this.tone,
+    required this.iconOnEvery,
     super.key,
   });
 
   final SaafSegment segment;
   final bool selected;
+  final SaafSegmentTone tone;
+  final bool iconOnEvery;
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.saaf;
     final colors = context.colors;
-    final color = selected ? colors.onPrimary : tokens.textSecondary;
+    final (Color fill, Color onFill) = switch (tone) {
+      SaafSegmentTone.sage => (colors.primary, colors.onPrimary),
+      SaafSegmentTone.ink => (colors.inverseSurface, colors.onInverseSurface),
+    };
+    final color = selected ? onFill : tokens.textSecondary;
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: selected ? colors.primary : Colors.transparent,
+        color: selected ? fill : Colors.transparent,
         borderRadius: BorderRadius.circular(tokens.radius.r22),
       ),
       child: Padding(
@@ -130,7 +150,7 @@ class _SegmentVisual extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: tokens.space.x6,
           children: [
-            if (selected && segment.icon != null)
+            if ((selected || iconOnEvery) && segment.icon != null)
               Icon(segment.icon, size: tokens.size.iconSmall, color: color),
             Flexible(
               child: Text(

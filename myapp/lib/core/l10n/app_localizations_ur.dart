@@ -669,4 +669,220 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get howWeScoreMedical =>
       'ثاف جلد کی بیماریوں کی تشخیص نہیں کر سکتا۔ اگر کوئی نشان بدلے، خون آئے، خارش ہو یا آپ کو پریشان کرے تو براہِ کرم ماہرِ جلد سے ملیں۔';
+
+  @override
+  String get routineTitle => 'آپ کا روٹین';
+
+  @override
+  String routineFor(String concerns) {
+    return '$concerns کے لیے';
+  }
+
+  @override
+  String get routineForGeneral => 'جلد کی روزمرہ صحت کے لیے';
+
+  @override
+  String routineBudget(String amount) {
+    return 'بجٹ $amount ماہانہ';
+  }
+
+  @override
+  String get routineBudgetNoLimit => 'بجٹ کی کوئی حد نہیں';
+
+  @override
+  String routineSubtitle(String forText, String budgetText) {
+    return '$forText · $budgetText';
+  }
+
+  @override
+  String routineAnd(String first, String second) {
+    return '$first اور $second';
+  }
+
+  @override
+  String get concernDarkSpots => 'داغ دھبے';
+
+  @override
+  String get concernAcne => 'دانے';
+
+  @override
+  String get concernOiliness => 'چکناہٹ';
+
+  @override
+  String get concernDryness => 'خشکی';
+
+  @override
+  String get concernUnevenTone => 'ناہموار رنگت';
+
+  @override
+  String priceRs(String amount) {
+    return '$amount روپے';
+  }
+
+  @override
+  String get routineMorning => 'صبح';
+
+  @override
+  String get routineNight => 'رات';
+
+  @override
+  String get routineTabsLabel => 'دن کا وقت';
+
+  @override
+  String routineSummary(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count مراحل',
+    );
+    return '$_temp0 · تقریباً $minutes منٹ';
+  }
+
+  @override
+  String routineTotal(String price) {
+    return 'کل $price';
+  }
+
+  @override
+  String routineStepLine(int number, String category) {
+    return 'مرحلہ $number · $category';
+  }
+
+  @override
+  String get stepCleanser => 'کلینزر';
+
+  @override
+  String get stepTreatment => 'ٹریٹمنٹ';
+
+  @override
+  String get stepMoisturiser => 'موئسچرائزر';
+
+  @override
+  String get stepSunscreen => 'دھوپ سے بچاؤ';
+
+  @override
+  String get routineResultsTitle => 'نتائج 6 سے 8 ہفتوں میں';
+
+  @override
+  String routineResultsBody(String date) {
+    return 'روزانہ استعمال کریں۔ آپ کی اگلی پروگریس تصویر $date کو ہے۔';
+  }
+
+  @override
+  String get routineResultsBodyNoDate =>
+      'روزانہ استعمال کریں اور مہینے میں ایک بار اپنی پیش رفت دیکھیں۔';
+
+  @override
+  String get routineStart => 'میرا روٹین شروع کریں';
+
+  @override
+  String get routineOverBudget => 'یہ آپ کے ماہانہ بجٹ سے کچھ زیادہ ہے۔';
+
+  @override
+  String get routinePriceNote =>
+      'قیمتیں صرف رہنمائی کے لیے ہیں اور دکانوں میں مختلف ہو سکتی ہیں۔';
+
+  @override
+  String get routineReminders => 'یاد دہانیاں';
+
+  @override
+  String get routineEmptyTitle => 'ہم ابھی روٹین نہیں بنا سکے';
+
+  @override
+  String get routineEmptyBody =>
+      'جلد کا کوئز مکمل کریں تاکہ ہم آپ کے لیے مصنوعات چن سکیں۔';
+
+  @override
+  String get routineEmptyAction => 'جلد کا کوئز لیں';
+
+  @override
+  String get routineErrorTitle => 'ہم آپ کا روٹین لوڈ نہیں کر سکے';
+
+  @override
+  String get routineErrorAction => 'دوبارہ کوشش کریں';
+
+  @override
+  String get navHome => 'ہوم';
+
+  @override
+  String get navScan => 'اسکین';
+
+  @override
+  String get navProgress => 'پیش رفت';
+
+  @override
+  String get navProfile => 'پروفائل';
+
+  @override
+  String homeGreeting(String name) {
+    return 'سلام، $name';
+  }
+
+  @override
+  String get homeGreetingNoName => 'سلام';
+
+  @override
+  String get homeProgressLabel => 'آج کی پیش رفت';
+
+  @override
+  String homeStepsDone(int done, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      total,
+      locale: localeName,
+      other: '$total مراحل',
+    );
+    return '$_temp0 میں سے $done مکمل';
+  }
+
+  @override
+  String homeProgressSemantics(int percent) {
+    return 'آج کا روٹین $percent فیصد مکمل';
+  }
+
+  @override
+  String get homeRoutineTitle => 'آج کا روٹین';
+
+  @override
+  String homeSwitchTime(String time) {
+    return '$time کا روٹین دکھائیں';
+  }
+
+  @override
+  String homeStepCaption(String category, String price) {
+    return '$category · $price';
+  }
+
+  @override
+  String homeStepDone(String name) {
+    return '$name، مکمل';
+  }
+
+  @override
+  String homeStepNotDone(String name) {
+    return '$name، ابھی مکمل نہیں';
+  }
+
+  @override
+  String homeDayComplete(String day) {
+    return '$day، تمام مراحل مکمل';
+  }
+
+  @override
+  String homeDayOpen(String day) {
+    return '$day';
+  }
+
+  @override
+  String homeToday(String day) {
+    return '$day، آج';
+  }
+
+  @override
+  String get homeWeekLabel => 'اس ہفتے';
+
+  @override
+  String get homeErrorTitle => 'ہم آج کا روٹین لوڈ نہیں کر سکے';
+
+  @override
+  String get homeErrorAction => 'دوبارہ کوشش کریں';
 }

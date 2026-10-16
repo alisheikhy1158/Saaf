@@ -152,6 +152,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
     this.size = const SaafSize(),
     this.motion = const SaafMotion(),
     this.scan = const SaafScanGeometry(),
+    this.thumbnail = const SaafThumbnailGeometry(),
   });
 
   /// Light theme tokens: ink drawn at the Figma alphas on cornsilk.
@@ -266,6 +267,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
   final SaafSize size;
   final SaafMotion motion;
   final SaafScanGeometry scan;
+  final SaafThumbnailGeometry thumbnail;
 
   @override
   SaafTokens copyWith({
@@ -332,6 +334,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
       size: size,
       motion: motion,
       scan: scan,
+      thumbnail: thumbnail,
     );
   }
 
@@ -373,6 +376,7 @@ class SaafTokens extends ThemeExtension<SaafTokens> {
       size: size,
       motion: motion,
       scan: scan,
+      thumbnail: thumbnail,
     );
   }
 }

@@ -3,44 +3,46 @@
 > Claude: keep this file under 60 lines. Overwrite "Current state"; append one line to "Log".
 
 ## Current state
-- **Phase / step:** Onboarding + auth UI DONE: 01–05 (quiz is now 5 real steps), legal pages with researched drafts, Firebase
-  auth coded behind `AuthRepository` (off until the owner configures Firebase). GitHub: https://github.com/alisheikhy1158/Saaf (main pushed).
-- **Next exact step:** 06 Selfie capture (Figma 3:2) + 07 Analysis results (3:97): `CameraService` + `PermissionService`
-  interfaces with fakes for Chrome, rationale sheet before the camera permission (store-compliance §1), on-device
-  `SkinAnalyzer` interface. Then 08 Routine (3:185), 09 Home (3:292), 10–14. Each screen: read docs/design.md +
-  store-compliance.md, Figma `get_design_context` first, tests first, verify in Chrome.
-- **Tests:** 586 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
+- **Phase / step:** Screens 01–09 BUILT (welcome, auth, consent, quiz, 3-pose face scan, results + "How we score", routine, home).
+  GitHub: https://github.com/alisheikhy1158/Saaf (main). Firebase auth is coded but off until the owner configures it.
+- **Next exact step:** 10 Product scan result (Figma 3:446), 11 Weekly check-in (3:537), 12 Monthly progress (3:613),
+  13 Saaf Pro paywall (3:712), 14 Profile & privacy (3:801). Each screen: read docs/design.md + store-compliance.md, Figma
+  `get_design_context` (load the figma-design-to-code skill first), tests first, verify in Chrome. Tab screens (12, 14) wrap
+  themselves in `SaafMainNav`.
+- **Tests:** 896 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
 
 ## Decisions made
-- Bundle ID `com.saafapp.saaf`. Unified Material 3 styled like Figma; Figma wins (design.md §0). Backend: **Firebase** (ADR 0001 accepted).
-- Quiz (researched, docs in git log): 1 skin type · 2 concerns (Figma 05) · 3 sensitivity · 4 safety (pregnant/breastfeeding,
-  prescription treatment, ingredient allergy, none) · 5 monthly budget in PKR bands. Routes `/skin-quiz` (step 1), `/skin-quiz/:n`.
-  `SaveQuizAnswers` merges each step into `SkinProfile`; `safetyFlags` null = unanswered, empty = "none of these".
-- **Requirement for later sync code:** safety flags (health data) must NEVER be uploaded — the quiz copy and Privacy Policy promise it.
-- Legal: `LegalDocuments` (English drafts, `core/legal/`), shown with a "Draft" chip until `LEGAL_REVIEWED=true`. Urdu pages show
-  a note that the text is English only. Contact email / deletion URL come from `SUPPORT_EMAIL` / `DELETION_URL` dart-defines.
-- Firebase: `FirebaseAuthRepository` (phone OTP, Google + Apple via `signInWithProvider`, Android auto-verification →
-  `sessionChanges`). Settings via `--dart-define` (`Env`), lazy init, no config files committed. Default = fake backend.
-  Google sign-in uses Firebase's provider flow (no google_sign_in package); swap to the native SDK later if UX needs it.
-- Consent boxes start unticked; 01 stat labelled "Example"; fonts are OFL variable fonts; Material icons replace Figma SVG icons.
-- In-memory repos (consent, skin profile, language) until drift (Phase 7). Urdu strings are mine — need native review.
+- Bundle ID `com.saafapp.saaf`. Unified Material 3 styled like Figma; Figma wins (design.md §0). Backend: **Firebase** (ADR 0001).
+- Quiz: 1 skin type · 2 concerns · 3 sensitivity · 4 safety flags · 5 monthly budget (PKR bands). `SkinProfile` (null = unanswered).
+- **Safety flags (health data) must NEVER be uploaded** — the quiz copy and Privacy Policy promise it.
+- Face scan: 3 photos (front, left cheek, right cheek) in `ScanController`; permission rationale panel before the system dialog;
+  gallery works without the camera; photos in private storage (`FilePhotoStore`, in memory on web). Always-dark screen (`SaafDarkScope`).
+  `--dart-define=FAKE_CAMERA=true` = pretend camera/permission/gallery/share (for Chrome demos).
+- **PLACEHOLDERS to replace before release:** `DemoSkinAnalyzer` (estimates the 4 bars from quiz answers, never looks at the photos),
+  `FakeCaptureQualityMonitor` (the "Good light / Centred / Hold still" hints and the 2 s auto-capture are pretend), `SeedProductCatalog`
+  (generic products, ballpark PKR prices, simplified ingredient flags — dermatologist review needed), "How we score" text.
+- Routine: `BuildRoutine` (pure domain) picks products by skin type/concerns, filters by safety flags, fits the PKR budget
+  (swaps to cheaper products, drops treatments last). Home checklist keys = `morning:<productId>` / `night:<productId>`.
+- Routes: `/how-we-score` (extra), results opens the routine with `push`. Bell icon → profile (reminders will live there).
+- In-memory repos (consent, skin profile, routine log, language) until drift (Phase 7). Urdu strings are mine — need native review.
 
 ## Testing notes
-- Widget tests use the Ahem font (16 dp/glyph): short labels, `ensureVisible`, no `pumpAndSettle` with a spinner, reset
-  `debugDefaultTargetPlatformOverride` in the test body. Helpers: `test/helpers/pump_app.dart`.
-- Browser check: `flutter run -d web-server --web-port 8099`, reload, wait ~40 s; if the first render looks cropped, reload again.
+- Widget tests use the Ahem font (16 dp/glyph): short labels, `ensureVisible`, fixed pumps instead of `pumpAndSettle` with a spinner,
+  reset `debugDefaultTargetPlatformOverride` in the test body. Helpers: `test/helpers/pump_app.dart` (`expectRobustLayoutSettled` for async screens).
+- Riverpod 3 retries failed providers: screens that show an error use `@Riverpod(retry: ...)` returning null.
+- Browser check: `flutter run -d web-server --web-port 8100 --release --dart-define=FAKE_CAMERA=true` (debug/DDC mode hung in the pane);
+  reload with a changed query string (`?v=2`) — a hash-only navigation keeps the old app running.
 
 ## Native files edited (only verifiable via Codemagic)
-- `ios/Runner.xcodeproj/project.pbxproj`: iOS deployment target 13 → 15 (Firebase), `CODE_SIGN_ENTITLEMENTS`.
-- NEW `ios/Runner/Runner.entitlements` (Sign in with Apple), NEW `ios/Podfile` (stock Flutter template, platform 15.0).
-- `codemagic.yaml`: Firebase/legal `--dart-define`s + a PlistBuddy step adding Firebase's URL scheme.
+- iOS: deployment target 15, `Runner.entitlements` (Sign in with Apple), `Podfile` (+ `PERMISSION_CAMERA=1`), `Info.plist` `NSCameraUsageDescription`.
+- Android: `AndroidManifest.xml` CAMERA permission + optional camera features. `codemagic.yaml`: Firebase/legal `--dart-define`s.
 
 ## Open problems / questions for the user
-- Do docs/firebase-setup.md (Firebase console, Apple capability, Codemagic variables). SMS delivery to Pakistani networks is the go/no-go.
-- Phase 3: Apple Developer + Google Play + Codemagic accounts (owner said they will do it).
-- Before release: lawyer review of Terms/Privacy (`LEGAL_REVIEWED`), support email, public deletion page, native Urdu review.
-- Delete-account flow + Cloud Function (Phase 4.4) still to build; needs Blaze plan.
+- docs/firebase-setup.md (Firebase console, Apple capability, Codemagic variables); SMS delivery on Pakistani networks is go/no-go.
+- Apple Developer + Google Play + Codemagic accounts. Test the camera on real phones via a Codemagic build.
+- Before release: lawyer review of Terms/Privacy (`LEGAL_REVIEWED`), support email, deletion page, native Urdu review.
+- Delete-account flow + Cloud Function (Phase 4.4) still to build; needs Blaze plan. Router guards (consent + quiz) not added yet.
 
 ## Log
-- 2026-10-16: screens 01–05, auth domain, ADR; GitHub pushed.
-- 2026-10-17: 5-step quiz, legal drafts (researched), Firebase auth implementation + setup guide. 586 tests green.
+- 2026-10-17: 5-step quiz, legal drafts, Firebase auth. 586 tests.
+- 2026-10-18: screens 06 (3-pose scan), 07 (results), 08 (routine + planner), 09 (home + week strip + checklist). 896 tests.

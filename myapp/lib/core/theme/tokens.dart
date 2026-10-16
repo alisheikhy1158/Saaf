@@ -38,6 +38,10 @@ abstract final class SaafAlpha {
   static const double tint = 0.10;
   static const double inkTint = 0.05;
 
+  // 08 product thumbnail placeholder (Figma node 3:245).
+  static const double thumbnailBody = 0.8;
+  static const double thumbnailDetail = 0.85;
+
   // 01 Welcome hero art (Figma node 2:37).
   static const double heroLightCircle = 0.0784;
   static const double heroInkCircle = 0.1216;
@@ -156,6 +160,21 @@ class SaafScanGeometry {
   final double minHeight = 160;
 }
 
+/// Geometry of the placeholder product bottle (Figma 08 "Product image"), in
+/// the 48 × 48 design frame. Real product photos replace it when the catalogue
+/// has images.
+class SaafThumbnailGeometry {
+  const SaafThumbnailGeometry();
+
+  final double designSize = 48;
+  final Rect body = const Rect.fromLTWH(15.84, 17.28, 16.32, 22.08);
+  final double bodyRadius = 3.36;
+  final Rect cap = const Rect.fromLTWH(19.68, 10.56, 8.64, 6.72);
+  final double capRadius = 2;
+  final Rect label = const Rect.fromLTWH(18.72, 25.92, 10.56, 5.76);
+  final double labelRadius = 1;
+}
+
 /// Corner radii (design.md §4).
 class SaafRadius {
   const SaafRadius();
@@ -213,6 +232,8 @@ class SaafSize {
   final double scoreRing = 104;
   final double scoreRingStroke = 8;
   final double progressRing = 76;
+  final double progressRingStroke = 7;
+  final double progressBarWide = 176;
   final double borderThin = 1;
   final double borderFocus = 1.5;
   final double borderSelectedPlan = 2;

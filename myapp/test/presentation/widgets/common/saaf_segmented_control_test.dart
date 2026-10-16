@@ -53,6 +53,42 @@ void main() {
     expect((fill.decoration as BoxDecoration).color, SaafPalette.sage);
   });
 
+  testWidgets(
+    'ink tone fills the selected segment with ink and cornsilk text',
+    (tester) async {
+      await pumpSaaf(
+        tester,
+        SaafSegmentedControl(
+          segments: const [
+            SaafSegment(label: 'Morning', icon: Icons.wb_sunny_outlined),
+            SaafSegment(label: 'Night', icon: Icons.nightlight_outlined),
+          ],
+          selectedIndex: 0,
+          onChanged: (_) {},
+          semanticLabel: 'Time of day',
+          tone: SaafSegmentTone.ink,
+          iconOnEvery: true,
+        ),
+      );
+      final fill = tester.widget<DecoratedBox>(
+        find
+            .descendant(
+              of: find.byKey(const ValueKey('saaf-segment-0')),
+              matching: find.byType(DecoratedBox),
+            )
+            .first,
+      );
+      expect((fill.decoration as BoxDecoration).color, SaafPalette.ink);
+      expect(
+        tester.widget<Text>(find.text('Morning')).style?.color,
+        SaafPalette.cornsilk,
+      );
+      // Both segments show their icon, not only the selected one.
+      expect(find.byIcon(Icons.wb_sunny_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.nightlight_outlined), findsOneWidget);
+    },
+  );
+
   testWidgets('track is ink@4 % with r26 corners', (tester) async {
     await pumpSaaf(tester, control());
     final track = tester.widget<DecoratedBox>(

@@ -40,10 +40,15 @@ void main() {
     repository = FirebaseAuthRepository(authProvider: () async => auth);
   });
 
-  MockUserCredential signedIn({String uid = 'u1', String? phoneNumber}) {
+  MockUserCredential signedIn({
+    String uid = 'u1',
+    String? phoneNumber,
+    String? displayName,
+  }) {
     final user = MockUser();
     when(() => user.uid).thenReturn(uid);
     when(() => user.phoneNumber).thenReturn(phoneNumber);
+    when(() => user.displayName).thenReturn(displayName);
     final credential = MockUserCredential();
     when(() => credential.user).thenReturn(user);
     return credential;
@@ -288,6 +293,25 @@ void main() {
         verify(() => auth.signInWithProvider(captureAny())).captured.single,
         isA<GoogleAuthProvider>(),
       );
+    });
+
+    test('the name from Google / Apple becomes the display name', () async {
+      when(() => auth.signInWithProvider(any())).thenAnswer(
+        (_) async => signedIn(uid: 'g2', displayName: '  Ayesha Khan '),
+      );
+      final result = await repository.signInWithGoogle();
+      expect(
+        result.valueOrNull,
+        const AuthSession(userId: 'g2', displayName: 'Ayesha Khan'),
+      );
+    });
+
+    test('a blank display name is treated as no name', () async {
+      when(
+        () => auth.signInWithProvider(any()),
+      ).thenAnswer((_) async => signedIn(uid: 'g3', displayName: '   '));
+      final result = await repository.signInWithGoogle();
+      expect(result.valueOrNull?.displayName, isNull);
     });
 
     test('Apple signs in through the provider flow', () async {

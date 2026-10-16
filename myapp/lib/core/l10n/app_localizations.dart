@@ -1285,6 +1285,336 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saaf cannot diagnose skin conditions. If a spot changes, bleeds, itches or worries you, please see a dermatologist.'**
   String get howWeScoreMedical;
+
+  /// Title of the routine screen (08).
+  ///
+  /// In en, this message translates to:
+  /// **'Your routine'**
+  String get routineTitle;
+
+  /// Start of the routine subtitle. {concerns} is like 'dark spots & breakouts'.
+  ///
+  /// In en, this message translates to:
+  /// **'For {concerns}'**
+  String routineFor(String concerns);
+
+  /// Start of the routine subtitle when the user picked no concern.
+  ///
+  /// In en, this message translates to:
+  /// **'For everyday skin health'**
+  String get routineForGeneral;
+
+  /// Budget part of the routine subtitle. {amount} is like Rs 6,000.
+  ///
+  /// In en, this message translates to:
+  /// **'Budget {amount}/month'**
+  String routineBudget(String amount);
+
+  /// Budget part of the routine subtitle for the highest budget band.
+  ///
+  /// In en, this message translates to:
+  /// **'No budget limit'**
+  String get routineBudgetNoLimit;
+
+  /// Routine subtitle joining who it is for and the budget.
+  ///
+  /// In en, this message translates to:
+  /// **'{forText} · {budgetText}'**
+  String routineSubtitle(String forText, String budgetText);
+
+  /// Joins two concern names, e.g. 'dark spots & breakouts'.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} & {second}'**
+  String routineAnd(String first, String second);
+
+  /// Concern name inside a sentence (lower case).
+  ///
+  /// In en, this message translates to:
+  /// **'dark spots'**
+  String get concernDarkSpots;
+
+  /// Concern name inside a sentence (lower case).
+  ///
+  /// In en, this message translates to:
+  /// **'breakouts'**
+  String get concernAcne;
+
+  /// Concern name inside a sentence (lower case).
+  ///
+  /// In en, this message translates to:
+  /// **'oiliness'**
+  String get concernOiliness;
+
+  /// Concern name inside a sentence (lower case).
+  ///
+  /// In en, this message translates to:
+  /// **'dryness'**
+  String get concernDryness;
+
+  /// Concern name inside a sentence (lower case).
+  ///
+  /// In en, this message translates to:
+  /// **'uneven tone'**
+  String get concernUnevenTone;
+
+  /// A price in Pakistani rupees. {amount} is like 1,450.
+  ///
+  /// In en, this message translates to:
+  /// **'Rs {amount}'**
+  String priceRs(String amount);
+
+  /// Tab: the morning routine.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get routineMorning;
+
+  /// Tab: the night routine.
+  ///
+  /// In en, this message translates to:
+  /// **'Night'**
+  String get routineNight;
+
+  /// Screen-reader name of the Morning / Night tabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Time of day'**
+  String get routineTabsLabel;
+
+  /// Line above the routine list.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 step} other{{count} steps}} · about {minutes} min'**
+  String routineSummary(int count, int minutes);
+
+  /// Total price of the shown routine. {price} is like Rs 5,050.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} total'**
+  String routineTotal(String price);
+
+  /// Caption under a product name.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {number} · {category}'**
+  String routineStepLine(int number, String category);
+
+  /// Step kind.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleanser'**
+  String get stepCleanser;
+
+  /// Step kind.
+  ///
+  /// In en, this message translates to:
+  /// **'Treatment'**
+  String get stepTreatment;
+
+  /// Step kind.
+  ///
+  /// In en, this message translates to:
+  /// **'Moisturiser'**
+  String get stepMoisturiser;
+
+  /// Step kind.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun protection'**
+  String get stepSunscreen;
+
+  /// Title of the info card under the routine.
+  ///
+  /// In en, this message translates to:
+  /// **'Results in 6–8 weeks'**
+  String get routineResultsTitle;
+
+  /// Body of the info card. {date} is like 14 Nov.
+  ///
+  /// In en, this message translates to:
+  /// **'Use it every day. Your next progress photo is on {date}.'**
+  String routineResultsBody(String date);
+
+  /// Body of the info card when there is no scan date yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Use it every day and check your progress once a month.'**
+  String get routineResultsBodyNoDate;
+
+  /// Primary button on the routine screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Start my routine'**
+  String get routineStart;
+
+  /// Shown when the cheapest suitable routine is more than the user's budget.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a little over your monthly budget.'**
+  String get routineOverBudget;
+
+  /// Note under the routine list.
+  ///
+  /// In en, this message translates to:
+  /// **'Prices are a guide and may differ in shops.'**
+  String get routinePriceNote;
+
+  /// Tooltip of the bell button on the routine screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get routineReminders;
+
+  /// Title when there are no products to suggest.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t build a routine yet'**
+  String get routineEmptyTitle;
+
+  /// Body when there are no products to suggest.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer the skin quiz and we will pick products for you.'**
+  String get routineEmptyBody;
+
+  /// Button that opens the skin quiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the skin quiz'**
+  String get routineEmptyAction;
+
+  /// Title when loading the routine fails.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t load your routine'**
+  String get routineErrorTitle;
+
+  /// Button that loads the routine again.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get routineErrorAction;
+
+  /// Bottom navigation: Home tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// Bottom navigation: face scan tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan'**
+  String get navScan;
+
+  /// Bottom navigation: progress tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get navProgress;
+
+  /// Bottom navigation: profile tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
+
+  /// Greeting on Home when the user's name is known.
+  ///
+  /// In en, this message translates to:
+  /// **'Salam, {name}'**
+  String homeGreeting(String name);
+
+  /// Greeting on Home when the name is not known.
+  ///
+  /// In en, this message translates to:
+  /// **'Salam'**
+  String get homeGreetingNoName;
+
+  /// Small label on the progress card.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s progress'**
+  String get homeProgressLabel;
+
+  /// Headline of the progress card, e.g. '2 of 4 steps done'.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total, plural, =1{1 step} other{{total} steps}} done'**
+  String homeStepsDone(int done, int total);
+
+  /// Screen-reader label of the progress ring.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} percent of today’s routine done'**
+  String homeProgressSemantics(int percent);
+
+  /// Section title above the checklist.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s routine'**
+  String get homeRoutineTitle;
+
+  /// Tooltip of the Morning / Night chip: switches to the other routine.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the {time} routine'**
+  String homeSwitchTime(String time);
+
+  /// Caption under a product name in the checklist, e.g. 'Cleanser · Rs 650'.
+  ///
+  /// In en, this message translates to:
+  /// **'{category} · {price}'**
+  String homeStepCaption(String category, String price);
+
+  /// Screen-reader label of a ticked checklist step.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, done'**
+  String homeStepDone(String name);
+
+  /// Screen-reader label of an unticked checklist step.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, not done yet'**
+  String homeStepNotDone(String name);
+
+  /// Screen-reader label of a day in the week strip when its routine was completed.
+  ///
+  /// In en, this message translates to:
+  /// **'{day}, all steps done'**
+  String homeDayComplete(String day);
+
+  /// Screen-reader label of a day in the week strip that was not completed.
+  ///
+  /// In en, this message translates to:
+  /// **'{day}'**
+  String homeDayOpen(String day);
+
+  /// Screen-reader label of today in the week strip.
+  ///
+  /// In en, this message translates to:
+  /// **'{day}, today'**
+  String homeToday(String day);
+
+  /// Screen-reader name of the week strip.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get homeWeekLabel;
+
+  /// Title when Home cannot load.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t load today’s routine'**
+  String get homeErrorTitle;
+
+  /// Button that loads Home again.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get homeErrorAction;
 }
 
 class _AppLocalizationsDelegate

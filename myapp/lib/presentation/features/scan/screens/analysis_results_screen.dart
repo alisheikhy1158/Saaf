@@ -13,12 +13,12 @@ import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_card.dart';
 import 'package:saaf/presentation/widgets/common/saaf_disclaimer.dart';
 import 'package:saaf/presentation/widgets/common/saaf_icon_button.dart';
-import 'package:saaf/presentation/widgets/common/saaf_icon_circle.dart';
 import 'package:saaf/presentation/widgets/common/saaf_ink_card.dart';
 import 'package:saaf/presentation/widgets/common/saaf_overline.dart';
 import 'package:saaf/presentation/widgets/common/saaf_progress_bar.dart';
 import 'package:saaf/presentation/widgets/common/saaf_progress_ring.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
+import 'package:saaf/presentation/widgets/common/saaf_status_message.dart';
 import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
 
 /// Figma 07 Analysis results: the score, the four measures and the way on to
@@ -48,20 +48,20 @@ class AnalysisResultsScreen extends ConsumerWidget {
               ),
       ),
       body: analysis.hasError && !analysis.hasValue
-          ? _Message(
+          ? SaafStatusMessage(
               icon: Icons.error_outline,
               title: l10n.resultsErrorTitle,
-              action: l10n.resultsErrorAction,
+              actionLabel: l10n.resultsErrorAction,
               onAction: () => ref.invalidate(skinAnalysisProvider),
             )
           : analysis.isLoading && !analysis.hasValue
           ? const _Loading()
           : result == null
-          ? _Message(
+          ? SaafStatusMessage(
               icon: Icons.photo_camera_outlined,
               title: l10n.resultsEmptyTitle,
               body: l10n.resultsEmptyBody,
-              action: l10n.resultsEmptyAction,
+              actionLabel: l10n.resultsEmptyAction,
               onAction: () => context.go(SaafRoute.selfieCapture.path),
             )
           : _Results(analysis: result),
@@ -70,7 +70,7 @@ class AnalysisResultsScreen extends ConsumerWidget {
           : SaafButton.primary(
               label: l10n.resultsSeeRoutine,
               trailingIcon: Icons.arrow_forward,
-              onPressed: () => context.go(SaafRoute.routine.path),
+              onPressed: () => context.push(SaafRoute.routine.path),
             ),
     );
   }
@@ -99,53 +99,6 @@ class _Loading extends StatelessWidget {
     padding: EdgeInsetsDirectional.only(top: context.saaf.space.x36),
     child: const Center(child: CircularProgressIndicator()),
   );
-}
-
-/// Empty and error states: an icon, a title, optional text and one button.
-class _Message extends StatelessWidget {
-  const _Message({
-    required this.icon,
-    required this.title,
-    required this.action,
-    required this.onAction,
-    this.body,
-  });
-
-  final IconData icon;
-  final String title;
-  final String? body;
-  final String action;
-  final VoidCallback onAction;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.saaf;
-    return Padding(
-      padding: EdgeInsetsDirectional.only(top: tokens.space.x36),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: tokens.space.x12,
-        children: [
-          Center(
-            child: SaafIconCircle(icon: icon, size: SaafIconCircleSize.large),
-          ),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: context.text.titleLarge,
-          ),
-          if (body != null)
-            Text(
-              body!,
-              textAlign: TextAlign.center,
-              style: context.text.bodyMedium?.copyWith(color: tokens.textLabel),
-            ),
-          SizedBox(height: tokens.space.x8),
-          SaafButton.primary(label: action, onPressed: onAction),
-        ],
-      ),
-    );
-  }
 }
 
 class _Results extends StatelessWidget {

@@ -668,4 +668,221 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get howWeScoreMedical =>
       'Saaf cannot diagnose skin conditions. If a spot changes, bleeds, itches or worries you, please see a dermatologist.';
+
+  @override
+  String get routineTitle => 'Your routine';
+
+  @override
+  String routineFor(String concerns) {
+    return 'For $concerns';
+  }
+
+  @override
+  String get routineForGeneral => 'For everyday skin health';
+
+  @override
+  String routineBudget(String amount) {
+    return 'Budget $amount/month';
+  }
+
+  @override
+  String get routineBudgetNoLimit => 'No budget limit';
+
+  @override
+  String routineSubtitle(String forText, String budgetText) {
+    return '$forText · $budgetText';
+  }
+
+  @override
+  String routineAnd(String first, String second) {
+    return '$first & $second';
+  }
+
+  @override
+  String get concernDarkSpots => 'dark spots';
+
+  @override
+  String get concernAcne => 'breakouts';
+
+  @override
+  String get concernOiliness => 'oiliness';
+
+  @override
+  String get concernDryness => 'dryness';
+
+  @override
+  String get concernUnevenTone => 'uneven tone';
+
+  @override
+  String priceRs(String amount) {
+    return 'Rs $amount';
+  }
+
+  @override
+  String get routineMorning => 'Morning';
+
+  @override
+  String get routineNight => 'Night';
+
+  @override
+  String get routineTabsLabel => 'Time of day';
+
+  @override
+  String routineSummary(int count, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count steps',
+      one: '1 step',
+    );
+    return '$_temp0 · about $minutes min';
+  }
+
+  @override
+  String routineTotal(String price) {
+    return '$price total';
+  }
+
+  @override
+  String routineStepLine(int number, String category) {
+    return 'Step $number · $category';
+  }
+
+  @override
+  String get stepCleanser => 'Cleanser';
+
+  @override
+  String get stepTreatment => 'Treatment';
+
+  @override
+  String get stepMoisturiser => 'Moisturiser';
+
+  @override
+  String get stepSunscreen => 'Sun protection';
+
+  @override
+  String get routineResultsTitle => 'Results in 6–8 weeks';
+
+  @override
+  String routineResultsBody(String date) {
+    return 'Use it every day. Your next progress photo is on $date.';
+  }
+
+  @override
+  String get routineResultsBodyNoDate =>
+      'Use it every day and check your progress once a month.';
+
+  @override
+  String get routineStart => 'Start my routine';
+
+  @override
+  String get routineOverBudget => 'This is a little over your monthly budget.';
+
+  @override
+  String get routinePriceNote => 'Prices are a guide and may differ in shops.';
+
+  @override
+  String get routineReminders => 'Reminders';
+
+  @override
+  String get routineEmptyTitle => 'We couldn’t build a routine yet';
+
+  @override
+  String get routineEmptyBody =>
+      'Answer the skin quiz and we will pick products for you.';
+
+  @override
+  String get routineEmptyAction => 'Take the skin quiz';
+
+  @override
+  String get routineErrorTitle => 'We couldn’t load your routine';
+
+  @override
+  String get routineErrorAction => 'Try again';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navScan => 'Scan';
+
+  @override
+  String get navProgress => 'Progress';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String homeGreeting(String name) {
+    return 'Salam, $name';
+  }
+
+  @override
+  String get homeGreetingNoName => 'Salam';
+
+  @override
+  String get homeProgressLabel => 'Today’s progress';
+
+  @override
+  String homeStepsDone(int done, int total) {
+    String _temp0 = intl.Intl.pluralLogic(
+      total,
+      locale: localeName,
+      other: '$total steps',
+      one: '1 step',
+    );
+    return '$done of $_temp0 done';
+  }
+
+  @override
+  String homeProgressSemantics(int percent) {
+    return '$percent percent of today’s routine done';
+  }
+
+  @override
+  String get homeRoutineTitle => 'Today’s routine';
+
+  @override
+  String homeSwitchTime(String time) {
+    return 'Show the $time routine';
+  }
+
+  @override
+  String homeStepCaption(String category, String price) {
+    return '$category · $price';
+  }
+
+  @override
+  String homeStepDone(String name) {
+    return '$name, done';
+  }
+
+  @override
+  String homeStepNotDone(String name) {
+    return '$name, not done yet';
+  }
+
+  @override
+  String homeDayComplete(String day) {
+    return '$day, all steps done';
+  }
+
+  @override
+  String homeDayOpen(String day) {
+    return '$day';
+  }
+
+  @override
+  String homeToday(String day) {
+    return '$day, today';
+  }
+
+  @override
+  String get homeWeekLabel => 'This week';
+
+  @override
+  String get homeErrorTitle => 'We couldn’t load today’s routine';
+
+  @override
+  String get homeErrorAction => 'Try again';
 }

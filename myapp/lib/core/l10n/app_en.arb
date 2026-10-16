@@ -597,5 +597,225 @@
   "@howWeScoreMedicalTitle": { "description": "Section heading." },
 
   "howWeScoreMedical": "Saaf cannot diagnose skin conditions. If a spot changes, bleeds, itches or worries you, please see a dermatologist.",
-  "@howWeScoreMedical": { "description": "Paragraph with the medical disclaimer." }
+  "@howWeScoreMedical": { "description": "Paragraph with the medical disclaimer." },
+  "routineTitle": "Your routine",
+  "@routineTitle": { "description": "Title of the routine screen (08)." },
+
+  "routineFor": "For {concerns}",
+  "@routineFor": {
+    "description": "Start of the routine subtitle. {concerns} is like 'dark spots & breakouts'.",
+    "placeholders": { "concerns": { "type": "String" } }
+  },
+
+  "routineForGeneral": "For everyday skin health",
+  "@routineForGeneral": { "description": "Start of the routine subtitle when the user picked no concern." },
+
+  "routineBudget": "Budget {amount}/month",
+  "@routineBudget": {
+    "description": "Budget part of the routine subtitle. {amount} is like Rs 6,000.",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+
+  "routineBudgetNoLimit": "No budget limit",
+  "@routineBudgetNoLimit": { "description": "Budget part of the routine subtitle for the highest budget band." },
+
+  "routineSubtitle": "{forText} · {budgetText}",
+  "@routineSubtitle": {
+    "description": "Routine subtitle joining who it is for and the budget.",
+    "placeholders": { "forText": { "type": "String" }, "budgetText": { "type": "String" } }
+  },
+
+  "routineAnd": "{first} & {second}",
+  "@routineAnd": {
+    "description": "Joins two concern names, e.g. 'dark spots & breakouts'.",
+    "placeholders": { "first": { "type": "String" }, "second": { "type": "String" } }
+  },
+
+  "concernDarkSpots": "dark spots",
+  "@concernDarkSpots": { "description": "Concern name inside a sentence (lower case)." },
+
+  "concernAcne": "breakouts",
+  "@concernAcne": { "description": "Concern name inside a sentence (lower case)." },
+
+  "concernOiliness": "oiliness",
+  "@concernOiliness": { "description": "Concern name inside a sentence (lower case)." },
+
+  "concernDryness": "dryness",
+  "@concernDryness": { "description": "Concern name inside a sentence (lower case)." },
+
+  "concernUnevenTone": "uneven tone",
+  "@concernUnevenTone": { "description": "Concern name inside a sentence (lower case)." },
+
+  "priceRs": "Rs {amount}",
+  "@priceRs": {
+    "description": "A price in Pakistani rupees. {amount} is like 1,450.",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+
+  "routineMorning": "Morning",
+  "@routineMorning": { "description": "Tab: the morning routine." },
+
+  "routineNight": "Night",
+  "@routineNight": { "description": "Tab: the night routine." },
+
+  "routineTabsLabel": "Time of day",
+  "@routineTabsLabel": { "description": "Screen-reader name of the Morning / Night tabs." },
+
+  "routineSummary": "{count, plural, =1{1 step} other{{count} steps}} · about {minutes} min",
+  "@routineSummary": {
+    "description": "Line above the routine list.",
+    "placeholders": { "count": { "type": "int" }, "minutes": { "type": "int" } }
+  },
+
+  "routineTotal": "{price} total",
+  "@routineTotal": {
+    "description": "Total price of the shown routine. {price} is like Rs 5,050.",
+    "placeholders": { "price": { "type": "String" } }
+  },
+
+  "routineStepLine": "Step {number} · {category}",
+  "@routineStepLine": {
+    "description": "Caption under a product name.",
+    "placeholders": { "number": { "type": "int" }, "category": { "type": "String" } }
+  },
+
+  "stepCleanser": "Cleanser",
+  "@stepCleanser": { "description": "Step kind." },
+
+  "stepTreatment": "Treatment",
+  "@stepTreatment": { "description": "Step kind." },
+
+  "stepMoisturiser": "Moisturiser",
+  "@stepMoisturiser": { "description": "Step kind." },
+
+  "stepSunscreen": "Sun protection",
+  "@stepSunscreen": { "description": "Step kind." },
+
+  "routineResultsTitle": "Results in 6–8 weeks",
+  "@routineResultsTitle": { "description": "Title of the info card under the routine." },
+
+  "routineResultsBody": "Use it every day. Your next progress photo is on {date}.",
+  "@routineResultsBody": {
+    "description": "Body of the info card. {date} is like 14 Nov.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "routineResultsBodyNoDate": "Use it every day and check your progress once a month.",
+  "@routineResultsBodyNoDate": { "description": "Body of the info card when there is no scan date yet." },
+
+  "routineStart": "Start my routine",
+  "@routineStart": { "description": "Primary button on the routine screen." },
+
+  "routineOverBudget": "This is a little over your monthly budget.",
+  "@routineOverBudget": { "description": "Shown when the cheapest suitable routine is more than the user's budget." },
+
+  "routinePriceNote": "Prices are a guide and may differ in shops.",
+  "@routinePriceNote": { "description": "Note under the routine list." },
+
+  "routineReminders": "Reminders",
+  "@routineReminders": { "description": "Tooltip of the bell button on the routine screen." },
+
+  "routineEmptyTitle": "We couldn’t build a routine yet",
+  "@routineEmptyTitle": { "description": "Title when there are no products to suggest." },
+
+  "routineEmptyBody": "Answer the skin quiz and we will pick products for you.",
+  "@routineEmptyBody": { "description": "Body when there are no products to suggest." },
+
+  "routineEmptyAction": "Take the skin quiz",
+  "@routineEmptyAction": { "description": "Button that opens the skin quiz." },
+
+  "routineErrorTitle": "We couldn’t load your routine",
+  "@routineErrorTitle": { "description": "Title when loading the routine fails." },
+
+  "routineErrorAction": "Try again",
+  "@routineErrorAction": { "description": "Button that loads the routine again." },
+  "navHome": "Home",
+  "@navHome": { "description": "Bottom navigation: Home tab." },
+
+  "navScan": "Scan",
+  "@navScan": { "description": "Bottom navigation: face scan tab." },
+
+  "navProgress": "Progress",
+  "@navProgress": { "description": "Bottom navigation: progress tab." },
+
+  "navProfile": "Profile",
+  "@navProfile": { "description": "Bottom navigation: profile tab." },
+
+  "homeGreeting": "Salam, {name}",
+  "@homeGreeting": {
+    "description": "Greeting on Home when the user's name is known.",
+    "placeholders": { "name": { "type": "String" } }
+  },
+
+  "homeGreetingNoName": "Salam",
+  "@homeGreetingNoName": { "description": "Greeting on Home when the name is not known." },
+
+  "homeProgressLabel": "Today’s progress",
+  "@homeProgressLabel": { "description": "Small label on the progress card." },
+
+  "homeStepsDone": "{done} of {total, plural, =1{1 step} other{{total} steps}} done",
+  "@homeStepsDone": {
+    "description": "Headline of the progress card, e.g. '2 of 4 steps done'.",
+    "placeholders": { "done": { "type": "int" }, "total": { "type": "int" } }
+  },
+
+  "homeProgressSemantics": "{percent} percent of today’s routine done",
+  "@homeProgressSemantics": {
+    "description": "Screen-reader label of the progress ring.",
+    "placeholders": { "percent": { "type": "int" } }
+  },
+
+  "homeRoutineTitle": "Today’s routine",
+  "@homeRoutineTitle": { "description": "Section title above the checklist." },
+
+  "homeSwitchTime": "Show the {time} routine",
+  "@homeSwitchTime": {
+    "description": "Tooltip of the Morning / Night chip: switches to the other routine.",
+    "placeholders": { "time": { "type": "String" } }
+  },
+
+  "homeStepCaption": "{category} · {price}",
+  "@homeStepCaption": {
+    "description": "Caption under a product name in the checklist, e.g. 'Cleanser · Rs 650'.",
+    "placeholders": { "category": { "type": "String" }, "price": { "type": "String" } }
+  },
+
+  "homeStepDone": "{name}, done",
+  "@homeStepDone": {
+    "description": "Screen-reader label of a ticked checklist step.",
+    "placeholders": { "name": { "type": "String" } }
+  },
+
+  "homeStepNotDone": "{name}, not done yet",
+  "@homeStepNotDone": {
+    "description": "Screen-reader label of an unticked checklist step.",
+    "placeholders": { "name": { "type": "String" } }
+  },
+
+  "homeDayComplete": "{day}, all steps done",
+  "@homeDayComplete": {
+    "description": "Screen-reader label of a day in the week strip when its routine was completed.",
+    "placeholders": { "day": { "type": "String" } }
+  },
+
+  "homeDayOpen": "{day}",
+  "@homeDayOpen": {
+    "description": "Screen-reader label of a day in the week strip that was not completed.",
+    "placeholders": { "day": { "type": "String" } }
+  },
+
+  "homeToday": "{day}, today",
+  "@homeToday": {
+    "description": "Screen-reader label of today in the week strip.",
+    "placeholders": { "day": { "type": "String" } }
+  },
+
+  "homeWeekLabel": "This week",
+  "@homeWeekLabel": { "description": "Screen-reader name of the week strip." },
+
+  "homeErrorTitle": "We couldn’t load today’s routine",
+  "@homeErrorTitle": { "description": "Title when Home cannot load." },
+
+  "homeErrorAction": "Try again",
+  "@homeErrorAction": { "description": "Button that loads Home again." }
 }
