@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:saaf/core/config/env.dart';
+import 'package:saaf/core/error/failure_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
@@ -70,7 +72,13 @@ class SignUpScreen extends ConsumerWidget {
             isValid: form.isValid,
             helperText: l10n.phoneHelper,
             helperIcon: Icons.info_outline,
-            errorText: form.sendFailure == null ? null : l10n.signUpSendFailed,
+            errorText: form.sendFailure == null
+                ? null
+                : withDetail(
+                    l10n.signUpSendFailed,
+                    form.sendFailure!,
+                    show: Env.diagnostics,
+                  ),
             onChanged: controller.setInput,
           ),
           SizedBox(height: space.sectionGapLarge),

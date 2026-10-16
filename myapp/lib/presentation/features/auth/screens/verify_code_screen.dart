@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:saaf/core/config/env.dart';
+import 'package:saaf/core/error/failure_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saaf/core/error/failure.dart';
@@ -50,7 +52,7 @@ class VerifyCodeScreen extends ConsumerWidget {
         ? null
         : failure is ValidationFailure
         ? l10n.verifyWrongCode
-        : l10n.verifyFailed;
+        : withDetail(l10n.verifyFailed, failure, show: Env.diagnostics);
 
     return SaafScaffold(
       key: ValueKey('screen-${SaafRoute.verifyCode.name}'),

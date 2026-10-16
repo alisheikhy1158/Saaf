@@ -19,6 +19,10 @@ abstract final class Env {
   /// `--dart-define=AI_PROXY_URL=https://saaf-ai.<you>.workers.dev`
   static const String aiProxyUrl = String.fromEnvironment('AI_PROXY_URL');
 
+  /// Shows a technical detail line under sign-in errors, to find out what went
+  /// wrong on a real phone. For the TEST app only: `--dart-define=DIAGNOSTICS=true`.
+  static const bool diagnostics = bool.fromEnvironment('DIAGNOSTICS');
+
   static const String firebaseProjectId = String.fromEnvironment(
     'FIREBASE_PROJECT_ID',
   );

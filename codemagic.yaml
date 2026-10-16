@@ -199,7 +199,8 @@ workflows:
             --dart-define=DELETION_URL="$DELETION_URL" \
             --dart-define=AI_PROXY_URL=https://saaf-ai.saafai.workers.dev \
             --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}" \
-            --dart-define=FAKE_PURCHASES=true
+            --dart-define=FAKE_PURCHASES=true \
+            --dart-define=DIAGNOSTICS=true
     artifacts:
       - myapp/build/app/outputs/flutter-apk/*.apk
     publishing:
