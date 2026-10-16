@@ -87,7 +87,7 @@ workflows:
   # ---------------------------------------------------------------------------
   ci-tests:
     name: CI — analyze & test
-    instance_type: linux_x2            # Linux is enough for tests (no Mac minutes used)
+    instance_type: mac_mini_m2         # the free plan only offers Mac machines (Linux is paid)
     max_build_duration: 30
     environment:
       flutter: stable
@@ -107,7 +107,7 @@ workflows:
   # ---------------------------------------------------------------------------
   android-release:
     name: Android release (.aab -> Play internal testing)
-    instance_type: linux_x2
+    instance_type: mac_mini_m2         # the free plan only offers Mac machines (Linux is paid)
     max_build_duration: 60
     environment:
       flutter: stable
