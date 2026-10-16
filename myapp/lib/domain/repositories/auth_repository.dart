@@ -19,6 +19,10 @@ abstract interface class AuthRepository {
 
   Future<AuthSession?> currentSession();
 
+  /// Emits whenever the signed-in user changes without the app asking: Android
+  /// can verify a number automatically, and signing out emits null.
+  Stream<AuthSession?> get sessionChanges;
+
   /// Ends the session and wipes tokens (SEC-7).
   Future<void> signOut();
 }

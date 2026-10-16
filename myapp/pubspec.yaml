@@ -46,7 +46,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   freezed_annotation: ^3.1.0
-
+  firebase_core: ^5.0.0
+  firebase_auth: ^7.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

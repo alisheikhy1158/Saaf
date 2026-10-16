@@ -49,6 +49,11 @@
 #
 # D) App config (Environment variables -> group "app_config", mark Secret where sensible):
 #       API_BASE_URL, RC_APPLE_API_KEY, RC_GOOGLE_API_KEY  (RevenueCat public SDK keys)
+#       USE_FIREBASE (true when Firebase is set up; default false = fake backend)
+#       FIREBASE_PROJECT_ID, FIREBASE_MESSAGING_SENDER_ID,
+#       FIREBASE_API_KEY_ANDROID, FIREBASE_APP_ID_ANDROID,
+#       FIREBASE_API_KEY_IOS, FIREBASE_APP_ID_IOS      (see docs/firebase-setup.md)
+#       SUPPORT_EMAIL, DELETION_URL, LEGAL_REVIEWED    (see lib/core/config/legal_config.dart)
 #    They are passed to Flutter with --dart-define and read in lib/core/config/env.dart.
 #
 # E) Make sure myapp/android/app/build.gradle.kts reads the CM_KEYSTORE_* env vars
@@ -133,7 +138,15 @@ workflows:
             --build-number=$((LATEST + 1)) \
             --obfuscate --split-debug-info=build/symbols \
             --dart-define=API_BASE_URL="$API_BASE_URL" \
-            --dart-define=RC_GOOGLE_API_KEY="$RC_GOOGLE_API_KEY"
+            --dart-define=RC_GOOGLE_API_KEY="$RC_GOOGLE_API_KEY" \
+            --dart-define=USE_FIREBASE="${USE_FIREBASE:-false}" \
+            --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
+            --dart-define=FIREBASE_MESSAGING_SENDER_ID="$FIREBASE_MESSAGING_SENDER_ID" \
+            --dart-define=FIREBASE_API_KEY_ANDROID="$FIREBASE_API_KEY_ANDROID" \
+            --dart-define=FIREBASE_APP_ID_ANDROID="$FIREBASE_APP_ID_ANDROID" \
+            --dart-define=SUPPORT_EMAIL="$SUPPORT_EMAIL" \
+            --dart-define=DELETION_URL="$DELETION_URL" \
+            --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}"
     artifacts:
       - myapp/build/app/outputs/bundle/release/*.aab
       - myapp/build/app/outputs/mapping/release/mapping.txt
@@ -176,6 +189,18 @@ workflows:
         script: |
           cd $APP_DIR
           xcode-project use-profiles
+      - name: Register Firebase's URL scheme (phone-number sign-in on iOS)
+        script: |
+          # Firebase phone sign-in needs the app's "encoded app ID" as a URL scheme:
+          # 1:123:ios:abc  ->  app-1-123-ios-abc. Derived here, so nothing is committed.
+          if [ -n "$FIREBASE_APP_ID_IOS" ]; then
+            SCHEME="app-$(echo "$FIREBASE_APP_ID_IOS" | tr ':' '-')"
+            PLIST="$CM_BUILD_DIR/$APP_DIR/ios/Runner/Info.plist"
+            /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes array" "$PLIST" 2>/dev/null || true
+            /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:0 dict" "$PLIST"
+            /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:0:CFBundleURLSchemes array" "$PLIST"
+            /usr/libexec/PlistBuddy -c "Add :CFBundleURLTypes:0:CFBundleURLSchemes:0 string $SCHEME" "$PLIST"
+          fi
       - name: Build signed, obfuscated IPA
         script: |
           cd $APP_DIR
@@ -185,7 +210,15 @@ workflows:
             --export-options-plist=/Users/builder/export_options.plist \
             --obfuscate --split-debug-info=build/symbols \
             --dart-define=API_BASE_URL="$API_BASE_URL" \
-            --dart-define=RC_APPLE_API_KEY="$RC_APPLE_API_KEY"
+            --dart-define=RC_APPLE_API_KEY="$RC_APPLE_API_KEY" \
+            --dart-define=USE_FIREBASE="${USE_FIREBASE:-false}" \
+            --dart-define=FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
+            --dart-define=FIREBASE_MESSAGING_SENDER_ID="$FIREBASE_MESSAGING_SENDER_ID" \
+            --dart-define=FIREBASE_API_KEY_IOS="$FIREBASE_API_KEY_IOS" \
+            --dart-define=FIREBASE_APP_ID_IOS="$FIREBASE_APP_ID_IOS" \
+            --dart-define=SUPPORT_EMAIL="$SUPPORT_EMAIL" \
+            --dart-define=DELETION_URL="$DELETION_URL" \
+            --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}"
     artifacts:
       - myapp/build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log     # read these if the iOS build fails

@@ -3,49 +3,44 @@
 > Claude: keep this file under 60 lines. Overwrite "Current state"; append one line to "Log".
 
 ## Current state
-- **Phase / step:** Phase 2 DONE. Onboarding/auth UI DONE: 01 Welcome, 02 Sign up, 03 Verify code, 04 Privacy consent,
-  05 Skin quiz (concerns step) — all with tests, Figma-checked in Chrome. Auth runs on `FakeAuthRepository` (code `123456`).
-  Phase 3 (stores/Codemagic) + GitHub remote need the user; backend choice is the owner's (docs/adr/0001-backend.md).
+- **Phase / step:** Onboarding + auth UI DONE: 01–05 (quiz is now 5 real steps), legal pages with researched drafts, Firebase
+  auth coded behind `AuthRepository` (off until the owner configures Firebase). GitHub: https://github.com/alisheikhy1158/Saaf (main pushed).
 - **Next exact step:** 06 Selfie capture (Figma 3:2) + 07 Analysis results (3:97): `CameraService` + `PermissionService`
-  interfaces with fakes for Chrome, rationale sheet before camera permission (store-compliance §1), on-device
-  `SkinAnalyzer` interface (model ADR later). Then 08 Routine (3:185), 09 Home (3:292), 10–14. Each screen: read
-  docs/design.md + store-compliance.md, Figma `get_design_context` first, tests first, verify in Chrome.
-- **Branch / last commit:** main / see `git log` (everything committed)
-- **Tests:** 494 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
+  interfaces with fakes for Chrome, rationale sheet before the camera permission (store-compliance §1), on-device
+  `SkinAnalyzer` interface. Then 08 Routine (3:185), 09 Home (3:292), 10–14. Each screen: read docs/design.md +
+  store-compliance.md, Figma `get_design_context` first, tests first, verify in Chrome.
+- **Tests:** 586 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
 
 ## Decisions made
-- Bundle ID `com.saafapp.saaf`. Unified Material 3 styled like Figma; Figma wins (design.md §0).
-- Fonts: Nunito + Noto Naskh Arabic OFL variable fonts, declared per weight. Material icons stand in for Figma's SVG icons.
-- Packages: flutter_riverpod 3 + riverpod_generator 4, go_router 18, drift, flutter_secure_storage, permission_handler,
-  freezed 4, mocktail; `intl: any`. `*.g.dart`/`*.freezed.dart` are gitignored → run
-  `dart run build_runner build --delete-conflicting-outputs` after a fresh clone. l10n output IS committed.
-- Consent boxes start unticked (mockup shows ticked); 04 title is 32/42 (design.md corrected). 01 stat is labelled "Example".
-- Auth: `PhoneNumber` (+92 3XX XXXXXXX, table-tested), `RequestOtp`/`VerifyOtp`/`SocialSignIn` use cases, `PendingSignIn`
-  provider carries the number to Verify; "Continue with Apple" only on iOS (§9.3). Google button uses a plain "G" like
-  Figma — swap for the official logo when real Google sign-in lands.
-- Repos for consent/skin profile are in-memory until drift (Phase 7); language choice is in-memory (no persistence).
-- Verify code: boxes + keypad as in Figma; a transparent TextField (NOT `Opacity(0)`, which hides it from screen readers)
-  gives system keyboard, `oneTimeCode` autofill and paste. Android SMS Retriever still to add (native, verify via Codemagic).
-- `SaafScaffold` pins CTA via min-height + spaceBetween (no intrinsics). 48 dp hit areas taken out of padding where Figma
-  is 40 dp (top bar) or accepted as +layout (check rows).
-- Urdu strings are my translations — need native review before release.
+- Bundle ID `com.saafapp.saaf`. Unified Material 3 styled like Figma; Figma wins (design.md §0). Backend: **Firebase** (ADR 0001 accepted).
+- Quiz (researched, docs in git log): 1 skin type · 2 concerns (Figma 05) · 3 sensitivity · 4 safety (pregnant/breastfeeding,
+  prescription treatment, ingredient allergy, none) · 5 monthly budget in PKR bands. Routes `/skin-quiz` (step 1), `/skin-quiz/:n`.
+  `SaveQuizAnswers` merges each step into `SkinProfile`; `safetyFlags` null = unanswered, empty = "none of these".
+- **Requirement for later sync code:** safety flags (health data) must NEVER be uploaded — the quiz copy and Privacy Policy promise it.
+- Legal: `LegalDocuments` (English drafts, `core/legal/`), shown with a "Draft" chip until `LEGAL_REVIEWED=true`. Urdu pages show
+  a note that the text is English only. Contact email / deletion URL come from `SUPPORT_EMAIL` / `DELETION_URL` dart-defines.
+- Firebase: `FirebaseAuthRepository` (phone OTP, Google + Apple via `signInWithProvider`, Android auto-verification →
+  `sessionChanges`). Settings via `--dart-define` (`Env`), lazy init, no config files committed. Default = fake backend.
+  Google sign-in uses Firebase's provider flow (no google_sign_in package); swap to the native SDK later if UX needs it.
+- Consent boxes start unticked; 01 stat labelled "Example"; fonts are OFL variable fonts; Material icons replace Figma SVG icons.
+- In-memory repos (consent, skin profile, language) until drift (Phase 7). Urdu strings are mine — need native review.
 
 ## Testing notes
-- Widget tests use the Ahem font (16 dp/glyph): keep labels short, `ensureVisible` before tapping low widgets, never
-  `pumpAndSettle` with a spinner, reset `debugDefaultTargetPlatformOverride` inside the test body. Helpers in
-  `test/helpers/pump_app.dart` (`pumpSaaf`, `pumpSaafApp`, `expectRobustLayout`, `expectTapTargetsAccessible`).
-- Browser check: `flutter run -d web-server --web-port 8099`, reload the page, wait ~40 s (dev compile); if the first
-  render looks cropped/zoomed, reload again.
+- Widget tests use the Ahem font (16 dp/glyph): short labels, `ensureVisible`, no `pumpAndSettle` with a spinner, reset
+  `debugDefaultTargetPlatformOverride` in the test body. Helpers: `test/helpers/pump_app.dart`.
+- Browser check: `flutter run -d web-server --web-port 8099`, reload, wait ~40 s; if the first render looks cropped, reload again.
 
 ## Native files edited (only verifiable via Codemagic)
-- none by hand.
+- `ios/Runner.xcodeproj/project.pbxproj`: iOS deployment target 13 → 15 (Firebase), `CODE_SIGN_ENTITLEMENTS`.
+- NEW `ios/Runner/Runner.entitlements` (Sign in with Apple), NEW `ios/Podfile` (stock Flutter template, platform 15.0).
+- `codemagic.yaml`: Firebase/legal `--dart-define`s + a PlistBuddy step adding Firebase's URL scheme.
 
 ## Open problems / questions for the user
-- Backend decision: read docs/adr/0001-backend.md (recommends Supabase; SMS delivery to Pakistan is the real go/no-go).
-- Quiz: what are steps 1, 3, 4, 5? (Figma shows only step 2, "STEP 2 OF 5".)
-- Terms/Privacy pages are placeholders; real documents + public URLs are required before store submission.
-- GitHub remote not created (`git remote add origin <url>`; `git push -u origin main`). Phase 3 accounts are the user's.
-- The promises on 04 are contractual: later code must make them true (on-device analysis, delete account, no sharing).
+- Do docs/firebase-setup.md (Firebase console, Apple capability, Codemagic variables). SMS delivery to Pakistani networks is the go/no-go.
+- Phase 3: Apple Developer + Google Play + Codemagic accounts (owner said they will do it).
+- Before release: lawyer review of Terms/Privacy (`LEGAL_REVIEWED`), support email, public deletion page, native Urdu review.
+- Delete-account flow + Cloud Function (Phase 4.4) still to build; needs Blaze plan.
 
 ## Log
-- 2026-10-16: Phase 1, 2.x, fonts, screens 01–05 (+legal pages), auth domain/fake, ADR 0001 draft. 494 tests green.
+- 2026-10-16: screens 01–05, auth domain, ADR; GitHub pushed.
+- 2026-10-17: 5-step quiz, legal drafts (researched), Firebase auth implementation + setup guide. 586 tests green.

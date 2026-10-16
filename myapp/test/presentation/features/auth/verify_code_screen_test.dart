@@ -2,8 +2,10 @@
 // keypad is not the only input), SEC-8 (6 digits), A11Y-1/4/5/6/8
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/core/error/failure.dart';
+import 'package:saaf/domain/entities/auth_session.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/phone_number.dart';
 import 'package:saaf/presentation/features/auth/screens/verify_code_screen.dart';
@@ -254,6 +256,23 @@ void main() {
       await tester.tap(find.byTooltip('Back'));
       await tester.pump(const Duration(milliseconds: 600));
       expect(find.byKey(const ValueKey('screen-signUp')), findsOneWidget);
+    });
+
+    testWidgets('an automatic sign-in (Android) moves on without typing', (
+      tester,
+    ) async {
+      await pumpVerify(tester);
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(VerifyCodeScreen)),
+      );
+      container
+          .read(authSessionControllerProvider.notifier)
+          .set(const AuthSession(userId: 'auto-1'));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(
+        find.byKey(const ValueKey('screen-privacyConsent')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('without a pending sign-in it redirects to Sign up', (

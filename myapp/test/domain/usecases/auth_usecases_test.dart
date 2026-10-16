@@ -45,6 +45,9 @@ class RecordingAuthRepository implements AuthRepository {
   Future<AuthSession?> currentSession() async => null;
 
   @override
+  Stream<AuthSession?> get sessionChanges => const Stream.empty();
+
+  @override
   Future<void> signOut() async {}
 }
 

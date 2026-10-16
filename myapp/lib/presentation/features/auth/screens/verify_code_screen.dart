@@ -8,6 +8,7 @@ import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/core/utils/countdown_format.dart';
 import 'package:saaf/presentation/features/auth/controllers/verify_code_controller.dart';
 import 'package:saaf/presentation/features/auth/widgets/sent_to_line.dart';
+import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/pending_sign_in.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_keypad.dart';
@@ -33,6 +34,13 @@ class VerifyCodeScreen extends ConsumerWidget {
     final form = ref.watch(verifyCodeControllerProvider);
     final controller = ref.read(verifyCodeControllerProvider.notifier);
     final secondsLeft = ref.watch(resendCountdownProvider);
+
+    // Android can verify the number by itself; move on as soon as that happens.
+    ref.listen(authSessionControllerProvider, (previous, next) {
+      if (previous == null && next != null && context.mounted) {
+        context.go(SaafRoute.privacyConsent.path);
+      }
+    });
 
     void backToSignUp() =>
         context.canPop() ? context.pop() : context.go(SaafRoute.signUp.path);
