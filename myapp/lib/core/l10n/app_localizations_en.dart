@@ -96,8 +96,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get legalPlaceholderBody =>
-      'The full text will be published here before Saaf is released.';
+  String get legalDraftBanner => 'Draft: pending legal review';
+
+  @override
+  String legalLastUpdated(String date) {
+    return 'Last updated $date';
+  }
+
+  @override
+  String get legalEnglishOnlyNote =>
+      'This document is currently available in English only.';
 
   @override
   String quizStepLabel(int current, int total) {

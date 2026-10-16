@@ -254,11 +254,23 @@ abstract class AppLocalizations {
   /// **'Open {name}'**
   String openDocumentAction(String name);
 
-  /// Temporary body of the Terms / Privacy pages. Must be replaced by the real documents before store submission.
+  /// Shown on the Terms / Privacy pages until a lawyer has reviewed them (LegalConfig.isReviewed). Must not ship to the stores.
   ///
   /// In en, this message translates to:
-  /// **'The full text will be published here before Saaf is released.'**
-  String get legalPlaceholderBody;
+  /// **'Draft: pending legal review'**
+  String get legalDraftBanner;
+
+  /// Date line under the title of a legal document.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated {date}'**
+  String legalLastUpdated(String date);
+
+  /// Shown above the legal text when the app language is not English.
+  ///
+  /// In en, this message translates to:
+  /// **'This document is currently available in English only.'**
+  String get legalEnglishOnlyNote;
 
   /// Overline above each quiz question (shown in capitals).
   ///

@@ -85,8 +85,17 @@
     "placeholders": { "name": { "type": "String" } }
   },
 
-  "legalPlaceholderBody": "The full text will be published here before Saaf is released.",
-  "@legalPlaceholderBody": { "description": "Temporary body of the Terms / Privacy pages. Must be replaced by the real documents before store submission." },
+  "legalDraftBanner": "Draft: pending legal review",
+  "@legalDraftBanner": { "description": "Shown on the Terms / Privacy pages until a lawyer has reviewed them (LegalConfig.isReviewed). Must not ship to the stores." },
+
+  "legalLastUpdated": "Last updated {date}",
+  "@legalLastUpdated": {
+    "description": "Date line under the title of a legal document.",
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "legalEnglishOnlyNote": "This document is currently available in English only.",
+  "@legalEnglishOnlyNote": { "description": "Shown above the legal text when the app language is not English." },
 
   "quizStepLabel": "Step {current} of {total}",
   "@quizStepLabel": {

@@ -96,8 +96,16 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get legalPlaceholderBody =>
-      'مکمل متن صاف کے جاری ہونے سے پہلے یہاں شائع کیا جائے گا۔';
+  String get legalDraftBanner => 'مسودہ: قانونی جائزہ باقی ہے';
+
+  @override
+  String legalLastUpdated(String date) {
+    return 'آخری تازہ کاری $date';
+  }
+
+  @override
+  String get legalEnglishOnlyNote =>
+      'یہ دستاویز فی الحال صرف انگریزی میں دستیاب ہے۔';
 
   @override
   String quizStepLabel(int current, int total) {

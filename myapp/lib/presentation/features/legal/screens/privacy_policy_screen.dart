@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:saaf/core/config/legal_config.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
+import 'package:saaf/core/legal/legal_documents.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/presentation/features/legal/widgets/legal_page.dart';
 
-/// Privacy Policy (placeholder text until the document is published).
+/// Privacy Policy (draft until LegalConfig.isReviewed).
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
 
@@ -11,5 +13,6 @@ class PrivacyPolicyScreen extends StatelessWidget {
   Widget build(BuildContext context) => LegalPage(
     route: SaafRoute.privacyPolicy,
     title: AppLocalizations.of(context).privacyPolicyTitle,
+    document: LegalDocuments.privacy(LegalConfig.current),
   );
 }
