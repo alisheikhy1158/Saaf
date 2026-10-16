@@ -185,7 +185,7 @@ workflows:
         script: |
           cd $APP_DIR
           # This TEST app always uses the REAL Firebase login (USE_FIREBASE=true), the real
-          # product database and, once AI_PROXY_URL is set, the real AI server.
+          # product database and the real AI server (backend/ai-proxy on Cloudflare).
           # FAKE_PURCHASES = a pretend store, so the Pro-only Progress screen can be
           # tried in this TEST app. NEVER add it to the store release workflows.
           flutter build apk --release \
@@ -197,7 +197,7 @@ workflows:
             --dart-define=FIREBASE_APP_ID_ANDROID="$FIREBASE_APP_ID_ANDROID" \
             --dart-define=SUPPORT_EMAIL="$SUPPORT_EMAIL" \
             --dart-define=DELETION_URL="$DELETION_URL" \
-            --dart-define=AI_PROXY_URL="$AI_PROXY_URL" \
+            --dart-define=AI_PROXY_URL=https://saaf-ai.saafai.workers.dev \
             --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}" \
             --dart-define=FAKE_PURCHASES=true
     artifacts:
