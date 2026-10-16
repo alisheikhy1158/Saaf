@@ -8,7 +8,7 @@
 - **Waiting on the owner:** push + rebuild "Android test app", test on the Android 15 phone (checklist below); AI coach needs the
   server (docs/ai-coach.md: Groq key + Cloudflare, then `AI_PROXY_URL` + `USE_FIREBASE=true` in Codemagic `app_config`).
 - **Tests:** 1508 Flutter + 32 backend (`cd backend/ai-proxy; node --test`) · **Analyze:** 0 issues · Flutter 3.47.7
-- **NOT pushed yet:** 6 local commits (profile edit, tissue test, scan checks, products, AI coach...). Push triggers a CI run.
+- **NOT pushed yet:** 5 local commits (profile edit, tissue test, scan checks, products, AI coach). Push triggers a CI run.
 
 ## Phone-test checklist (new, unverified on a device)
 1. Scan: face/light/angle chips and hints react; shutter locked until green; side photos need ~20–55° turn. **If "turn left" is
