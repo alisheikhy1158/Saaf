@@ -38,7 +38,7 @@
 #       BACK IT UP (password manager + offline copy). NEVER commit it to git.
 #    2. Codemagic -> Team settings -> codemagic.yaml settings -> Code signing identities
 #       -> Android keystores -> upload the .jks, enter passwords + alias, and set the
-#       Reference name exactly:  saaf_upload_keystore
+#       Reference name exactly:  "saaf upload keystore" (Codemagic turns underscores into spaces)
 #    3. Google Cloud: create a service account, give it access in Play Console
 #       (Users and permissions -> invite the service account email -> release permissions),
 #       create a JSON key. In Codemagic -> App settings -> Environment variables add
@@ -112,7 +112,7 @@ workflows:
     environment:
       flutter: stable
       android_signing:
-        - saaf_upload_keystore         # reference name from step C2
+        - "saaf upload keystore"        # reference name from step C2
       groups:
         - google_play                  # GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
         - app_config                   # API_BASE_URL, RC_GOOGLE_API_KEY
@@ -169,7 +169,7 @@ workflows:
     environment:
       flutter: stable
       android_signing:
-        - saaf_upload_keystore
+        - "saaf upload keystore"
       groups:
         - app_config
       vars:
