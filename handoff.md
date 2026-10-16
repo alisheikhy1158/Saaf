@@ -47,7 +47,7 @@
 - `codemagic.yaml` on Mac M2 (free plan has no Linux). New var `AI_PROXY_URL`.
 
 ## Open problems / questions for the user
-- Firebase: the test phone number is the owner's REAL number with a fixed code: delete it (and use a made-up one) BEFORE anyone else gets the app or the review notes; real SMS delivery is untested; Play-signing SHA after first Play upload (Firebase + Google Cloud key);
+- Firebase: test number is now made-up (+92 300 1234567, code 123456; also for the App Review notes); real SMS delivery is untested; Play-signing SHA after first Play upload (Firebase + Google Cloud key);
   Apple/Play accounts; SMS delivery on PK networks; Blaze plan decision.
 - Before release: lawyer review (new AI section 6 in Privacy Policy), native Urdu review (all Urdu is mine), dermatologist review,
   support email, public deletion page, Cloud Function for account deletion, drift on web (OFF-6), outbox/sync (OFF-2), RevenueCat.
