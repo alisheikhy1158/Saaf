@@ -32,11 +32,26 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        // The upload key lives in Codemagic (saaf_upload_keystore); it is never in git.
+        create("release") {
+            if (System.getenv("CI") != null) {
+                storeFile = file(System.getenv("CM_KEYSTORE_PATH"))
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("CM_KEY_ALIAS")
+                keyPassword = System.getenv("CM_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // Codemagic signs with the upload key; on a PC (no CI) the debug key is used.
+            signingConfig = if (System.getenv("CI") != null) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }
