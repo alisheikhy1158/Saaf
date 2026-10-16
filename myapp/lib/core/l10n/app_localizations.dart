@@ -757,6 +757,276 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Valid'**
   String get fieldValid;
+
+  /// Title of the camera screen (06).
+  ///
+  /// In en, this message translates to:
+  /// **'Face scan'**
+  String get scanTitle;
+
+  /// Tooltip of the X button that leaves the face scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get scanClose;
+
+  /// Tooltip of the sun button that adds a light frame around the camera view.
+  ///
+  /// In en, this message translates to:
+  /// **'Screen light'**
+  String get scanLightToggle;
+
+  /// Step label: the straight-on photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Front'**
+  String get scanPoseFront;
+
+  /// Step label: the photo of the left side of the face.
+  ///
+  /// In en, this message translates to:
+  /// **'Left'**
+  String get scanPoseLeft;
+
+  /// Step label: the photo of the right side of the face.
+  ///
+  /// In en, this message translates to:
+  /// **'Right'**
+  String get scanPoseRight;
+
+  /// Screen-reader label of one step in the three-photo indicator.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {number} of {total}: {pose}'**
+  String scanStepSemantics(int number, int total, String pose);
+
+  /// Screen-reader suffix for a step whose photo is already taken.
+  ///
+  /// In en, this message translates to:
+  /// **'taken'**
+  String get scanStepDone;
+
+  /// Instruction chip for the front photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Look straight at the camera'**
+  String get scanInstructionFront;
+
+  /// Instruction chip for the left-side photo: turn the head so the left cheek faces the camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Show your left cheek'**
+  String get scanInstructionLeft;
+
+  /// Instruction chip for the right-side photo: turn the head so the right cheek faces the camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Show your right cheek'**
+  String get scanInstructionRight;
+
+  /// Advice chip when the light is too harsh.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to softer light'**
+  String get scanAdviceTooBright;
+
+  /// Advice chip when the light is too dim.
+  ///
+  /// In en, this message translates to:
+  /// **'Find brighter light'**
+  String get scanAdviceTooDark;
+
+  /// Quality chip: the light is fine.
+  ///
+  /// In en, this message translates to:
+  /// **'Good light'**
+  String get scanChipLight;
+
+  /// Quality chip: the face is in the middle of the oval.
+  ///
+  /// In en, this message translates to:
+  /// **'Centred'**
+  String get scanChipCentred;
+
+  /// Quality chip: the phone is steady.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold still'**
+  String get scanChipSteady;
+
+  /// Screen-reader suffix of a quality chip whose check has not passed yet, e.g. 'Good light, not yet'.
+  ///
+  /// In en, this message translates to:
+  /// **'not yet'**
+  String get scanChipNotYet;
+
+  /// Status line under the chips while the automatic photo counts down.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold still — capturing in {seconds}s'**
+  String scanStatusCountdown(int seconds);
+
+  /// Status line when no countdown is running.
+  ///
+  /// In en, this message translates to:
+  /// **'Or tap the button to take it now'**
+  String get scanStatusManual;
+
+  /// Tooltip of the gallery button next to the shutter.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get scanGallery;
+
+  /// Screen-reader label of the shutter button.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get scanShutter;
+
+  /// Tooltip of the button that switches between front and back camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch camera'**
+  String get scanFlip;
+
+  /// Screen-reader label of the live camera area.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera view'**
+  String get scanCameraPreview;
+
+  /// Screen-reader label of a photo that was just taken.
+  ///
+  /// In en, this message translates to:
+  /// **'{pose} photo'**
+  String scanPhotoOf(String pose);
+
+  /// Status line while a photo that was just taken is shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Is your face clear and well lit?'**
+  String get scanReviewQuestion;
+
+  /// Button that discards the photo and shows the camera again.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get scanRetake;
+
+  /// Button that keeps the photo and moves to the next one.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this photo'**
+  String get scanUsePhoto;
+
+  /// Button on the last photo that saves the scan and shows the results.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyse my skin'**
+  String get scanAnalyse;
+
+  /// Shown while the three photos are saved on the phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving your photos…'**
+  String get scanSaving;
+
+  /// Error when saving the photos fails.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t save your photos. Please try again.'**
+  String get scanSaveFailed;
+
+  /// Error when the chosen gallery photo cannot be used.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t open that photo. Please try another.'**
+  String get scanPickFailed;
+
+  /// Error when taking a photo fails.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo didn’t work. Please try again.'**
+  String get scanCaptureFailed;
+
+  /// Reassurance shown in the camera permission sheet and under the review buttons.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos stay on your phone and are never uploaded.'**
+  String get scanPrivacyNote;
+
+  /// Title of our own explanation shown before the system camera dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera access'**
+  String get scanRationaleTitle;
+
+  /// Body of our camera explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf uses your camera only to take the three photos of your face scan: front, left and right.'**
+  String get scanRationaleBody;
+
+  /// Button that moves on to the system camera dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get scanContinue;
+
+  /// Button that skips the camera and leaves the scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get scanNotNow;
+
+  /// Title shown after the user refused the camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is off'**
+  String get scanDeniedTitle;
+
+  /// Body shown after the user refused the camera.
+  ///
+  /// In en, this message translates to:
+  /// **'You can try again, or choose photos from your gallery instead.'**
+  String get scanDeniedBody;
+
+  /// Title shown when the camera was refused for good.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on the camera in Settings'**
+  String get scanSettingsTitle;
+
+  /// Body shown when the camera was refused for good.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is blocked for Saaf. You can allow it in your phone’s Settings, or choose photos from your gallery.'**
+  String get scanSettingsBody;
+
+  /// Button that opens the phone's settings for Saaf.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get scanOpenSettings;
+
+  /// Button that tries the camera again.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get scanTryAgain;
+
+  /// Title shown when the camera could not start.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera didn’t start'**
+  String get scanFailedTitle;
+
+  /// Body shown when the camera could not start.
+  ///
+  /// In en, this message translates to:
+  /// **'Close other apps that use the camera and try again, or choose photos from your gallery.'**
+  String get scanFailedBody;
 }
 
 class _AppLocalizationsDelegate

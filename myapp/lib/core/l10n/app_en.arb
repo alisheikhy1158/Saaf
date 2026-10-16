@@ -309,5 +309,149 @@
   "@goToStart": { "description": "Button on the not-found page that returns to the first screen." },
 
   "fieldValid": "Valid",
-  "@fieldValid": { "description": "Screen-reader label of the green check shown when a text field's value is valid." }
+  "@fieldValid": { "description": "Screen-reader label of the green check shown when a text field's value is valid." },
+
+  "scanTitle": "Face scan",
+  "@scanTitle": { "description": "Title of the camera screen (06)." },
+
+  "scanClose": "Close",
+  "@scanClose": { "description": "Tooltip of the X button that leaves the face scan." },
+
+  "scanLightToggle": "Screen light",
+  "@scanLightToggle": { "description": "Tooltip of the sun button that adds a light frame around the camera view." },
+
+  "scanPoseFront": "Front",
+  "@scanPoseFront": { "description": "Step label: the straight-on photo." },
+
+  "scanPoseLeft": "Left",
+  "@scanPoseLeft": { "description": "Step label: the photo of the left side of the face." },
+
+  "scanPoseRight": "Right",
+  "@scanPoseRight": { "description": "Step label: the photo of the right side of the face." },
+
+  "scanStepSemantics": "Photo {number} of {total}: {pose}",
+  "@scanStepSemantics": {
+    "description": "Screen-reader label of one step in the three-photo indicator.",
+    "placeholders": { "number": { "type": "int" }, "total": { "type": "int" }, "pose": { "type": "String" } }
+  },
+
+  "scanStepDone": "taken",
+  "@scanStepDone": { "description": "Screen-reader suffix for a step whose photo is already taken." },
+
+  "scanInstructionFront": "Look straight at the camera",
+  "@scanInstructionFront": { "description": "Instruction chip for the front photo." },
+
+  "scanInstructionLeft": "Show your left cheek",
+  "@scanInstructionLeft": { "description": "Instruction chip for the left-side photo: turn the head so the left cheek faces the camera." },
+
+  "scanInstructionRight": "Show your right cheek",
+  "@scanInstructionRight": { "description": "Instruction chip for the right-side photo: turn the head so the right cheek faces the camera." },
+
+  "scanAdviceTooBright": "Move to softer light",
+  "@scanAdviceTooBright": { "description": "Advice chip when the light is too harsh." },
+
+  "scanAdviceTooDark": "Find brighter light",
+  "@scanAdviceTooDark": { "description": "Advice chip when the light is too dim." },
+
+  "scanChipLight": "Good light",
+  "@scanChipLight": { "description": "Quality chip: the light is fine." },
+
+  "scanChipCentred": "Centred",
+  "@scanChipCentred": { "description": "Quality chip: the face is in the middle of the oval." },
+
+  "scanChipSteady": "Hold still",
+  "@scanChipSteady": { "description": "Quality chip: the phone is steady." },
+
+  "scanChipNotYet": "not yet",
+  "@scanChipNotYet": { "description": "Screen-reader suffix of a quality chip whose check has not passed yet, e.g. 'Good light, not yet'." },
+
+  "scanStatusCountdown": "Hold still — capturing in {seconds}s",
+  "@scanStatusCountdown": {
+    "description": "Status line under the chips while the automatic photo counts down.",
+    "placeholders": { "seconds": { "type": "int" } }
+  },
+
+  "scanStatusManual": "Or tap the button to take it now",
+  "@scanStatusManual": { "description": "Status line when no countdown is running." },
+
+  "scanGallery": "Choose from gallery",
+  "@scanGallery": { "description": "Tooltip of the gallery button next to the shutter." },
+
+  "scanShutter": "Take photo",
+  "@scanShutter": { "description": "Screen-reader label of the shutter button." },
+
+  "scanFlip": "Switch camera",
+  "@scanFlip": { "description": "Tooltip of the button that switches between front and back camera." },
+
+  "scanCameraPreview": "Camera view",
+  "@scanCameraPreview": { "description": "Screen-reader label of the live camera area." },
+
+  "scanPhotoOf": "{pose} photo",
+  "@scanPhotoOf": {
+    "description": "Screen-reader label of a photo that was just taken.",
+    "placeholders": { "pose": { "type": "String" } }
+  },
+
+  "scanReviewQuestion": "Is your face clear and well lit?",
+  "@scanReviewQuestion": { "description": "Status line while a photo that was just taken is shown." },
+
+  "scanRetake": "Retake",
+  "@scanRetake": { "description": "Button that discards the photo and shows the camera again." },
+
+  "scanUsePhoto": "Use this photo",
+  "@scanUsePhoto": { "description": "Button that keeps the photo and moves to the next one." },
+
+  "scanAnalyse": "Analyse my skin",
+  "@scanAnalyse": { "description": "Button on the last photo that saves the scan and shows the results." },
+
+  "scanSaving": "Saving your photos…",
+  "@scanSaving": { "description": "Shown while the three photos are saved on the phone." },
+
+  "scanSaveFailed": "We couldn’t save your photos. Please try again.",
+  "@scanSaveFailed": { "description": "Error when saving the photos fails." },
+
+  "scanPickFailed": "We couldn’t open that photo. Please try another.",
+  "@scanPickFailed": { "description": "Error when the chosen gallery photo cannot be used." },
+
+  "scanCaptureFailed": "The photo didn’t work. Please try again.",
+  "@scanCaptureFailed": { "description": "Error when taking a photo fails." },
+
+  "scanPrivacyNote": "Photos stay on your phone and are never uploaded.",
+  "@scanPrivacyNote": { "description": "Reassurance shown in the camera permission sheet and under the review buttons." },
+
+  "scanRationaleTitle": "Allow camera access",
+  "@scanRationaleTitle": { "description": "Title of our own explanation shown before the system camera dialog." },
+
+  "scanRationaleBody": "Saaf uses your camera only to take the three photos of your face scan: front, left and right.",
+  "@scanRationaleBody": { "description": "Body of our camera explanation." },
+
+  "scanContinue": "Continue",
+  "@scanContinue": { "description": "Button that moves on to the system camera dialog." },
+
+  "scanNotNow": "Not now",
+  "@scanNotNow": { "description": "Button that skips the camera and leaves the scan." },
+
+  "scanDeniedTitle": "Camera access is off",
+  "@scanDeniedTitle": { "description": "Title shown after the user refused the camera." },
+
+  "scanDeniedBody": "You can try again, or choose photos from your gallery instead.",
+  "@scanDeniedBody": { "description": "Body shown after the user refused the camera." },
+
+  "scanSettingsTitle": "Turn on the camera in Settings",
+  "@scanSettingsTitle": { "description": "Title shown when the camera was refused for good." },
+
+  "scanSettingsBody": "Camera access is blocked for Saaf. You can allow it in your phone’s Settings, or choose photos from your gallery.",
+  "@scanSettingsBody": { "description": "Body shown when the camera was refused for good." },
+
+  "scanOpenSettings": "Open Settings",
+  "@scanOpenSettings": { "description": "Button that opens the phone's settings for Saaf." },
+
+  "scanTryAgain": "Try again",
+  "@scanTryAgain": { "description": "Button that tries the camera again." },
+
+  "scanFailedTitle": "The camera didn’t start",
+  "@scanFailedTitle": { "description": "Title shown when the camera could not start." },
+
+  "scanFailedBody": "Close other apps that use the camera and try again, or choose photos from your gallery.",
+  "@scanFailedBody": { "description": "Body shown when the camera could not start." }
 }

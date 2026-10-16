@@ -6,6 +6,10 @@ abstract final class Env {
   /// (fixed code 123456) — fine for Chrome and tests, never for a store release.
   static const bool useFirebase = bool.fromEnvironment('USE_FIREBASE');
 
+  /// Demo camera, gallery and permission (no real device needed). For trying the
+  /// scan screens in Chrome without a webcam: `--dart-define=FAKE_CAMERA=true`.
+  static const bool fakeCamera = bool.fromEnvironment('FAKE_CAMERA');
+
   static const String firebaseProjectId = String.fromEnvironment(
     'FIREBASE_PROJECT_ID',
   );

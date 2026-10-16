@@ -372,4 +372,152 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get fieldValid => 'درست';
+
+  @override
+  String get scanTitle => 'چہرے کا اسکین';
+
+  @override
+  String get scanClose => 'بند کریں';
+
+  @override
+  String get scanLightToggle => 'اسکرین کی روشنی';
+
+  @override
+  String get scanPoseFront => 'سامنے';
+
+  @override
+  String get scanPoseLeft => 'بایاں';
+
+  @override
+  String get scanPoseRight => 'دایاں';
+
+  @override
+  String scanStepSemantics(int number, int total, String pose) {
+    return 'تصویر $number از $total: $pose';
+  }
+
+  @override
+  String get scanStepDone => 'لی جا چکی';
+
+  @override
+  String get scanInstructionFront => 'سیدھا کیمرے کی طرف دیکھیں';
+
+  @override
+  String get scanInstructionLeft => 'اپنا بایاں گال دکھائیں';
+
+  @override
+  String get scanInstructionRight => 'اپنا دایاں گال دکھائیں';
+
+  @override
+  String get scanAdviceTooBright => 'نرم روشنی میں جائیں';
+
+  @override
+  String get scanAdviceTooDark => 'زیادہ روشنی والی جگہ تلاش کریں';
+
+  @override
+  String get scanChipLight => 'اچھی روشنی';
+
+  @override
+  String get scanChipCentred => 'درمیان میں';
+
+  @override
+  String get scanChipSteady => 'ہلیں نہیں';
+
+  @override
+  String get scanChipNotYet => 'ابھی نہیں';
+
+  @override
+  String scanStatusCountdown(int seconds) {
+    return 'ہلیں نہیں — $seconds سیکنڈ میں تصویر';
+  }
+
+  @override
+  String get scanStatusManual => 'یا ابھی لینے کے لیے بٹن دبائیں';
+
+  @override
+  String get scanGallery => 'گیلری سے منتخب کریں';
+
+  @override
+  String get scanShutter => 'تصویر لیں';
+
+  @override
+  String get scanFlip => 'کیمرہ بدلیں';
+
+  @override
+  String get scanCameraPreview => 'کیمرے کا منظر';
+
+  @override
+  String scanPhotoOf(String pose) {
+    return '$pose کی تصویر';
+  }
+
+  @override
+  String get scanReviewQuestion => 'کیا آپ کا چہرہ صاف اور روشن نظر آ رہا ہے؟';
+
+  @override
+  String get scanRetake => 'دوبارہ لیں';
+
+  @override
+  String get scanUsePhoto => 'یہ تصویر استعمال کریں';
+
+  @override
+  String get scanAnalyse => 'میری جلد کا تجزیہ کریں';
+
+  @override
+  String get scanSaving => 'آپ کی تصاویر محفوظ ہو رہی ہیں…';
+
+  @override
+  String get scanSaveFailed =>
+      'ہم آپ کی تصاویر محفوظ نہیں کر سکے۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get scanPickFailed =>
+      'ہم یہ تصویر نہیں کھول سکے۔ کوئی اور منتخب کریں۔';
+
+  @override
+  String get scanCaptureFailed => 'تصویر نہیں بن سکی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get scanPrivacyNote =>
+      'تصاویر آپ کے فون ہی میں رہتی ہیں اور کبھی اپ لوڈ نہیں ہوتیں۔';
+
+  @override
+  String get scanRationaleTitle => 'کیمرے کی اجازت دیں';
+
+  @override
+  String get scanRationaleBody =>
+      'ثاف آپ کا کیمرہ صرف چہرے کے اسکین کی تین تصاویر کے لیے استعمال کرتا ہے: سامنے، بائیں اور دائیں۔';
+
+  @override
+  String get scanContinue => 'جاری رکھیں';
+
+  @override
+  String get scanNotNow => 'ابھی نہیں';
+
+  @override
+  String get scanDeniedTitle => 'کیمرے کی اجازت بند ہے';
+
+  @override
+  String get scanDeniedBody =>
+      'آپ دوبارہ کوشش کر سکتے ہیں، یا اس کے بجائے گیلری سے تصاویر منتخب کریں۔';
+
+  @override
+  String get scanSettingsTitle => 'سیٹنگز میں کیمرہ آن کریں';
+
+  @override
+  String get scanSettingsBody =>
+      'ثاف کے لیے کیمرے کی اجازت بند ہے۔ آپ اپنے فون کی سیٹنگز میں اجازت دے سکتے ہیں، یا گیلری سے تصاویر منتخب کریں۔';
+
+  @override
+  String get scanOpenSettings => 'سیٹنگز کھولیں';
+
+  @override
+  String get scanTryAgain => 'دوبارہ کوشش کریں';
+
+  @override
+  String get scanFailedTitle => 'کیمرہ شروع نہیں ہوا';
+
+  @override
+  String get scanFailedBody =>
+      'کیمرہ استعمال کرنے والی دوسری ایپس بند کریں اور دوبارہ کوشش کریں، یا گیلری سے تصاویر منتخب کریں۔';
 }

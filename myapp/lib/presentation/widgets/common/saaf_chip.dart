@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 
 /// Fill of a [SaafChip] (design.md §6).
-enum SaafChipTone { sage, papaya, ink, cornsilk, onDark, sageTint }
+enum SaafChipTone {
+  sage,
+  papaya,
+  ink,
+  cornsilk,
+  onDark,
+  sageTint,
+
+  /// The page's text colour as fill, the page colour as text: the "Move to
+  /// softer light" chip on 06 (cornsilk on the dark screen).
+  strong,
+}
 
 /// Display pill (r18). Pair meaning with an [icon] or text, never colour alone
 /// (A11Y-7). [small] is the tighter 11/14 variant used for "Save 44%".
@@ -36,6 +47,7 @@ class SaafChip extends StatelessWidget {
       SaafChipTone.cornsilk => (colors.surface, colors.onSurface),
       SaafChipTone.onDark => (tokens.controlOnInk, colors.onInverseSurface),
       SaafChipTone.sageTint => (tokens.sageTint, colors.onSurface),
+      SaafChipTone.strong => (colors.onSurface, colors.surface),
     };
 
     final textStyle = (small ? tokens.styles.micro : context.text.labelMedium)

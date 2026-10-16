@@ -6,7 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/app.dart';
 import 'package:saaf/core/router/app_router.dart';
 import 'package:saaf/core/router/saaf_route.dart';
+import 'package:saaf/data/services/web/fake_permission_service.dart';
+import 'package:saaf/domain/entities/camera_permission.dart';
 import 'package:saaf/domain/entities/phone_number.dart';
+import 'package:saaf/presentation/providers/scan_providers.dart';
 import 'package:saaf/presentation/providers/app_router_provider.dart';
 import 'package:saaf/presentation/providers/pending_sign_in.dart';
 
@@ -64,11 +67,17 @@ void main() {
                   resendAfter: const Duration(seconds: 30),
                 ),
               ),
+              // The camera screen starts a camera and timers: use quiet fakes.
+              permissionServiceProvider.overrideWithValue(
+                FakePermissionService(CameraPermission.permanentlyDenied),
+              ),
             ],
             child: const SaafApp(),
           ),
         );
-        await tester.pumpAndSettle();
+        // Fixed pumps: a spinner on a screen would hang pumpAndSettle.
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
         expect(find.byKey(ValueKey('screen-${route.name}')), findsOneWidget);
       });
     }

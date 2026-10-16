@@ -371,4 +371,152 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fieldValid => 'Valid';
+
+  @override
+  String get scanTitle => 'Face scan';
+
+  @override
+  String get scanClose => 'Close';
+
+  @override
+  String get scanLightToggle => 'Screen light';
+
+  @override
+  String get scanPoseFront => 'Front';
+
+  @override
+  String get scanPoseLeft => 'Left';
+
+  @override
+  String get scanPoseRight => 'Right';
+
+  @override
+  String scanStepSemantics(int number, int total, String pose) {
+    return 'Photo $number of $total: $pose';
+  }
+
+  @override
+  String get scanStepDone => 'taken';
+
+  @override
+  String get scanInstructionFront => 'Look straight at the camera';
+
+  @override
+  String get scanInstructionLeft => 'Show your left cheek';
+
+  @override
+  String get scanInstructionRight => 'Show your right cheek';
+
+  @override
+  String get scanAdviceTooBright => 'Move to softer light';
+
+  @override
+  String get scanAdviceTooDark => 'Find brighter light';
+
+  @override
+  String get scanChipLight => 'Good light';
+
+  @override
+  String get scanChipCentred => 'Centred';
+
+  @override
+  String get scanChipSteady => 'Hold still';
+
+  @override
+  String get scanChipNotYet => 'not yet';
+
+  @override
+  String scanStatusCountdown(int seconds) {
+    return 'Hold still — capturing in ${seconds}s';
+  }
+
+  @override
+  String get scanStatusManual => 'Or tap the button to take it now';
+
+  @override
+  String get scanGallery => 'Choose from gallery';
+
+  @override
+  String get scanShutter => 'Take photo';
+
+  @override
+  String get scanFlip => 'Switch camera';
+
+  @override
+  String get scanCameraPreview => 'Camera view';
+
+  @override
+  String scanPhotoOf(String pose) {
+    return '$pose photo';
+  }
+
+  @override
+  String get scanReviewQuestion => 'Is your face clear and well lit?';
+
+  @override
+  String get scanRetake => 'Retake';
+
+  @override
+  String get scanUsePhoto => 'Use this photo';
+
+  @override
+  String get scanAnalyse => 'Analyse my skin';
+
+  @override
+  String get scanSaving => 'Saving your photos…';
+
+  @override
+  String get scanSaveFailed =>
+      'We couldn’t save your photos. Please try again.';
+
+  @override
+  String get scanPickFailed =>
+      'We couldn’t open that photo. Please try another.';
+
+  @override
+  String get scanCaptureFailed => 'The photo didn’t work. Please try again.';
+
+  @override
+  String get scanPrivacyNote =>
+      'Photos stay on your phone and are never uploaded.';
+
+  @override
+  String get scanRationaleTitle => 'Allow camera access';
+
+  @override
+  String get scanRationaleBody =>
+      'Saaf uses your camera only to take the three photos of your face scan: front, left and right.';
+
+  @override
+  String get scanContinue => 'Continue';
+
+  @override
+  String get scanNotNow => 'Not now';
+
+  @override
+  String get scanDeniedTitle => 'Camera access is off';
+
+  @override
+  String get scanDeniedBody =>
+      'You can try again, or choose photos from your gallery instead.';
+
+  @override
+  String get scanSettingsTitle => 'Turn on the camera in Settings';
+
+  @override
+  String get scanSettingsBody =>
+      'Camera access is blocked for Saaf. You can allow it in your phone’s Settings, or choose photos from your gallery.';
+
+  @override
+  String get scanOpenSettings => 'Open Settings';
+
+  @override
+  String get scanTryAgain => 'Try again';
+
+  @override
+  String get scanFailedTitle => 'The camera didn’t start';
+
+  @override
+  String get scanFailedBody =>
+      'Close other apps that use the camera and try again, or choose photos from your gallery.';
 }

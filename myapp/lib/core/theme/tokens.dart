@@ -128,6 +128,34 @@ class SaafHeroGeometry {
   final double glowHeight = 244;
 }
 
+/// Geometry of the 06 viewfinder (Figma node 3:57), in the 350 × 440 design
+/// frame. The viewfinder scales with its box; [reservedHeight] is the height of
+/// everything else on the screen (top bar, steps, chips, controls) at normal
+/// text size, used to give the viewfinder the space that is left.
+class SaafScanGeometry {
+  const SaafScanGeometry();
+
+  final double designWidth = 350;
+  final double designHeight = 440;
+
+  /// The oval the face should fill (dashed guide).
+  final Rect guide = const Rect.fromLTWH(57, 62, 236, 306);
+
+  /// The oval the progress arc runs along, just outside the guide.
+  final Rect arc = const Rect.fromLTWH(47, 52, 256, 326);
+
+  final double guideStroke = 2;
+  final double arcStroke = 4;
+  final double dashLength = 6;
+  final double dashGap = 5;
+
+  /// Where the arc starts: straight up (−90°).
+  final double arcStartAngle = -1.5707963267948966;
+
+  final double reservedHeight = 400;
+  final double minHeight = 160;
+}
+
 /// Corner radii (design.md §4).
 class SaafRadius {
   const SaafRadius();
@@ -171,6 +199,8 @@ class SaafSize {
   final double dayDot = 5;
   final double bottomNav = 64;
   final double shutter = 78;
+  final double shutterRing = 4;
+  final double shutterGap = 6;
   final double cameraControl = 48;
   final double icon = 20;
   final double iconSmall = 16;
