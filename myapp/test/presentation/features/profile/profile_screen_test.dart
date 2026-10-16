@@ -201,10 +201,15 @@ void main() {
   });
 
   group('editing the routine answers', () {
-    testWidgets('Skin profile opens the skin quiz', (tester) async {
+    // Changed on purpose (first phone test): a row now edits ONLY its own
+    // answer instead of restarting the whole quiz — see profile_editing_test.
+    testWidgets('Skin profile lets you pick which answer to change', (
+      tester,
+    ) async {
       await _app(tester);
       await _tap(tester, find.text('Skin profile'));
-      expect(find.byKey(const ValueKey('screen-skinQuiz')), findsOneWidget);
+      expect(find.text('Skin concerns'), findsOneWidget);
+      expect(find.byKey(const ValueKey('screen-skinQuiz')), findsNothing);
     });
 
     testWidgets('Monthly budget opens the budget step', (tester) async {

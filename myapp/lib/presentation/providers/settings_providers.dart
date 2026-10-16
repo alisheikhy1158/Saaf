@@ -11,6 +11,8 @@ abstract final class SettingNames {
   static const reminders = 'reminders';
   static const language = 'language';
   static const theme = 'theme';
+  static const name = 'name';
+  static const age = 'age';
 }
 
 /// Drift on the phone; in memory in tests and Chrome.

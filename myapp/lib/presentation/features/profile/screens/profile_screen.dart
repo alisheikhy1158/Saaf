@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' show NumberFormat;
@@ -6,7 +7,11 @@ import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
+import 'package:saaf/domain/entities/profile_details.dart';
 import 'package:saaf/domain/entities/reminder_settings.dart';
+import 'package:saaf/domain/entities/safety_flag.dart';
+import 'package:saaf/domain/entities/sensitivity.dart';
+import 'package:saaf/domain/entities/quiz_step.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
@@ -25,6 +30,7 @@ import 'package:saaf/presentation/widgets/common/saaf_overline.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_segmented_control.dart';
 import 'package:saaf/presentation/widgets/common/saaf_settings_group.dart';
+import 'package:saaf/presentation/widgets/common/saaf_text_field.dart';
 
 /// Figma 14 Profile & privacy: who you are, your plan, the answers behind your
 /// routine, privacy choices (including deleting the account, store requirement
@@ -44,7 +50,8 @@ class ProfileScreen extends ConsumerWidget {
     final reminders = ref.watch(reminderSettingsControllerProvider);
     final themeMode = ref.watch(themeModeControllerProvider);
 
-    final name = session?.displayName;
+    final details = ref.watch(profileDetailsControllerProvider);
+    final name = details.name ?? session?.displayName;
     final phone = session?.phoneE164;
     final title =
         name ??
@@ -92,6 +99,7 @@ class ProfileScreen extends ConsumerWidget {
               initial: initial,
               name: title,
               caption: _skinLine(l10n, profile),
+              onTap: () => _showSheet(context, const _DetailsSheet()),
             ),
             SizedBox(height: space.x16),
             _ProCard(isPro: isPro),
@@ -104,13 +112,13 @@ class ProfileScreen extends ConsumerWidget {
                   icon: Icons.water_drop_outlined,
                   title: l10n.profileRowSkin,
                   value: _skinValue(l10n, profile),
-                  onTap: () => context.push(SaafRoute.skinQuiz.path),
+                  onTap: () => _showSheet(context, const _SkinProfileSheet()),
                 ),
                 SaafSettingsRow(
                   icon: Icons.account_balance_wallet_outlined,
                   title: l10n.profileRowBudget,
                   value: budgetValue,
-                  onTap: () => context.push('${SaafRoute.skinQuiz.path}/5'),
+                  onTap: () => context.push(_editQuizPath(QuizStep.budget)),
                 ),
                 SaafSettingsRow(
                   icon: Icons.notifications_none,
@@ -178,6 +186,10 @@ class ProfileScreen extends ConsumerWidget {
       ),
     );
   }
+
+  /// The quiz asked for just [step], to be saved and closed (not the whole quiz).
+  static String _editQuizPath(QuizStep step) =>
+      '${SaafRoute.skinQuiz.path}/${step.number}?edit=1';
 
   /// "Combination skin · Acne-prone", or null when nothing is known.
   static String? _skinLine(AppLocalizations l10n, SkinProfile profile) {
@@ -307,14 +319,33 @@ class _Identity extends StatelessWidget {
     required this.initial,
     required this.name,
     required this.caption,
+    required this.onTap,
   });
 
   final String initial;
   final String name;
   final String? caption;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    return Semantics(
+      button: true,
+      label: '$name. ${l10n.profileDetailsEditSemantics}',
+      excludeSemantics: true,
+      onTap: onTap,
+      child: InkWell(
+        key: const ValueKey('profile-identity'),
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(tokens.radius.r20),
+        child: _identityRow(context),
+      ),
+    );
+  }
+
+  Widget _identityRow(BuildContext context) {
     final tokens = context.saaf;
     return Row(
       spacing: tokens.space.benefitGap,
@@ -427,10 +458,17 @@ class _ProCard extends StatelessWidget {
 
 /// The frame every bottom sheet shares: a title, the content and a Done button.
 class _SheetFrame extends StatelessWidget {
-  const _SheetFrame({required this.title, required this.children});
+  const _SheetFrame({
+    required this.title,
+    required this.children,
+    this.showDone = true,
+  });
 
   final String title;
   final List<Widget> children;
+
+  /// The shared Done button; sheets that save something bring their own.
+  final bool showDone;
 
   @override
   Widget build(BuildContext context) {
@@ -453,10 +491,11 @@ class _SheetFrame extends StatelessWidget {
               child: Text(title, style: context.text.titleLarge),
             ),
             ...children,
-            SaafButton.primary(
-              label: l10n.commonDone,
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+            if (showDone)
+              SaafButton.primary(
+                label: l10n.commonDone,
+                onPressed: () => Navigator.of(context).pop(),
+              ),
           ],
         ),
       ),
@@ -713,6 +752,174 @@ class _RemindersSheetState extends ConsumerState<_RemindersSheet> {
           style: tokens.styles.legal.copyWith(color: tokens.textMeta),
         ),
       ],
+    );
+  }
+}
+
+/// The skin answers one by one: each row opens ONLY that question (with Save),
+/// so nothing has to be answered again.
+class _SkinProfileSheet extends ConsumerWidget {
+  const _SkinProfileSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final profile = ref.watch(skinProfileControllerProvider);
+    final notSet = l10n.profileValueNotSet;
+
+    void edit(QuizStep step) {
+      final router = GoRouter.of(context);
+      Navigator.of(context).pop();
+      router.push(ProfileScreen._editQuizPath(step));
+    }
+
+    final type = ProfileScreen._typeTitle(l10n, profile.skinType);
+    final concerns = [
+      for (final c in profile.concerns) ProfileScreen._concernName(l10n, c),
+    ];
+    final sensitivity = switch (profile.sensitivity) {
+      Sensitivity.low => l10n.sensitivityLowTitle,
+      Sensitivity.sometimes => l10n.sensitivitySometimesTitle,
+      Sensitivity.high => l10n.sensitivityHighTitle,
+      null => notSet,
+    };
+    final flags = profile.safetyFlags;
+    final safety = flags == null
+        ? notSet
+        : flags.isEmpty
+        ? l10n.profileValueNone
+        : [
+            for (final f in flags)
+              switch (f) {
+                SafetyFlag.pregnantOrBreastfeeding => l10n.safetyPregnantTitle,
+                SafetyFlag.prescriptionTreatment =>
+                  l10n.safetyPrescriptionTitle,
+                SafetyFlag.ingredientAllergy => l10n.safetyAllergyTitle,
+              },
+          ].join(', ');
+
+    return _SheetFrame(
+      title: l10n.profileSkinSheetTitle,
+      children: [
+        SaafSettingsGroup(
+          rows: [
+            SaafSettingsRow(
+              icon: Icons.water_drop_outlined,
+              title: l10n.profileRowSkinType,
+              value: type ?? notSet,
+              onTap: () => edit(QuizStep.skinType),
+            ),
+            SaafSettingsRow(
+              icon: Icons.auto_awesome_outlined,
+              title: l10n.profileRowConcerns,
+              value: concerns.isEmpty ? notSet : concerns.join(', '),
+              onTap: () => edit(QuizStep.concerns),
+            ),
+            SaafSettingsRow(
+              icon: Icons.sentiment_neutral_outlined,
+              title: l10n.profileRowSensitivity,
+              value: sensitivity,
+              onTap: () => edit(QuizStep.sensitivity),
+            ),
+            SaafSettingsRow(
+              icon: Icons.medical_services_outlined,
+              title: l10n.profileRowSafety,
+              value: safety,
+              onTap: () => edit(QuizStep.safety),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Name and age, kept on this phone only.
+class _DetailsSheet extends ConsumerStatefulWidget {
+  const _DetailsSheet();
+
+  @override
+  ConsumerState<_DetailsSheet> createState() => _DetailsSheetState();
+}
+
+class _DetailsSheetState extends ConsumerState<_DetailsSheet> {
+  late final TextEditingController _name;
+  late final TextEditingController _age;
+  bool _nameError = false;
+  bool _ageError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final saved = ref.read(profileDetailsControllerProvider);
+    final session = ref.read(authSessionControllerProvider);
+    _name = TextEditingController(text: saved.name ?? session?.displayName);
+    _age = TextEditingController(text: saved.age?.toString());
+  }
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _age.dispose();
+    super.dispose();
+  }
+
+  void _save() {
+    final name = ProfileDetails.cleanName(_name.text);
+    final ageText = _age.text.trim();
+    final age = ProfileDetails.parseAge(ageText);
+    final nameError = name == null;
+    final ageError = ageText.isNotEmpty && age == null;
+    setState(() {
+      _nameError = nameError;
+      _ageError = ageError;
+    });
+    if (nameError || ageError) return;
+    ref
+        .read(profileDetailsControllerProvider.notifier)
+        .set(name: name, age: age);
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    return Padding(
+      padding: EdgeInsetsDirectional.only(
+        bottom: MediaQuery.viewInsetsOf(context).bottom,
+      ),
+      child: _SheetFrame(
+        title: l10n.profileDetailsTitle,
+        showDone: false,
+        children: [
+          SaafTextField(
+            key: const ValueKey('details-name'),
+            label: l10n.profileDetailsName,
+            controller: _name,
+            hintText: l10n.profileDetailsNameHint,
+            textInputAction: TextInputAction.next,
+            autofillHints: const [AutofillHints.name],
+            errorText: _nameError ? l10n.profileDetailsNameError : null,
+          ),
+          SaafTextField(
+            key: const ValueKey('details-age'),
+            label: l10n.profileDetailsAge,
+            controller: _age,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            helperText: l10n.profileDetailsHelp,
+            helperIcon: Icons.lock_outline,
+            errorText: _ageError ? l10n.profileDetailsAgeError : null,
+          ),
+          SaafButton.primary(label: l10n.commonSave, onPressed: _save),
+          SaafButton.text(
+            label: l10n.commonCancel,
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          SizedBox(height: tokens.space.x2),
+        ],
+      ),
     );
   }
 }

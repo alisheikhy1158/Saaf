@@ -1484,6 +1484,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get commonSave => 'Save';
+
+  @override
+  String get profileDetailsTitle => 'Your details';
+
+  @override
+  String get profileDetailsName => 'Name';
+
+  @override
+  String get profileDetailsNameHint => 'What should we call you?';
+
+  @override
+  String get profileDetailsAge => 'Age (optional)';
+
+  @override
+  String get profileDetailsHelp => 'Only stored on this phone.';
+
+  @override
+  String get profileDetailsNameError => 'Enter a name of up to 40 letters.';
+
+  @override
+  String get profileDetailsAgeError => 'Enter an age from 16 to 99.';
+
+  @override
+  String get profileDetailsEditSemantics => 'Edit your name and age';
+
+  @override
+  String get profileSkinSheetTitle => 'Skin profile';
+
+  @override
+  String get profileRowSkinType => 'Skin type';
+
+  @override
+  String get profileRowConcerns => 'Skin concerns';
+
+  @override
+  String get profileRowSensitivity => 'Sensitivity';
+
+  @override
+  String get profileRowSafety => 'Health & safety';
+
+  @override
+  String get profileValueNone => 'None';
+
+  @override
   String get languageTitle => 'Language';
 
   @override

@@ -182,6 +182,36 @@ void main() {
     expect(second.read(localeControllerProvider), const Locale('ur'));
   });
 
+  test(
+    'the name and age are remembered, and account deletion forgets them',
+    () async {
+      final first = start();
+      first
+          .read(profileDetailsControllerProvider.notifier)
+          .set(name: 'Ayesha', age: 27);
+      await settle();
+
+      final second = start();
+      second.listen(profileDetailsControllerProvider, (_, _) {});
+      await settle();
+      expect(second.read(profileDetailsControllerProvider).name, 'Ayesha');
+      expect(second.read(profileDetailsControllerProvider).age, 27);
+
+      final result = await second
+          .read(accountControllerProvider.notifier)
+          .deleteAccount();
+      expect(result.isOk, isTrue);
+      await settle();
+      expect(second.read(profileDetailsControllerProvider).name, isNull);
+
+      final third = start();
+      third.listen(profileDetailsControllerProvider, (_, _) {});
+      await settle();
+      expect(third.read(profileDetailsControllerProvider).name, isNull);
+      expect(third.read(profileDetailsControllerProvider).age, isNull);
+    },
+  );
+
   test('following the phone language is remembered as "no choice"', () async {
     final first = start();
     first.read(localeControllerProvider.notifier).setLocale(const Locale('ur'));

@@ -17,10 +17,14 @@ import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
 
 /// Skin quiz, one question per screen (Figma 05, node 2:305, is step 2 of 5; the
 /// other four steps follow the same layout). [step] is 1-based and clamped.
+///
+/// With [edit] it is ONE step opened from Profile: no progress, no Skip, a Save
+/// button, and Save (or Back) returns to where the user came from.
 class SkinQuizScreen extends ConsumerWidget {
-  const SkinQuizScreen({super.key, this.step = 1});
+  const SkinQuizScreen({super.key, this.step = 1, this.edit = false});
 
   final int step;
+  final bool edit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,7 +38,9 @@ class SkinQuizScreen extends ConsumerWidget {
 
     void toNextScreen() {
       final next = quizStep.next;
-      if (next == null) {
+      if (edit) {
+        context.canPop() ? context.pop() : context.go(SaafRoute.profile.path);
+      } else if (next == null) {
         ref.read(quizDoneProvider.notifier).markDone();
         context.go(SaafRoute.selfieCapture.path);
       } else {
@@ -55,28 +61,36 @@ class SkinQuizScreen extends ConsumerWidget {
               ? context.pop()
               : context.go(SaafRoute.privacyConsent.path),
         ),
-        center: Padding(
-          padding: EdgeInsetsDirectional.symmetric(horizontal: space.x16),
-          child: SaafProgressBar(value: quizStep.number / QuizStep.count),
-        ),
-        trailing: TextButton(
-          onPressed: toNextScreen,
-          style: TextButton.styleFrom(
-            padding: EdgeInsetsDirectional.symmetric(horizontal: space.x8),
-            textStyle: tokens.styles.skip,
-          ),
-          child: Text(l10n.quizSkip),
-        ),
+        center: edit
+            ? null
+            : Padding(
+                padding: EdgeInsetsDirectional.symmetric(horizontal: space.x16),
+                child: SaafProgressBar(value: quizStep.number / QuizStep.count),
+              ),
+        trailing: edit
+            ? null
+            : TextButton(
+                onPressed: toNextScreen,
+                style: TextButton.styleFrom(
+                  padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: space.x8,
+                  ),
+                  textStyle: tokens.styles.skip,
+                ),
+                child: Text(l10n.quizSkip),
+              ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(height: space.x16),
-          SaafOverline(
-            l10n.quizStepLabel(quizStep.number, QuizStep.count),
-            strong: true,
-          ),
-          SizedBox(height: space.x8),
+          if (!edit) ...[
+            SaafOverline(
+              l10n.quizStepLabel(quizStep.number, QuizStep.count),
+              strong: true,
+            ),
+            SizedBox(height: space.x8),
+          ],
           Text(view.title(l10n), style: context.text.headlineSmall),
           SizedBox(height: space.x6),
           Text(
@@ -103,8 +117,8 @@ class SkinQuizScreen extends ConsumerWidget {
       ),
       bottom: SaafButton.primary(
         key: const ValueKey('quiz-next'),
-        label: l10n.quizNext,
-        trailingIcon: Icons.arrow_forward,
+        label: edit ? l10n.commonSave : l10n.quizNext,
+        trailingIcon: edit ? null : Icons.arrow_forward,
         isLoading: quiz.isSubmitting,
         onPressed: quiz.canSubmit
             ? () async {

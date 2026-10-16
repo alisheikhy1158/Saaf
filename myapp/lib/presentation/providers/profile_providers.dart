@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' show ThemeMode;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saaf/core/error/result.dart';
+import 'package:saaf/domain/entities/profile_details.dart';
 import 'package:saaf/domain/entities/reminder_settings.dart';
 import 'package:saaf/domain/usecases/delete_account.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
@@ -64,6 +65,37 @@ class ThemeModeController extends _$ThemeModeController {
   }
 }
 
+/// The name and age the user added on Profile (stored only on this phone).
+@Riverpod(keepAlive: true)
+class ProfileDetailsController extends _$ProfileDetailsController {
+  bool _changed = false;
+
+  @override
+  ProfileDetails build() {
+    final settings = ref.read(settingsRepositoryProvider);
+    Future.wait([
+      settings.read(SettingNames.name),
+      settings.read(SettingNames.age),
+    ]).then((saved) {
+      if (!ref.mounted || _changed) return;
+      state = ProfileDetails(
+        name: saved[0],
+        age: ProfileDetails.ageFromStored(saved[1]),
+      );
+    });
+    return const ProfileDetails();
+  }
+
+  /// Saves [name] and [age] (either can be null to leave it out).
+  void set({String? name, int? age}) {
+    _changed = true;
+    state = ProfileDetails(name: name, age: age);
+    ref.read(settingsRepositoryProvider)
+      ..write(SettingNames.name, name)
+      ..write(SettingNames.age, age?.toString());
+  }
+}
+
 @riverpod
 DeleteAccount deleteAccountUseCase(Ref ref) => DeleteAccount(
   auth: ref.watch(authRepositoryProvider),
@@ -107,7 +139,10 @@ class AccountController extends _$AccountController {
   Future<void> _wipeLocalData() async {
     // The database first, so nothing is read back after the reset below.
     await ref.read(appDatabaseProvider)?.wipe();
+    await ref.read(settingsRepositoryProvider).write(SettingNames.name, null);
+    await ref.read(settingsRepositoryProvider).write(SettingNames.age, null);
     ref
+      ..invalidate(profileDetailsControllerProvider)
       ..invalidate(skinProfileControllerProvider)
       ..invalidate(skinProfileRepositoryProvider)
       ..invalidate(completedScanProvider)

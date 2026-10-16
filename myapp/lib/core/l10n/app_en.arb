@@ -1402,6 +1402,51 @@
   "commonCancel": "Cancel",
   "@commonCancel": { "description": "Button that cancels a dialog." },
 
+  "commonSave": "Save",
+  "@commonSave": { "description": "Button that saves what was changed." },
+
+  "profileDetailsTitle": "Your details",
+  "@profileDetailsTitle": { "description": "Title of the sheet where the name and age are edited." },
+
+  "profileDetailsName": "Name",
+  "@profileDetailsName": { "description": "Label of the name field." },
+
+  "profileDetailsNameHint": "What should we call you?",
+  "@profileDetailsNameHint": { "description": "Hint inside the name field." },
+
+  "profileDetailsAge": "Age (optional)",
+  "@profileDetailsAge": { "description": "Label of the age field." },
+
+  "profileDetailsHelp": "Only stored on this phone.",
+  "@profileDetailsHelp": { "description": "Reassurance under the details fields." },
+
+  "profileDetailsNameError": "Enter a name of up to 40 letters.",
+  "@profileDetailsNameError": { "description": "Error when the name is empty or too long." },
+
+  "profileDetailsAgeError": "Enter an age from 16 to 99.",
+  "@profileDetailsAgeError": { "description": "Error when the age is not allowed." },
+
+  "profileDetailsEditSemantics": "Edit your name and age",
+  "@profileDetailsEditSemantics": { "description": "Screen-reader label of the profile card." },
+
+  "profileSkinSheetTitle": "Skin profile",
+  "@profileSkinSheetTitle": { "description": "Title of the sheet that lists the skin answers." },
+
+  "profileRowSkinType": "Skin type",
+  "@profileRowSkinType": { "description": "Row in the skin profile sheet." },
+
+  "profileRowConcerns": "Skin concerns",
+  "@profileRowConcerns": { "description": "Row in the skin profile sheet." },
+
+  "profileRowSensitivity": "Sensitivity",
+  "@profileRowSensitivity": { "description": "Row in the skin profile sheet." },
+
+  "profileRowSafety": "Health & safety",
+  "@profileRowSafety": { "description": "Row in the skin profile sheet." },
+
+  "profileValueNone": "None",
+  "@profileValueNone": { "description": "Value of the safety row when the user has none of the listed conditions." },
+
   "languageTitle": "Language",
   "@languageTitle": { "description": "Title of the language sheet." },
 

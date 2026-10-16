@@ -2624,6 +2624,96 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get commonCancel;
 
+  /// Button that saves what was changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get commonSave;
+
+  /// Title of the sheet where the name and age are edited.
+  ///
+  /// In en, this message translates to:
+  /// **'Your details'**
+  String get profileDetailsTitle;
+
+  /// Label of the name field.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get profileDetailsName;
+
+  /// Hint inside the name field.
+  ///
+  /// In en, this message translates to:
+  /// **'What should we call you?'**
+  String get profileDetailsNameHint;
+
+  /// Label of the age field.
+  ///
+  /// In en, this message translates to:
+  /// **'Age (optional)'**
+  String get profileDetailsAge;
+
+  /// Reassurance under the details fields.
+  ///
+  /// In en, this message translates to:
+  /// **'Only stored on this phone.'**
+  String get profileDetailsHelp;
+
+  /// Error when the name is empty or too long.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name of up to 40 letters.'**
+  String get profileDetailsNameError;
+
+  /// Error when the age is not allowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an age from 16 to 99.'**
+  String get profileDetailsAgeError;
+
+  /// Screen-reader label of the profile card.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit your name and age'**
+  String get profileDetailsEditSemantics;
+
+  /// Title of the sheet that lists the skin answers.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin profile'**
+  String get profileSkinSheetTitle;
+
+  /// Row in the skin profile sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin type'**
+  String get profileRowSkinType;
+
+  /// Row in the skin profile sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin concerns'**
+  String get profileRowConcerns;
+
+  /// Row in the skin profile sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensitivity'**
+  String get profileRowSensitivity;
+
+  /// Row in the skin profile sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Health & safety'**
+  String get profileRowSafety;
+
+  /// Value of the safety row when the user has none of the listed conditions.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get profileValueNone;
+
   /// Title of the language sheet.
   ///
   /// In en, this message translates to:

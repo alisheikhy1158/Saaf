@@ -92,8 +92,10 @@ GoRouter buildAppRouter({
             if (route == SaafRoute.skinQuiz)
               GoRoute(
                 path: ':step',
+                // ?edit=1 is one answer opened from Profile (see SkinQuizScreen).
                 builder: (context, state) => SkinQuizScreen(
                   step: int.tryParse(state.pathParameters['step'] ?? '') ?? 1,
+                  edit: state.uri.queryParameters['edit'] == '1',
                 ),
               ),
           ],

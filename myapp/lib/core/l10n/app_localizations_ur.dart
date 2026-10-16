@@ -1482,6 +1482,52 @@ class AppLocalizationsUr extends AppLocalizations {
   String get commonCancel => 'منسوخ کریں';
 
   @override
+  String get commonSave => 'محفوظ کریں';
+
+  @override
+  String get profileDetailsTitle => 'آپ کی تفصیلات';
+
+  @override
+  String get profileDetailsName => 'نام';
+
+  @override
+  String get profileDetailsNameHint => 'ہم آپ کو کس نام سے پکاریں؟';
+
+  @override
+  String get profileDetailsAge => 'عمر (اختیاری)';
+
+  @override
+  String get profileDetailsHelp => 'یہ صرف آپ کے فون پر محفوظ رہتا ہے۔';
+
+  @override
+  String get profileDetailsNameError =>
+      'زیادہ سے زیادہ 40 حروف کا نام درج کریں۔';
+
+  @override
+  String get profileDetailsAgeError => '16 سے 99 کے درمیان عمر درج کریں۔';
+
+  @override
+  String get profileDetailsEditSemantics => 'اپنا نام اور عمر تبدیل کریں';
+
+  @override
+  String get profileSkinSheetTitle => 'جلد کا پروفائل';
+
+  @override
+  String get profileRowSkinType => 'جلد کی قسم';
+
+  @override
+  String get profileRowConcerns => 'جلد کے مسائل';
+
+  @override
+  String get profileRowSensitivity => 'حساسیت';
+
+  @override
+  String get profileRowSafety => 'صحت اور حفاظت';
+
+  @override
+  String get profileValueNone => 'کوئی نہیں';
+
+  @override
   String get languageTitle => 'زبان';
 
   @override
