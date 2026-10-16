@@ -7,6 +7,7 @@ import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/check_in_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
+import 'package:saaf/presentation/providers/database_providers.dart';
 import 'package:saaf/presentation/providers/home_providers.dart';
 import 'package:saaf/presentation/providers/onboarding_status.dart';
 import 'package:saaf/presentation/providers/pending_sign_in.dart';
@@ -69,17 +70,21 @@ class AccountController extends _$AccountController {
     }.toList();
 
     final result = await ref.read(deleteAccountUseCaseProvider)(scanIds);
-    if (result.isOk) _wipeLocalData();
+    if (result.isOk) await _wipeLocalData();
     if (ref.mounted) state = false;
     return result;
   }
 
   /// Back to a fresh install, except for the language and appearance choices.
-  void _wipeLocalData() {
+  Future<void> _wipeLocalData() async {
+    // The database first, so nothing is read back after the reset below.
+    await ref.read(appDatabaseProvider)?.wipe();
     ref
       ..invalidate(skinProfileControllerProvider)
       ..invalidate(skinProfileRepositoryProvider)
       ..invalidate(completedScanProvider)
+      ..invalidate(scanHistoryRepositoryProvider)
+      ..invalidate(onboardingRepositoryProvider)
       ..invalidate(scanHistoryProvider)
       ..invalidate(checkInRepositoryProvider)
       ..invalidate(routineLogRepositoryProvider)

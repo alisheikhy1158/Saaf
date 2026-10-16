@@ -1,25 +1,47 @@
 import 'dart:typed_data';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:saaf/data/local/drift_repositories.dart';
+import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
 import 'package:saaf/domain/entities/completed_scan.dart';
 import 'package:saaf/domain/entities/face_pose.dart';
 import 'package:saaf/domain/entities/stored_photo.dart';
+import 'package:saaf/domain/repositories/scan_history_repository.dart';
 import 'package:saaf/domain/usecases/compare_progress.dart';
 import 'package:saaf/presentation/providers/analysis_providers.dart';
+import 'package:saaf/presentation/providers/database_providers.dart';
+
 import 'package:saaf/presentation/providers/no_auto_retry.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
 import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 
 part 'progress_providers.g.dart';
 
-/// Every finished scan, oldest first. Becomes a stored history with the local
-/// database (Phase 7).
+@Riverpod(keepAlive: true)
+ScanHistoryRepository scanHistoryRepository(Ref ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return db == null
+      ? InMemoryScanHistoryRepository()
+      : DriftScanHistoryRepository(db);
+}
+
+/// Every finished scan, oldest first. Loaded from the database at start and
+/// saved to it as scans finish.
 @Riverpod(keepAlive: true)
 class ScanHistory extends _$ScanHistory {
   @override
-  List<CompletedScan> build() => const [];
+  List<CompletedScan> build() {
+    final repository = ref.read(scanHistoryRepositoryProvider);
+    repository.all().then((saved) {
+      if (ref.mounted && state.isEmpty) state = saved;
+    });
+    return const [];
+  }
 
-  void add(CompletedScan scan) => state = [...state, scan];
+  void add(CompletedScan scan) {
+    state = [...state, scan];
+    ref.read(scanHistoryRepositoryProvider).add(scan);
+  }
 }
 
 /// The front photo of [scan] (the one the comparison shows).

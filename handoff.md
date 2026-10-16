@@ -6,9 +6,8 @@
 - **Phase / step:** ALL 14 Figma screens are built and tested (01–14) plus router, theme, l10n (English + Urdu), fakes for every
   plugin. GitHub: https://github.com/alisheikhy1158/Saaf (main). It is a complete, demo-able app on fakes; nothing is real-backend yet.
 - **Next exact step (needs the owner):** Firebase console setup (docs/firebase-setup.md), Apple/Google/Codemagic accounts, then a
-  Codemagic build to test the camera, permissions and share on real phones. Engineering next: Phase 7 (drift persistence +
-  notifications), Phase 8 (barcode scanner + real product/price service), Phase 9 (RevenueCat), real analyser.
-- **Tests:** 1144 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
+  Codemagic build to test the camera, permissions and share on real phones. Engineering next: Phase 7 rest (notifications; drift on web needs `sqlite3.wasm` + `drift_worker.js` in `web/`, OFF-6), Phase 8 (barcode scanner + real product/price service), Phase 9 (RevenueCat), real analyser.
+- **Tests:** 1165 passing · **Analyze:** 0 issues · Flutter 3.47.7 / Dart 3.13.5
 
 ## Decisions made
 - Bundle ID `com.saafapp.saaf`. Unified Material 3 styled like Figma; Figma wins (design.md §0). Backend: **Firebase** (ADR 0001).
@@ -24,7 +23,8 @@
   (generic products, made-up prices/stores; ingredient flags need dermatologist review), `FakeSubscriptionRepository`, "How we score" text,
   `ReminderSettings` (times saved, but NO notifications are scheduled yet), Profile "Photo backup" (always off).
 - Router guard (`core/router/app_guard.dart`): signed in -> consent -> quiz before the app opens; off in tests unless `guard:` is passed. `ConsentStatus`/`QuizDone` live in `onboarding_status.dart` (quiz-done is in memory, so persist it with drift).
-- In-memory repos (consent, skin profile, scan history, routine log, check-ins, reminders, theme, language) until drift. Urdu = mine, needs native review.
+- **Drift DB** (`data/local/app_database.dart`, repos in `drift_repositories.dart`) stores consent, skin profile, scans (metadata), routine log, check-ins and quiz-done on phones; `main()` opens it and overrides `appDatabaseProvider`; null (tests, Chrome) = in-memory repos. Delete account wipes it. Still in memory: reminders, theme, language, outbox/sync (OFF-2), schema migrations beyond v1.
+- In-memory repos Urdu = mine, needs native review.
 - Profile "Skin profile"/"Monthly budget" reopen the quiz; the quiz ends on the camera screen (could return to Profile instead).
 
 ## Testing notes

@@ -1,5 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:saaf/data/local/drift_repositories.dart';
+import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
+import 'package:saaf/domain/repositories/onboarding_repository.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
+import 'package:saaf/presentation/providers/database_providers.dart';
 
 part 'onboarding_status.g.dart';
 
@@ -18,12 +22,28 @@ class ConsentStatus extends _$ConsentStatus {
   void markGiven() => state = true;
 }
 
+@Riverpod(keepAlive: true)
+OnboardingRepository onboardingRepository(Ref ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return db == null
+      ? InMemoryOnboardingRepository()
+      : DriftOnboardingRepository(db);
+}
+
 /// Whether the skin quiz was finished (or skipped to the end). The router guard
-/// sends a new user to the quiz until it is.
+/// sends a new user to the quiz until it is. Remembered between sessions.
 @Riverpod(keepAlive: true)
 class QuizDone extends _$QuizDone {
   @override
-  bool build() => false;
+  bool build() {
+    ref.read(onboardingRepositoryProvider).quizDone().then((done) {
+      if (ref.mounted && done) state = true;
+    });
+    return false;
+  }
 
-  void markDone() => state = true;
+  void markDone() {
+    state = true;
+    ref.read(onboardingRepositoryProvider).setQuizDone(done: true);
+  }
 }
