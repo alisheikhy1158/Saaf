@@ -395,6 +395,60 @@
   "scanReviewQuestion": "Is your face clear and well lit?",
   "@scanReviewQuestion": { "description": "Status line while a photo that was just taken is shown." },
 
+  "scanChipAngle": "Right angle",
+  "@scanChipAngle": { "description": "Quality chip: the head is turned the way this photo needs." },
+
+  "scanStatusLocked": "The button unlocks when everything is ready",
+  "@scanStatusLocked": { "description": "Status line while the shutter waits for the checks." },
+
+  "scanFaceNoFace": "We can’t see your face",
+  "@scanFaceNoFace": { "description": "Hint: no face found in the camera picture." },
+
+  "scanFaceSeveral": "Only one face, please",
+  "@scanFaceSeveral": { "description": "Hint: more than one face in the camera picture." },
+
+  "scanFaceCloser": "Move a little closer",
+  "@scanFaceCloser": { "description": "Hint: the face is too small." },
+
+  "scanFaceBack": "Move a little back",
+  "@scanFaceBack": { "description": "Hint: the face is too big." },
+
+  "scanFaceCentre": "Centre your face in the oval",
+  "@scanFaceCentre": { "description": "Hint: the face is off centre." },
+
+  "scanFaceStraight": "Look straight at the camera",
+  "@scanFaceStraight": { "description": "Hint: the head is turned or tilted for the front photo." },
+
+  "scanFaceTurnLeft": "Turn your head to your left",
+  "@scanFaceTurnLeft": { "description": "Hint for the left cheek photo." },
+
+  "scanFaceTurnRight": "Turn your head to your right",
+  "@scanFaceTurnRight": { "description": "Hint for the right cheek photo." },
+
+  "scanFaceTurnLess": "Turn back a little",
+  "@scanFaceTurnLess": { "description": "Hint: the head is turned too far for a side photo." },
+
+  "scanCheckNoFace": "We couldn’t find a face in this photo. Please retake it.",
+  "@scanCheckNoFace": { "description": "Warning under a photo with no face." },
+
+  "scanCheckSeveral": "There is more than one face in this photo. Please retake it with only you in it.",
+  "@scanCheckSeveral": { "description": "Warning under a photo with several faces." },
+
+  "scanCheckPose": "This is not the angle we need for this photo. Please retake it.",
+  "@scanCheckPose": { "description": "Warning under a photo taken at the wrong angle." },
+
+  "scanCheckSmall": "Your face is too small in this photo. Move closer and retake it.",
+  "@scanCheckSmall": { "description": "Warning under a photo where the face is tiny." },
+
+  "scanCheckDark": "This photo is too dark. Find brighter light and retake it.",
+  "@scanCheckDark": { "description": "Warning under a dark photo." },
+
+  "scanCheckBright": "This photo is too bright. Move to softer light and retake it.",
+  "@scanCheckBright": { "description": "Warning under an over-bright photo." },
+
+  "scanUseAnyway": "Use it anyway",
+  "@scanUseAnyway": { "description": "Button that keeps a photo the check did not like." },
+
   "scanRetake": "Retake",
   "@scanRetake": { "description": "Button that discards the photo and shows the camera again." },
 

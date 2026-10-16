@@ -15,6 +15,11 @@ import 'package:saaf/domain/entities/camera_permission.dart';
 import 'package:saaf/domain/services/camera_service.dart';
 import 'package:saaf/domain/services/capture_quality_monitor.dart';
 import 'package:saaf/domain/services/permission_service.dart';
+import 'package:saaf/domain/services/photo_verifier.dart';
+import 'package:saaf/data/services/live_frame_source.dart';
+import 'package:saaf/data/services/mlkit_capture_quality_monitor.dart';
+import 'package:saaf/data/services/mlkit_photo_verifier.dart';
+import 'package:saaf/data/services/web/always_ok_photo_verifier.dart';
 import 'package:saaf/domain/services/photo_picker.dart';
 import 'package:saaf/domain/services/photo_store.dart';
 import 'package:saaf/domain/usecases/camera_access.dart';
@@ -65,10 +70,23 @@ PhotoPicker photoPicker(Ref ref) =>
 PhotoStore photoStore(Ref ref) =>
     (Env.fakeCamera || kIsWeb) ? InMemoryPhotoStore() : FilePhotoStore();
 
-/// Pretend until real on-device image analysis exists (see handoff.md).
+/// Phones really check the camera picture (face, light, angle, steadiness) with
+/// the on-device face detector. Chrome and `FAKE_CAMERA` demos pretend.
 @Riverpod(keepAlive: true)
-CaptureQualityMonitor captureQualityMonitor(Ref ref) =>
-    const FakeCaptureQualityMonitor();
+CaptureQualityMonitor captureQualityMonitor(Ref ref) {
+  final camera = ref.watch(cameraServiceProvider);
+  if (!Env.fakeCamera && !kIsWeb && camera is LiveFrameSource) {
+    return MlKitCaptureQualityMonitor(camera as LiveFrameSource);
+  }
+  return const FakeCaptureQualityMonitor();
+}
+
+/// Checks each photo for a clear face in the right pose with the on-device face
+/// detector. Pretend (always ok) in Chrome and for `FAKE_CAMERA` demos.
+@Riverpod(keepAlive: true)
+PhotoVerifier photoVerifier(Ref ref) => (Env.fakeCamera || kIsWeb)
+    ? const AlwaysOkPhotoVerifier()
+    : MlKitPhotoVerifier();
 
 @Riverpod(keepAlive: true)
 CameraAccess cameraAccess(Ref ref) =>

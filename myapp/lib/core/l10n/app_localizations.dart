@@ -908,6 +908,114 @@ abstract class AppLocalizations {
   /// **'Is your face clear and well lit?'**
   String get scanReviewQuestion;
 
+  /// Quality chip: the head is turned the way this photo needs.
+  ///
+  /// In en, this message translates to:
+  /// **'Right angle'**
+  String get scanChipAngle;
+
+  /// Status line while the shutter waits for the checks.
+  ///
+  /// In en, this message translates to:
+  /// **'The button unlocks when everything is ready'**
+  String get scanStatusLocked;
+
+  /// Hint: no face found in the camera picture.
+  ///
+  /// In en, this message translates to:
+  /// **'We can’t see your face'**
+  String get scanFaceNoFace;
+
+  /// Hint: more than one face in the camera picture.
+  ///
+  /// In en, this message translates to:
+  /// **'Only one face, please'**
+  String get scanFaceSeveral;
+
+  /// Hint: the face is too small.
+  ///
+  /// In en, this message translates to:
+  /// **'Move a little closer'**
+  String get scanFaceCloser;
+
+  /// Hint: the face is too big.
+  ///
+  /// In en, this message translates to:
+  /// **'Move a little back'**
+  String get scanFaceBack;
+
+  /// Hint: the face is off centre.
+  ///
+  /// In en, this message translates to:
+  /// **'Centre your face in the oval'**
+  String get scanFaceCentre;
+
+  /// Hint: the head is turned or tilted for the front photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Look straight at the camera'**
+  String get scanFaceStraight;
+
+  /// Hint for the left cheek photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn your head to your left'**
+  String get scanFaceTurnLeft;
+
+  /// Hint for the right cheek photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn your head to your right'**
+  String get scanFaceTurnRight;
+
+  /// Hint: the head is turned too far for a side photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn back a little'**
+  String get scanFaceTurnLess;
+
+  /// Warning under a photo with no face.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t find a face in this photo. Please retake it.'**
+  String get scanCheckNoFace;
+
+  /// Warning under a photo with several faces.
+  ///
+  /// In en, this message translates to:
+  /// **'There is more than one face in this photo. Please retake it with only you in it.'**
+  String get scanCheckSeveral;
+
+  /// Warning under a photo taken at the wrong angle.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not the angle we need for this photo. Please retake it.'**
+  String get scanCheckPose;
+
+  /// Warning under a photo where the face is tiny.
+  ///
+  /// In en, this message translates to:
+  /// **'Your face is too small in this photo. Move closer and retake it.'**
+  String get scanCheckSmall;
+
+  /// Warning under a dark photo.
+  ///
+  /// In en, this message translates to:
+  /// **'This photo is too dark. Find brighter light and retake it.'**
+  String get scanCheckDark;
+
+  /// Warning under an over-bright photo.
+  ///
+  /// In en, this message translates to:
+  /// **'This photo is too bright. Move to softer light and retake it.'**
+  String get scanCheckBright;
+
+  /// Button that keeps a photo the check did not like.
+  ///
+  /// In en, this message translates to:
+  /// **'Use it anyway'**
+  String get scanUseAnyway;
+
   /// Button that discards the photo and shows the camera again.
   ///
   /// In en, this message translates to:

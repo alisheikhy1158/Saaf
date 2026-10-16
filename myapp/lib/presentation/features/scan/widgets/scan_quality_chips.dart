@@ -22,6 +22,7 @@ class ScanQualityChips extends StatelessWidget {
       children: [
         _chip(l10n, l10n.scanChipLight, quality.lightOk),
         _chip(l10n, l10n.scanChipCentred, quality.centred),
+        _chip(l10n, l10n.scanChipAngle, quality.poseOk),
         _chip(l10n, l10n.scanChipSteady, quality.steady),
       ],
     );

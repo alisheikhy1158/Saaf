@@ -5,6 +5,7 @@ import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/domain/entities/capture_quality.dart';
 import 'package:saaf/domain/entities/completed_scan.dart';
 import 'package:saaf/domain/entities/face_pose.dart';
+import 'package:saaf/domain/entities/photo_check.dart';
 import 'package:saaf/domain/entities/scan_photo.dart';
 import 'package:saaf/domain/entities/scan_session.dart';
 import 'package:saaf/domain/usecases/camera_access.dart';
@@ -114,11 +115,16 @@ class ScanController extends _$ScanController {
       state = state.copyWith(
         phase: ScanPhase.live,
         reviewPhoto: null,
+        photoCheck: null,
         failure: null,
       );
       _watchQuality();
     } else {
-      state = state.copyWith(reviewPhoto: null, failure: null);
+      state = state.copyWith(
+        reviewPhoto: null,
+        photoCheck: null,
+        failure: null,
+      );
       await _check();
     }
   }
@@ -168,9 +174,12 @@ class ScanController extends _$ScanController {
 
   // ── Taking, keeping and retaking ─────────────────────────────────────────
 
-  /// The shutter. Works at once, even if the hints say "not ready".
+  /// The shutter. With the demo monitor it works at once; when the phone is
+  /// really checking the picture it waits until the checks pass (the screen
+  /// also disables the button).
   Future<void> capture() async {
     if (state.phase != ScanPhase.live || _capturing) return;
+    if (state.shutterLocked) return;
     _capturing = true;
     _cancelCountdown();
     final result = await ref.read(capturePhotoProvider)(state.pose);
@@ -215,8 +224,26 @@ class ScanController extends _$ScanController {
       session: state.session.withPhoto(photo),
       pose: photo.pose,
       reviewPhoto: photo,
+      photoCheck: null,
       failure: null,
     );
+    unawaited(_verify(photo));
+  }
+
+  /// Looks at the photo for a clear face in the right pose and records what it
+  /// found. The photo can still be kept either way; the screen says what is
+  /// wrong and recommends a retake.
+  Future<void> _verify(ScanPhoto photo) async {
+    PhotoCheck verdict;
+    try {
+      verdict = await ref
+          .read(photoVerifierProvider)
+          .check(photo.pose, photo.bytes);
+    } on Object {
+      verdict = PhotoCheck.unavailable;
+    }
+    if (!ref.mounted || !identical(state.reviewPhoto, photo)) return;
+    state = state.copyWith(photoCheck: verdict);
   }
 
   /// Throws the photo away and shows the camera again.

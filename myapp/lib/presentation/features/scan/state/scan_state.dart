@@ -2,6 +2,7 @@ import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/domain/entities/camera_facing.dart';
 import 'package:saaf/domain/entities/capture_quality.dart';
 import 'package:saaf/domain/entities/face_pose.dart';
+import 'package:saaf/domain/entities/photo_check.dart';
 import 'package:saaf/domain/entities/scan_photo.dart';
 import 'package:saaf/domain/entities/scan_session.dart';
 
@@ -52,6 +53,7 @@ class ScanState {
     this.fillLight = false,
     this.failure,
     this.reviewPhoto,
+    this.photoCheck,
   });
 
   factory ScanState.initial(ScanSession session) =>
@@ -78,6 +80,13 @@ class ScanState {
   /// The photo shown in the review state.
   final ScanPhoto? reviewPhoto;
 
+  /// What the check of [reviewPhoto] found; null while it is still checking.
+  final PhotoCheck? photoCheck;
+
+  /// The phone is really checking the camera picture and it is not good enough
+  /// yet, so the shutter waits (the 2-second auto-capture also needs it).
+  bool get shutterLocked => quality.assessed && !quality.isReady;
+
   ScanState copyWith({
     ScanPhase? phase,
     ScanSession? session,
@@ -89,6 +98,7 @@ class ScanState {
     bool? fillLight,
     Object? failure = _keep,
     Object? reviewPhoto = _keep,
+    Object? photoCheck = _keep,
   }) => ScanState(
     phase: phase ?? this.phase,
     session: session ?? this.session,
@@ -102,5 +112,8 @@ class ScanState {
     reviewPhoto: identical(reviewPhoto, _keep)
         ? this.reviewPhoto
         : reviewPhoto as ScanPhoto?,
+    photoCheck: identical(photoCheck, _keep)
+        ? this.photoCheck
+        : photoCheck as PhotoCheck?,
   );
 }

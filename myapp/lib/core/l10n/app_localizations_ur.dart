@@ -455,6 +455,66 @@ class AppLocalizationsUr extends AppLocalizations {
   String get scanReviewQuestion => 'کیا آپ کا چہرہ صاف اور روشن نظر آ رہا ہے؟';
 
   @override
+  String get scanChipAngle => 'درست زاویہ';
+
+  @override
+  String get scanStatusLocked => 'جب سب کچھ ٹھیک ہو جائے گا تو بٹن کھل جائے گا';
+
+  @override
+  String get scanFaceNoFace => 'ہمیں آپ کا چہرہ نظر نہیں آ رہا';
+
+  @override
+  String get scanFaceSeveral => 'براہِ کرم صرف ایک چہرہ';
+
+  @override
+  String get scanFaceCloser => 'تھوڑا قریب آئیں';
+
+  @override
+  String get scanFaceBack => 'تھوڑا پیچھے ہٹیں';
+
+  @override
+  String get scanFaceCentre => 'اپنا چہرہ بیضوی شکل کے بیچ میں لائیں';
+
+  @override
+  String get scanFaceStraight => 'سیدھا کیمرے کی طرف دیکھیں';
+
+  @override
+  String get scanFaceTurnLeft => 'اپنا سر اپنے بائیں طرف موڑیں';
+
+  @override
+  String get scanFaceTurnRight => 'اپنا سر اپنے دائیں طرف موڑیں';
+
+  @override
+  String get scanFaceTurnLess => 'تھوڑا واپس موڑیں';
+
+  @override
+  String get scanCheckNoFace =>
+      'اس تصویر میں ہمیں چہرہ نہیں ملا۔ براہِ کرم دوبارہ لیں۔';
+
+  @override
+  String get scanCheckSeveral =>
+      'اس تصویر میں ایک سے زیادہ چہرے ہیں۔ براہِ کرم صرف اپنی تصویر دوبارہ لیں۔';
+
+  @override
+  String get scanCheckPose =>
+      'اس تصویر کے لیے یہ زاویہ درست نہیں۔ براہِ کرم دوبارہ لیں۔';
+
+  @override
+  String get scanCheckSmall =>
+      'اس تصویر میں آپ کا چہرہ بہت چھوٹا ہے۔ قریب آ کر دوبارہ لیں۔';
+
+  @override
+  String get scanCheckDark =>
+      'یہ تصویر بہت تاریک ہے۔ زیادہ روشنی میں جا کر دوبارہ لیں۔';
+
+  @override
+  String get scanCheckBright =>
+      'یہ تصویر بہت زیادہ روشن ہے۔ نرم روشنی میں جا کر دوبارہ لیں۔';
+
+  @override
+  String get scanUseAnyway => 'پھر بھی استعمال کریں';
+
+  @override
   String get scanRetake => 'دوبارہ لیں';
 
   @override

@@ -454,6 +454,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scanReviewQuestion => 'Is your face clear and well lit?';
 
   @override
+  String get scanChipAngle => 'Right angle';
+
+  @override
+  String get scanStatusLocked => 'The button unlocks when everything is ready';
+
+  @override
+  String get scanFaceNoFace => 'We can’t see your face';
+
+  @override
+  String get scanFaceSeveral => 'Only one face, please';
+
+  @override
+  String get scanFaceCloser => 'Move a little closer';
+
+  @override
+  String get scanFaceBack => 'Move a little back';
+
+  @override
+  String get scanFaceCentre => 'Centre your face in the oval';
+
+  @override
+  String get scanFaceStraight => 'Look straight at the camera';
+
+  @override
+  String get scanFaceTurnLeft => 'Turn your head to your left';
+
+  @override
+  String get scanFaceTurnRight => 'Turn your head to your right';
+
+  @override
+  String get scanFaceTurnLess => 'Turn back a little';
+
+  @override
+  String get scanCheckNoFace =>
+      'We couldn’t find a face in this photo. Please retake it.';
+
+  @override
+  String get scanCheckSeveral =>
+      'There is more than one face in this photo. Please retake it with only you in it.';
+
+  @override
+  String get scanCheckPose =>
+      'This is not the angle we need for this photo. Please retake it.';
+
+  @override
+  String get scanCheckSmall =>
+      'Your face is too small in this photo. Move closer and retake it.';
+
+  @override
+  String get scanCheckDark =>
+      'This photo is too dark. Find brighter light and retake it.';
+
+  @override
+  String get scanCheckBright =>
+      'This photo is too bright. Move to softer light and retake it.';
+
+  @override
+  String get scanUseAnyway => 'Use it anyway';
+
+  @override
   String get scanRetake => 'Retake';
 
   @override

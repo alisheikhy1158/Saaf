@@ -8,6 +8,7 @@ import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/domain/entities/capture_quality.dart';
+import 'package:saaf/domain/entities/photo_check.dart';
 import 'package:saaf/presentation/features/scan/controllers/scan_controller.dart';
 import 'package:saaf/presentation/features/scan/state/scan_state.dart';
 import 'package:saaf/presentation/features/scan/widgets/pose_text.dart';
@@ -113,6 +114,7 @@ class _ScanView extends ConsumerWidget {
           : isReviewing
           ? _ReviewButtons(
               isLast: isLast,
+              needsRetake: state.photoCheck?.needsRetake ?? false,
               isSaving: state.phase == ScanPhase.saving,
               onRetake: controller.retake,
               onAccept: controller.accept,
@@ -122,7 +124,9 @@ class _ScanView extends ConsumerWidget {
               shutterLabel: l10n.scanShutter,
               flipLabel: l10n.scanFlip,
               onGallery: isLive ? controller.pickFromGallery : null,
-              onShutter: isLive ? controller.capture : null,
+              onShutter: isLive && !state.shutterLocked
+                  ? controller.capture
+                  : null,
               onFlip: isLive && state.canFlip ? controller.flip : null,
             ),
     );
@@ -146,17 +150,32 @@ class _HintChip extends StatelessWidget {
           }
         : null;
 
-    return advice != null
-        ? SaafChip(
-            label: advice,
-            icon: Icons.wb_sunny_outlined,
-            tone: SaafChipTone.strong,
-          )
-        : SaafChip(
-            label: state.pose.instruction(l10n),
-            icon: Icons.face_outlined,
-            tone: SaafChipTone.onDark,
-          );
+    if (advice != null) {
+      return SaafChip(
+        label: advice,
+        icon: Icons.wb_sunny_outlined,
+        tone: SaafChipTone.strong,
+      );
+    }
+    final faceAdvice = state.phase == ScanPhase.live
+        ? switch (state.quality.faceAdvice) {
+            FaceAdvice.none => null,
+            FaceAdvice.noFace => l10n.scanFaceNoFace,
+            FaceAdvice.severalFaces => l10n.scanFaceSeveral,
+            FaceAdvice.moveCloser => l10n.scanFaceCloser,
+            FaceAdvice.moveBack => l10n.scanFaceBack,
+            FaceAdvice.centreFace => l10n.scanFaceCentre,
+            FaceAdvice.lookStraight => l10n.scanFaceStraight,
+            FaceAdvice.turnLeft => l10n.scanFaceTurnLeft,
+            FaceAdvice.turnRight => l10n.scanFaceTurnRight,
+            FaceAdvice.turnLess => l10n.scanFaceTurnLess,
+          }
+        : null;
+    return SaafChip(
+      label: faceAdvice ?? state.pose.instruction(l10n),
+      icon: Icons.face_outlined,
+      tone: faceAdvice != null ? SaafChipTone.strong : SaafChipTone.onDark,
+    );
   }
 }
 
@@ -226,8 +245,14 @@ class _StatusLine extends StatelessWidget {
       (ScanPhase.live, _) => (
         state.countdown != null
             ? l10n.scanStatusCountdown(state.countdown!)
+            : state.shutterLocked
+            ? l10n.scanStatusLocked
             : l10n.scanStatusManual,
         false,
+      ),
+      (ScanPhase.reviewing, _) when state.photoCheck?.needsRetake ?? false => (
+        _checkText(l10n, state.photoCheck!),
+        true,
       ),
       (ScanPhase.reviewing, _) => (l10n.scanReviewQuestion, false),
       (ScanPhase.saving, _) => (l10n.scanSaving, false),
@@ -245,15 +270,31 @@ class _StatusLine extends StatelessWidget {
   }
 }
 
+/// What is wrong with a photo, in words ("Please retake it").
+String _checkText(AppLocalizations l10n, PhotoCheck check) => switch (check) {
+  PhotoCheck.noFace => l10n.scanCheckNoFace,
+  PhotoCheck.severalFaces => l10n.scanCheckSeveral,
+  PhotoCheck.wrongPose => l10n.scanCheckPose,
+  PhotoCheck.tooSmall => l10n.scanCheckSmall,
+  PhotoCheck.tooDark => l10n.scanCheckDark,
+  PhotoCheck.tooBright => l10n.scanCheckBright,
+  PhotoCheck.ok || PhotoCheck.unavailable => l10n.scanReviewQuestion,
+};
+
 class _ReviewButtons extends StatelessWidget {
   const _ReviewButtons({
     required this.isLast,
+    required this.needsRetake,
     required this.isSaving,
     required this.onRetake,
     required this.onAccept,
   });
 
   final bool isLast;
+
+  /// The photo check found a problem: Retake is the main button and keeping
+  /// the photo is the quieter "Use it anyway".
+  final bool needsRetake;
   final bool isSaving;
   final VoidCallback onRetake;
   final VoidCallback onAccept;
@@ -265,19 +306,30 @@ class _ReviewButtons extends StatelessWidget {
       spacing: context.saaf.space.x12,
       children: [
         Expanded(
-          flex: 2,
-          child: SaafButton.outline(
-            label: l10n.scanRetake,
-            onPressed: isSaving ? null : onRetake,
-          ),
+          flex: needsRetake ? 3 : 2,
+          child: needsRetake
+              ? SaafButton.primary(
+                  label: l10n.scanRetake,
+                  onPressed: isSaving ? null : onRetake,
+                )
+              : SaafButton.outline(
+                  label: l10n.scanRetake,
+                  onPressed: isSaving ? null : onRetake,
+                ),
         ),
         Expanded(
-          flex: 3,
-          child: SaafButton.primary(
-            label: isLast ? l10n.scanAnalyse : l10n.scanUsePhoto,
-            isLoading: isSaving,
-            onPressed: isSaving ? null : onAccept,
-          ),
+          flex: needsRetake ? 2 : 3,
+          child: needsRetake
+              ? SaafButton.outline(
+                  label: l10n.scanUseAnyway,
+                  isLoading: isSaving,
+                  onPressed: isSaving ? null : onAccept,
+                )
+              : SaafButton.primary(
+                  label: isLast ? l10n.scanAnalyse : l10n.scanUsePhoto,
+                  isLoading: isSaving,
+                  onPressed: isSaving ? null : onAccept,
+                ),
         ),
       ],
     );

@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter/widgets.dart';
 import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/core/platform/camera_preview_source.dart';
+import 'package:saaf/data/services/live_frame_source.dart';
 import 'package:saaf/domain/entities/camera_facing.dart';
 import 'package:saaf/domain/services/camera_service.dart';
 
@@ -18,7 +21,8 @@ Failure cameraFailureFromCode(String code) => switch (code) {
 
 /// The real camera through the `camera` plugin (phones and Chrome). Photos are
 /// taken at "high" resolution (about 720p), enough for skin analysis and small.
-class PluginCameraService implements CameraService, CameraPreviewSource {
+class PluginCameraService
+    implements CameraService, CameraPreviewSource, LiveFrameSource {
   CameraController? _controller;
   List<CameraDescription> _cameras = const [];
 
@@ -43,6 +47,12 @@ class PluginCameraService implements CameraService, CameraPreviewSource {
         description,
         ResolutionPreset.high,
         enableAudio: false,
+        // The format the face detector reads (not used in Chrome).
+        imageFormatGroup: kIsWeb
+            ? null
+            : defaultTargetPlatform == TargetPlatform.android
+            ? ImageFormatGroup.nv21
+            : ImageFormatGroup.bgra8888,
       );
       await controller.initialize();
       _controller = controller;
@@ -79,6 +89,46 @@ class PluginCameraService implements CameraService, CameraPreviewSource {
     } on Object {
       // Already gone.
     }
+  }
+
+  @override
+  Stream<LiveFrame> liveFrames() {
+    final controller = _controller;
+    if (controller == null || !controller.value.isInitialized) {
+      return Stream.error(StateError('camera-closed'));
+    }
+    late final StreamController<LiveFrame> out;
+    out = StreamController<LiveFrame>(
+      onListen: () async {
+        try {
+          await controller.startImageStream((image) {
+            if (out.isClosed) return;
+            out.add(
+              LiveFrame(
+                image: image,
+                sensorOrientation: controller.description.sensorOrientation,
+                front:
+                    controller.description.lensDirection ==
+                    CameraLensDirection.front,
+                deviceOrientation: controller.value.deviceOrientation,
+              ),
+            );
+          });
+        } on Object catch (error, stack) {
+          if (!out.isClosed) out.addError(error, stack);
+        }
+      },
+      onCancel: () async {
+        try {
+          if (controller.value.isStreamingImages) {
+            await controller.stopImageStream();
+          }
+        } on Object {
+          // The camera is already closed.
+        }
+      },
+    );
+    return out.stream;
   }
 
   @override
