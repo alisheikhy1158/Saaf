@@ -726,3 +726,10 @@ test('look-up: cheaper alternatives are searched in Pakistan, without prices', a
     assert.ok(asked.includes(must), must);
   }
 });
+
+test('validate: the body pigmentation concern is kept and described', () => {
+  const r = validateChat({ question: 'x', context: { concerns: ['bodyPigmentation', 'acne'] } });
+  assert.deepEqual(r.value.context.concerns, ['bodyPigmentation', 'acne']);
+  const text = buildSystemPrompt(r.value.context);
+  assert.ok(text.includes('underarms'), 'underarms');
+});

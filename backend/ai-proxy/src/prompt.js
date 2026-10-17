@@ -14,6 +14,7 @@ const CONCERN_TEXT = {
   oiliness: 'oiliness',
   dryness: 'dryness',
   unevenTone: 'uneven tone',
+  bodyPigmentation: 'darker underarms, knees, elbows or neck (body pigmentation: suggest gentle lactic/glycolic or urea body lotions, sharp razors, sunscreen; never bleaching)',
 };
 const SENSITIVITY_TEXT = {
   low: 'rarely reacts',

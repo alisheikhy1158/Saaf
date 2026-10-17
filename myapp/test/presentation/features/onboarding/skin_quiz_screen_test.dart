@@ -51,6 +51,8 @@ const _specs = [
       ('Oiliness & large pores', 'Shiny by midday'),
       ('Dryness & dullness', 'Tight, flaky or tired-looking'),
       ('Uneven skin tone', 'Patchy colour, dark circles'),
+      // Added after Figma (owner's request, 2026-10-18).
+      ('Dark underarms, knees or neck', 'Darker patches on the body'),
     ],
   ),
   StepSpec(

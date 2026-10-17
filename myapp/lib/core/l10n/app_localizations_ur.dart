@@ -2845,4 +2845,32 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get profileRowEvent => 'کسی تقریب کی تیاری';
+
+  @override
+  String get concernBodyTitle => 'بغلوں، گھٹنوں یا گردن کا کالا پن';
+
+  @override
+  String get concernBodyCaption => 'جسم پر گہرے دھبے';
+
+  @override
+  String get concernBody => 'جسم کا کالا پن';
+
+  @override
+  String get bodyCareTitle => 'جسم کی دیکھ بھال';
+
+  @override
+  String get bodyCareExfoliate =>
+      'ہفتے میں 2–3 بار بغلوں، گھٹنوں، کہنیوں اور گردن پر لیکٹک یا گلائکولک ایسڈ (یا یوریا) والا باڈی لوشن لگائیں؛ روزانہ موئسچرائز کریں۔';
+
+  @override
+  String get bodyCareShaving =>
+      'رگڑ، سخت اسکرب اور کند ریزر جلد کو کالا کرتے ہیں: تیز ریزر استعمال کریں، نرمی سے شیو کریں اور بعد میں سکون دینے والا لوشن لگائیں۔';
+
+  @override
+  String get bodyCareSunscreen =>
+      'گردن اور دھوپ لگنے والی ہر جگہ پر سن اسکرین لگائیں۔';
+
+  @override
+  String get bodyCareNoBleach =>
+      'جسم پر کبھی بلیچ یا رنگ گورا کرنے والی کریم نہ لگائیں: یہ جلد کو پتلا کرتی ہیں اور مزید دھبے چھوڑ سکتی ہیں۔ فرق مہینوں میں آتا ہے؛ اگر تیزی سے پھیلے تو ڈاکٹر سے ملیں۔';
 }

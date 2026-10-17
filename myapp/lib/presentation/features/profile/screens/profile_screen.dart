@@ -277,6 +277,7 @@ class ProfileScreen extends ConsumerWidget {
         SkinConcern.oiliness => l10n.concernOiliness,
         SkinConcern.dryness => l10n.concernDryness,
         SkinConcern.unevenTone => l10n.concernUnevenTone,
+        SkinConcern.bodyPigmentation => l10n.concernBody,
       };
 
   static String _capitalised(String text) =>

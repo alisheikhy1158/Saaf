@@ -325,6 +325,26 @@ void main() {
     });
   });
 
+  testWidgets('body pigmentation: a body care card, never bleaching', (
+    tester,
+  ) async {
+    await _open(
+      tester,
+      overrides: _with(
+        profile: const SkinProfile(concerns: {SkinConcern.bodyPigmentation}),
+      ),
+    );
+    await tester.pump();
+    expect(find.text('Body care'), findsOneWidget);
+    expect(find.textContaining('underarms'), findsWidgets);
+    expect(find.textContaining('bleach'), findsWidgets);
+  });
+
+  testWidgets('no body concern: no body care card', (tester) async {
+    await _open(tester);
+    expect(find.text('Body care'), findsNothing);
+  });
+
   testWidgets('Ramadan mode: the tabs say after sehri and after iftar', (
     tester,
   ) async {

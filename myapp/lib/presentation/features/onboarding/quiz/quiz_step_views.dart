@@ -125,6 +125,12 @@ final Map<QuizStep, QuizStepView> quizStepViews = {
         (l) => l.concernUnevenToneTitle,
         (l) => l.concernUnevenToneCaption,
       ),
+      QuizOptionView(
+        SkinConcern.bodyPigmentation,
+        Icons.accessibility_new_outlined,
+        (l) => l.concernBodyTitle,
+        (l) => l.concernBodyCaption,
+      ),
     ],
   ),
   QuizStep.sensitivity: QuizStepView(

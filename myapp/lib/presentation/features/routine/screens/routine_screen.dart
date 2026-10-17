@@ -175,6 +175,10 @@ class _Content extends ConsumerWidget {
           ),
           SizedBox(height: space.x8),
         ],
+        if (routine.concerns.contains(SkinConcern.bodyPigmentation)) ...[
+          const _BodyCareCard(),
+          SizedBox(height: space.x14),
+        ],
         SaafDisclaimer(l10n.routinePriceNote),
         SizedBox(height: space.x14),
         _ResultsInfo(
@@ -221,6 +225,7 @@ class _Content extends ConsumerWidget {
         SkinConcern.oiliness => l10n.concernOiliness,
         SkinConcern.dryness => l10n.concernDryness,
         SkinConcern.unevenTone => l10n.concernUnevenTone,
+        SkinConcern.bodyPigmentation => l10n.concernBody,
       };
 }
 
@@ -772,6 +777,57 @@ class _VerdictRow extends StatelessWidget {
               color: context.colors.onSurface,
             ),
         ],
+      ),
+    );
+  }
+}
+
+/// Body pigmentation (underarms, knees, elbows, neck): gentle care that works
+/// slowly, and never bleaching.
+class _BodyCareCard extends StatelessWidget {
+  const _BodyCareCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(tokens.radius.r20),
+        border: Border.all(
+          color: tokens.borderCard,
+          width: tokens.size.borderThin,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsetsDirectional.all(tokens.space.x16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: tokens.space.x8,
+          children: [
+            Semantics(
+              header: true,
+              child: Text(l10n.bodyCareTitle, style: tokens.styles.listTitle),
+            ),
+            for (final tip in [
+              l10n.bodyCareExfoliate,
+              l10n.bodyCareShaving,
+              l10n.bodyCareSunscreen,
+              l10n.bodyCareNoBleach,
+            ])
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: tokens.space.x8,
+                children: [
+                  ExcludeSemantics(
+                    child: Text('•', style: tokens.styles.pointCaption),
+                  ),
+                  Expanded(child: Text(tip, style: tokens.styles.pointCaption)),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }

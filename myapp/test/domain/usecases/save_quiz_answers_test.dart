@@ -61,6 +61,8 @@ void main() {
         'oiliness',
         'dryness',
         'unevenTone',
+        // Added after Figma, at the end (owner's request, 2026-10-18).
+        'bodyPigmentation',
       ]);
       expect(SkinType.values.map((t) => t.name), [
         'oily',

@@ -2324,5 +2324,21 @@
   "profileRowRamadan": "Ramadan mode",
   "@profileRowRamadan": {"description": "Profile row."},
   "profileRowEvent": "Getting ready for an event",
-  "@profileRowEvent": {"description": "Profile row."}
+  "@profileRowEvent": {"description": "Profile row."},
+  "concernBodyTitle": "Dark underarms, knees or neck",
+  "@concernBodyTitle": {"description": "Quiz option."},
+  "concernBodyCaption": "Darker patches on the body",
+  "@concernBodyCaption": {"description": "Quiz option caption."},
+  "concernBody": "body pigmentation",
+  "@concernBody": {"description": "Concern name inside a sentence (lower case)."},
+  "bodyCareTitle": "Body care",
+  "@bodyCareTitle": {"description": "Routine card title."},
+  "bodyCareExfoliate": "2–3 times a week, use a body lotion with lactic or glycolic acid (or urea) on underarms, knees, elbows and neck; moisturise every day.",
+  "@bodyCareExfoliate": {"description": "Body care tip."},
+  "bodyCareShaving": "Rubbing, harsh scrubs and blunt razors darken skin: use a sharp razor, shave gently and soothe afterwards.",
+  "@bodyCareShaving": {"description": "Body care tip."},
+  "bodyCareSunscreen": "Put sunscreen on your neck and any skin the sun reaches.",
+  "@bodyCareSunscreen": {"description": "Body care tip."},
+  "bodyCareNoBleach": "Never use bleaching or whitening creams on the body: they thin the skin and can leave worse patches. Change takes months; if it spreads fast, see a doctor.",
+  "@bodyCareNoBleach": {"description": "Body care tip."}
 }

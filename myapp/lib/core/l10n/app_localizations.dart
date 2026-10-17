@@ -4891,6 +4891,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Getting ready for an event'**
   String get profileRowEvent;
+
+  /// Quiz option.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark underarms, knees or neck'**
+  String get concernBodyTitle;
+
+  /// Quiz option caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Darker patches on the body'**
+  String get concernBodyCaption;
+
+  /// Concern name inside a sentence (lower case).
+  ///
+  /// In en, this message translates to:
+  /// **'body pigmentation'**
+  String get concernBody;
+
+  /// Routine card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Body care'**
+  String get bodyCareTitle;
+
+  /// Body care tip.
+  ///
+  /// In en, this message translates to:
+  /// **'2–3 times a week, use a body lotion with lactic or glycolic acid (or urea) on underarms, knees, elbows and neck; moisturise every day.'**
+  String get bodyCareExfoliate;
+
+  /// Body care tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Rubbing, harsh scrubs and blunt razors darken skin: use a sharp razor, shave gently and soothe afterwards.'**
+  String get bodyCareShaving;
+
+  /// Body care tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Put sunscreen on your neck and any skin the sun reaches.'**
+  String get bodyCareSunscreen;
+
+  /// Body care tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Never use bleaching or whitening creams on the body: they thin the skin and can leave worse patches. Change takes months; if it spreads fast, see a doctor.'**
+  String get bodyCareNoBleach;
 }
 
 class _AppLocalizationsDelegate

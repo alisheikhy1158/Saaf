@@ -10,7 +10,7 @@ export const MAX_IMAGE_CHARS = 2_800_000;
 export const MAX_ROUTINE_PRODUCTS = 12;
 
 const SKIN_TYPES = ['oily', 'dry', 'combination', 'normal', 'notSure'];
-const CONCERNS = ['darkSpots', 'acne', 'oiliness', 'dryness', 'unevenTone'];
+const CONCERNS = ['darkSpots', 'acne', 'oiliness', 'dryness', 'unevenTone', 'bodyPigmentation'];
 const SENSITIVITIES = ['low', 'sometimes', 'high'];
 const BUDGETS = ['essential', 'balanced', 'comfortable', 'premium'];
 const LANGUAGES = ['en', 'ur'];

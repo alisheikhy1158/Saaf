@@ -2844,4 +2844,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileRowEvent => 'Getting ready for an event';
+
+  @override
+  String get concernBodyTitle => 'Dark underarms, knees or neck';
+
+  @override
+  String get concernBodyCaption => 'Darker patches on the body';
+
+  @override
+  String get concernBody => 'body pigmentation';
+
+  @override
+  String get bodyCareTitle => 'Body care';
+
+  @override
+  String get bodyCareExfoliate =>
+      '2–3 times a week, use a body lotion with lactic or glycolic acid (or urea) on underarms, knees, elbows and neck; moisturise every day.';
+
+  @override
+  String get bodyCareShaving =>
+      'Rubbing, harsh scrubs and blunt razors darken skin: use a sharp razor, shave gently and soothe afterwards.';
+
+  @override
+  String get bodyCareSunscreen =>
+      'Put sunscreen on your neck and any skin the sun reaches.';
+
+  @override
+  String get bodyCareNoBleach =>
+      'Never use bleaching or whitening creams on the body: they thin the skin and can leave worse patches. Change takes months; if it spreads fast, see a doctor.';
 }
