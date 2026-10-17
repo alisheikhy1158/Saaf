@@ -22,6 +22,10 @@ abstract final class SettingNames {
 
   /// Saaf AI's skin estimates, by scan id (JSON).
   static const aiSkinEstimates = 'aiSkinEstimates';
+
+  /// "on" / "off": the answer to "analyse every scan automatically?"; none
+  /// until the user is asked.
+  static const autoAnalyseScans = 'autoAnalyseScans';
 }
 
 /// Drift on the phone; in memory in tests and Chrome.

@@ -365,12 +365,76 @@ class _SourceCard extends ConsumerStatefulWidget {
 
 enum _ReportReason { harmful, wrong, offensive, other }
 
+enum _AutoAnswer { notNow, once, every }
+
 class _SourceCardState extends ConsumerState<_SourceCard> {
   bool _busy = false;
   Failure? _failure;
   String? _problem;
   bool _reported = false;
 
+  /// The automatic analysis (or the one-time question) is tried once per
+  /// visit, so a failure or "Not now" is not repeated by itself.
+  bool _autoTried = false;
+
+  /// Not analysed yet: once Saaf AI sharing and the automatic setting are
+  /// known, analyse by itself (automatic on) or ask once (never asked).
+  void _maybeAuto() {
+    if (_autoTried || widget.analysis != null) return;
+    final consent = ref.read(aiConsentStateProvider);
+    final auto = ref.read(autoAnalyseScansProvider);
+    if (consent == null || !auto.hasValue) return;
+    _autoTried = true;
+    if (consent != true || auto.value == false) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      auto.value == true ? _send() : _askOnce();
+    });
+  }
+
+  Future<void> _askOnce() async {
+    final l10n = AppLocalizations.of(context);
+    final scan = ref.read(completedScanProvider);
+    if (scan == null) return;
+    final front = frontPhotoOf(scan);
+    final answer = await showDialog<_AutoAnswer>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.autoAnalyseTitle),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: context.saaf.space.x12,
+            children: [
+              if (front != null) _FrontThumb(photo: front),
+              Text(l10n.autoAnalyseBody),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(_AutoAnswer.notNow),
+            child: Text(l10n.scanNotNow),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(_AutoAnswer.once),
+            child: Text(l10n.autoAnalyseOnce),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(_AutoAnswer.every),
+            child: Text(l10n.autoAnalyseEvery),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || answer == null || answer == _AutoAnswer.notNow) return;
+    await ref
+        .read(autoAnalyseScansProvider.notifier)
+        .set(on: answer == _AutoAnswer.every);
+    if (mounted) await _send();
+  }
+
+  /// The button: shows the photo and asks before this one send.
   Future<void> _analyse() async {
     final l10n = AppLocalizations.of(context);
     final scan = ref.read(completedScanProvider);
@@ -403,6 +467,12 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
       ),
     );
     if (go != true || !mounted) return;
+    await _send();
+  }
+
+  Future<void> _send() async {
+    final scan = ref.read(completedScanProvider);
+    if (scan == null || _busy) return;
     setState(() {
       _busy = true;
       _failure = null;
@@ -490,6 +560,8 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
     final tokens = context.saaf;
     final space = tokens.space;
     final consent = ref.watch(aiConsentStateProvider);
+    ref.watch(autoAnalyseScansProvider);
+    _maybeAuto();
     final analysis = widget.analysis;
     final fromAi = analysis != null;
 

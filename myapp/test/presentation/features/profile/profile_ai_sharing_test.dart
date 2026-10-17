@@ -73,7 +73,7 @@ void main() {
     await _tap(tester, find.text('AI coach sharing'));
     expect(find.textContaining('Privacy Policy'), findsWidgets);
     expect(find.text('Share with the AI coach'), findsOneWidget);
-    await _tap(tester, find.byType(Switch));
+    await _tap(tester, find.byKey(const ValueKey('ai-sharing-switch')));
     expect(_container(tester).read(aiConsentStateProvider), isFalse);
     expect(await settings.read(AiConsent.settingName), isNull);
   });
@@ -82,8 +82,32 @@ void main() {
     final settings = InMemorySettingsRepository();
     await _open(tester, settings);
     await _tap(tester, find.text('AI coach sharing'));
-    await _tap(tester, find.byType(Switch));
+    await _tap(tester, find.byKey(const ValueKey('ai-sharing-switch')));
     expect(_container(tester).read(aiConsentStateProvider), isTrue);
     expect(await settings.read(AiConsent.settingName), isNotNull);
+  });
+
+  testWidgets('with sharing on, a switch analyses each scan automatically', (
+    tester,
+  ) async {
+    final settings = InMemorySettingsRepository();
+    await settings.write(
+      AiConsent.settingName,
+      DateTime(2026, 10, 17).toIso8601String(),
+    );
+    await _open(tester, settings);
+    await _tap(tester, find.text('AI coach sharing'));
+    expect(find.text('Analyse each scan automatically'), findsOneWidget);
+    final auto = find.byKey(const ValueKey('auto-analyse-switch'));
+    await _tap(tester, auto);
+    expect(await settings.read(SettingNames.autoAnalyseScans), 'on');
+    await _tap(tester, auto);
+    expect(await settings.read(SettingNames.autoAnalyseScans), 'off');
+  });
+
+  testWidgets('with sharing off, there is no automatic switch', (tester) async {
+    await _open(tester, InMemorySettingsRepository());
+    await _tap(tester, find.text('AI coach sharing'));
+    expect(find.text('Analyse each scan automatically'), findsNothing);
   });
 }

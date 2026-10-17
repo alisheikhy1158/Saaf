@@ -2336,4 +2336,24 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get progressAnalyseFailed =>
       'Saaf AI couldn’t analyse every scan. Try again, or take a new scan in good light.';
+
+  @override
+  String get autoAnalyseTitle => 'Analyse every scan automatically?';
+
+  @override
+  String get autoAnalyseBody =>
+      'Saaf AI reads each scan’s photo to give you real results. Only the front photo is sent (to Groq, through Saaf’s server) and it isn’t kept there. Your side photos stay on your phone. You can turn this off in Profile.';
+
+  @override
+  String get autoAnalyseEvery => 'Yes, every scan';
+
+  @override
+  String get autoAnalyseOnce => 'Only this scan';
+
+  @override
+  String get profileAutoAnalyse => 'Analyse each scan automatically';
+
+  @override
+  String get profileAutoAnalyseHint =>
+      'Sends each new scan’s front photo to Saaf AI for your results.';
 }

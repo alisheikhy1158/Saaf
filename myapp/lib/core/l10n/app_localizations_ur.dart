@@ -2337,4 +2337,24 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get progressAnalyseFailed =>
       'ثاف اے آئی ہر اسکین کا تجزیہ نہیں کر سکا۔ دوبارہ کوشش کریں، یا اچھی روشنی میں نیا اسکین کریں۔';
+
+  @override
+  String get autoAnalyseTitle => 'ہر اسکین کا خودبخود تجزیہ کریں؟';
+
+  @override
+  String get autoAnalyseBody =>
+      'ثاف اے آئی ہر اسکین کی تصویر دیکھ کر آپ کو اصل نتائج دیتا ہے۔ صرف سامنے کی تصویر بھیجی جاتی ہے (Groq کو، ثاف کے سرور کے ذریعے) اور وہاں محفوظ نہیں رہتی۔ آپ کی سائیڈ کی تصاویر آپ کے فون پر رہتی ہیں۔ آپ اسے پروفائل میں بند کر سکتے ہیں۔';
+
+  @override
+  String get autoAnalyseEvery => 'ہاں، ہر اسکین';
+
+  @override
+  String get autoAnalyseOnce => 'صرف یہ اسکین';
+
+  @override
+  String get profileAutoAnalyse => 'ہر اسکین کا خودبخود تجزیہ';
+
+  @override
+  String get profileAutoAnalyseHint =>
+      'ہر نئے اسکین کی سامنے کی تصویر آپ کے نتائج کے لیے ثاف اے آئی کو بھیجتا ہے۔';
 }

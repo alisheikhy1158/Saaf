@@ -4087,6 +4087,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saaf AI couldn’t analyse every scan. Try again, or take a new scan in good light.'**
   String get progressAnalyseFailed;
+
+  /// Asked once before the first photo analysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyse every scan automatically?'**
+  String get autoAnalyseTitle;
+
+  /// What the automatic analysis sends.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI reads each scan’s photo to give you real results. Only the front photo is sent (to Groq, through Saaf’s server) and it isn’t kept there. Your side photos stay on your phone. You can turn this off in Profile.'**
+  String get autoAnalyseBody;
+
+  /// Turns automatic analysis on and analyses now.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, every scan'**
+  String get autoAnalyseEvery;
+
+  /// Analyses this scan only.
+  ///
+  /// In en, this message translates to:
+  /// **'Only this scan'**
+  String get autoAnalyseOnce;
+
+  /// Profile switch for automatic photo analysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyse each scan automatically'**
+  String get profileAutoAnalyse;
+
+  /// Explains the automatic switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Sends each new scan’s front photo to Saaf AI for your results.'**
+  String get profileAutoAnalyseHint;
 }
 
 class _AppLocalizationsDelegate

@@ -17,6 +17,7 @@ import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/usecases/notification_access.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
+import 'package:saaf/presentation/providers/analysis_providers.dart';
 import 'package:saaf/presentation/providers/ai_routine_providers.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/locale_controller.dart';
@@ -952,6 +953,7 @@ class _AiSharingSheet extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final tokens = context.saaf;
     final on = ref.watch(aiConsentStateProvider) == true;
+    final auto = ref.watch(autoAnalyseScansProvider).value == true;
 
     return _SheetFrame(
       title: l10n.aiSheetTitle,
@@ -967,6 +969,7 @@ class _AiSharingSheet extends ConsumerWidget {
               child: Text(l10n.aiSheetSwitch, style: tokens.styles.rowTitle),
             ),
             Switch(
+              key: const ValueKey('ai-sharing-switch'),
               value: on,
               onChanged: (value) {
                 final notifier = ref.read(aiConsentStateProvider.notifier);
@@ -975,6 +978,34 @@ class _AiSharingSheet extends ConsumerWidget {
             ),
           ],
         ),
+        if (on)
+          Row(
+            spacing: tokens.space.rowGap,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: tokens.space.x2,
+                  children: [
+                    Text(
+                      l10n.profileAutoAnalyse,
+                      style: tokens.styles.rowTitle,
+                    ),
+                    Text(
+                      l10n.profileAutoAnalyseHint,
+                      style: context.text.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+              Switch(
+                key: const ValueKey('auto-analyse-switch'),
+                value: auto,
+                onChanged: (value) =>
+                    ref.read(autoAnalyseScansProvider.notifier).set(on: value),
+              ),
+            ],
+          ),
       ],
     );
   }

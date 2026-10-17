@@ -82,7 +82,12 @@ late InMemorySettingsRepository _settings;
 late InMemoryPhotoStore _photos;
 late CompletedScan _scan;
 
-Future<List<Override>> _overrides({bool consented = true}) async {
+/// [auto] is the saved answer to "analyse every scan automatically?" ('on',
+/// 'off', or null = not asked yet). The tests of the button use 'off'.
+Future<List<Override>> _overrides({
+  bool consented = true,
+  String? auto = 'off',
+}) async {
   _settings = InMemorySettingsRepository();
   if (consented) {
     await _settings.write(
@@ -90,6 +95,7 @@ Future<List<Override>> _overrides({bool consented = true}) async {
       DateTime(2026, 10, 17).toIso8601String(),
     );
   }
+  if (auto != null) await _settings.write(SettingNames.autoAnalyseScans, auto);
   _photos = InMemoryPhotoStore();
   final front = (await _photos.save(
     scanId: 'scan-1',
@@ -111,12 +117,16 @@ Future<List<Override>> _overrides({bool consented = true}) async {
   ];
 }
 
-Future<void> _open(WidgetTester tester, {bool consented = true}) async {
+Future<void> _open(
+  WidgetTester tester, {
+  bool consented = true,
+  String? auto = 'off',
+}) async {
   await pumpSaaf(
     tester,
     const AnalysisResultsScreen(),
     scaffold: false,
-    overrides: await _overrides(consented: consented),
+    overrides: await _overrides(consented: consented, auto: auto),
   );
   for (var i = 0; i < 4; i++) {
     await tester.pump(const Duration(milliseconds: 50));
@@ -216,6 +226,75 @@ void main() {
     await _tap(tester, 'Send');
     expect(find.textContaining('connection'), findsOneWidget);
     expect(find.text('Analyse my photo with Saaf AI'), findsOneWidget);
+  });
+
+  group('asked once, then automatic', () {
+    Future<void> settle(WidgetTester tester) async {
+      for (var i = 0; i < 6; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+    }
+
+    testWidgets('the first time, it asks by itself what will be sent', (
+      tester,
+    ) async {
+      await _open(tester, auto: null);
+      await settle(tester);
+      expect(find.text('Analyse every scan automatically?'), findsOneWidget);
+      expect(find.textContaining('Only the front photo'), findsOneWidget);
+      expect(_service.sentSizes, isEmpty);
+    });
+
+    testWidgets('"Yes, every scan" analyses now and remembers it', (
+      tester,
+    ) async {
+      await _open(tester, auto: null);
+      await settle(tester);
+      await _tap(tester, 'Yes, every scan');
+      expect(_service.sentSizes, hasLength(1));
+      expect(await _settings.read(SettingNames.autoAnalyseScans), 'on');
+      expect(find.text('Skin score'), findsOneWidget);
+    });
+
+    testWidgets('"Only this scan" analyses now, not automatically later', (
+      tester,
+    ) async {
+      await _open(tester, auto: null);
+      await settle(tester);
+      await _tap(tester, 'Only this scan');
+      expect(_service.sentSizes, hasLength(1));
+      expect(await _settings.read(SettingNames.autoAnalyseScans), 'off');
+    });
+
+    testWidgets('"Not now" sends nothing and does not ask again here', (
+      tester,
+    ) async {
+      await _open(tester, auto: null);
+      await settle(tester);
+      await _tap(tester, 'Not now');
+      await settle(tester);
+      expect(_service.sentSizes, isEmpty);
+      expect(find.text('Analyse every scan automatically?'), findsNothing);
+      expect(find.text('Analyse my photo with Saaf AI'), findsOneWidget);
+    });
+
+    testWidgets('when it is on, a new scan is analysed without asking', (
+      tester,
+    ) async {
+      await _open(tester, auto: 'on');
+      await settle(tester);
+      expect(find.text('Analyse every scan automatically?'), findsNothing);
+      expect(find.text('Send your front photo?'), findsNothing);
+      expect(_service.sentSizes, hasLength(1));
+      expect(find.text('Skin score'), findsOneWidget);
+    });
+
+    testWidgets('never without Saaf AI turned on', (tester) async {
+      await _open(tester, consented: false, auto: 'on');
+      await settle(tester);
+      expect(_service.sentSizes, isEmpty);
+      expect(find.text('Analyse every scan automatically?'), findsNothing);
+    });
   });
 
   testWidgets('is robust at every size, 200 % text and in Urdu', (

@@ -2056,5 +2056,17 @@
   "progressAnalyseConfirmBody": "Only the front photos of these scans go to Saaf AI (Groq, through Saaf’s server) to estimate the four measures. They are not kept there. Your side photos stay on your phone.",
   "@progressAnalyseConfirmBody": {"description": "What is sent, in the progress confirm dialog."},
   "progressAnalyseFailed": "Saaf AI couldn’t analyse every scan. Try again, or take a new scan in good light.",
-  "@progressAnalyseFailed": {"description": "When some scans could not be analysed."}
+  "@progressAnalyseFailed": {"description": "When some scans could not be analysed."},
+  "autoAnalyseTitle": "Analyse every scan automatically?",
+  "@autoAnalyseTitle": {"description": "Asked once before the first photo analysis."},
+  "autoAnalyseBody": "Saaf AI reads each scan’s photo to give you real results. Only the front photo is sent (to Groq, through Saaf’s server) and it isn’t kept there. Your side photos stay on your phone. You can turn this off in Profile.",
+  "@autoAnalyseBody": {"description": "What the automatic analysis sends."},
+  "autoAnalyseEvery": "Yes, every scan",
+  "@autoAnalyseEvery": {"description": "Turns automatic analysis on and analyses now."},
+  "autoAnalyseOnce": "Only this scan",
+  "@autoAnalyseOnce": {"description": "Analyses this scan only."},
+  "profileAutoAnalyse": "Analyse each scan automatically",
+  "@profileAutoAnalyse": {"description": "Profile switch for automatic photo analysis."},
+  "profileAutoAnalyseHint": "Sends each new scan’s front photo to Saaf AI for your results.",
+  "@profileAutoAnalyseHint": {"description": "Explains the automatic switch."}
 }

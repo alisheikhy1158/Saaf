@@ -108,3 +108,28 @@ class AiSkinEstimates extends _$AiSkinEstimates {
     return result;
   }
 }
+
+/// Whether each new scan's front photo goes to Saaf AI by itself: null until
+/// the user has been asked (once), then their answer. Saaf AI sharing must
+/// also be on; the switch is in Profile.
+@Riverpod(keepAlive: true)
+class AutoAnalyseScans extends _$AutoAnalyseScans {
+  @override
+  Future<bool?> build() async {
+    final value = await ref
+        .read(settingsRepositoryProvider)
+        .read(SettingNames.autoAnalyseScans);
+    return switch (value) {
+      'on' => true,
+      'off' => false,
+      _ => null,
+    };
+  }
+
+  Future<void> set({required bool on}) async {
+    await ref
+        .read(settingsRepositoryProvider)
+        .write(SettingNames.autoAnalyseScans, on ? 'on' : 'off');
+    state = AsyncData(on);
+  }
+}
