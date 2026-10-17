@@ -2617,4 +2617,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanGhostShow => 'Show the last scan';
+
+  @override
+  String get productAiDupeTitle => 'Find a cheaper alternative';
+
+  @override
+  String productAiDupeBody(String name) {
+    return 'Saaf AI searches for products sold in Pakistan with the same key ingredients as $name, and what reviews say. Only the product’s name and your skin type and concerns are sent (to Groq, through Saaf’s server).';
+  }
+
+  @override
+  String shelfUseBy(String date) {
+    return 'Use by $date';
+  }
+
+  @override
+  String shelfRunsOut(String date) {
+    return 'runs out around $date';
+  }
+
+  @override
+  String get shelfOpenedQuestion => 'When did you open it?';
+
+  @override
+  String get shelfNotSet => 'Not set yet';
+
+  @override
+  String shelfOpenedOn(String date) {
+    return 'Opened on $date';
+  }
+
+  @override
+  String get shelfOpenedToday => 'Opened today';
+
+  @override
+  String get shelfChooseDate => 'Choose the date';
+
+  @override
+  String get shelfKeepsQuestion => 'How long does it keep once open?';
+
+  @override
+  String get shelfKeepsHint =>
+      'Look for the open-jar symbol on the pack, like “12M”.';
+
+  @override
+  String shelfMonths(int months) {
+    return '$months months';
+  }
+
+  @override
+  String get shelfLastsQuestion => 'About how long does one pack last?';
+
+  @override
+  String shelfWeeks(int weeks) {
+    return '$weeks weeks';
+  }
+
+  @override
+  String get shelfSave => 'Save';
+
+  @override
+  String get shelfFindCheaper => 'Find a cheaper alternative';
+
+  @override
+  String get shelfTitle => 'Your shelf';
+
+  @override
+  String get shelfOpen => 'See your products';
+
+  @override
+  String shelfAlertExpired(String name) {
+    return '$name is past its use-by date: time to replace it.';
+  }
+
+  @override
+  String shelfAlertExpiresSoon(String name, String date) {
+    return '$name should be used by $date.';
+  }
+
+  @override
+  String shelfAlertFinished(String name) {
+    return '$name has probably run out: time for a new one?';
+  }
+
+  @override
+  String shelfAlertRunsOut(String name, String date) {
+    return '$name runs out around $date.';
+  }
 }

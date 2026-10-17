@@ -197,6 +197,7 @@ class HttpAiCoachService
         ProductPhotoQuery(:final bytes) => {'image': base64Encode(bytes)},
         ProductBarcodeQuery(:final digits) => {'barcode': digits},
         ProductQrQuery(:final text) => {'qr': text},
+        ProductDupeQuery(:final name) => {'dupe': name},
       },
       'context': _contextJson(context),
     });

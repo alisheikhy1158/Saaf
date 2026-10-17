@@ -5,15 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
+import 'package:saaf/domain/services/clock.dart';
 import 'package:saaf/presentation/features/products/screens/my_products_screen.dart';
+import 'package:saaf/presentation/features/products/screens/product_ai_screen.dart';
+import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
 
 import '../../../helpers/pump_app.dart';
 
 late InMemorySettingsRepository _settings;
 
+class _Clock implements Clock {
+  @override
+  DateTime now() => DateTime(2026, 10, 18, 9);
+}
+
 List<Override> _overrides() => [
   settingsRepositoryProvider.overrideWithValue(_settings),
+  clockProvider.overrideWithValue(_Clock()),
 ];
 
 Future<void> _open(WidgetTester tester, {bool setup = false}) async {
@@ -129,6 +138,36 @@ void main() {
     await _open(tester);
     expect(find.text('Done'), findsOneWidget);
     expect(find.text('Skip'), findsNothing);
+  });
+
+  group('the shelf', () {
+    testWidgets('opened today, keeps 12 months, lasts 8 weeks', (tester) async {
+      await _open(tester);
+      await _add(tester, 'Nivea Soft');
+      await _tap(tester, find.text('Nivea Soft'));
+      expect(find.text('When did you open it?'), findsOneWidget);
+      await _tap(tester, find.text('Opened today'));
+      await _tap(tester, find.text('12 months'));
+      await _tap(tester, find.text('8 weeks'));
+      await _tap(tester, find.text('Save'));
+      expect(find.textContaining('Use by 18 Oct 2027'), findsOneWidget);
+      expect(find.textContaining('runs out around 13 Dec'), findsOneWidget);
+      expect(
+        await _settings.read(SettingNames.currentProducts),
+        contains('"paoMonths":12'),
+      );
+    });
+
+    testWidgets('a cheaper alternative is looked up with Saaf AI', (
+      tester,
+    ) async {
+      await _open(tester);
+      await _add(tester, 'Cetaphil Gentle Cleanser', kind: 'Cleanser');
+      await _tap(tester, find.text('Cetaphil Gentle Cleanser'));
+      await _tap(tester, find.text('Find a cheaper alternative'));
+      expect(find.byType(ProductAiScreen), findsOneWidget);
+      expect(find.textContaining('Cetaphil Gentle Cleanser'), findsWidgets);
+    });
   });
 
   testWidgets('Profile has a row that opens it', (tester) async {

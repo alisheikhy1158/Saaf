@@ -179,6 +179,7 @@ export function validateSafety(body) {
     };
   }
   const checked = validateProduct(body);
+  if (checked.ok && checked.value.dupe) return { ok: false, error: 'bad_request' };
   return checked.ok ? { ok: true, value: { ...checked.value, name: null } } : checked;
 }
 
@@ -199,11 +200,14 @@ export function validateProduct(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return { ok: false, error: 'bad_request' };
   }
-  const given = ['image', 'barcode', 'qr'].filter((k) => body[k] !== undefined && body[k] !== null && body[k] !== '');
+  const given = ['image', 'barcode', 'qr', 'dupe'].filter((k) => body[k] !== undefined && body[k] !== null && body[k] !== '');
   if (given.length !== 1) return { ok: false, error: 'bad_request' };
 
-  const value = { context: cleanContext(body.context), image: null, barcode: null, qr: null };
-  if (given[0] === 'image') {
+  const value = { context: cleanContext(body.context), image: null, barcode: null, qr: null, dupe: null };
+  if (given[0] === 'dupe') {
+    value.dupe = cleanText(body.dupe, 120);
+    if (!value.dupe) return { ok: false, error: 'bad_request' };
+  } else if (given[0] === 'image') {
     value.image = cleanImage(body.image);
     if (!value.image) return { ok: false, error: 'bad_image' };
   } else if (given[0] === 'barcode') {

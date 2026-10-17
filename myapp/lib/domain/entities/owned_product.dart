@@ -5,13 +5,60 @@ import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/usecases/active_rules.dart';
 
 /// A product the user already uses, as they typed it, and which step of the
-/// routine it is ([step] null = something else, like a lip balm). Kept on the
-/// phone.
+/// routine it is ([step] null = something else, like a lip balm), with its
+/// shelf details when they gave them. Kept on the phone.
 class OwnedProduct {
-  const OwnedProduct({required this.name, this.step});
+  const OwnedProduct({
+    required this.name,
+    this.step,
+    this.openedOn,
+    this.paoMonths,
+    this.lastsWeeks,
+  });
 
   final String name;
   final ProductCategory? step;
+
+  /// The day it was opened.
+  final DateTime? openedOn;
+
+  /// How long it keeps once opened (the open-jar symbol, like "12M").
+  final int? paoMonths;
+
+  /// About how long one pack lasts.
+  final int? lastsWeeks;
+
+  /// Use it before this day (needs the opened date and [paoMonths]).
+  DateTime? get useBy => switch ((openedOn, paoMonths)) {
+    (final opened?, final months?) => DateTime(
+      opened.year,
+      opened.month + months,
+      opened.day,
+    ),
+    _ => null,
+  };
+
+  /// It probably runs out around this day.
+  DateTime? get runsOutAround => switch ((openedOn, lastsWeeks)) {
+    (final opened?, final weeks?) => DateTime(
+      opened.year,
+      opened.month,
+      opened.day + weeks * 7,
+    ),
+    _ => null,
+  };
+
+  OwnedProduct withShelf({
+    DateTime? openedOn,
+    int? paoMonths,
+    int? lastsWeeks,
+  }) => OwnedProduct(
+    name: name,
+    step: step,
+    openedOn: openedOn,
+    paoMonths: paoMonths,
+    lastsWeeks: lastsWeeks,
+  );
 
   static const idPrefix = 'mine-';
 
@@ -56,7 +103,15 @@ class OwnedProduct {
       .replaceAll(RegExp(r'^-+|-+$'), '');
 
   static String encodeList(List<OwnedProduct> list) => jsonEncode([
-    for (final p in list) {'name': p.name, 'step': p.step?.name ?? 'other'},
+    for (final p in list)
+      {
+        'name': p.name,
+        'step': p.step?.name ?? 'other',
+        if (p.openedOn case final d?)
+          'openedOn': DateTime(d.year, d.month, d.day).toIso8601String(),
+        'paoMonths': ?p.paoMonths,
+        'lastsWeeks': ?p.lastsWeeks,
+      },
   ]);
 
   /// Also reads the first version of the list, which held names only.
@@ -74,6 +129,18 @@ class OwnedProduct {
             OwnedProduct(
               name: name.trim(),
               step: ProductCategory.values.asNameMap()[item['step']],
+              openedOn: switch (item['openedOn']) {
+                final String date => DateTime.tryParse(date),
+                _ => null,
+              },
+              paoMonths: switch (item['paoMonths']) {
+                final int months when months > 0 => months,
+                _ => null,
+              },
+              lastsWeeks: switch (item['lastsWeeks']) {
+                final int weeks when weeks > 0 => weeks,
+                _ => null,
+              },
             ),
       ];
     } on Object {
@@ -83,10 +150,15 @@ class OwnedProduct {
 
   @override
   bool operator ==(Object other) =>
-      other is OwnedProduct && other.name == name && other.step == step;
+      other is OwnedProduct &&
+      other.name == name &&
+      other.step == step &&
+      other.openedOn == openedOn &&
+      other.paoMonths == paoMonths &&
+      other.lastsWeeks == lastsWeeks;
 
   @override
-  int get hashCode => Object.hash(name, step);
+  int get hashCode => Object.hash(name, step, openedOn, paoMonths, lastsWeeks);
 
   @override
   String toString() => 'OwnedProduct($name, ${step?.name ?? 'other'})';

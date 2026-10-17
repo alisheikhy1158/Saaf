@@ -43,6 +43,27 @@ class CurrentProducts extends _$CurrentProducts {
     return true;
   }
 
+  /// Saves the shelf details of the product called [name].
+  Future<void> updateShelf(
+    String name, {
+    DateTime? openedOn,
+    int? paoMonths,
+    int? lastsWeeks,
+  }) async {
+    final now = await future;
+    await _save([
+      for (final p in now)
+        if (p.name == name)
+          p.withShelf(
+            openedOn: openedOn,
+            paoMonths: paoMonths,
+            lastsWeeks: lastsWeeks,
+          )
+        else
+          p,
+    ]);
+  }
+
   Future<void> remove(String name) async {
     final now = await future;
     await _save([

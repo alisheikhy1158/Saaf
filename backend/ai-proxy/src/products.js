@@ -357,6 +357,8 @@ export async function lookUpProduct(env, request, options = {}) {
     label = await readLabel(env, request.image, options);
     if (!label) return { found: false };
     known = describeLabel(label);
+  } else if (request.dupe) {
+    known = `The person uses "${request.dupe}" and wants cheaper alternatives.`;
   } else if (request.barcode) {
     known = `The barcode number printed on the product is ${request.barcode}.`;
   } else {
@@ -365,7 +367,12 @@ export async function lookUpProduct(env, request, options = {}) {
 
   const messages = [
     { role: 'system', content: lookUpSystem(request.context) },
-    { role: 'user', content: `${known}\n\nWhat is this product, and does it suit my skin?` },
+    {
+      role: 'user',
+      content: request.dupe
+        ? `${known}\n\nFind 2 or 3 cheaper alternatives sold in Pakistan with the same key ingredients and the same job (for example the same kind of cleanser or sunscreen), which suit my skin. Use what reviews say. The first line must be "PRODUCT: Cheaper alternatives to ${request.dupe}". Then a section **Similar products** with one bullet per product: its name in bold, the shared key ingredients, and why it suits me. Say they are usually cheaper only if the shops you found show that. Do not state prices.`
+        : `${known}\n\nWhat is this product, and does it suit my skin?`,
+    },
   ];
   const base = {
     model: env.MODEL_SEARCH || env.MODEL_TEXT || TEXT_MODEL,

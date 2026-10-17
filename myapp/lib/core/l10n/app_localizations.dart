@@ -4537,6 +4537,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show the last scan'**
   String get scanGhostShow;
+
+  /// Title of the cheaper-alternative look-up.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a cheaper alternative'**
+  String get productAiDupeTitle;
+
+  /// What the cheaper-alternative look-up sends.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI searches for products sold in Pakistan with the same key ingredients as {name}, and what reviews say. Only the product’s name and your skin type and concerns are sent (to Groq, through Saaf’s server).'**
+  String productAiDupeBody(String name);
+
+  /// Shelf caption.
+  ///
+  /// In en, this message translates to:
+  /// **'Use by {date}'**
+  String shelfUseBy(String date);
+
+  /// Shelf caption.
+  ///
+  /// In en, this message translates to:
+  /// **'runs out around {date}'**
+  String shelfRunsOut(String date);
+
+  /// Shelf sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'When did you open it?'**
+  String get shelfOpenedQuestion;
+
+  /// Shelf sheet: no date.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set yet'**
+  String get shelfNotSet;
+
+  /// Shelf sheet: the date.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened on {date}'**
+  String shelfOpenedOn(String date);
+
+  /// Shelf sheet button.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened today'**
+  String get shelfOpenedToday;
+
+  /// Shelf sheet button.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the date'**
+  String get shelfChooseDate;
+
+  /// Shelf sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'How long does it keep once open?'**
+  String get shelfKeepsQuestion;
+
+  /// Shelf sheet hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Look for the open-jar symbol on the pack, like “12M”.'**
+  String get shelfKeepsHint;
+
+  /// Shelf chip.
+  ///
+  /// In en, this message translates to:
+  /// **'{months} months'**
+  String shelfMonths(int months);
+
+  /// Shelf sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'About how long does one pack last?'**
+  String get shelfLastsQuestion;
+
+  /// Shelf chip.
+  ///
+  /// In en, this message translates to:
+  /// **'{weeks} weeks'**
+  String shelfWeeks(int weeks);
+
+  /// Shelf sheet button.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get shelfSave;
+
+  /// Shelf sheet button.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a cheaper alternative'**
+  String get shelfFindCheaper;
+
+  /// Home shelf card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your shelf'**
+  String get shelfTitle;
+
+  /// Home shelf card button.
+  ///
+  /// In en, this message translates to:
+  /// **'See your products'**
+  String get shelfOpen;
+
+  /// Shelf alert.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is past its use-by date: time to replace it.'**
+  String shelfAlertExpired(String name);
+
+  /// Shelf alert.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} should be used by {date}.'**
+  String shelfAlertExpiresSoon(String name, String date);
+
+  /// Shelf alert.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has probably run out: time for a new one?'**
+  String shelfAlertFinished(String name);
+
+  /// Shelf alert.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} runs out around {date}.'**
+  String shelfAlertRunsOut(String name, String date);
 }
 
 class _AppLocalizationsDelegate

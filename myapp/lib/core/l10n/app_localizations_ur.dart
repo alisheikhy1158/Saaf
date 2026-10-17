@@ -2618,4 +2618,90 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get scanGhostShow => 'پچھلا اسکین دکھائیں';
+
+  @override
+  String get productAiDupeTitle => 'سستا متبادل تلاش کریں';
+
+  @override
+  String productAiDupeBody(String name) {
+    return 'ثاف اے آئی پاکستان میں ملنے والی ایسی پروڈکٹس تلاش کرتا ہے جن کے اہم اجزا $name جیسے ہوں، اور ریویوز دیکھتا ہے۔ صرف پروڈکٹ کا نام اور آپ کی جلد کی قسم اور مسائل بھیجے جاتے ہیں (Groq کو، ثاف کے سرور کے ذریعے)۔';
+  }
+
+  @override
+  String shelfUseBy(String date) {
+    return '$date تک استعمال کریں';
+  }
+
+  @override
+  String shelfRunsOut(String date) {
+    return 'تقریباً $date تک ختم';
+  }
+
+  @override
+  String get shelfOpenedQuestion => 'آپ نے اسے کب کھولا؟';
+
+  @override
+  String get shelfNotSet => 'ابھی نہیں بتایا';
+
+  @override
+  String shelfOpenedOn(String date) {
+    return '$date کو کھولا';
+  }
+
+  @override
+  String get shelfOpenedToday => 'آج کھولا';
+
+  @override
+  String get shelfChooseDate => 'تاریخ چنیں';
+
+  @override
+  String get shelfKeepsQuestion => 'کھلنے کے بعد کتنی دیر چلتی ہے؟';
+
+  @override
+  String get shelfKeepsHint => 'پیکٹ پر کھلے ڈبے کا نشان دیکھیں، جیسے “12M”۔';
+
+  @override
+  String shelfMonths(int months) {
+    return '$months مہینے';
+  }
+
+  @override
+  String get shelfLastsQuestion => 'ایک پیک تقریباً کتنی دیر چلتا ہے؟';
+
+  @override
+  String shelfWeeks(int weeks) {
+    return '$weeks ہفتے';
+  }
+
+  @override
+  String get shelfSave => 'محفوظ کریں';
+
+  @override
+  String get shelfFindCheaper => 'سستا متبادل تلاش کریں';
+
+  @override
+  String get shelfTitle => 'آپ کا شیلف';
+
+  @override
+  String get shelfOpen => 'اپنی پروڈکٹس دیکھیں';
+
+  @override
+  String shelfAlertExpired(String name) {
+    return '$name کی استعمال کی مدت ختم ہو گئی: اسے بدلنے کا وقت ہے۔';
+  }
+
+  @override
+  String shelfAlertExpiresSoon(String name, String date) {
+    return '$name کو $date تک استعمال کر لیں۔';
+  }
+
+  @override
+  String shelfAlertFinished(String name) {
+    return '$name شاید ختم ہو گئی ہے: نئی لینے کا وقت؟';
+  }
+
+  @override
+  String shelfAlertRunsOut(String name, String date) {
+    return '$name تقریباً $date تک ختم ہو جائے گی۔';
+  }
 }

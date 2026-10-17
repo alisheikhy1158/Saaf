@@ -128,6 +128,7 @@ GoRouter buildAppRouter({
         builder: (context, state) => ProductAiScreen(
           barcode: state.uri.queryParameters['barcode'],
           qr: state.uri.queryParameters['qr'],
+          dupe: state.uri.queryParameters['dupe'],
           photo: state.uri.queryParameters['photo'] == '1',
         ),
       ),

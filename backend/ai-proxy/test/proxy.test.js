@@ -708,3 +708,21 @@ test('server: safety check needs sign-in', async () => {
   assert.equal(r.status, 200);
   assert.equal(r.json.level, 'danger');
 });
+
+// ---------------------------------------------------------------- cheaper alternatives
+test('validate product: a cheaper alternative to a named product', () => {
+  assert.equal(validateProduct({ dupe: '  Cetaphil Gentle Cleanser ' }).value.dupe, 'Cetaphil Gentle Cleanser');
+  assert.equal(validateProduct({ dupe: 'x', barcode: '12345678' }).ok, false);
+  assert.equal(validateSafety({ dupe: 'x' }).ok, false);
+});
+
+test('look-up: cheaper alternatives are searched in Pakistan, without prices', async () => {
+  const groq = groqSequence(['PRODUCT: Cheaper alternatives to Cetaphil Gentle Cleanser\n**Similar products**\n- **Simple Refreshing Wash** – gentle.']);
+  const result = await lookUpProduct({ GROQ_API_KEY: 'k' }, validateProduct({ dupe: 'Cetaphil Gentle Cleanser' }).value, { fetchImpl: groq.fetchImpl });
+  assert.equal(result.found, true);
+  assert.equal(result.title, 'Cheaper alternatives to Cetaphil Gentle Cleanser');
+  const asked = JSON.stringify(groq.bodies[0].messages);
+  for (const must of ['cheaper', 'Pakistan', 'Cetaphil Gentle Cleanser', 'Do not state prices', 'same key ingredients']) {
+    assert.ok(asked.includes(must), must);
+  }
+});

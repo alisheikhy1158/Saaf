@@ -8,6 +8,7 @@ import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/presentation/features/home/widgets/cream_check_card.dart';
+import 'package:saaf/presentation/features/home/widgets/shelf_card.dart';
 import 'package:saaf/presentation/features/home/widgets/skin_weather_card.dart';
 import 'package:saaf/core/utils/week.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
@@ -222,6 +223,8 @@ class _Content extends ConsumerWidget {
         _Checklist(state: state),
         SizedBox(height: space.sectionGapMedium),
         const SkinWeatherCard(),
+        SizedBox(height: space.x14),
+        const ShelfCard(),
         SizedBox(height: space.x14),
         const CreamCheckCard(),
       ],

@@ -28,10 +28,19 @@ import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
 /// 5.1.2(i)); the answer is marked as AI and can be reported (Google Play's AI
 /// content policy). Exactly one of [barcode], [qr] or [photo] is used.
 class ProductAiScreen extends ConsumerWidget {
-  const ProductAiScreen({super.key, this.barcode, this.qr, this.photo = false});
+  const ProductAiScreen({
+    super.key,
+    this.barcode,
+    this.qr,
+    this.dupe,
+    this.photo = false,
+  });
 
   final String? barcode;
   final String? qr;
+
+  /// Find cheaper alternatives to the product with this name.
+  final String? dupe;
 
   /// Look the product up from a photo of its label.
   final bool photo;
@@ -41,6 +50,8 @@ class ProductAiScreen extends ConsumerWidget {
     if (digits != null && digits.isNotEmpty) return ProductBarcodeQuery(digits);
     final text = qr?.trim();
     if (text != null && text.isNotEmpty) return ProductQrQuery(text);
+    final name = dupe?.trim();
+    if (name != null && name.isNotEmpty) return ProductDupeQuery(name);
     return null;
   }
 
@@ -68,6 +79,7 @@ class ProductAiScreen extends ConsumerWidget {
     final whatIsSent = switch (code) {
       ProductBarcodeQuery(:final digits) => l10n.productAiBarcodeBody(digits),
       ProductQrQuery(:final text) => l10n.productAiQrBody(text),
+      ProductDupeQuery(:final name) => l10n.productAiDupeBody(name),
       _ => l10n.productAiPhotoBody,
     };
 
@@ -76,7 +88,11 @@ class ProductAiScreen extends ConsumerWidget {
       body = const Center(child: CircularProgressIndicator());
     } else if (consent == false) {
       body = _Intro(
-        title: usesPhoto ? l10n.productAiPhotoTitle : l10n.productAiCodeTitle,
+        title: usesPhoto
+            ? l10n.productAiPhotoTitle
+            : code is ProductDupeQuery
+            ? l10n.productAiDupeTitle
+            : l10n.productAiCodeTitle,
         body: '$whatIsSent\n\n${l10n.productAiNeedsConsent}',
         actions: [
           SaafButton.primary(
@@ -130,7 +146,11 @@ class ProductAiScreen extends ConsumerWidget {
       );
     } else {
       body = _Intro(
-        title: usesPhoto ? l10n.productAiPhotoTitle : l10n.productAiCodeTitle,
+        title: usesPhoto
+            ? l10n.productAiPhotoTitle
+            : code is ProductDupeQuery
+            ? l10n.productAiDupeTitle
+            : l10n.productAiCodeTitle,
         body: whatIsSent,
         photo: state.photo,
         error: state.failure == null

@@ -37,6 +37,19 @@ final class ProductQrQuery extends ProductQuery {
   int get hashCode => text.hashCode;
 }
 
+/// Cheaper alternatives to a product the user uses.
+final class ProductDupeQuery extends ProductQuery {
+  const ProductDupeQuery(this.name);
+  final String name;
+
+  @override
+  bool operator ==(Object other) =>
+      other is ProductDupeQuery && other.name == name;
+
+  @override
+  int get hashCode => name.hashCode;
+}
+
 /// What Saaf AI found about a product, written for this user's skin.
 class ProductInsight {
   const ProductInsight({

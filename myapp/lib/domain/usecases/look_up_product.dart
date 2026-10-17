@@ -32,6 +32,7 @@ class LookUpProduct {
       ProductPhotoQuery(:final bytes) => bytes.isNotEmpty,
       ProductBarcodeQuery(:final digits) => _barcode.hasMatch(digits),
       ProductQrQuery(:final text) => text.trim().isNotEmpty,
+      ProductDupeQuery(:final name) => name.trim().isNotEmpty,
     };
     if (!ok) return const Err(ValidationFailure('product'));
 
