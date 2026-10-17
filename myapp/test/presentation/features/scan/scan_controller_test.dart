@@ -409,12 +409,14 @@ void main() {
       expect(read(c).canFlip, isFalse);
     });
 
-    testWidgets('the light button toggles the fill light', (tester) async {
+    testWidgets('the fill light starts on; the light button toggles it', (
+      tester,
+    ) async {
       final c = make(tester);
       await settle(tester);
-      expect(read(c).fillLight, isFalse);
-      notifier(c).toggleFillLight();
       expect(read(c).fillLight, isTrue);
+      notifier(c).toggleFillLight();
+      expect(read(c).fillLight, isFalse);
     });
 
     testWidgets('leaving the screen closes the camera', (tester) async {

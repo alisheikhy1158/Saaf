@@ -4,6 +4,8 @@ import 'dart:ui' show PlatformDispatcher;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saaf/data/services/ai_routine_plan_json.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
+import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/skin_analysis.dart';
 import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
@@ -15,58 +17,48 @@ import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 
 part 'ai_routine_providers.g.dart';
 
-/// The skin care products the user uses now, as they typed them (kept on the
-/// phone; sent to Saaf AI only when it is turned on).
+/// The skin care products the user uses now, as they typed them, with their
+/// step (kept on the phone; sent to Saaf AI only when it is turned on).
 @Riverpod(keepAlive: true)
 class CurrentProducts extends _$CurrentProducts {
   static const max = 10;
 
   @override
-  Future<List<String>> build() async {
+  Future<List<OwnedProduct>> build() async {
     final json = await ref
         .read(settingsRepositoryProvider)
         .read(SettingNames.currentProducts);
-    if (json == null) return const [];
-    try {
-      final list = jsonDecode(json);
-      if (list is List) {
-        return [
-          for (final n in list)
-            if (n is String) n,
-        ];
-      }
-    } on Object {
-      // A damaged entry starts the list again.
-    }
-    return const [];
+    return json == null ? const [] : OwnedProduct.decodeList(json);
   }
 
   /// False when the name is empty, already there, or the list is full.
-  Future<bool> add(String name) async {
+  Future<bool> add(String name, ProductCategory? step) async {
     final clean = name.trim().replaceAll(RegExp(r'\s+'), ' ');
     final now = await future;
     if (clean.isEmpty || now.length >= max) return false;
-    if (now.any((n) => n.toLowerCase() == clean.toLowerCase())) return false;
-    await _save([...now, clean]);
+    if (now.any((p) => p.name.toLowerCase() == clean.toLowerCase())) {
+      return false;
+    }
+    await _save([...now, OwnedProduct(name: clean, step: step)]);
     return true;
   }
 
   Future<void> remove(String name) async {
     final now = await future;
     await _save([
-      for (final n in now)
-        if (n != name) n,
+      for (final p in now)
+        if (p.name != name) p,
     ]);
   }
 
-  Future<void> _save(List<String> names) async {
+  Future<void> _save(List<OwnedProduct> products) async {
     await ref
         .read(settingsRepositoryProvider)
         .write(
           SettingNames.currentProducts,
-          names.isEmpty ? null : jsonEncode(names),
+          products.isEmpty ? null : OwnedProduct.encodeList(products),
         );
-    state = AsyncData(names);
+    state = AsyncData(products);
   }
 }
 
@@ -138,7 +130,7 @@ class AiRoutinePlanController extends _$AiRoutinePlanController {
     SkinProfile profile,
     SkinAnalysis? analysis,
     String language,
-    List<String> current,
+    List<OwnedProduct> current,
   ) {
     List<String> names(Iterable<Enum> values) =>
         [for (final v in values) v.name]..sort();
@@ -149,7 +141,9 @@ class AiRoutinePlanController extends _$AiRoutinePlanController {
       profile.budget?.name,
       analysis?.scanId,
       language,
-      ([...current]..sort()).join(';'),
+      ([
+        for (final p in current) '${p.name}:${p.step?.name}',
+      ]..sort()).join(';'),
     ].join('|');
   }
 

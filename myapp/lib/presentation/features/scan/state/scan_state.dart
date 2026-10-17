@@ -50,7 +50,7 @@ class ScanState {
     this.facing = CameraFacing.front,
     this.canFlip = false,
     this.countdown,
-    this.fillLight = false,
+    this.fillLight = true,
     this.failure,
     this.reviewPhoto,
     this.photoCheck,

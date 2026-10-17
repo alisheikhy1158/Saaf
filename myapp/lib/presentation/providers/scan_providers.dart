@@ -6,10 +6,12 @@ import 'package:saaf/data/services/file_photo_store.dart';
 import 'package:saaf/data/services/plugin_camera_service.dart';
 import 'package:saaf/data/services/plugin_permission_service.dart';
 import 'package:saaf/data/services/plugin_photo_picker.dart';
+import 'package:saaf/data/services/plugin_screen_light.dart';
 import 'package:saaf/data/services/web/fake_camera_service.dart';
 import 'package:saaf/data/services/web/fake_capture_quality_monitor.dart';
 import 'package:saaf/data/services/web/fake_permission_service.dart';
 import 'package:saaf/data/services/web/fake_photo_picker.dart';
+import 'package:saaf/data/services/web/fake_screen_light.dart';
 import 'package:saaf/data/services/web/in_memory_photo_store.dart';
 import 'package:saaf/domain/entities/camera_permission.dart';
 import 'package:saaf/domain/services/camera_service.dart';
@@ -22,6 +24,7 @@ import 'package:saaf/data/services/mlkit_photo_verifier.dart';
 import 'package:saaf/data/services/web/always_ok_photo_verifier.dart';
 import 'package:saaf/domain/services/photo_picker.dart';
 import 'package:saaf/domain/services/photo_store.dart';
+import 'package:saaf/domain/services/screen_light.dart';
 import 'package:saaf/domain/usecases/camera_access.dart';
 import 'package:saaf/domain/usecases/capture_photo.dart';
 import 'package:saaf/domain/usecases/finish_scan.dart';
@@ -106,3 +109,8 @@ PickPhoto pickPhoto(Ref ref) => PickPhoto(
 
 @Riverpod(keepAlive: true)
 FinishScan finishScan(Ref ref) => FinishScan(ref.watch(photoStoreProvider));
+
+/// Full screen brightness while the selfie camera is open (phones only).
+@Riverpod(keepAlive: true)
+ScreenLight screenLight(Ref ref) =>
+    (Env.fakeCamera || kIsWeb) ? FakeScreenLight() : const PluginScreenLight();

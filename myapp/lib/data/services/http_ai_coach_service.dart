@@ -4,15 +4,19 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:saaf/data/services/ai_routine_plan_json.dart';
+import 'package:saaf/data/services/ai_skin_estimate_json.dart';
 import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/ai_skin_estimate.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
+import 'package:saaf/domain/services/ai_skin_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
 
 /// The AI coach through OUR OWN server (a small proxy in front of an open-source
@@ -23,7 +27,8 @@ import 'package:saaf/domain/services/auth_token_provider.dart';
 /// Only the chat, the optional photos and a few non-health facts about the
 /// user's skin are sent (see [AiContext]); never their name, number or safety
 /// answers. Saaf AI's product help (picks and look-ups) goes the same way.
-class HttpAiCoachService implements AiCoachService, AiProductService {
+class HttpAiCoachService
+    implements AiCoachService, AiProductService, AiSkinService {
   HttpAiCoachService({
     required String baseUrl,
     required AuthTokenProvider tokens,
@@ -66,18 +71,38 @@ class HttpAiCoachService implements AiCoachService, AiProductService {
   @override
   Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<String> currentProducts,
+    required List<OwnedProduct> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async {
     final sent = await _post('/v1/routine', {
       'context': _contextJson(context),
       'scan': {for (final e in scan.entries) e.key.name: e.value},
-      'current': currentProducts,
+      'current': [
+        for (final p in currentProducts)
+          {'name': p.name, 'step': p.step?.name ?? 'other'},
+      ],
     });
     final body = _decode(sent);
     if (body case Err(:final failure)) return Err(failure);
     final plan = AiRoutinePlanJson.decode(body.valueOrNull);
     return plan == null ? const Err(UnknownFailure('ai-routine')) : Ok(plan);
+  }
+
+  @override
+  Future<Result<AiSkinEstimate>> estimateSkin({
+    required Uint8List photo,
+    required String languageCode,
+  }) async {
+    final sent = await _post('/v1/skin', {
+      'image': base64Encode(photo),
+      'context': {'language': languageCode},
+    });
+    final body = _decode(sent);
+    if (body case Err(:final failure)) return Err(failure);
+    final estimate = AiSkinEstimateJson.decode(body.valueOrNull);
+    return estimate == null
+        ? const Err(UnknownFailure('ai-skin'))
+        : Ok(estimate);
   }
 
   @override
@@ -118,6 +143,17 @@ class HttpAiCoachService implements AiCoachService, AiProductService {
     'budget': context.budget?.name,
     'routine': context.routineProducts,
   };
+
+  /// The server's short error code ("timeout", "groq_400"…), if it sent one.
+  static String? _reason(http.Response response) {
+    try {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      final error = body is Map<String, dynamic> ? body['error'] : null;
+      return error is String && error.length <= 40 ? error : null;
+    } on Object {
+      return null;
+    }
+  }
 
   /// The JSON object our server answered with.
   static Result<Map<String, dynamic>> _decode(Result<http.Response> sent) {
@@ -177,7 +213,7 @@ class HttpAiCoachService implements AiCoachService, AiProductService {
       400 => const ValidationFailure('message'),
       401 || 403 => const Unauthorised(),
       429 => const RateLimited(),
-      _ when status >= 500 => const ServiceUnavailable(),
+      _ when status >= 500 => ServiceUnavailable(_reason(response)),
       _ => UnknownFailure('ai-http-$status'),
     });
   }

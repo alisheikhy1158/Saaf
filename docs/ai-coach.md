@@ -52,6 +52,16 @@ server answers without it and the app says it was not checked on the web. QR cod
 Digital Link / DataMatrix) are read on the phone (`ReadProductCode`) and go to the normal barcode look-up. Groq retired
 its `compound` web-search models in Sept 2026; browser search is the documented replacement.
 
+**Skin estimate from the photo (Results screen, `/v1/skin`).** The face scan's bars were a PLACEHOLDER guess from the
+quiz (`DemoSkinAnalyzer`); the screen now says so ("Estimated from your quiz answers"). With Saaf AI on, "Analyse my
+photo with Saaf AI" shows the FRONT photo and asks before sending it (shrunk on the phone). The vision model returns
+each measure's score, confidence (low/medium/high) and what it saw (strict JSON); unusable photos (dark, blurry, no
+face) return a reason. Kept on the phone per scan (`aiSkinEstimates`), used by Results and Progress, can be reported.
+The screen says it is a rough estimate from one photo, not a measurement.
+
+**Prices.** The AI no longer states prices (they were often wrong). Look-ups and routine picks have a "Check prices
+online" link (a Google search, opened in the browser); AI picks show "Check price", the user's own products "Yours".
+
 **Answer format.** The prompts ask for a 1–2 sentence answer, at most 3 bold headings with "- " bullets, no tables, under
 150 words. The app renders that with `SaafAiText` (`core/utils/ai_text.dart`), which also turns any table into bullets.
 

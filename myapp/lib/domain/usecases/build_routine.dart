@@ -14,15 +14,26 @@ import 'package:saaf/domain/entities/skin_type.dart';
 ///
 /// [preferred] are the ids Saaf AI chose: they come first in their step, but
 /// the safety answers and the budget still apply to them like to any product.
+/// [owned] are the user's own products: they come before everything else, and
+/// a strong one stays even without a matching concern (they already use it),
+/// but the safety answers still apply.
 class BuildRoutine {
-  const BuildRoutine(this._catalog, {Set<String> preferred = const {}})
-    : _preferred = preferred;
+  const BuildRoutine(
+    this._catalog, {
+    Set<String> preferred = const {},
+    Set<String> owned = const {},
+  }) : _preferred = preferred,
+       _owned = owned;
 
   final List<Product> _catalog;
   final Set<String> _preferred;
+  final Set<String> _owned;
 
   /// Score bonus that puts a Saaf AI pick ahead of every rule-based choice.
   static const int _preferredBonus = 100;
+
+  /// And the user's own product ahead of a Saaf AI pick.
+  static const int _ownedBonus = 200;
 
   /// Every product the safety answers allow for [profile] (what Saaf AI may
   /// choose from).
@@ -93,8 +104,11 @@ class BuildRoutine {
     if (p.isStrongActive) {
       if (flags.contains(SafetyFlag.prescriptionTreatment)) return false;
       if (profile.sensitivity == Sensitivity.high) return false;
-      // A strong active is only worth it for a concern the user has.
-      if (!p.targets.any(profile.concerns.contains)) return false;
+      // A strong active is only worth it for a concern the user has (unless
+      // they already use it).
+      if (!_owned.contains(p.id) && !p.targets.any(profile.concerns.contains)) {
+        return false;
+      }
     }
     return true;
   }
@@ -107,7 +121,8 @@ class BuildRoutine {
         : (knowsType && p.skinTypes.contains(type) ? 3 : 0);
     final concernScore = 2 * p.targets.where(profile.concerns.contains).length;
     final aiScore = _preferred.contains(p.id) ? _preferredBonus : 0;
-    return typeScore + concernScore + aiScore;
+    final ownScore = _owned.contains(p.id) ? _ownedBonus : 0;
+    return typeScore + concernScore + aiScore + ownScore;
   }
 
   // ── Budget ───────────────────────────────────────────────────────────────

@@ -11,6 +11,7 @@ import 'package:saaf/data/services/http_ai_coach_service.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/budget_band.dart';
 import 'package:saaf/domain/entities/ingredient.dart';
 import 'package:saaf/domain/entities/product.dart';
@@ -239,6 +240,16 @@ void main() {
       }
     });
 
+    test(
+      'the server’s reason is kept (for the test app’s detail line)',
+      () async {
+        final s = service(
+          MockClient((_) async => http.Response('{"error":"timeout"}', 503)),
+        );
+        expect(await ask(s), const ServiceUnavailable('timeout'));
+      },
+    );
+
     test('no connection', () async {
       final s = service(
         MockClient((_) async => throw http.ClientException('offline')),
@@ -350,14 +361,20 @@ void main() {
       );
       await s.planRoutine(
         context: _context,
-        currentProducts: const ['Nivea Soft'],
+        currentProducts: const [
+          OwnedProduct(name: 'Nivea Soft', step: ProductCategory.moisturiser),
+          OwnedProduct(name: 'Lip balm'),
+        ],
         scan: const {SkinMetricKind.darkSpots: 0.5},
       );
       expect(seen.url.path, '/v1/routine');
       expect(seen.headers['Authorization'], 'Bearer firebase-id-token');
       final body = jsonDecode(seen.body) as Map<String, dynamic>;
       expect(body.keys, {'context', 'scan', 'current'});
-      expect(body['current'], ['Nivea Soft']);
+      expect(body['current'], [
+        {'name': 'Nivea Soft', 'step': 'moisturiser'},
+        {'name': 'Lip balm', 'step': 'other'},
+      ]);
       expect(body['scan'], {'darkSpots': 0.5});
       expect(body['context'], containsPair('skinType', 'oily'));
     });
@@ -366,7 +383,7 @@ void main() {
       final s = service(MockClient((_) async => ok(reply)));
       final plan = (await s.planRoutine(
         context: _context,
-        currentProducts: const ['Nivea Soft'],
+        currentProducts: const [OwnedProduct(name: 'Nivea Soft')],
       )).valueOrNull!;
       expect(plan.summary, 'A simple routine.');
       expect(plan.picks, hasLength(2));
@@ -387,7 +404,7 @@ void main() {
       final s = service(MockClient((_) async => ok(reply)));
       final plan = (await s.planRoutine(
         context: _context,
-        currentProducts: const ['Nivea Soft'],
+        currentProducts: const [OwnedProduct(name: 'Nivea Soft')],
       )).valueOrNull!;
       expect(plan.current, hasLength(1));
       expect(plan.current.single.verdict, ProductVerdict.replace);

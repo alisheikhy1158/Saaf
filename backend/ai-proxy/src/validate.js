@@ -145,11 +145,28 @@ export function validateRoutine(body) {
   const raw = body.current ?? [];
   if (!Array.isArray(raw)) return { ok: false, error: 'bad_request' };
   if (raw.length > MAX_CURRENT) return { ok: false, error: 'too_many_products' };
-  const current = [...new Set(raw.map((name) => cleanText(name, 120)).filter(Boolean))];
+  // Each is a name, or {name, step} when the person said what kind it is.
+  const current = [];
+  for (const item of raw) {
+    const name = cleanText(typeof item === 'string' ? item : item?.name, 120);
+    if (!name || current.some((c) => c.name.toLowerCase() === name.toLowerCase())) continue;
+    const step = typeof item === 'object' && STEPS.includes(item?.step) ? item.step : 'other';
+    current.push({ name, step });
+  }
   return {
     ok: true,
     value: { context: cleanContext(body.context), scan: cleanScan(body.scan), current },
   };
+}
+
+/** One front photo of the face for the AI skin estimate (nothing else about the person). */
+export function validateSkin(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { ok: false, error: 'bad_image' };
+  }
+  const image = cleanImage(body.image);
+  if (!image) return { ok: false, error: 'bad_image' };
+  return { ok: true, value: { image, context: cleanContext(body.context) } };
 }
 
 export const MAX_QR = 500;

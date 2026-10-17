@@ -4,7 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' show DateFormat, NumberFormat;
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
+import 'package:saaf/core/config/env.dart';
+import 'package:saaf/core/error/failure.dart';
+import 'package:saaf/core/error/failure_detail.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
+import 'package:saaf/core/utils/price_search.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/routine.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
@@ -318,8 +323,10 @@ class _StepRow extends StatelessWidget {
           fit: BoxFit.scaleDown,
           alignment: AlignmentDirectional.centerEnd,
           child: Text(
-            // 0 = Saaf AI found no price for a product from the web.
-            step.product.pricePkr == 0
+            // The user's own product, or one from the web (no price).
+            OwnedProduct.isOwned(step.product)
+                ? l10n.routineYours
+                : step.product.pricePkr == 0
                 ? l10n.productCheckPrice
                 : _rs(l10n, locale, step.product.pricePkr),
             style: tokens.styles.segment,
@@ -522,8 +529,14 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
     }
 
     if (async.hasError) {
+      final failure = async.error;
       return card([
-        Text(l10n.aiPicksFailed, style: tokens.styles.pointCaption),
+        Text(
+          failure is Failure
+              ? withDetail(l10n.aiPicksFailed, failure, show: Env.diagnostics)
+              : l10n.aiPicksFailed,
+          style: tokens.styles.pointCaption,
+        ),
         link(
           l10n.scanTryAgain,
           () => ref.read(aiRoutinePlanControllerProvider.notifier).retry(),
@@ -640,6 +653,16 @@ class _PickDetails extends ConsumerWidget {
             l10n.aiPicksPeopleSay(pick.reviews),
             style: tokens.styles.pointCaption,
           ),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: SaafButton.text(
+            label: l10n.checkPricesOnline,
+            leadingIcon: Icons.open_in_new,
+            onPressed: () => ref
+                .read(externalLinkServiceProvider)
+                .open(priceSearchUrl(pick.product.name)),
+          ),
+        ),
         if (pick.sources.isNotEmpty)
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,

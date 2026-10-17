@@ -12,6 +12,7 @@ import 'package:saaf/data/services/web/fake_external_link_service.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/ingredient.dart';
 import 'package:saaf/domain/entities/safety_flag.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
@@ -370,6 +371,28 @@ void main() {
       await tester.pump();
     }
 
+    testWidgets('the user’s own products are in the routine, marked Yours', (
+      tester,
+    ) async {
+      final settings = InMemorySettingsRepository();
+      await settings.write(
+        SettingNames.currentProducts,
+        '[{"name":"My Face Wash","step":"cleanser"},{"name":"Lip balm","step":"other"}]',
+      );
+      await _open(
+        tester,
+        overrides: [
+          ..._with(),
+          settingsRepositoryProvider.overrideWithValue(settings),
+        ],
+      );
+      await tester.pump();
+      expect(find.text('My Face Wash'), findsOneWidget);
+      expect(find.text('Yours'), findsOneWidget);
+      expect(find.text('Neem Face Wash'), findsNothing);
+      expect(find.text('Lip balm'), findsNothing);
+    });
+
     testWidgets('without Saaf AI: offers it, and uses our standard picks', (
       tester,
     ) async {
@@ -383,7 +406,10 @@ void main() {
 
     testWidgets('sends the products the user uses now', (tester) async {
       await openAi(tester);
-      expect(service.current, ['Nivea Soft', 'Night Serum']);
+      expect(service.current?.map((p) => p.name), [
+        'Nivea Soft',
+        'Night Serum',
+      ]);
     });
 
     testWidgets('a product it found on the web is in the routine', (
@@ -419,6 +445,14 @@ void main() {
       expect(links.opened, [
         'https://www.reddit.com/r/PakistaniSkincare/comments/abc',
       ]);
+      // No AI price in the routine: a link to check it instead.
+      await tester.ensureVisible(find.text('Check prices online').first);
+      await tester.tap(find.text('Check prices online').first);
+      await tester.pump();
+      expect(
+        links.opened.last,
+        'https://www.google.com/search?q=CeraVe+Foaming+Facial+Cleanser+price+in+Pakistan',
+      );
     });
 
     testWidgets('keep / replace / stop for the products the user uses', (
@@ -567,12 +601,12 @@ class _FailingCatalog implements ProductCatalog {
 class _PlanService implements AiProductService {
   int calls = 0;
   bool fail = false;
-  List<String>? current;
+  List<OwnedProduct>? current;
 
   @override
   Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<String> currentProducts,
+    required List<OwnedProduct> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async {
     calls++;

@@ -3,6 +3,15 @@ import 'package:saaf/domain/entities/skin_metric.dart';
 /// How the headline on the results screen reads.
 enum SkinTone { good, fair, needsCare }
 
+/// What the numbers are based on (the screen says so plainly).
+enum AnalysisSource {
+  /// A starting guess from the quiz answers: the photo was not looked at.
+  quizEstimate,
+
+  /// Saaf AI's estimate from the front photo, with how sure it is.
+  aiPhoto,
+}
+
 /// The result of a face scan (Figma 07): four measures, one score and the two
 /// areas to work on first. Cosmetic screening only, never a diagnosis.
 class SkinAnalysis {
@@ -10,10 +19,16 @@ class SkinAnalysis {
     required this.scanId,
     required this.takenAt,
     required this.metrics,
+    this.source = AnalysisSource.quizEstimate,
+    this.summary,
   });
 
   final String scanId;
   final DateTime takenAt;
+  final AnalysisSource source;
+
+  /// Saaf AI's one or two sentences about the photo (AI estimates only).
+  final String? summary;
 
   /// In display order.
   final List<SkinMetric> metrics;

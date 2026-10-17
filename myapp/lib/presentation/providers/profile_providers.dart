@@ -152,6 +152,9 @@ class AccountController extends _$AccountController {
         .write(SettingNames.aiRoutinePlan, null);
     await ref
         .read(settingsRepositoryProvider)
+        .write(SettingNames.aiSkinEstimates, null);
+    await ref
+        .read(settingsRepositoryProvider)
         .write(AiConsent.settingName, null);
     ref
       ..invalidate(profileDetailsControllerProvider)

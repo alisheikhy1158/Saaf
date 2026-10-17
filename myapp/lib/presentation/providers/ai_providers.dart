@@ -9,10 +9,12 @@ import 'package:saaf/data/services/web/fake_ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
+import 'package:saaf/domain/services/ai_skin_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
 import 'package:saaf/domain/services/photo_shrinker.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/usecases/ask_coach.dart';
+import 'package:saaf/domain/usecases/estimate_skin.dart';
 import 'package:saaf/domain/usecases/look_up_product.dart';
 import 'package:saaf/domain/usecases/plan_routine.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
@@ -50,6 +52,22 @@ AiProductService aiProductService(Ref ref) => _pretendAi
         // Web research takes much longer than a chat answer.
         timeout: const Duration(seconds: 150),
       );
+
+/// Saaf AI's estimate from a front photo; pretend in the same builds as the
+/// coach.
+@Riverpod(keepAlive: true)
+AiSkinService aiSkinService(Ref ref) => _pretendAi
+    ? const FakeAiSkinService()
+    : HttpAiCoachService(
+        baseUrl: Env.aiProxyUrl,
+        tokens: ref.watch(idTokenSourceProvider),
+      );
+
+@Riverpod(keepAlive: true)
+EstimateSkin estimateSkin(Ref ref) => EstimateSkin(
+  service: ref.watch(aiSkinServiceProvider),
+  consent: ref.watch(aiConsentStoreProvider),
+);
 
 @Riverpod(keepAlive: true)
 PlanRoutine planRoutine(Ref ref) => PlanRoutine(

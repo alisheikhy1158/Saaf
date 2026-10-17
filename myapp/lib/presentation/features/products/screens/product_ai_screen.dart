@@ -3,14 +3,18 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:saaf/core/config/env.dart';
 import 'package:saaf/core/error/failure.dart';
+import 'package:saaf/core/error/failure_detail.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
+import 'package:saaf/core/utils/price_search.dart';
 import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/product_insight_controller.dart';
+import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_ai_text.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
@@ -171,13 +175,17 @@ class ProductAiScreen extends ConsumerWidget {
   }
 
   static String _failureText(AppLocalizations l10n, Failure failure) =>
-      switch (failure) {
-        NetworkFailure() => l10n.aiErrorNetwork,
-        RateLimited() => l10n.aiErrorLimit,
-        ServiceUnavailable() => l10n.aiErrorUnavailable,
-        Unauthorised() => l10n.aiErrorSignIn,
-        _ => l10n.aiErrorGeneric,
-      };
+      withDetail(
+        switch (failure) {
+          NetworkFailure() => l10n.aiErrorNetwork,
+          RateLimited() => l10n.aiErrorLimit,
+          ServiceUnavailable() => l10n.aiErrorUnavailable,
+          Unauthorised() => l10n.aiErrorSignIn,
+          _ => l10n.aiErrorGeneric,
+        },
+        failure,
+        show: Env.diagnostics,
+      );
 }
 
 /// The starting view: what this does, what is sent, and the buttons.
@@ -360,6 +368,17 @@ class _Answer extends ConsumerWidget {
             style: context.text.bodySmall?.copyWith(color: tokens.textLabel),
           ),
         SaafAiText(insight.text),
+        if (insight.title != null)
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: SaafButton.text(
+              label: l10n.checkPricesOnline,
+              leadingIcon: Icons.open_in_new,
+              onPressed: () => ref
+                  .read(externalLinkServiceProvider)
+                  .open(priceSearchUrl(insight.title!)),
+            ),
+          ),
         Text(
           l10n.aiDisclaimer,
           style: tokens.styles.legal.copyWith(color: tokens.textMeta),

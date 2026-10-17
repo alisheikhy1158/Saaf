@@ -19,6 +19,9 @@ abstract final class SettingNames {
 
   /// Saaf AI's last routine plan and what it was for (JSON).
   static const aiRoutinePlan = 'aiRoutinePlan';
+
+  /// Saaf AI's skin estimates, by scan id (JSON).
+  static const aiSkinEstimates = 'aiSkinEstimates';
 }
 
 /// Drift on the phone; in memory in tests and Chrome.

@@ -9,6 +9,7 @@ import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/domain/entities/capture_quality.dart';
 import 'package:saaf/domain/entities/photo_check.dart';
+import 'package:saaf/domain/services/screen_light.dart';
 import 'package:saaf/presentation/features/scan/controllers/scan_controller.dart';
 import 'package:saaf/presentation/features/scan/state/scan_state.dart';
 import 'package:saaf/presentation/features/scan/widgets/pose_text.dart';
@@ -16,6 +17,7 @@ import 'package:saaf/presentation/features/scan/widgets/scan_permission_panel.da
 import 'package:saaf/presentation/features/scan/widgets/scan_pose_stepper.dart';
 import 'package:saaf/presentation/features/scan/widgets/scan_quality_chips.dart';
 import 'package:saaf/presentation/features/scan/widgets/scan_viewfinder.dart';
+import 'package:saaf/presentation/providers/scan_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_camera_controls.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
@@ -31,7 +33,56 @@ class SelfieCaptureScreen extends StatelessWidget {
   const SelfieCaptureScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => const SaafDarkScope(child: _ScanView());
+  Widget build(BuildContext context) =>
+      const SaafDarkScope(child: _ScreenLightScope(child: _ScanView()));
+}
+
+/// While the light is on (the default) the screen is at full brightness, so
+/// the face is lit from the front; it goes back to normal when the light is
+/// switched off or the screen is left, and comes back when the app returns
+/// from the background (the phone resets it there).
+class _ScreenLightScope extends ConsumerStatefulWidget {
+  const _ScreenLightScope({required this.child});
+
+  final Widget child;
+
+  @override
+  ConsumerState<_ScreenLightScope> createState() => _ScreenLightScopeState();
+}
+
+class _ScreenLightScopeState extends ConsumerState<_ScreenLightScope>
+    with WidgetsBindingObserver {
+  late final ScreenLight _light = ref.read(screenLightProvider);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    if (ref.read(scanControllerProvider).fillLight) _light.brighten();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        ref.read(scanControllerProvider).fillLight) {
+      _light.brighten();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _light.restore();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(scanControllerProvider.select((s) => s.fillLight), (_, on) {
+      on ? _light.brighten() : _light.restore();
+    });
+    return widget.child;
+  }
 }
 
 class _ScanView extends ConsumerWidget {

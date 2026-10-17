@@ -1,6 +1,7 @@
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 
@@ -12,7 +13,7 @@ abstract interface class AiProductService {
   /// without a scan.
   Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<String> currentProducts,
+    required List<OwnedProduct> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   });
 

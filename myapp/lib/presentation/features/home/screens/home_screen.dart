@@ -8,6 +8,7 @@ import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/core/utils/week.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/routine.dart';
 import 'package:saaf/presentation/features/home/controllers/home_controller.dart';
@@ -472,8 +473,10 @@ class _ChecklistRow extends StatelessWidget {
       ProductCategory.moisturiser => l10n.stepMoisturiser,
       ProductCategory.sunscreen => l10n.stepSunscreen,
     };
-    // 0 = Saaf AI found no price for a product from the web.
-    final price = step.product.pricePkr == 0
+    // The user's own product, or one from the web (no price).
+    final price = OwnedProduct.isOwned(step.product)
+        ? l10n.routineYours
+        : step.product.pricePkr == 0
         ? l10n.productCheckPrice
         : l10n.priceRs(
             NumberFormat.decimalPattern(locale).format(step.product.pricePkr),

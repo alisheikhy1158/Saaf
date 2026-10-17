@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/data/services/web/fake_camera_service.dart';
 import 'package:saaf/data/services/web/fake_permission_service.dart';
 import 'package:saaf/data/services/web/fake_photo_picker.dart';
+import 'package:saaf/data/services/web/fake_screen_light.dart';
 import 'package:saaf/data/services/web/in_memory_photo_store.dart';
 import 'package:saaf/domain/entities/camera_permission.dart';
 import 'package:saaf/domain/entities/capture_quality.dart';
@@ -29,12 +30,16 @@ class _Monitor implements CaptureQualityMonitor {
 
 const _ready = CaptureQuality(lightOk: true, centred: true, steady: true);
 
+late FakeScreenLight _light;
+
 List<Override> _overrides({
   CameraPermission permission = CameraPermission.granted,
   CaptureQualityMonitor? monitor,
 }) {
   final camera = FakeCameraService();
+  _light = FakeScreenLight();
   return [
+    screenLightProvider.overrideWithValue(_light),
     permissionServiceProvider.overrideWithValue(
       FakePermissionService(permission),
     ),
@@ -123,15 +128,43 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     });
 
-    testWidgets('the light button adds a frame and can be switched off', (
+    testWidgets('the light is on from the start: full brightness and a frame', (
       tester,
     ) async {
       await _open(tester);
+      expect(find.byKey(const ValueKey('scan-light-frame')), findsOneWidget);
+      expect(_light.bright, isTrue);
+    });
+
+    testWidgets('the light button switches both off and on again', (
+      tester,
+    ) async {
+      await _open(tester);
+      await _tap(tester, find.byTooltip('Screen light'));
       expect(find.byKey(const ValueKey('scan-light-frame')), findsNothing);
+      expect(_light.bright, isFalse);
       await _tap(tester, find.byTooltip('Screen light'));
       expect(find.byKey(const ValueKey('scan-light-frame')), findsOneWidget);
-      await _tap(tester, find.byTooltip('Screen light'));
-      expect(find.byKey(const ValueKey('scan-light-frame')), findsNothing);
+      expect(_light.bright, isTrue);
+    });
+
+    testWidgets('leaving the screen gives the normal brightness back', (
+      tester,
+    ) async {
+      await _open(tester);
+      expect(_light.bright, isTrue);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump();
+      expect(_light.bright, isFalse);
+    });
+
+    testWidgets('coming back to the app makes it bright again', (tester) async {
+      await _open(tester);
+      _light.bright = false; // the phone reset it while the app was away
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+      expect(_light.bright, isTrue);
+      await tester.pumpWidget(const SizedBox());
     });
   });
 

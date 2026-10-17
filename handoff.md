@@ -7,7 +7,7 @@
   "Android test app", needs Mac minutes; see Native notes). GitHub: https://github.com/alisheikhy1158/Saaf (main).
 - **Waiting on the owner:** rebuild "Android test app" and test on the Android 15 phone (checklist below). Real Firebase
   sign-in + AI server (https://saaf-ai.saafai.workers.dev) are live in the test build.
-- **Tests:** 1623 Flutter + 47 backend (`cd backend/ai-proxy; node --test`) · **Analyze:** 0 issues · Flutter 3.47.7
+- **Tests:** 1644 Flutter + 52 backend (`cd backend/ai-proxy; node --test`) · **Analyze:** 0 issues · Flutter 3.47.7
 - New: tidy AI answers (`SaafAiText`); **Saaf AI routine from the web** (`/v1/routine`: PK shops, Reddit r/PakistaniSkincare,
   reviews + sources; keep/replace/stop for "Products you use now" asked after the quiz); safety answers stay on the phone
   (`ActiveRules`, `BuildRoutine`, `cautionFor`); **product look-up** `/product-ai`; QR + DataMatrix scanning. docs/ai-coach.md.
@@ -18,8 +18,10 @@
    Bad photos (also from gallery) show a warning with "Use it anyway". 2. Scan a product (Home icon): real barcode -> Open Beauty
    Facts; typed number works without camera. 3. Profile: edit one answer; name/age sheet; AI sharing row. 4. Tissue test on quiz step 1.
 5. Reminders. 6. AI coach chat + photo. 7. Progress: week label, next scan, AI review -> photos -> chat (no scan-due notification).
-8. AI answers tidy. Quiz -> "Products you use now" -> scan. Routine: AI web picks (can take ~1 min), why/people say/sources,
-   keep/replace/stop card. Live browser-search output is UNTESTED (no local Groq key): check quality on the phone.
+8. Quiz -> "Products you use now" (with kind) -> scan (screen at full brightness + light frame). Your products show as
+   "Yours" in Routine/Home. AI web picks (~1 min), keep/replace/stop. No AI prices (Check prices online). Results: "Estimated
+   from your quiz answers" + "Analyse my photo with Saaf AI" (how sure per measure). Test app shows a technical detail on
+   AI errors; server logs Groq errors (`npx wrangler tail` in backend/ai-proxy).
 9. Scan product: a QR code; "Take a photo of the product" -> Look it up; unknown barcode -> "Look it up with Saaf AI".
 
 ## Decisions made

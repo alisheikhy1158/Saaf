@@ -582,7 +582,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiConsentShareBody =>
-      'Your message, any photo you attach or choose to send (a progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and the products you use now, and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.';
+      'Your message, any photo you attach or choose to send (a skin estimate or progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and the products you use now, and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.';
 
   @override
   String get aiConsentWhoTitle => 'Who receives it';
@@ -2245,4 +2245,74 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get checkPricesOnline => 'Check prices online';
+
+  @override
+  String get myProductsStepLabel => 'What is it?';
+
+  @override
+  String get myProductsStepOther => 'Something else';
+
+  @override
+  String get myProductsChooseStep => 'Choose what kind of product it is.';
+
+  @override
+  String get routineYours => 'Yours';
+
+  @override
+  String get resultsQuizEstimateTitle => 'Estimated from your quiz answers';
+
+  @override
+  String get resultsQuizEstimateBody =>
+      'Your photo hasn’t been analysed, so these bars are a starting guess from what you told us, not a measurement.';
+
+  @override
+  String get resultsAnalysePhoto => 'Analyse my photo with Saaf AI';
+
+  @override
+  String get resultsAnalyseConfirmTitle => 'Send your front photo?';
+
+  @override
+  String get resultsAnalyseConfirmBody =>
+      'Only this front photo goes to Saaf AI (Groq, through Saaf’s server) to estimate the four measures. It is not kept there. Your side photos stay on your phone.';
+
+  @override
+  String get resultsAnalyseSend => 'Send';
+
+  @override
+  String get resultsAnalysing => 'Saaf AI is looking at your photo…';
+
+  @override
+  String resultsAnalyseUnusable(String problem) {
+    return 'Saaf AI couldn’t judge this photo: $problem Try a new scan in good light.';
+  }
+
+  @override
+  String get resultsAiTitle => 'Estimated by Saaf AI from your photo';
+
+  @override
+  String get resultsAiAccuracy =>
+      'A rough estimate from one phone photo, not a measurement. Light, angle, make-up and the camera all change it, so watch the trend over several scans.';
+
+  @override
+  String get resultsAiSeen => 'What Saaf AI saw';
+
+  @override
+  String resultsHowSure(String level) {
+    return 'How sure: $level';
+  }
+
+  @override
+  String get confidenceLow => 'Low';
+
+  @override
+  String get confidenceMedium => 'Medium';
+
+  @override
+  String get confidenceHigh => 'High';
+
+  @override
+  String get resultsFrontPhotoLabel => 'Your front photo';
 }

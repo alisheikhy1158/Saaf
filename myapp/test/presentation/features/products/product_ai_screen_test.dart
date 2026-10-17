@@ -10,16 +10,19 @@ import 'package:saaf/core/error/result.dart';
 import 'package:saaf/core/utils/solid_png.dart';
 import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
 import 'package:saaf/data/services/web/fake_ai_coach_service.dart';
+import 'package:saaf/data/services/web/fake_external_link_service.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/presentation/features/products/screens/product_ai_screen.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
+import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
 
 import '../../../helpers/pump_app.dart';
@@ -48,7 +51,7 @@ class _Service implements AiProductService {
   @override
   Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<String> currentProducts,
+    required List<OwnedProduct> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async => const Err(ServiceUnavailable());
 }
@@ -65,6 +68,7 @@ class _Picker implements AiPhotoPicker {
 
 late _Service _service;
 late _Picker _picker;
+late FakeExternalLinkService _links;
 
 List<Override> _overrides({bool consented = true}) {
   final settings = InMemorySettingsRepository();
@@ -79,6 +83,7 @@ List<Override> _overrides({bool consented = true}) {
     aiProductServiceProvider.overrideWithValue(_service),
     aiCoachServiceProvider.overrideWithValue(const FakeAiCoachService()),
     aiPhotoPickerProvider.overrideWithValue(_picker),
+    externalLinkServiceProvider.overrideWithValue(_links),
   ];
 }
 
@@ -109,6 +114,7 @@ void main() {
   setUp(() {
     _service = _Service();
     _picker = _Picker();
+    _links = FakeExternalLinkService();
   });
 
   group('a label photo', () {
@@ -141,6 +147,18 @@ void main() {
       expect(find.textContaining('**'), findsNothing);
       expect(find.byTooltip('Report this answer'), findsOneWidget);
       expect(find.textContaining('AI answers can be wrong'), findsOneWidget);
+    });
+
+    testWidgets('no AI price: a link to check prices online instead', (
+      tester,
+    ) async {
+      await _open(tester, '/product-ai?photo=1');
+      await _tap(tester, find.text('Take a photo'));
+      await _tap(tester, find.text('Look it up'));
+      await _tap(tester, find.text('Check prices online'));
+      expect(_links.opened, [
+        'https://www.google.com/search?q=CeraVe+Foaming+Facial+Cleanser+price+in+Pakistan',
+      ]);
     });
 
     testWidgets('not a product: asks for a clearer photo', (tester) async {

@@ -581,7 +581,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get aiConsentShareBody =>
-      'آپ کا پیغام، آپ کی لگائی ہوئی یا بھیجنے کے لیے چنی ہوئی کوئی تصویر (پیش رفت کا جائزہ، یا معلوم کرنے کے لیے پروڈکٹ کا لیبل)، اور چند باتیں: آپ کی جلد کی قسم، مسائل، حساسیت، بجٹ، آپ کے روٹین اور موجودہ پروڈکٹس کے نام اور، پروڈکٹس چننے کے لیے، آپ کے آخری اسکین کے اسکور۔ آپ کا نام، فون نمبر، سائیڈ کی تصاویر، یا حمل، دوائی اور الرجی کے جوابات ہرگز نہیں۔';
+      'آپ کا پیغام، آپ کی لگائی ہوئی یا بھیجنے کے لیے چنی ہوئی کوئی تصویر (جلد کا اندازہ یا پیش رفت کا جائزہ، یا معلوم کرنے کے لیے پروڈکٹ کا لیبل)، اور چند باتیں: آپ کی جلد کی قسم، مسائل، حساسیت، بجٹ، آپ کے روٹین اور موجودہ پروڈکٹس کے نام اور، پروڈکٹس چننے کے لیے، آپ کے آخری اسکین کے اسکور۔ آپ کا نام، فون نمبر، سائیڈ کی تصاویر، یا حمل، دوائی اور الرجی کے جوابات ہرگز نہیں۔';
 
   @override
   String get aiConsentWhoTitle => 'کس کو ملتا ہے';
@@ -2246,4 +2246,74 @@ class AppLocalizationsUr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get checkPricesOnline => 'آن لائن قیمتیں دیکھیں';
+
+  @override
+  String get myProductsStepLabel => 'یہ کیا ہے؟';
+
+  @override
+  String get myProductsStepOther => 'کچھ اور';
+
+  @override
+  String get myProductsChooseStep => 'منتخب کریں کہ یہ کس قسم کی پروڈکٹ ہے۔';
+
+  @override
+  String get routineYours => 'آپ کی';
+
+  @override
+  String get resultsQuizEstimateTitle => 'آپ کے کوئز کے جوابات سے اندازہ';
+
+  @override
+  String get resultsQuizEstimateBody =>
+      'آپ کی تصویر کا تجزیہ نہیں ہوا، اس لیے یہ بارز آپ کی بتائی ہوئی باتوں سے ایک ابتدائی اندازہ ہیں، پیمائش نہیں۔';
+
+  @override
+  String get resultsAnalysePhoto => 'ثاف اے آئی سے میری تصویر کا تجزیہ کریں';
+
+  @override
+  String get resultsAnalyseConfirmTitle => 'اپنی سامنے کی تصویر بھیجیں؟';
+
+  @override
+  String get resultsAnalyseConfirmBody =>
+      'صرف یہ سامنے کی تصویر ثاف اے آئی (Groq، ثاف کے سرور کے ذریعے) کو جاتی ہے تاکہ چاروں پیمانوں کا اندازہ لگایا جا سکے۔ یہ وہاں محفوظ نہیں رہتی۔ آپ کی سائیڈ کی تصاویر آپ کے فون پر رہتی ہیں۔';
+
+  @override
+  String get resultsAnalyseSend => 'بھیجیں';
+
+  @override
+  String get resultsAnalysing => 'ثاف اے آئی آپ کی تصویر دیکھ رہا ہے…';
+
+  @override
+  String resultsAnalyseUnusable(String problem) {
+    return 'ثاف اے آئی اس تصویر کا اندازہ نہیں لگا سکا: $problem اچھی روشنی میں نیا اسکین کریں۔';
+  }
+
+  @override
+  String get resultsAiTitle => 'ثاف اے آئی کا آپ کی تصویر سے اندازہ';
+
+  @override
+  String get resultsAiAccuracy =>
+      'یہ ایک فون تصویر سے موٹا اندازہ ہے، پیمائش نہیں۔ روشنی، زاویہ، میک اپ اور کیمرہ سب اسے بدلتے ہیں، اس لیے کئی اسکینز میں رجحان دیکھیں۔';
+
+  @override
+  String get resultsAiSeen => 'ثاف اے آئی نے کیا دیکھا';
+
+  @override
+  String resultsHowSure(String level) {
+    return 'یقین: $level';
+  }
+
+  @override
+  String get confidenceLow => 'کم';
+
+  @override
+  String get confidenceMedium => 'درمیانہ';
+
+  @override
+  String get confidenceHigh => 'زیادہ';
+
+  @override
+  String get resultsFrontPhotoLabel => 'آپ کی سامنے کی تصویر';
 }

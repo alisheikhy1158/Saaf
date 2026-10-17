@@ -1,10 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:saaf/core/error/result.dart';
 import 'package:saaf/data/local/drift_repositories.dart';
 import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
 import 'package:saaf/domain/entities/completed_scan.dart';
 import 'package:saaf/domain/entities/face_pose.dart';
+import 'package:saaf/domain/entities/skin_analysis.dart';
 import 'package:saaf/domain/entities/stored_photo.dart';
 import 'package:saaf/domain/repositories/scan_history_repository.dart';
 import 'package:saaf/domain/usecases/compare_progress.dart';
@@ -86,8 +88,17 @@ Future<ProgressView?> progressView(Ref ref) async {
   final before = history[history.length - 2];
   final after = history.last;
 
-  final beforeResult = await analyse(before, profile);
-  final afterResult = await analyse(after, profile);
+  // Saaf AI's estimate for a scan when there is one, else the quiz guess.
+  final estimates = await ref.watch(aiSkinEstimatesProvider.future);
+  Future<Result<SkinAnalysis>> analysed(CompletedScan scan) async {
+    final estimate = estimates[scan.id];
+    return estimate != null && estimate.usable
+        ? Ok(estimate.toAnalysis(scanId: scan.id, takenAt: scan.takenAt))
+        : analyse(scan, profile);
+  }
+
+  final beforeResult = await analysed(before);
+  final afterResult = await analysed(after);
   final beforeAnalysis = beforeResult.when(
     ok: (a) => a,
     err: (failure) => throw failure,

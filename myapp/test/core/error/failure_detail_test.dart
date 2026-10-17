@@ -24,6 +24,11 @@ void main() {
     expect(failureDetail(const UnknownFailure()), 'unknown');
   });
 
+  test('an unavailable service shows the server’s reason when it gave one', () {
+    expect(failureDetail(const ServiceUnavailable('timeout')), 'timeout');
+    expect(failureDetail(const ServiceUnavailable()), 'ServiceUnavailable');
+  });
+
   test('other failures show their kind', () {
     expect(failureDetail(const PermissionDenied()), 'PermissionDenied');
   });

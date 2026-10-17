@@ -9,6 +9,7 @@ import 'package:saaf/core/error/result.dart';
 import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/budget_band.dart';
 import 'package:saaf/domain/entities/ingredient.dart';
 import 'package:saaf/domain/entities/product.dart';
@@ -49,13 +50,13 @@ class _Service implements AiProductService {
   int calls = 0;
   AiContext? context;
   Map<SkinMetricKind, double>? scan;
-  List<String>? current;
+  List<OwnedProduct>? current;
   ProductQuery? query;
 
   @override
   Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<String> currentProducts,
+    required List<OwnedProduct> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async {
     calls++;
@@ -125,7 +126,9 @@ void main() {
     Future<Result<AiRoutinePlan>> plan({
       bool consent = true,
       SkinProfile profile = _pregnantWithAcne,
-      List<String> current = const ['Nivea Soft'],
+      List<OwnedProduct> current = const [
+        OwnedProduct(name: 'Nivea Soft', step: ProductCategory.moisturiser),
+      ],
       SkinAnalysis? analysis,
     }) async =>
         PlanRoutine(
@@ -153,7 +156,9 @@ void main() {
       expect(context.skinType, SkinType.oily);
       expect(context.concerns, {SkinConcern.acne, SkinConcern.darkSpots});
       expect(context.budget, BudgetBand.balanced);
-      expect(service.current, ['Nivea Soft']);
+      expect(service.current, const [
+        OwnedProduct(name: 'Nivea Soft', step: ProductCategory.moisturiser),
+      ]);
       // AiContext has no field for the safety answers at all.
     });
 

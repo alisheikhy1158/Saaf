@@ -9,10 +9,13 @@ import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/ai_skin_estimate.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
+import 'package:saaf/domain/services/ai_skin_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
 
 /// A pretend AI coach for Chrome, tests and builds without the real service. It
@@ -64,7 +67,7 @@ class FakeAiProductService implements AiProductService {
   @override
   Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<String> currentProducts,
+    required List<OwnedProduct> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async {
     final firstPerStep = <ProductCategory, Product>{};
@@ -79,9 +82,9 @@ class FakeAiProductService implements AiProductService {
             AiPick(product: product, brand: '', why: 'A demo reason.'),
         ],
         current: [
-          for (final name in currentProducts)
+          for (final owned in currentProducts)
             CurrentProductReview(
-              name: name,
+              name: owned.name,
               verdict: ProductVerdict.keep,
               why: 'A demo verdict.',
             ),
@@ -101,6 +104,28 @@ class FakeAiProductService implements AiProductService {
           'This is a demo answer: the real Saaf AI is not connected in this '
           'build.\n**What it is**\n- A product it would look up on the web.',
       webChecked: false,
+    ),
+  );
+}
+
+/// A pretend skin estimate for Chrome and builds without the real service. It
+/// says it is a demo and is never sure.
+class FakeAiSkinService implements AiSkinService {
+  const FakeAiSkinService();
+
+  @override
+  Future<Result<AiSkinEstimate>> estimateSkin({
+    required Uint8List photo,
+    required String languageCode,
+  }) async => Ok(
+    AiSkinEstimate(
+      usable: true,
+      summary:
+          'Demo estimate: the real Saaf AI is not connected in this build.',
+      metrics: [
+        for (final kind in SkinMetricKind.values)
+          SkinMetric(kind: kind, amount: 0.5, confidence: Confidence.low),
+      ],
     ),
   );
 }

@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:saaf/core/config/env.dart';
 import 'package:saaf/core/error/failure.dart';
+import 'package:saaf/core/error/failure_detail.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
@@ -594,13 +596,17 @@ class _FailureBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final tokens = context.saaf;
-    final text = switch (failure) {
-      NetworkFailure() => l10n.aiErrorNetwork,
-      RateLimited() => l10n.aiErrorLimit,
-      ServiceUnavailable() => l10n.aiErrorUnavailable,
-      Unauthorised() => l10n.aiErrorSignIn,
-      _ => l10n.aiErrorGeneric,
-    };
+    final text = withDetail(
+      switch (failure) {
+        NetworkFailure() => l10n.aiErrorNetwork,
+        RateLimited() => l10n.aiErrorLimit,
+        ServiceUnavailable() => l10n.aiErrorUnavailable,
+        Unauthorised() => l10n.aiErrorSignIn,
+        _ => l10n.aiErrorGeneric,
+      },
+      failure,
+      show: Env.diagnostics,
+    );
     return DecoratedBox(
       decoration: BoxDecoration(
         color: tokens.sageTint,

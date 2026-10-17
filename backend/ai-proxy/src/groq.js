@@ -82,6 +82,7 @@ export async function callGroq(env, body, { fetchImpl = fetch, timeoutMs = 45_00
       signal: controller.signal,
     });
   } catch {
+    console.error(`groq timeout after ${timeoutMs} ms (${body.model}${body.tools ? ', tools' : ''})`);
     throw new UpstreamError(504, 'timeout');
   } finally {
     clearTimeout(timer);
@@ -89,7 +90,17 @@ export async function callGroq(env, body, { fetchImpl = fetch, timeoutMs = 45_00
 
   // Groq's own limits or an outage are "busy" for the app, not the user's fault.
   if (response.status === 429) throw new UpstreamError(503, 'busy');
-  if (!response.ok) throw new UpstreamError(502, `groq_${response.status}`);
+  if (!response.ok) {
+    // Groq's own error message (never the person's question) helps fix problems.
+    let detail = '';
+    try {
+      detail = (await response.text()).slice(0, 300);
+    } catch {
+      // No detail.
+    }
+    console.error(`groq ${response.status} (${body.model}${body.tools ? ', tools' : ''}): ${detail}`);
+    throw new UpstreamError(502, `groq_${response.status}`);
+  }
 
   try {
     const data = await response.json();

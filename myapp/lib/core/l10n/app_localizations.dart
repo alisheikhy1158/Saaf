@@ -1139,7 +1139,7 @@ abstract class AppLocalizations {
   /// What is sent to the AI.
   ///
   /// In en, this message translates to:
-  /// **'Your message, any photo you attach or choose to send (a progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and the products you use now, and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.'**
+  /// **'Your message, any photo you attach or choose to send (a skin estimate or progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and the products you use now, and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.'**
   String get aiConsentShareBody;
 
   /// Heading on the AI permission screen.
@@ -3925,6 +3925,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{None} =1{1 product} other{{count} products}}'**
   String profileProductsValue(int count);
+
+  /// Link that searches the web for a product's price in Pakistan.
+  ///
+  /// In en, this message translates to:
+  /// **'Check prices online'**
+  String get checkPricesOnline;
+
+  /// Label above the product kind choices.
+  ///
+  /// In en, this message translates to:
+  /// **'What is it?'**
+  String get myProductsStepLabel;
+
+  /// Product kind: not one of the routine steps.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get myProductsStepOther;
+
+  /// Error when no kind was chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose what kind of product it is.'**
+  String get myProductsChooseStep;
+
+  /// Shown instead of a price for the user's own product.
+  ///
+  /// In en, this message translates to:
+  /// **'Yours'**
+  String get routineYours;
+
+  /// Notice: the numbers are a guess from the quiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated from your quiz answers'**
+  String get resultsQuizEstimateTitle;
+
+  /// Body of the quiz-estimate notice.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photo hasn’t been analysed, so these bars are a starting guess from what you told us, not a measurement.'**
+  String get resultsQuizEstimateBody;
+
+  /// Button that asks to send the front photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyse my photo with Saaf AI'**
+  String get resultsAnalysePhoto;
+
+  /// Title of the confirm dialog before sending.
+  ///
+  /// In en, this message translates to:
+  /// **'Send your front photo?'**
+  String get resultsAnalyseConfirmTitle;
+
+  /// What is sent, in the confirm dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Only this front photo goes to Saaf AI (Groq, through Saaf’s server) to estimate the four measures. It is not kept there. Your side photos stay on your phone.'**
+  String get resultsAnalyseConfirmBody;
+
+  /// Confirm button.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get resultsAnalyseSend;
+
+  /// Shown while the photo is analysed.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI is looking at your photo…'**
+  String get resultsAnalysing;
+
+  /// When the photo could not be judged.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI couldn’t judge this photo: {problem} Try a new scan in good light.'**
+  String resultsAnalyseUnusable(String problem);
+
+  /// Notice: the numbers come from the AI photo estimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated by Saaf AI from your photo'**
+  String get resultsAiTitle;
+
+  /// How accurate the AI estimate is.
+  ///
+  /// In en, this message translates to:
+  /// **'A rough estimate from one phone photo, not a measurement. Light, angle, make-up and the camera all change it, so watch the trend over several scans.'**
+  String get resultsAiAccuracy;
+
+  /// Heading of the per-measure notes.
+  ///
+  /// In en, this message translates to:
+  /// **'What Saaf AI saw'**
+  String get resultsAiSeen;
+
+  /// How sure Saaf AI is about one measure.
+  ///
+  /// In en, this message translates to:
+  /// **'How sure: {level}'**
+  String resultsHowSure(String level);
+
+  /// Confidence level.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get confidenceLow;
+
+  /// Confidence level.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get confidenceMedium;
+
+  /// Confidence level.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get confidenceHigh;
+
+  /// Screen-reader label of the photo in the send dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Your front photo'**
+  String get resultsFrontPhotoLabel;
 }
 
 class _AppLocalizationsDelegate

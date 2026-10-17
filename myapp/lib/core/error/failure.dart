@@ -40,9 +40,15 @@ final class RateLimited extends Failure {
   const RateLimited();
 }
 
-/// The service is down or not set up on this build.
+/// The service is down or not set up on this build. [reason] is the server's
+/// short error code when it gave one (for the test app's detail line).
 final class ServiceUnavailable extends Failure {
-  const ServiceUnavailable();
+  const ServiceUnavailable([this.reason]);
+
+  final String? reason;
+
+  @override
+  List<Object?> get props => [reason];
 }
 
 /// The user is not signed in (or the sign-in has expired).

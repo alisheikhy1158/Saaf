@@ -2,6 +2,7 @@ import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/skin_analysis.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/entities/skin_profile.dart';
@@ -25,7 +26,7 @@ class PlanRoutine {
 
   Future<Result<AiRoutinePlan>> call({
     required SkinProfile profile,
-    required List<String> currentProducts,
+    required List<OwnedProduct> currentProducts,
     required String languageCode,
     SkinAnalysis? analysis,
   }) async {

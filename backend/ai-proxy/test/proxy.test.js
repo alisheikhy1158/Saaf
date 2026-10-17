@@ -6,8 +6,9 @@ import { AuthError, verifyFirebaseToken } from '../src/auth.js';
 import { askGroq, buildMessages, cleanReply } from '../src/groq.js';
 import { handle } from '../src/index.js';
 import { lookUpProduct, planRoutine } from '../src/products.js';
+import { analyseSkin } from '../src/skin.js';
 import { buildSystemPrompt } from '../src/prompt.js';
-import { sniffImage, validateChat, validateProduct, validateReport, validateRoutine } from '../src/validate.js';
+import { sniffImage, validateChat, validateProduct, validateReport, validateRoutine, validateSkin } from '../src/validate.js';
 
 const PROJECT = 'saaf-test';
 const NOW = Date.UTC(2026, 9, 17, 12, 0, 0);
@@ -413,7 +414,7 @@ test('look-up: if the web search fails, answers without it and says so', async (
 const routineBody = {
   context: { language: 'en', skinType: 'oily', concerns: ['acne'], budget: 'essential' },
   scan: { darkSpots: 0.6, breakouts: 0.3, oiliness: 0.7, hydration: 0.5 },
-  current: ['Fair & Lovely Advanced Multi Vitamin', 'Nivea Soft', '  '],
+  current: ['Fair & Lovely Advanced Multi Vitamin', { name: 'Nivea Soft', step: 'moisturiser' }, '  ', { name: 'Odd', step: 'perfume' }],
 };
 
 const NOTES = `Research notes
@@ -437,10 +438,14 @@ const plan = (extra = {}) => JSON.stringify({
   ...extra,
 });
 
-test('validate routine: keeps skin facts, scan and up to 10 current products', () => {
+test('validate routine: keeps skin facts, scan and up to 10 current products with their step', () => {
   const r = validateRoutine({ ...routineBody, pregnant: true });
   assert.equal(r.ok, true);
-  assert.deepEqual(r.value.current, ['Fair & Lovely Advanced Multi Vitamin', 'Nivea Soft']);
+  assert.deepEqual(r.value.current, [
+    { name: 'Fair & Lovely Advanced Multi Vitamin', step: 'other' },
+    { name: 'Nivea Soft', step: 'moisturiser' },
+    { name: 'Odd', step: 'other' },
+  ]);
   assert.deepEqual(r.value.scan, routineBody.scan);
   assert.equal('pregnant' in r.value, false);
   assert.equal(validateRoutine({ current: Array.from({ length: 11 }, (_, i) => `p${i}`) }).error, 'too_many_products');
@@ -454,10 +459,13 @@ test('routine: researches the web first (Reddit included), then structures it as
   const [research, structure] = groq.bodies;
   assert.deepEqual(research.tools, [{ type: 'browser_search' }]);
   const asked = JSON.stringify(research.messages);
-  for (const must of ['r/PakistaniSkincare', 'Pakistan', 'Fair & Lovely Advanced Multi Vitamin', 'under Rs 3,000', 'oiliness', 'hydroquinone', 'keep, replace or stop']) {
+  for (const must of ['r/PakistaniSkincare', 'Pakistan', 'Fair & Lovely Advanced Multi Vitamin', 'Nivea Soft (moisturiser)', 'under Rs 3,000', 'oiliness', 'hydroquinone', 'keep, replace or stop', 'Only pick a product for a step', 'at most 5 searches']) {
     assert.ok(asked.includes(must), must);
   }
   assert.equal(structure.response_format.type, 'json_schema');
+  // Prices from the web were often wrong: the plan never carries one.
+  assert.equal('priceRs' in structure.response_format.json_schema.schema.properties.picks.items.properties, false);
+  assert.ok(JSON.stringify(structure.messages).includes('Do not include prices'));
   assert.equal(structure.response_format.json_schema.strict, true);
   assert.ok(JSON.stringify(structure.messages).includes('derma.pk/cerave-foaming'));
   assert.equal('tools' in structure, false);
@@ -473,7 +481,7 @@ test('routine: picks are cleaned, one per step, sources only from the research',
   assert.deepEqual(cleanser.actives, ['niacinamide', 'ceramides']);
   assert.deepEqual(cleanser.times, ['morning', 'night']);
   assert.deepEqual(cleanser.sources, ['https://derma.pk/cerave-foaming']);
-  assert.equal(result.picks[1].pricePkr, 2900);
+  assert.equal(result.picks[1].pricePkr, 0);
   assert.deepEqual(result.picks[1].times, ['night']);
 });
 
@@ -511,4 +519,58 @@ test('server: routines and look-ups need sign-in and count toward the limit', as
   assert.equal((await call('/v1/product', { token, body: { barcode: '3337875743563' }, env, groq: fakeGroq(insight) })).status, 429);
   assert.equal((await call('/v1/routine', { token, body: { current: 'x' } })).status, 400);
   assert.equal((await call('/v1/recommend', { token, body: {} })).status, 404);
+});
+
+test('look-up: never states prices (they were often wrong)', async () => {
+  const groq = groqSequence([insight]);
+  await lookUpProduct({ GROQ_API_KEY: 'k' }, validateProduct({ barcode: '12345678' }).value, { fetchImpl: groq.fetchImpl });
+  const prompt = JSON.stringify(groq.bodies[0].messages);
+  assert.ok(prompt.includes('Do not state prices'));
+  assert.equal(prompt.includes('about Rs'), false);
+});
+
+// ---------------------------------------------------------------- skin photo
+const skinReply = (extra = {}) => JSON.stringify({
+  usable: true,
+  problem: '',
+  summary: '  Some shine on the forehead and a few small spots.  ',
+  darkSpots: { score: 0.2, confidence: 'medium', seen: 'A few small marks on the cheeks.' },
+  breakouts: { score: 1.7, confidence: 'high', seen: 'Several small spots on the chin.' },
+  oiliness: { score: 0.6, confidence: 'sure', seen: 'Shine on the T-zone.' },
+  hydration: { score: 0.5, confidence: 'low', seen: 'Hard to judge from a photo.' },
+  ...extra,
+});
+
+test('validate skin: one real photo, nothing else about the person', () => {
+  assert.equal(validateSkin({ image: JPEG, context: { language: 'ur' } }).value.context.language, 'ur');
+  assert.equal(validateSkin({}).error, 'bad_image');
+  assert.equal(validateSkin({ image: 'nope' }).error, 'bad_image');
+});
+
+test('skin: the vision model scores the four measures with how sure it is', async () => {
+  const groq = groqSequence([skinReply()]);
+  const result = await analyseSkin({ GROQ_API_KEY: 'k' }, validateSkin({ image: JPEG }).value, { fetchImpl: groq.fetchImpl });
+  assert.equal(groq.bodies[0].model, 'qwen/qwen3.8-27b');
+  assert.equal(groq.bodies[0].response_format.json_schema.strict, true);
+  const prompt = JSON.stringify(groq.bodies[0].messages);
+  for (const must of ['not a diagnosis', 'Never identify', 'lighting', 'confidence']) assert.ok(prompt.includes(must), must);
+  assert.equal(result.usable, true);
+  assert.equal(result.summary, 'Some shine on the forehead and a few small spots.');
+  assert.deepEqual(result.metrics.breakouts, { score: 1, confidence: 'high', seen: 'Several small spots on the chin.' });
+  assert.equal(result.metrics.oiliness.confidence, 'low'); // unknown word -> low
+  assert.equal(result.metrics.hydration.score, 0.5);
+});
+
+test('skin: an unusable photo says why, with no scores', async () => {
+  const groq = groqSequence([skinReply({ usable: false, problem: 'The photo is too dark.' })]);
+  const result = await analyseSkin({ GROQ_API_KEY: 'k' }, validateSkin({ image: JPEG }).value, { fetchImpl: groq.fetchImpl });
+  assert.deepEqual(result, { usable: false, problem: 'The photo is too dark.' });
+});
+
+test('server: skin analysis needs sign-in', async () => {
+  assert.equal((await call('/v1/skin', { body: { image: JPEG } })).status, 401);
+  const token = await makeToken();
+  const r = await call('/v1/skin', { token, body: { image: JPEG }, groq: groqSequence([skinReply()]).fetchImpl });
+  assert.equal(r.status, 200);
+  assert.equal(r.json.metrics.darkSpots.score, 0.2);
 });

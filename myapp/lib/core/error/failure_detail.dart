@@ -5,6 +5,7 @@ import 'package:saaf/core/error/failure.dart';
 String failureDetail(Failure failure) => switch (failure) {
   UnknownFailure(:final message) => message ?? 'unknown',
   NetworkFailure() => 'network',
+  ServiceUnavailable(:final reason?) => reason,
   ValidationFailure(:final field) => 'invalid $field',
   _ => failure.runtimeType.toString(),
 };
