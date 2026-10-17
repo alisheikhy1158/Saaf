@@ -15,7 +15,7 @@ part 'auth_providers.g.dart';
 /// a phone; otherwise the fake backend (Chrome, tests, local development).
 @Riverpod(keepAlive: true)
 AuthRepository authRepository(Ref ref) => Env.useFirebase && !kIsWeb
-    ? FirebaseAuthRepository()
+    ? FirebaseAuthRepository(testPhoneNumbersOnly: Env.phoneTestMode)
     : FakeAuthRepository();
 
 @riverpod

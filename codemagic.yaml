@@ -186,6 +186,8 @@ workflows:
           cd $APP_DIR
           # This TEST app always uses the REAL Firebase login (USE_FIREBASE=true), the real
           # product database and the real AI server (backend/ai-proxy on Cloudflare).
+          # PHONE_TEST_MODE = only Firebase TEST numbers can sign in (skips the app check
+          # that hangs on a sideloaded app). Remove it to test real SMS.
           # FAKE_PURCHASES = a pretend store, so the Pro-only Progress screen can be
           # tried in this TEST app. NEVER add it to the store release workflows.
           flutter build apk --release \
@@ -200,7 +202,8 @@ workflows:
             --dart-define=AI_PROXY_URL=https://saaf-ai.saafai.workers.dev \
             --dart-define=LEGAL_REVIEWED="${LEGAL_REVIEWED:-false}" \
             --dart-define=FAKE_PURCHASES=true \
-            --dart-define=DIAGNOSTICS=true
+            --dart-define=DIAGNOSTICS=true \
+            --dart-define=PHONE_TEST_MODE=true
     artifacts:
       - myapp/build/app/outputs/flutter-apk/*.apk
     publishing:

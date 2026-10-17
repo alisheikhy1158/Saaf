@@ -98,6 +98,56 @@ void main() {
       },
     );
 
+    test(
+      'Firebase never answering is its own error, not "no connection"',
+      () async {
+        // The app check before the SMS can hang on a sideloaded test app.
+        stubVerifyPhoneNumber((call) {});
+        final quick = FirebaseAuthRepository(
+          authProvider: () async => auth,
+          codeWait: const Duration(milliseconds: 50),
+        );
+        expect(
+          (await quick.requestOtp(phone)).failureOrNull,
+          const UnknownFailure('no-answer-from-firebase'),
+        );
+      },
+    );
+
+    test(
+      'test-number mode switches off the app check first (test app only)',
+      () async {
+        when(
+          () => auth.setSettings(
+            appVerificationDisabledForTesting: any(
+              named: 'appVerificationDisabledForTesting',
+            ),
+          ),
+        ).thenAnswer((_) async {});
+        sendsCode();
+        final testing = FirebaseAuthRepository(
+          authProvider: () async => auth,
+          testPhoneNumbersOnly: true,
+        );
+        expect((await testing.requestOtp(phone)).isOk, isTrue);
+        verify(
+          () => auth.setSettings(appVerificationDisabledForTesting: true),
+        ).called(1);
+      },
+    );
+
+    test('normal builds never switch the app check off', () async {
+      sendsCode();
+      await repository.requestOtp(phone);
+      verifyNever(
+        () => auth.setSettings(
+          appVerificationDisabledForTesting: any(
+            named: 'appVerificationDisabledForTesting',
+          ),
+        ),
+      );
+    });
+
     test('a network error becomes NetworkFailure', () async {
       stubVerifyPhoneNumber((call) {
         (call.namedArguments[#verificationFailed] as PhoneVerificationFailed)(

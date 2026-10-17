@@ -17,8 +17,22 @@ import 'package:saaf/domain/repositories/auth_repository.dart';
 /// is thrown to the UI. Tokens stay inside the Firebase SDK, which keeps them in
 /// the platform's secure storage (SEC-1); this class never sees them.
 class FirebaseAuthRepository implements AuthRepository {
-  FirebaseAuthRepository({Future<FirebaseAuth> Function()? authProvider})
-    : _authProvider = authProvider ?? ensureFirebaseAuth;
+  FirebaseAuthRepository({
+    Future<FirebaseAuth> Function()? authProvider,
+    Duration? codeWait,
+    this.testPhoneNumbersOnly = false,
+  }) : _authProvider = authProvider ?? ensureFirebaseAuth,
+       _codeWait = codeWait ?? _codeTimeout + const Duration(seconds: 5);
+
+  /// TEST APP ONLY (`PHONE_TEST_MODE=true`): skips Firebase's "is this the
+  /// genuine app" check, which can hang on an app installed outside the Play
+  /// Store. Then ONLY the test numbers set in the Firebase console work; real
+  /// numbers are refused. Never on in a store build.
+  final bool testPhoneNumbersOnly;
+
+  /// How long to wait for Firebase to say the code was sent.
+  final Duration _codeWait;
+  bool _settingsApplied = false;
 
   static const Duration _resendDelay = Duration(seconds: 30);
   static const Duration _codeTimeout = Duration(seconds: 60);
@@ -45,6 +59,11 @@ class FirebaseAuthRepository implements AuthRepository {
       if (kIsWeb) {
         _webConfirmation = await auth.signInWithPhoneNumber(phone.e164);
         return const Ok(challenge);
+      }
+
+      if (testPhoneNumbersOnly && !_settingsApplied) {
+        await auth.setSettings(appVerificationDisabledForTesting: true);
+        _settingsApplied = true;
       }
 
       final done = Completer<Result<OtpChallenge>>();
@@ -77,9 +96,11 @@ class FirebaseAuthRepository implements AuthRepository {
           _verificationId = verificationId;
         },
       );
+      // No answer at all (not even an error) usually means the app check
+      // before the SMS got stuck, not a missing connection.
       return await done.future.timeout(
-        _codeTimeout + const Duration(seconds: 5),
-        onTimeout: () => const Err(NetworkFailure()),
+        _codeWait,
+        onTimeout: () => const Err(UnknownFailure('no-answer-from-firebase')),
       );
     } on FirebaseAuthException catch (e) {
       return Err(mapFirebaseAuthError(e));

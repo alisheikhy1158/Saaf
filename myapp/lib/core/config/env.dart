@@ -23,6 +23,11 @@ abstract final class Env {
   /// wrong on a real phone. For the TEST app only: `--dart-define=DIAGNOSTICS=true`.
   static const bool diagnostics = bool.fromEnvironment('DIAGNOSTICS');
 
+  /// TEST APP ONLY: phone sign-in works with Firebase TEST numbers without the
+  /// app check (see FirebaseAuthRepository.testPhoneNumbersOnly).
+  /// `--dart-define=PHONE_TEST_MODE=true`. Never in a store build.
+  static const bool phoneTestMode = bool.fromEnvironment('PHONE_TEST_MODE');
+
   static const String firebaseProjectId = String.fromEnvironment(
     'FIREBASE_PROJECT_ID',
   );
