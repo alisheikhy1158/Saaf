@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:saaf/presentation/providers/consent_providers.dart';
+import 'package:saaf/presentation/providers/life_providers.dart';
+import 'package:saaf/domain/entities/life_event.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart' show NumberFormat;
+import 'package:intl/intl.dart' show DateFormat, NumberFormat;
 import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
@@ -143,6 +146,29 @@ class ProfileScreen extends ConsumerWidget {
                   title: l10n.profileRowLanguage,
                   value: language,
                   onTap: () => _showSheet(context, const _LanguageSheet()),
+                ),
+              ],
+            ),
+            SizedBox(height: space.sectionGapSmall),
+            SaafOverline(l10n.profileSectionLife),
+            SizedBox(height: space.x8),
+            SaafSettingsGroup(
+              rows: [
+                SaafSettingsRow(
+                  icon: Icons.nights_stay_outlined,
+                  title: l10n.profileRowRamadan,
+                  value: ref.watch(ramadanModeProvider).value == true
+                      ? l10n.profileValueOn
+                      : l10n.profileValueOff,
+                  onTap: () => _showSheet(context, const _RamadanSheet()),
+                ),
+                SaafSettingsRow(
+                  icon: Icons.celebration_outlined,
+                  title: l10n.profileRowEvent,
+                  value:
+                      ref.watch(lifeEventControllerProvider).value?.name ??
+                      l10n.profileValueNotSet,
+                  onTap: () => _showSheet(context, const _EventSheet()),
                 ),
               ],
             ),
@@ -1005,6 +1031,125 @@ class _AiSharingSheet extends ConsumerWidget {
                     ref.read(autoAnalyseScansProvider.notifier).set(on: value),
               ),
             ],
+          ),
+      ],
+    );
+  }
+}
+
+class _RamadanSheet extends ConsumerWidget {
+  const _RamadanSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    final on = ref.watch(ramadanModeProvider).value == true;
+    return _SheetFrame(
+      title: l10n.profileRowRamadan,
+      children: [
+        Text(
+          l10n.ramadanSheetBody,
+          style: context.text.bodyMedium?.copyWith(color: tokens.textLabel),
+        ),
+        Row(
+          spacing: tokens.space.rowGap,
+          children: [
+            Expanded(
+              child: Text(
+                l10n.profileRowRamadan,
+                style: tokens.styles.rowTitle,
+              ),
+            ),
+            Switch(
+              key: const ValueKey('ramadan-switch'),
+              value: on,
+              onChanged: (value) =>
+                  ref.read(ramadanModeProvider.notifier).set(on: value),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _EventSheet extends ConsumerStatefulWidget {
+  const _EventSheet();
+
+  @override
+  ConsumerState<_EventSheet> createState() => _EventSheetState();
+}
+
+class _EventSheetState extends ConsumerState<_EventSheet> {
+  /// A new event starts eight weeks away (the plan's longest step).
+  static const _defaultWeeks = 8;
+
+  late final LifeEvent? _saved = ref.read(lifeEventControllerProvider).value;
+  late final TextEditingController _name = TextEditingController(
+    text: _saved?.name ?? '',
+  );
+  late DateTime _date =
+      _saved?.date ??
+      ref
+          .read(clockProvider)
+          .now()
+          .add(const Duration(days: 7 * _defaultWeeks));
+
+  @override
+  void dispose() {
+    _name.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pick() async {
+    final today = ref.read(clockProvider).now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: today,
+      lastDate: DateTime(today.year + 2),
+    );
+    if (picked != null) setState(() => _date = picked);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
+    final notifier = ref.read(lifeEventControllerProvider.notifier);
+    return _SheetFrame(
+      title: l10n.profileRowEvent,
+      showDone: false,
+      children: [
+        Text(l10n.eventSheetBody, style: context.text.bodyMedium),
+        SaafTextField(
+          key: const ValueKey('event-name'),
+          label: l10n.eventNameLabel,
+          controller: _name,
+          hintText: l10n.eventNameHint,
+        ),
+        Text(
+          l10n.eventDateIs(DateFormat('d MMM y', locale).format(_date)),
+          style: context.text.bodyMedium,
+        ),
+        SaafButton.text(label: l10n.shelfChooseDate, onPressed: _pick),
+        SaafButton.primary(
+          label: l10n.shelfSave,
+          onPressed: () async {
+            final name = _name.text.trim();
+            if (name.isEmpty) return;
+            await notifier.set(LifeEvent(name: name, date: _date));
+            if (context.mounted) Navigator.of(context).pop();
+          },
+        ),
+        if (_saved != null)
+          SaafButton.text(
+            label: l10n.eventRemove,
+            onPressed: () async {
+              await notifier.set(null);
+              if (context.mounted) Navigator.of(context).pop();
+            },
           ),
       ],
     );

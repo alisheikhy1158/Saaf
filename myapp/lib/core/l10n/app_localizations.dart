@@ -4669,6 +4669,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{name} runs out around {date}.'**
   String shelfAlertRunsOut(String name, String date);
+
+  /// Routine time in Ramadan mode.
+  ///
+  /// In en, this message translates to:
+  /// **'After sehri'**
+  String get ramadanAfterSehri;
+
+  /// Routine time in Ramadan mode.
+  ///
+  /// In en, this message translates to:
+  /// **'After iftar'**
+  String get ramadanAfterIftar;
+
+  /// Home Ramadan card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramadan skin care'**
+  String get ramadanTitle;
+
+  /// Ramadan tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink water between iftar and sehri: skin shows thirst first, as dullness and tightness.'**
+  String get ramadanTipWater;
+
+  /// Ramadan tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the routine simple and don’t start strong actives while fasting.'**
+  String get ramadanTipSimple;
+
+  /// Ramadan tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunscreen still matters after sehri, even if you stay in.'**
+  String get ramadanTipSunscreen;
+
+  /// Ramadan sheet body.
+  ///
+  /// In en, this message translates to:
+  /// **'Your routine is shown as after sehri and after iftar, with fasting-friendly tips on Home.'**
+  String get ramadanSheetBody;
+
+  /// Introducer card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Introducing {name}'**
+  String introTitle(String name);
+
+  /// Introducer step.
+  ///
+  /// In en, this message translates to:
+  /// **'Patch test: put a little behind your ear or on your jaw, morning and night, for 2 days. Not on your face yet.'**
+  String get introPatchTest;
+
+  /// Introducer step.
+  ///
+  /// In en, this message translates to:
+  /// **'Use it 2 nights a week (for example Monday and Thursday), after cleansing.'**
+  String get introTwiceAWeek;
+
+  /// Introducer step.
+  ///
+  /// In en, this message translates to:
+  /// **'Use it every other night.'**
+  String get introEveryOtherNight;
+
+  /// Introducer step after a mild reaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Take 2 days off it, then carry on more slowly.'**
+  String get introPaused;
+
+  /// Introducer after a strong reaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop using {name}. Rinse with cool water and use only a gentle cleanser and moisturiser. If there is swelling, blisters or it spreads, see a doctor.'**
+  String introStopped(String name);
+
+  /// Introducer finished.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is part of your routine now. Use it as the label says.'**
+  String introDone(String name);
+
+  /// Daily check-in question.
+  ///
+  /// In en, this message translates to:
+  /// **'Any reaction today?'**
+  String get introAsk;
+
+  /// Check-in answer.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get introNone;
+
+  /// Check-in answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Mild'**
+  String get introMild;
+
+  /// Check-in answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get introStrong;
+
+  /// Shelf sheet button.
+  ///
+  /// In en, this message translates to:
+  /// **'Introduce it slowly'**
+  String get introStart;
+
+  /// Snack after starting.
+  ///
+  /// In en, this message translates to:
+  /// **'Introducing {name} slowly. Today’s step is on Home.'**
+  String introStarted(String name);
+
+  /// Warning near an event.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is less than 4 weeks away: starting a new active now could cause a reaction on the day.'**
+  String introTooClose(String name);
+
+  /// Event card title.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} in {days} days'**
+  String eventCountdown(String name, int days);
+
+  /// Event card title on the day.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is today!'**
+  String eventToday(String name);
+
+  /// Event stage tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Plenty of time: build your routine now, and bring in any new active one at a time.'**
+  String get eventBuildRoutine;
+
+  /// Event stage tip.
+  ///
+  /// In en, this message translates to:
+  /// **'If you want one more new product, start it now. Keep everything else the same.'**
+  String get eventLastNewProduct;
+
+  /// Event stage tip.
+  ///
+  /// In en, this message translates to:
+  /// **'No new actives now: keep your routine steady and wear sunscreen every day.'**
+  String get eventNoNewActives;
+
+  /// Event stage tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing new now: no new products, facials, peels or threading near spots.'**
+  String get eventNothingNew;
+
+  /// Event stage tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Gentle week: drink water, sleep well, cleanse gently and wear sunscreen. No experiments.'**
+  String get eventGentleWeek;
+
+  /// Event day tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Gentle cleanse, moisturiser and sunscreen, and enjoy your day!'**
+  String get eventTodayTip;
+
+  /// Event sheet body.
+  ///
+  /// In en, this message translates to:
+  /// **'A wedding, a mehndi or another big day: Saaf plans your skin care week by week before it.'**
+  String get eventSheetBody;
+
+  /// Event name label.
+  ///
+  /// In en, this message translates to:
+  /// **'What is it?'**
+  String get eventNameLabel;
+
+  /// Event name hint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: My wedding'**
+  String get eventNameHint;
+
+  /// Event date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date: {date}'**
+  String eventDateIs(String date);
+
+  /// Event sheet button.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the event'**
+  String get eventRemove;
+
+  /// Profile section overline.
+  ///
+  /// In en, this message translates to:
+  /// **'Life events'**
+  String get profileSectionLife;
+
+  /// Profile row.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramadan mode'**
+  String get profileRowRamadan;
+
+  /// Profile row.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting ready for an event'**
+  String get profileRowEvent;
 }
 
 class _AppLocalizationsDelegate

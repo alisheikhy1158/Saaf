@@ -156,6 +156,14 @@ class AccountController extends _$AccountController {
     await ref
         .read(settingsRepositoryProvider)
         .write(SettingNames.autoAnalyseScans, null);
+    for (final name in [
+      SettingNames.weatherCity,
+      SettingNames.introduction,
+      SettingNames.lifeEvent,
+      SettingNames.ramadanMode,
+    ]) {
+      await ref.read(settingsRepositoryProvider).write(name, null);
+    }
     await ref
         .read(settingsRepositoryProvider)
         .write(AiConsent.settingName, null);

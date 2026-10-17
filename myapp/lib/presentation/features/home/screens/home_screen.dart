@@ -8,7 +8,9 @@ import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/presentation/features/home/widgets/cream_check_card.dart';
+import 'package:saaf/presentation/features/home/widgets/life_cards.dart';
 import 'package:saaf/presentation/features/home/widgets/shelf_card.dart';
+import 'package:saaf/presentation/providers/life_providers.dart';
 import 'package:saaf/presentation/features/home/widgets/skin_weather_card.dart';
 import 'package:saaf/core/utils/week.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
@@ -211,6 +213,7 @@ class _Content extends ConsumerWidget {
             ),
             _TimeChip(
               time: state.time,
+              ramadan: ref.watch(ramadanModeProvider).value == true,
               onPressed: () => controller.selectTime(
                 state.time == RoutineTime.morning
                     ? RoutineTime.night
@@ -225,6 +228,8 @@ class _Content extends ConsumerWidget {
         const SkinWeatherCard(),
         SizedBox(height: space.x14),
         const ShelfCard(),
+        SizedBox(height: space.x14),
+        const LifeCards(),
         SizedBox(height: space.x14),
         const CreamCheckCard(),
       ],
@@ -376,9 +381,14 @@ class _DayPill extends StatelessWidget {
 /// The "Morning" / "Night" chip: shows which routine is listed and switches to
 /// the other one when tapped.
 class _TimeChip extends StatelessWidget {
-  const _TimeChip({required this.time, required this.onPressed});
+  const _TimeChip({
+    required this.time,
+    required this.ramadan,
+    required this.onPressed,
+  });
 
   final RoutineTime time;
+  final bool ramadan;
   final VoidCallback onPressed;
 
   @override
@@ -386,7 +396,11 @@ class _TimeChip extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final tokens = context.saaf;
     final isMorning = time == RoutineTime.morning;
-    final other = isMorning ? l10n.routineNight : l10n.routineMorning;
+    final other = routineTimeName(
+      l10n,
+      isMorning ? RoutineTime.night : RoutineTime.morning,
+      ramadan: ramadan,
+    );
 
     return Tooltip(
       message: l10n.homeSwitchTime(other),
@@ -398,7 +412,7 @@ class _TimeChip extends StatelessWidget {
           child: Center(
             widthFactor: 1,
             child: SaafChip(
-              label: isMorning ? l10n.routineMorning : l10n.routineNight,
+              label: routineTimeName(l10n, time, ramadan: ramadan),
               icon: isMorning
                   ? Icons.wb_sunny_outlined
                   : Icons.nightlight_outlined,

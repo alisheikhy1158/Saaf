@@ -110,4 +110,31 @@ void main() {
     await _tap(tester, find.text('AI coach sharing'));
     expect(find.text('Analyse each scan automatically'), findsNothing);
   });
+
+  group('life events', () {
+    testWidgets('Ramadan mode can be switched on', (tester) async {
+      final settings = InMemorySettingsRepository();
+      await _open(tester, settings);
+      await _tap(tester, find.text('Ramadan mode'));
+      await _tap(tester, find.byKey(const ValueKey('ramadan-switch')));
+      expect(await settings.read(SettingNames.ramadanMode), 'on');
+    });
+
+    testWidgets('an event can be set, today counts as its date', (
+      tester,
+    ) async {
+      final settings = InMemorySettingsRepository();
+      await _open(tester, settings);
+      await _tap(tester, find.text('Getting ready for an event'));
+      await tester.enterText(
+        find.byKey(const ValueKey('event-name')),
+        'My wedding',
+      );
+      await _tap(tester, find.text('Save'));
+      expect(
+        await settings.read(SettingNames.lifeEvent),
+        contains('My wedding'),
+      );
+    });
+  });
 }

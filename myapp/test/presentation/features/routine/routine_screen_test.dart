@@ -325,6 +325,24 @@ void main() {
     });
   });
 
+  testWidgets('Ramadan mode: the tabs say after sehri and after iftar', (
+    tester,
+  ) async {
+    final settings = InMemorySettingsRepository();
+    await settings.write(SettingNames.ramadanMode, 'on');
+    await _open(
+      tester,
+      overrides: [
+        ..._with(),
+        settingsRepositoryProvider.overrideWithValue(settings),
+      ],
+    );
+    await tester.pump();
+    expect(find.text('After sehri'), findsOneWidget);
+    expect(find.text('After iftar'), findsOneWidget);
+    expect(find.text('Morning'), findsNothing);
+  });
+
   group('Saaf AI picks', () {
     late _PlanService service;
     late InMemorySettingsRepository consentedSettings;

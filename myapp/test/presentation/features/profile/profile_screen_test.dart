@@ -186,7 +186,8 @@ void main() {
 
     testWidgets('no answers: values say Not set', (tester) async {
       await _open(tester, overrides: _with(profile: const SkinProfile()));
-      expect(find.text('Not set'), findsNWidgets(2));
+      // Skin profile, budget, and the event (Life events) row.
+      expect(find.text('Not set'), findsNWidgets(3));
     });
 
     testWidgets('the highest budget band has no limit', (tester) async {

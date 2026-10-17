@@ -2704,4 +2704,145 @@ class AppLocalizationsUr extends AppLocalizations {
   String shelfAlertRunsOut(String name, String date) {
     return '$name تقریباً $date تک ختم ہو جائے گی۔';
   }
+
+  @override
+  String get ramadanAfterSehri => 'سحری کے بعد';
+
+  @override
+  String get ramadanAfterIftar => 'افطار کے بعد';
+
+  @override
+  String get ramadanTitle => 'رمضان میں جلد کی دیکھ بھال';
+
+  @override
+  String get ramadanTipWater =>
+      'افطار اور سحری کے درمیان پانی پیئیں: پیاس سب سے پہلے جلد پر دکھتی ہے، بے رونقی اور کھنچاؤ کی صورت میں۔';
+
+  @override
+  String get ramadanTipSimple =>
+      'روٹین سادہ رکھیں اور روزے میں تیز اجزا شروع نہ کریں۔';
+
+  @override
+  String get ramadanTipSunscreen =>
+      'سحری کے بعد بھی سن اسکرین ضروری ہے، چاہے آپ گھر پر رہیں۔';
+
+  @override
+  String get ramadanSheetBody =>
+      'آپ کا روٹین سحری کے بعد اور افطار کے بعد دکھایا جاتا ہے، اور ہوم پر روزے کے مطابق مشورے۔';
+
+  @override
+  String introTitle(String name) {
+    return '$name آہستہ شروع';
+  }
+
+  @override
+  String get introPatchTest =>
+      'پیچ ٹیسٹ: 2 دن تک صبح شام تھوڑا سا کان کے پیچھے یا جبڑے پر لگائیں۔ ابھی چہرے پر نہیں۔';
+
+  @override
+  String get introTwiceAWeek =>
+      'اسے ہفتے میں 2 راتیں استعمال کریں (مثلاً پیر اور جمعرات)، چہرہ دھونے کے بعد۔';
+
+  @override
+  String get introEveryOtherNight => 'اسے ایک رات چھوڑ کر استعمال کریں۔';
+
+  @override
+  String get introPaused =>
+      '2 دن کا وقفہ کریں، پھر آہستہ آہستہ دوبارہ شروع کریں۔';
+
+  @override
+  String introStopped(String name) {
+    return '$name کا استعمال بند کریں۔ ٹھنڈے پانی سے دھوئیں اور صرف نرم کلینزر اور موئسچرائزر لگائیں۔ اگر سوجن، چھالے ہوں یا یہ پھیلے تو ڈاکٹر سے ملیں۔';
+  }
+
+  @override
+  String introDone(String name) {
+    return '$name اب آپ کے روٹین کا حصہ ہے۔ لیبل کے مطابق استعمال کریں۔';
+  }
+
+  @override
+  String get introAsk => 'آج کوئی ردعمل؟';
+
+  @override
+  String get introNone => 'نہیں';
+
+  @override
+  String get introMild => 'ہلکا';
+
+  @override
+  String get introStrong => 'شدید';
+
+  @override
+  String get introStart => 'اسے آہستہ شروع کریں';
+
+  @override
+  String introStarted(String name) {
+    return '$name آہستہ شروع ہو گئی۔ آج کا قدم ہوم پر ہے۔';
+  }
+
+  @override
+  String introTooClose(String name) {
+    return '$name میں 4 ہفتے سے کم رہ گئے ہیں: ابھی نیا تیز جز شروع کرنے سے اس دن ردعمل ہو سکتا ہے۔';
+  }
+
+  @override
+  String eventCountdown(String name, int days) {
+    return '$name میں $days دن';
+  }
+
+  @override
+  String eventToday(String name) {
+    return '$name آج ہے!';
+  }
+
+  @override
+  String get eventBuildRoutine =>
+      'کافی وقت ہے: ابھی اپنا روٹین بنائیں، اور ہر نیا جز ایک ایک کر کے شامل کریں۔';
+
+  @override
+  String get eventLastNewProduct =>
+      'اگر ایک اور نئی پروڈکٹ چاہیے تو ابھی شروع کریں۔ باقی سب ویسا ہی رکھیں۔';
+
+  @override
+  String get eventNoNewActives =>
+      'اب کوئی نیا تیز جز نہیں: روٹین مستحکم رکھیں اور روزانہ سن اسکرین لگائیں۔';
+
+  @override
+  String get eventNothingNew =>
+      'اب کچھ نیا نہیں: نئی پروڈکٹس، فیشل، پیل یا دانوں کے قریب تھریڈنگ نہیں۔';
+
+  @override
+  String get eventGentleWeek =>
+      'نرم ہفتہ: پانی پیئیں، اچھی نیند لیں، نرمی سے چہرہ دھوئیں اور سن اسکرین لگائیں۔ کوئی تجربہ نہیں۔';
+
+  @override
+  String get eventTodayTip =>
+      'نرمی سے چہرہ دھوئیں، موئسچرائزر اور سن اسکرین لگائیں، اور اپنا دن منائیں!';
+
+  @override
+  String get eventSheetBody =>
+      'شادی، مہندی یا کوئی اور بڑا دن: ثاف اس سے پہلے ہفتہ وار آپ کی جلد کی دیکھ بھال کا منصوبہ بناتا ہے۔';
+
+  @override
+  String get eventNameLabel => 'کیا ہے؟';
+
+  @override
+  String get eventNameHint => 'مثلاً: میری شادی';
+
+  @override
+  String eventDateIs(String date) {
+    return 'تاریخ: $date';
+  }
+
+  @override
+  String get eventRemove => 'تقریب ہٹائیں';
+
+  @override
+  String get profileSectionLife => 'زندگی کے مواقع';
+
+  @override
+  String get profileRowRamadan => 'رمضان موڈ';
+
+  @override
+  String get profileRowEvent => 'کسی تقریب کی تیاری';
 }

@@ -2704,4 +2704,144 @@ class AppLocalizationsEn extends AppLocalizations {
   String shelfAlertRunsOut(String name, String date) {
     return '$name runs out around $date.';
   }
+
+  @override
+  String get ramadanAfterSehri => 'After sehri';
+
+  @override
+  String get ramadanAfterIftar => 'After iftar';
+
+  @override
+  String get ramadanTitle => 'Ramadan skin care';
+
+  @override
+  String get ramadanTipWater =>
+      'Drink water between iftar and sehri: skin shows thirst first, as dullness and tightness.';
+
+  @override
+  String get ramadanTipSimple =>
+      'Keep the routine simple and don’t start strong actives while fasting.';
+
+  @override
+  String get ramadanTipSunscreen =>
+      'Sunscreen still matters after sehri, even if you stay in.';
+
+  @override
+  String get ramadanSheetBody =>
+      'Your routine is shown as after sehri and after iftar, with fasting-friendly tips on Home.';
+
+  @override
+  String introTitle(String name) {
+    return 'Introducing $name';
+  }
+
+  @override
+  String get introPatchTest =>
+      'Patch test: put a little behind your ear or on your jaw, morning and night, for 2 days. Not on your face yet.';
+
+  @override
+  String get introTwiceAWeek =>
+      'Use it 2 nights a week (for example Monday and Thursday), after cleansing.';
+
+  @override
+  String get introEveryOtherNight => 'Use it every other night.';
+
+  @override
+  String get introPaused => 'Take 2 days off it, then carry on more slowly.';
+
+  @override
+  String introStopped(String name) {
+    return 'Stop using $name. Rinse with cool water and use only a gentle cleanser and moisturiser. If there is swelling, blisters or it spreads, see a doctor.';
+  }
+
+  @override
+  String introDone(String name) {
+    return '$name is part of your routine now. Use it as the label says.';
+  }
+
+  @override
+  String get introAsk => 'Any reaction today?';
+
+  @override
+  String get introNone => 'No';
+
+  @override
+  String get introMild => 'Mild';
+
+  @override
+  String get introStrong => 'Strong';
+
+  @override
+  String get introStart => 'Introduce it slowly';
+
+  @override
+  String introStarted(String name) {
+    return 'Introducing $name slowly. Today’s step is on Home.';
+  }
+
+  @override
+  String introTooClose(String name) {
+    return '$name is less than 4 weeks away: starting a new active now could cause a reaction on the day.';
+  }
+
+  @override
+  String eventCountdown(String name, int days) {
+    return '$name in $days days';
+  }
+
+  @override
+  String eventToday(String name) {
+    return '$name is today!';
+  }
+
+  @override
+  String get eventBuildRoutine =>
+      'Plenty of time: build your routine now, and bring in any new active one at a time.';
+
+  @override
+  String get eventLastNewProduct =>
+      'If you want one more new product, start it now. Keep everything else the same.';
+
+  @override
+  String get eventNoNewActives =>
+      'No new actives now: keep your routine steady and wear sunscreen every day.';
+
+  @override
+  String get eventNothingNew =>
+      'Nothing new now: no new products, facials, peels or threading near spots.';
+
+  @override
+  String get eventGentleWeek =>
+      'Gentle week: drink water, sleep well, cleanse gently and wear sunscreen. No experiments.';
+
+  @override
+  String get eventTodayTip =>
+      'Gentle cleanse, moisturiser and sunscreen, and enjoy your day!';
+
+  @override
+  String get eventSheetBody =>
+      'A wedding, a mehndi or another big day: Saaf plans your skin care week by week before it.';
+
+  @override
+  String get eventNameLabel => 'What is it?';
+
+  @override
+  String get eventNameHint => 'For example: My wedding';
+
+  @override
+  String eventDateIs(String date) {
+    return 'Date: $date';
+  }
+
+  @override
+  String get eventRemove => 'Remove the event';
+
+  @override
+  String get profileSectionLife => 'Life events';
+
+  @override
+  String get profileRowRamadan => 'Ramadan mode';
+
+  @override
+  String get profileRowEvent => 'Getting ready for an event';
 }

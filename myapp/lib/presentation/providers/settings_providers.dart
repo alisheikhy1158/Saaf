@@ -29,6 +29,15 @@ abstract final class SettingNames {
 
   /// The city chosen for the skin weather (a `PkCity` id).
   static const weatherCity = 'weatherCity';
+
+  /// The new product being introduced slowly (JSON).
+  static const introduction = 'introduction';
+
+  /// The event the user is getting ready for (JSON).
+  static const lifeEvent = 'lifeEvent';
+
+  /// "on" when Ramadan mode is on.
+  static const ramadanMode = 'ramadanMode';
 }
 
 /// Drift on the phone; in memory in tests and Chrome.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
+import 'package:saaf/presentation/providers/life_providers.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:go_router/go_router.dart';
@@ -94,6 +95,20 @@ class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
       builder: (context) => _ShelfSheet(product: product),
     );
     if (!mounted || result == null) return;
+    if (result.introduce) {
+      await ref
+          .read(introductionControllerProvider.notifier)
+          .start(product.name);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context).introStarted(product.name),
+          ),
+        ),
+      );
+      return;
+    }
     if (result.findCheaper) {
       await context.push(
         Uri(
@@ -286,12 +301,14 @@ class _ShelfResult {
     this.paoMonths,
     this.lastsWeeks,
     this.findCheaper = false,
+    this.introduce = false,
   });
 
   final DateTime? openedOn;
   final int? paoMonths;
   final int? lastsWeeks;
   final bool findCheaper;
+  final bool introduce;
 }
 
 /// One product's shelf details: when it was opened, how long it keeps once
@@ -410,6 +427,21 @@ class _ShelfSheetState extends ConsumerState<_ShelfSheet> {
                   lastsWeeks: _lasts,
                 ),
               ),
+            ),
+            if (ref.watch(lifeEventControllerProvider).value case final event?
+                when event.tooCloseForNewProduct(ref.read(clockProvider).now()))
+              Text(
+                l10n.introTooClose(event.name),
+                style: context.text.bodySmall?.copyWith(
+                  color: context.colors.error,
+                ),
+              ),
+            SaafButton.outline(
+              label: l10n.introStart,
+              leadingIcon: Icons.science_outlined,
+              onPressed: () => Navigator.of(
+                context,
+              ).pop(const _ShelfResult(introduce: true)),
             ),
             SaafButton.text(
               label: l10n.shelfFindCheaper,

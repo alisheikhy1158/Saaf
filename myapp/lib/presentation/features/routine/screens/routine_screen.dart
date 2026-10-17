@@ -15,7 +15,9 @@ import 'package:saaf/domain/entities/routine.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/presentation/features/home/widgets/life_cards.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
+import 'package:saaf/presentation/providers/life_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
 import 'package:saaf/presentation/providers/ai_routine_providers.dart';
 import 'package:saaf/presentation/providers/product_providers.dart';
@@ -140,11 +142,19 @@ class _Content extends ConsumerWidget {
         SaafSegmentedControl(
           segments: [
             SaafSegment(
-              label: l10n.routineMorning,
+              label: routineTimeName(
+                l10n,
+                RoutineTime.morning,
+                ramadan: ref.watch(ramadanModeProvider).value == true,
+              ),
               icon: Icons.wb_sunny_outlined,
             ),
             SaafSegment(
-              label: l10n.routineNight,
+              label: routineTimeName(
+                l10n,
+                RoutineTime.night,
+                ramadan: ref.watch(ramadanModeProvider).value == true,
+              ),
               icon: Icons.nightlight_outlined,
             ),
           ],
