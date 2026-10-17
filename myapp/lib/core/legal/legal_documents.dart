@@ -273,6 +273,9 @@ abstract final class LegalDocuments {
               'open-source AI model that writes the reply (see section 6).',
           'Open Beauty Facts, a free open database: when you scan a product '
               'barcode, only the barcode number is sent to look the product up.',
+          'Google or Apple speech recognition: only if you tap the microphone '
+              'in the AI coach, your phone’s own speech service turns your voice '
+              'into text. Saaf receives only the text.',
           'Open-Meteo: if you choose a city for the daily skin weather, our '
               'server asks Open-Meteo for that city’s weather and air quality. '
               'Only the city’s place is sent, never your exact location.',

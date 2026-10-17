@@ -4963,6 +4963,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We couldn’t share the report. Please try again.'**
   String get dermReportFailed;
+
+  /// Tooltip of the microphone button.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak your question'**
+  String get voiceSpeak;
+
+  /// Tooltip while listening.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop listening'**
+  String get voiceStop;
+
+  /// Voice explanation title.
+  ///
+  /// In en, this message translates to:
+  /// **'Speak instead of typing'**
+  String get voiceTitle;
+
+  /// Voice explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone’s speech service (Google or Apple) turns what you say into text, in English or Urdu. Saaf only gets the text, and sends it to the AI coach when you tap send. Your phone will ask to use the microphone.'**
+  String get voiceBody;
+
+  /// When speech can't start.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice input isn’t available on this phone, or the microphone is off for Saaf.'**
+  String get voiceUnavailable;
 }
 
 class _AppLocalizationsDelegate

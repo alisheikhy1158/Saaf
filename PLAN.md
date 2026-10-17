@@ -183,7 +183,7 @@ android {
 
 ---
 
-## Phase 10.5 — Best-in-class features (decided 2026-10-18)
+## Phase 10.5 — Best-in-class features (decided and BUILT 2026-10-18; phone test pending)
 Goal: the app that knows Pakistani skin and Pakistani life best. Build in this order, one commit each, tests first.
 Rules for all: safety answers never leave the phone; anything sent to an AI or a server is shown and agreed first;
 every AI answer is labelled and reportable; no AI prices; Urdu + RTL + 200 % text; no hardcoded colours/sizes.

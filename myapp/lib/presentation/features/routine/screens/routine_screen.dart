@@ -15,7 +15,7 @@ import 'package:saaf/domain/entities/routine.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
-import 'package:saaf/presentation/features/home/widgets/life_cards.dart';
+import 'package:saaf/presentation/widgets/common/routine_time_name.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/life_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';

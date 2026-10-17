@@ -4,22 +4,9 @@ import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/domain/entities/introduction.dart';
 import 'package:saaf/domain/entities/life_event.dart';
-import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/life_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
-
-/// "Morning" / "Night", or "After sehri" / "After iftar" in Ramadan mode.
-String routineTimeName(
-  AppLocalizations l10n,
-  RoutineTime time, {
-  required bool ramadan,
-}) => switch ((time, ramadan)) {
-  (RoutineTime.morning, false) => l10n.routineMorning,
-  (RoutineTime.night, false) => l10n.routineNight,
-  (RoutineTime.morning, true) => l10n.ramadanAfterSehri,
-  (RoutineTime.night, true) => l10n.ramadanAfterIftar,
-};
 
 /// Home: the new product being introduced (with the daily check-in), the
 /// event countdown and Ramadan tips; each only when it applies.

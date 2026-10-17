@@ -3,63 +3,53 @@
 > Claude: keep this file under 60 lines. Overwrite "Current state"; append one line to "Log".
 
 ## Current state
-- **Phase / step:** all 14 Figma screens + phone-test feedback round done. Android test builds work on Codemagic (workflow
-  "Android test app", needs Mac minutes; see Native notes). GitHub: https://github.com/alisheikhy1158/Saaf (main).
-- **Waiting on the owner:** rebuild "Android test app" and test on the Android 15 phone (checklist below). Real Firebase
-  sign-in + AI server (https://saaf-ai.saafai.workers.dev) are live in the test build.
-- **Tests:** 1637 Flutter + 52 backend (`cd backend/ai-proxy; node --test`) · **Analyze:** 0 issues · Flutter 3.47.7
-- New: tidy AI answers (`SaafAiText`); **Saaf AI routine from the web** (`/v1/routine`: PK shops, Reddit r/PakistaniSkincare,
-  reviews + sources; keep/replace/stop for "Products you use now" asked after the quiz); safety answers stay on the phone
-  (`ActiveRules`, `BuildRoutine`, `cautionFor`); **product look-up** `/product-ai`; QR + DataMatrix scanning. docs/ai-coach.md.
+- **Phase / step:** Phase 10.5 "best-in-class features" (PLAN.md) BUILT: skin weather, cream safety check, line-up outline +
+  before/after GIF, product shelf + cheaper alternatives, new-product introducer, Ramadan mode, event prep, body care,
+  dermatologist bridge (Maps + PDF report), voice input. GitHub: https://github.com/alisheikhy1158/Saaf (main).
+- **Waiting on the owner:** rebuild "Android test app" (Codemagic), test on the Android 15 phone (checklist below).
+- **Tests:** 1713 Flutter + 65 backend (`cd backend/ai-proxy; node --test`) · **Analyze:** 0 issues · Flutter 3.47.7.
+  Server live: https://saaf-ai.saafai.workers.dev (deploy: `npx wrangler deploy` in backend/ai-proxy). docs/ai-coach.md.
 
-## Phone-test checklist (new, unverified on a device)
-1. Scan: face/light/angle chips and hints react; shutter locked until green; side photos need ~20–55° turn. **If "turn left" is
-   mirrored, flip `_yawSign` in `domain/usecases/analyse_frame.dart`** (and `mirrored` in `mlkit_capture_quality_monitor.dart` for iOS).
-   Bad photos (also from gallery) show a warning with "Use it anyway". 2. Scan a product (Home icon): real barcode -> Open Beauty
-   Facts; typed number works without camera. 3. Profile: edit one answer; name/age sheet; AI sharing row. 4. Tissue test on quiz step 1.
-5. Reminders. 6. AI coach chat + photo. 7. Progress: week label, next scan, AI review -> photos -> chat (no scan-due notification).
-8. Quiz -> "Products you use now" (with kind) -> scan (screen at full brightness + light frame). Your products show as
-   "Yours" in Routine/Home. AI web picks (~1 min), keep/replace/stop. No AI prices (Check prices online). Results/Progress: numbers ONLY from
-   Saaf AI reading the front photo ("Not analysed yet" until then; how sure per measure); asked once, then automatic
-   (Profile -> AI coach sharing switch). Test app shows a technical detail on
-   AI errors; server logs Groq errors (`npx wrangler tail` in backend/ai-proxy).
-9. Scan product: a QR code; "Take a photo of the product" -> Look it up; unknown barcode -> "Look it up with Saaf AI".
+## Phone-test checklist (unverified on a device)
+1. Scan: chips/hints react; side photos need ~20–55° turn (**mirrored? flip `_yawSign`** in `analyse_frame.dart`). Screen at full
+   brightness + light frame; faint outline of the last scan (**if not lined up, remove `Transform.flip` in `scan_viewfinder.dart`**).
+2. Results: "Not analysed yet" -> asked once "Analyse every scan automatically?" -> numbers with "How sure". Progress: GIF share.
+3. Quiz (6 concerns incl. body) -> "Products you use now" (kind) -> scan. Routine: your products "Yours", AI web picks (~1 min),
+   keep/replace/stop, Body care card. Shelf: tap a product -> opened/keeps/lasts, cheaper alternative, introduce slowly.
+4. Home cards: skin weather (choose city), shelf reminders, introducer check-in, event countdown, Ramadan tips, cream check.
+5. Cream check (Home / scan screen): type a name or photo -> Danger / Be careful / No known problem + sources.
+6. AI coach: answers tidy; mic button (explain -> mic permission -> text in box). Profile: life events, dermatologist, PDF report.
+7. Scan product: QR, label photo look-up, unknown barcode -> Saaf AI. Test app shows "Technical detail" on AI errors.
 
 ## Decisions made
-- Bundle ID `com.saafapp.saaf`. Material 3 like Figma (design.md §0). Backend: **Firebase** (project `saaf-01`, see memory file).
-- **Safety flags (health data) NEVER leave the phone** — not even to the AI (`AiContext` has no such field; tested).
-- Face scan = 3 photos; checks use ML Kit on-device (`google_mlkit_face_detection`); fakes in Chrome/tests (`FAKE_CAMERA=true`).
-  Pure rules: `analyse_frame.dart` (`FrameQualityAnalyzer`, `checkPhoto`). Shutter locks only when `CaptureQuality.assessed`.
-- Weekly check-in (11) is rule-based. The **AI coach** (`/ai-coach`) is separate: explicit consent (Groq named), report button,
-  server-side prompt in `backend/ai-proxy/src/prompt.js`, models set in `wrangler.toml` (qwen3.8-27b is a *preview* model).
-- Products: `RealProductCatalog` (22 named PK products, prices = guide from derma.pk/qeemat, Oct 2026; two "estimate"s) drives
-  routines; `OpenBeautyFactsLookup` + `IngredientReader` read real ingredient lists. `SeedProductCatalog/Lookup` stay as test/demo data.
-- Profile rows edit ONE quiz step (`/skin-quiz/N?edit=1`); `ProfileDetails` (name, age) kept on the phone; wiped on delete.
-- Pro gate: 12 Monthly progress needs Pro. Delete account wipes drift + settings (name, age, AI consent). Router guard in `app_guard.dart`.
-- **PLACEHOLDERS before release:** `FakeSubscriptionRepository`,
-  "How we score" text, Profile "Photo backup", demo AI when no server. Prices need re-checking; flags need dermatologist review;
-  allergy-flagged users get no sunscreen (no fragrance-free one with a PK price yet).
+- Bundle ID `com.saafapp.saaf`. Material 3 like Figma (design.md §0). Backend: **Firebase** (`saaf-01`) + Cloudflare Worker.
+- **Safety flags (health data) NEVER leave the phone** (`AiContext` has no such field; AI products checked on the phone by
+  `ActiveRules`/`BuildRoutine`/`cautionFor`; the doctor PDF leaves them out). Skin numbers ONLY from Saaf AI reading the FRONT
+  photo (consent; asked once, then automatic; Profile switch). No AI prices anywhere ("Check prices online").
+- Cream check never says "safe"; phone rules (`FlagIngredients`) can only make the verdict stricter; sources only from search.
+- Weather: city picker (no GPS); Open-Meteo through our server, cached 30 min; attribution shown.
+- Quiz concern `bodyPigmentation` added after Figma (end of list). Ramadan labels via `routineTimeName`.
+- **PLACEHOLDERS before release:** `FakeSubscriptionRepository`, Profile "Photo backup", demo AI when no server; prices of the
+  22-product fallback catalogue need re-checking; ingredient/active rules need dermatologist review.
 
 ## Testing notes
 - Widget tests use Ahem (16 dp/glyph): `FittedBox(scaleDown)`/`Flexible`; fixed pumps (no `pumpAndSettle` with spinners).
-  `pumpSaaf`/`pumpSaafApp` default fakes for notifications; params `permissions:`/`scheduler:` (duplicate overrides throw).
-- Re-pumping `pumpSaafApp` in one test keeps the old ProviderScope: `pumpWidget(const SizedBox())` between.
-- `overrideWithBuild` pins state; Riverpod 3 retries: `noAutoRetry`. Bash heredocs mangle `\\` and quotes: write scripts with Write.
+- Re-pumping `pumpSaafApp` keeps the old ProviderScope: `pumpWidget(const SizedBox())` between. Riverpod 3: `noAutoRetry`.
+- Bash heredocs mangle `\\` and quotes: write scripts with the Write tool. `compute` in widget tests needs `runAsync`.
 
 ## Native notes (only verifiable via Codemagic)
-- Android: Kotlin 2.4.0 + AGP 8.11.1 + `permission_handler 12.0.1` (13.x needs API 37). INTERNET, CAMERA, POST_NOTIFICATIONS,
-  RECEIVE_BOOT_COMPLETED, boot receivers, desugaring. Release signing = Codemagic keystore "saaf upload keystore".
-- iOS: deployment target 15.5 (ML Kit), `PERMISSION_CAMERA/NOTIFICATIONS`, entitlements. iOS build not tried yet.
-- `codemagic.yaml` on Mac M2 (free plan has no Linux). New var `AI_PROXY_URL`.
+- Android: Kotlin 2.4.0 + AGP 8.11.1 + `permission_handler 12.0.1`. INTERNET, CAMERA, POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED,
+  **RECORD_AUDIO + `<queries>` RecognitionService (speech_to_text, Bluetooth off)**. `screen_brightness` (app window only).
+- iOS: target 15.5, `PERMISSION_CAMERA/NOTIFICATIONS`, **NSMicrophone/NSSpeechRecognition usage strings**. iOS build not tried.
+- `codemagic.yaml` on Mac M2. Release signing = Codemagic keystore "saaf upload keystore".
 
 ## Open problems / questions for the user
-- Firebase: test number is now made-up (+92 300 1234567, code 123456; also for the App Review notes); real SMS delivery is untested; Play-signing SHA after first Play upload (Firebase + Google Cloud key);
-  Apple/Play accounts; SMS delivery on PK networks; Blaze plan decision.
-- Before release: lawyer review (new AI section 6 in Privacy Policy), native Urdu review (all Urdu is mine), dermatologist review,
-  support email, public deletion page, Cloud Function for account deletion, drift on web (OFF-6), outbox/sync (OFF-2), RevenueCat.
+- **Open-Meteo free tier is non-commercial**: buy their API plan (or switch provider in `backend/ai-proxy/src/weather.js`) before
+  charging money. Firebase: real SMS untested (test number +92 300 1234567 / 123456); Play-signing SHA after first upload.
+- Before release: lawyer review (Privacy Policy sections 5–6 changed a lot), native Urdu review, dermatologist review (rules,
+  tips, cream flags), support email, deletion page, account-deletion Cloud Function, backup/sync, RevenueCat, crash reporting.
 
 ## Log
-- Earlier: quiz, legal, Firebase auth (586 tests); screens 10–14, guard, drift, reminders (1201 tests).
-- 2026-10-16/17 (device): Codemagic + Firebase wired; Android build fixed 4x. Feedback round: profile edit, name/age, tissue test,
-  real camera checks, real products + barcode scanner, AI coach + proxy. 1508 tests.
-- 2026-10-17: sign-in works on the phone. Tidy AI answers, AI product picks, AI product look-up (photo/QR), QR scanning.
+- Earlier: quiz, legal, Firebase auth; screens 10–14, guard, drift, reminders; Codemagic + Firebase; feedback round 1 (1508).
+- 2026-10-17: AI tidy answers, web routine + keep/replace/stop, look-up, QR, honest scan results (1644).
+- 2026-10-18: Phase 10.5 built (weather, cream check, trust, shelf, introducer, Ramadan/event, body, dermatologist, voice). 1713.

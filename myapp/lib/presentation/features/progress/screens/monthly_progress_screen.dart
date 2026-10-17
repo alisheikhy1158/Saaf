@@ -1,7 +1,5 @@
 import 'package:saaf/presentation/providers/scan_providers.dart';
 import 'package:saaf/domain/services/share_service.dart';
-import 'package:saaf/data/services/before_after_gif.dart';
-import 'package:flutter/foundation.dart' show compute;
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -754,20 +752,17 @@ class _ShareAnimationState extends ConsumerState<_ShareAnimation> {
     final after = (await store.load(latest)).valueOrNull;
     Uint8List? gif;
     if (before != null && after != null) {
-      gif = await compute(
-        makeBeforeAfterGif,
-        BeforeAfterFrames(
-          before: before,
-          after: after,
-          beforeLabel: DateFormat(
-            'd MMM y',
-            locale,
-          ).format(widget.view.first.takenAt),
-          afterLabel: DateFormat(
-            'd MMM y',
-            locale,
-          ).format(widget.view.after.takenAt),
-        ),
+      gif = await makeProgressAnimation(
+        before: before,
+        after: after,
+        beforeLabel: DateFormat(
+          'd MMM y',
+          locale,
+        ).format(widget.view.first.takenAt),
+        afterLabel: DateFormat(
+          'd MMM y',
+          locale,
+        ).format(widget.view.after.takenAt),
       );
     }
     if (!mounted) return;

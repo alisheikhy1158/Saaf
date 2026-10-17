@@ -2885,4 +2885,21 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get dermReportFailed => 'رپورٹ شیئر نہیں ہو سکی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get voiceSpeak => 'اپنا سوال بولیں';
+
+  @override
+  String get voiceStop => 'سننا بند کریں';
+
+  @override
+  String get voiceTitle => 'لکھنے کے بجائے بولیں';
+
+  @override
+  String get voiceBody =>
+      'آپ کے فون کی اسپیچ سروس (گوگل یا ایپل) آپ کی بات کو انگریزی یا اردو میں تحریر بناتی ہے۔ ثاف کو صرف تحریر ملتی ہے، اور وہ آپ کے بھیجنے پر اے آئی کوچ کو جاتی ہے۔ آپ کا فون مائیکروفون کی اجازت مانگے گا۔';
+
+  @override
+  String get voiceUnavailable =>
+      'اس فون پر آواز سے لکھنا دستیاب نہیں، یا ثاف کے لیے مائیکروفون بند ہے۔';
 }

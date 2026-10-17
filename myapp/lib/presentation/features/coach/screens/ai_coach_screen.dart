@@ -14,6 +14,7 @@ import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/usecases/ask_coach.dart';
 import 'package:saaf/presentation/providers/ai_chat_controller.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
+import 'package:saaf/presentation/providers/settings_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_ai_text.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
@@ -40,6 +41,7 @@ enum _ReportReason { harmful, wrong, offensive, other }
 class _AiCoachScreenState extends ConsumerState<AiCoachScreen> {
   final TextEditingController _input = TextEditingController();
   final ScrollController _scroll = ScrollController();
+  bool _listening = false;
 
   @override
   void initState() {
@@ -75,6 +77,58 @@ class _AiCoachScreenState extends ConsumerState<AiCoachScreen> {
     await ref
         .read(aiChatControllerProvider.notifier)
         .send(text, languageCode: _language);
+  }
+
+  /// Speak instead of typing: our explanation first (once), then the phone's
+  /// speech service fills the message box. Nothing is sent until Send.
+  Future<void> _speak() async {
+    final voice = ref.read(voiceInputProvider);
+    if (_listening) {
+      await voice.stop();
+      if (mounted) setState(() => _listening = false);
+      return;
+    }
+    final l10n = AppLocalizations.of(context);
+    final settings = ref.read(settingsRepositoryProvider);
+    if (await settings.read(SettingNames.voiceExplained) != 'yes') {
+      if (!mounted) return;
+      final go = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.voiceTitle),
+          content: Text(l10n.voiceBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.scanNotNow),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.scanContinue),
+            ),
+          ],
+        ),
+      );
+      if (go != true) return;
+      await settings.write(SettingNames.voiceExplained, 'yes');
+    }
+    if (!mounted) return;
+    setState(() => _listening = true);
+    final started = await voice.start(
+      languageCode: _language,
+      onWords: (words, done) {
+        if (!mounted) return;
+        _input.text = words;
+        if (done) setState(() => _listening = false);
+      },
+    );
+    if (!mounted) return;
+    if (!started) {
+      setState(() => _listening = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.voiceUnavailable)));
+    }
   }
 
   Future<void> _attach() async {
@@ -203,7 +257,13 @@ class _AiCoachScreenState extends ConsumerState<AiCoachScreen> {
         ),
       },
       bottom: consent == true
-          ? _Composer(input: _input, onSend: _send, onAttach: _attach)
+          ? _Composer(
+              input: _input,
+              onSend: _send,
+              onAttach: _attach,
+              onSpeak: _speak,
+              listening: _listening,
+            )
           : const SizedBox.shrink(),
     );
   }
@@ -391,11 +451,15 @@ class _Composer extends ConsumerWidget {
     required this.input,
     required this.onSend,
     required this.onAttach,
+    required this.onSpeak,
+    required this.listening,
   });
 
   final TextEditingController input;
   final Future<void> Function(String text) onSend;
   final VoidCallback onAttach;
+  final VoidCallback onSpeak;
+  final bool listening;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -462,6 +526,13 @@ class _Composer extends ConsumerWidget {
                   decoration: InputDecoration(hintText: l10n.aiInputHint),
                 ),
               ),
+            ),
+            IconButton(
+              tooltip: listening ? l10n.voiceStop : l10n.voiceSpeak,
+              icon: Icon(
+                listening ? Icons.stop_circle_outlined : Icons.mic_none,
+              ),
+              onPressed: chat.sending ? null : onSpeak,
             ),
             IconButton.filled(
               key: const ValueKey('ai-send'),

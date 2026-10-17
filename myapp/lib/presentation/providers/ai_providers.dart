@@ -5,6 +5,8 @@ import 'package:saaf/data/services/firebase_id_token_provider.dart';
 import 'package:saaf/data/services/http_ai_coach_service.dart';
 import 'package:saaf/data/services/image_photo_shrinker.dart';
 import 'package:saaf/data/services/plugin_ai_photo_picker.dart';
+import 'package:saaf/data/services/plugin_voice_input.dart';
+import 'package:saaf/data/services/web/fake_voice_input.dart';
 import 'package:saaf/data/services/web/fake_ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
@@ -13,6 +15,7 @@ import 'package:saaf/domain/services/ai_safety_service.dart';
 import 'package:saaf/domain/services/ai_skin_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
 import 'package:saaf/domain/services/photo_shrinker.dart';
+import 'package:saaf/domain/services/voice_input.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/usecases/ask_coach.dart';
 import 'package:saaf/domain/usecases/check_cream_safety.dart';
@@ -99,6 +102,12 @@ LookUpProduct lookUpProduct(Ref ref) => LookUpProduct(
   service: ref.watch(aiProductServiceProvider),
   consent: ref.watch(aiConsentStoreProvider),
 );
+
+/// Speech to text for the coach (the phone's own speech service); pretend in
+/// Chrome and demos.
+@Riverpod(keepAlive: true)
+VoiceInput voiceInput(Ref ref) =>
+    (kIsWeb || Env.fakeCamera) ? const FakeVoiceInput() : PluginVoiceInput();
 
 @Riverpod(keepAlive: true)
 AiPhotoPicker aiPhotoPicker(Ref ref) => (kIsWeb || Env.fakeCamera)

@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show compute;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:saaf/data/services/before_after_gif.dart';
 import 'package:saaf/data/local/drift_repositories.dart';
 import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
 import 'package:saaf/domain/entities/completed_scan.dart';
@@ -109,3 +111,20 @@ Future<Uint8List?> lastFrontPhoto(Ref ref) async {
   if (front == null) return null;
   return (await ref.watch(photoStoreProvider).load(front)).valueOrNull;
 }
+
+/// The before-and-after animation of two front photos (made on the phone, in
+/// the background); null when a photo cannot be read.
+Future<Uint8List?> makeProgressAnimation({
+  required Uint8List before,
+  required Uint8List after,
+  required String beforeLabel,
+  required String afterLabel,
+}) => compute(
+  makeBeforeAfterGif,
+  BeforeAfterFrames(
+    before: before,
+    after: after,
+    beforeLabel: beforeLabel,
+    afterLabel: afterLabel,
+  ),
+);

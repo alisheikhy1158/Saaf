@@ -15,6 +15,7 @@ import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
+import 'package:saaf/domain/services/voice_input.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/presentation/features/coach/screens/ai_coach_screen.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
@@ -60,8 +61,29 @@ class _Picker implements AiPhotoPicker {
   Future<Result<Uint8List?>> pick(AiPhotoSource source) async => next;
 }
 
+class _Voice implements VoiceInput {
+  final List<String> languages = [];
+  bool listening = false;
+
+  @override
+  Future<bool> start({
+    required String languageCode,
+    required void Function(String words, bool done) onWords,
+  }) async {
+    languages.add(languageCode);
+    listening = true;
+    onWords('Is my routine', false);
+    onWords('Is my routine right for me', true);
+    return true;
+  }
+
+  @override
+  Future<void> stop() async => listening = false;
+}
+
 late _Service _service;
 late _Picker _picker;
+late _Voice _voice;
 
 List<Override> _overrides({bool consented = true}) {
   final settings = InMemorySettingsRepository();
@@ -75,6 +97,7 @@ List<Override> _overrides({bool consented = true}) {
     aiCoachServiceProvider.overrideWithValue(_service),
     aiPhotoPickerProvider.overrideWithValue(_picker),
     settingsRepositoryProvider.overrideWithValue(settings),
+    voiceInputProvider.overrideWithValue(_voice),
   ];
 }
 
@@ -112,6 +135,7 @@ void main() {
   setUp(() {
     _service = _Service();
     _picker = _Picker();
+    _voice = _Voice();
   });
 
   group('before the first chat', () {
@@ -271,6 +295,36 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Reported'), findsNothing);
+    });
+  });
+
+  group('speaking instead of typing', () {
+    testWidgets('explains first, then the words go into the message box', (
+      tester,
+    ) async {
+      await _open(tester);
+      await _tap(tester, find.byTooltip('Speak your question'));
+      expect(find.text('Speak instead of typing'), findsOneWidget);
+      expect(find.textContaining('speech service'), findsOneWidget);
+      expect(_voice.languages, isEmpty);
+      await _tap(tester, find.text('Continue'));
+      expect(_voice.languages, ['en']);
+      final field = tester.widget<EditableText>(
+        find.descendant(
+          of: find.byKey(const ValueKey('ai-input')),
+          matching: find.byType(EditableText),
+        ),
+      );
+      expect(field.controller.text, 'Is my routine right for me');
+      // Nothing is sent until the user taps send.
+      expect(_service.asked, isEmpty);
+    });
+
+    testWidgets('Not now does not listen', (tester) async {
+      await _open(tester);
+      await _tap(tester, find.byTooltip('Speak your question'));
+      await _tap(tester, find.text('Not now'));
+      expect(_voice.languages, isEmpty);
     });
   });
 

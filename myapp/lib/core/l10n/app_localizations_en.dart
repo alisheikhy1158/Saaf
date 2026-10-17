@@ -2885,4 +2885,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dermReportFailed =>
       'We couldn’t share the report. Please try again.';
+
+  @override
+  String get voiceSpeak => 'Speak your question';
+
+  @override
+  String get voiceStop => 'Stop listening';
+
+  @override
+  String get voiceTitle => 'Speak instead of typing';
+
+  @override
+  String get voiceBody =>
+      'Your phone’s speech service (Google or Apple) turns what you say into text, in English or Urdu. Saaf only gets the text, and sends it to the AI coach when you tap send. Your phone will ask to use the microphone.';
+
+  @override
+  String get voiceUnavailable =>
+      'Voice input isn’t available on this phone, or the microphone is off for Saaf.';
 }

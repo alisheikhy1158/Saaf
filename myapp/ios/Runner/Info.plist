@@ -24,6 +24,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Saaf uses the microphone only when you tap the microphone in the AI coach, to turn your question into text.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Your phone's speech recognition turns what you say into text for your question to the AI coach.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Saaf uses the camera to take the three photos of your face scan. Photos stay on your phone.</string>
 	<key>LSRequiresIPhoneOS</key>

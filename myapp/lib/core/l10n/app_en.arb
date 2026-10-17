@@ -2348,5 +2348,15 @@
   "dermReport": "Report for your doctor",
   "@dermReport": {"description": "Shares a PDF summary."},
   "dermReportFailed": "We couldn’t share the report. Please try again.",
-  "@dermReportFailed": {"description": "Report share failed."}
+  "@dermReportFailed": {"description": "Report share failed."},
+  "voiceSpeak": "Speak your question",
+  "@voiceSpeak": {"description": "Tooltip of the microphone button."},
+  "voiceStop": "Stop listening",
+  "@voiceStop": {"description": "Tooltip while listening."},
+  "voiceTitle": "Speak instead of typing",
+  "@voiceTitle": {"description": "Voice explanation title."},
+  "voiceBody": "Your phone’s speech service (Google or Apple) turns what you say into text, in English or Urdu. Saaf only gets the text, and sends it to the AI coach when you tap send. Your phone will ask to use the microphone.",
+  "@voiceBody": {"description": "Voice explanation."},
+  "voiceUnavailable": "Voice input isn’t available on this phone, or the microphone is off for Saaf.",
+  "@voiceUnavailable": {"description": "When speech can't start."}
 }

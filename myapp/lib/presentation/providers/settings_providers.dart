@@ -38,6 +38,9 @@ abstract final class SettingNames {
 
   /// "on" when Ramadan mode is on.
   static const ramadanMode = 'ramadanMode';
+
+  /// "yes" once the user has read how voice input works.
+  static const voiceExplained = 'voiceExplained';
 }
 
 /// Drift on the phone; in memory in tests and Chrome.
