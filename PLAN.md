@@ -183,6 +183,50 @@ android {
 
 ---
 
+## Phase 10.5 — Best-in-class features (decided 2026-10-18)
+Goal: the app that knows Pakistani skin and Pakistani life best. Build in this order, one commit each, tests first.
+Rules for all: safety answers never leave the phone; anything sent to an AI or a server is shown and agreed first;
+every AI answer is labelled and reportable; no AI prices; Urdu + RTL + 200 % text; no hardcoded colours/sizes.
+
+1. **Skin weather (daily).** City picker (no GPS permission). Our server `/v1/weather` (signed in, cached 30 min
+   per city) fetches Open-Meteo forecast (temperature, humidity, UV now + today's max) and air quality (US AQI,
+   PM2.5). Pure rules on the phone turn it into 2–3 tips on Home ("UV 11 today: reapply at 1 pm", humid → gel
+   moisturiser, smog → cleanse well tonight, heat → reapply after sweat). Attribution "Weather data by
+   Open-Meteo.com" + CAMS. **Before launch:** Open-Meteo's free tier is non-commercial only → paid plan or
+   another provider (swap on the server only).
+2. **"Is this cream safe?"** Label photo / barcode → server `/v1/safety`: vision reads the ingredient list,
+   browser search looks for regulator warnings (PSQCA, DRAP, FDA, others) about THIS product, strict JSON with
+   cited links (only links found by the search). The phone adds fixed ingredient rules: mercury compounds,
+   hydroquinone, strong steroids (clobetasol, betamethasone…), prescription retinoids; "no ingredients
+   printed" = caution. Verdict: Danger / Be careful / No known problem (never "safe"), with reasons and sources.
+3. **Progress you can trust.** On the front pose, a faint outline of the last scan's front photo to line up
+   angle and distance (toggle). Light check already exists. Progress: "Share before & after" makes an animated
+   GIF (first vs latest front photo, dated) and shares it only when the user taps.
+4. **Product shelf.** "Products you use now" becomes the shelf: opened date, period after opening (6/12/24
+   months), how long it lasts → "use by" and "runs out around"; Home reminds before it runs out or expires.
+   "Find a cheaper alternative" → Saaf AI web search for similar products sold in Pakistan (no prices; "Check
+   prices online").
+5. **New-product introducer.** One new active at a time: patch test (24–48 h) → 2 nights a week → every other
+   night → normal. Home card with today's step and "Any reaction today?" (No / Mild / Strong) — strong = stop and
+   advice, possibly see a doctor. Kept on the phone.
+6. **Life-event modes.** Ramadan mode (routine labelled "After sehri" / "After iftar", hydration tips). Event prep
+   (wedding, mehndi…): date → countdown plan (no new actives in the last 4 weeks, nothing new in the last 2, gentle
+   last week). Home card.
+7. **Dermatologist bridge.** "Find a dermatologist" (Google Maps search in the user's city, opened in the
+   browser) shown on warning signs and in Profile; "Share a report for your doctor": PDF of latest scan photo +
+   AI estimate + routine + products, shared only on tap.
+8. **Voice + Roman Urdu.** Microphone button in the AI coach (speech_to_text; Urdu or English by app language),
+   own explanation before the mic/speech permission; Privacy Policy names Google/Apple speech services. Native
+   permissions only verifiable on Codemagic.
+9. **Body pigmentation.** New concern (underarms, knees, elbows, neck); body-care tips card; AI routine and coach
+   know it; no bleaching ever.
+
+Still open for launch (Phase 9–11): RevenueCat, cloud backup/sync, crash reporting, deletion web page, reviews.
+
+### 📝 Document & Clear after each feature · commit · push
+
+---
+
 ## Phase 11 — Store submission
 - [ ] Privacy policy, Terms (EULA), support page, deletion page live on the web.
 - [ ] App Privacy labels, `PrivacyInfo.xcprivacy`, Play Data safety, Health apps declaration, content ratings, target audience 16+/18+.

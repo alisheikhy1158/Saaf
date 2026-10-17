@@ -4123,6 +4123,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sends each new scan’s front photo to Saaf AI for your results.'**
   String get profileAutoAnalyseHint;
+
+  /// Title of the weather card before a city is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin weather'**
+  String get weatherOfferTitle;
+
+  /// Body of the weather offer.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily tips for your city’s sun, heat and smog.'**
+  String get weatherOfferBody;
+
+  /// Button that opens the city list.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your city'**
+  String get weatherPickCity;
+
+  /// Tooltip of the change-city button.
+  ///
+  /// In en, this message translates to:
+  /// **'Change city'**
+  String get weatherChangeCity;
+
+  /// Title of the city list.
+  ///
+  /// In en, this message translates to:
+  /// **'Your city'**
+  String get weatherCitySheetTitle;
+
+  /// Privacy note under the city list.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the city you choose is used for this, never your exact location.'**
+  String get weatherCityNote;
+
+  /// Title of the weather card.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin weather · {city}'**
+  String weatherTitle(String city);
+
+  /// UV chip.
+  ///
+  /// In en, this message translates to:
+  /// **'UV {uv}'**
+  String weatherUv(String uv);
+
+  /// Temperature chip.
+  ///
+  /// In en, this message translates to:
+  /// **'{t}°C'**
+  String weatherTemp(String t);
+
+  /// Humidity chip.
+  ///
+  /// In en, this message translates to:
+  /// **'{h}% humidity'**
+  String weatherHumidity(String h);
+
+  /// Air quality chip.
+  ///
+  /// In en, this message translates to:
+  /// **'AQI {aqi}'**
+  String weatherAqi(String aqi);
+
+  /// Weather error.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t load today’s weather.'**
+  String get weatherUnavailable;
+
+  /// Data source credit (licence requirement).
+  ///
+  /// In en, this message translates to:
+  /// **'Weather data by Open-Meteo.com · air quality by CAMS'**
+  String get weatherCredit;
+
+  /// Weather tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Very strong sun today (UV {uv}). Reapply sunscreen every 2 hours outside, and keep to the shade from 11 to 3.'**
+  String weatherTipUvExtreme(String uv);
+
+  /// Weather tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong sun today (UV {uv}). Reapply sunscreen around midday if you go out.'**
+  String weatherTipUvHigh(String uv);
+
+  /// Weather tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate sun today (UV {uv}). Your morning sunscreen covers it unless you are outside for long.'**
+  String weatherTipUvModerate(String uv);
+
+  /// Weather tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Low sun today (UV {uv}), but still wear sunscreen: it keeps dark marks from getting darker.'**
+  String weatherTipUvLow(String uv);
+
+  /// Weather tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Smoggy air (AQI {aqi}). Cleanse well tonight; if you wore sunscreen or make-up, cleanse twice.'**
+  String weatherTipSmog(String aqi);
+
+  /// Weather tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Hazy air (AQI {aqi}). Wash your face gently tonight to clear the dust.'**
+  String weatherTipHaze(String aqi);
+
+  /// Weather tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Hot day ({t}°C). Sweat washes sunscreen off: blot, reapply and keep layers light.'**
+  String weatherTipHeat(String t);
+
+  /// Weather tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Humid air ({h}%). A light gel moisturiser is enough today.'**
+  String weatherTipHumid(String h);
+
+  /// Weather tip.
+  ///
+  /// In en, this message translates to:
+  /// **'Dry air ({h}%). Use a richer moisturiser and don’t skip it at night.'**
+  String weatherTipDry(String h);
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Karachi'**
+  String get cityKarachi;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Lahore'**
+  String get cityLahore;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Islamabad'**
+  String get cityIslamabad;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Rawalpindi'**
+  String get cityRawalpindi;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Faisalabad'**
+  String get cityFaisalabad;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Multan'**
+  String get cityMultan;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Peshawar'**
+  String get cityPeshawar;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Quetta'**
+  String get cityQuetta;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Hyderabad'**
+  String get cityHyderabad;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Gujranwala'**
+  String get cityGujranwala;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Sialkot'**
+  String get citySialkot;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Bahawalpur'**
+  String get cityBahawalpur;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Sukkur'**
+  String get citySukkur;
+
+  /// City name.
+  ///
+  /// In en, this message translates to:
+  /// **'Abbottabad'**
+  String get cityAbbottabad;
 }
 
 class _AppLocalizationsDelegate

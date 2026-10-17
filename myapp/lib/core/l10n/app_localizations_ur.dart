@@ -2357,4 +2357,143 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get profileAutoAnalyseHint =>
       'ہر نئے اسکین کی سامنے کی تصویر آپ کے نتائج کے لیے ثاف اے آئی کو بھیجتا ہے۔';
+
+  @override
+  String get weatherOfferTitle => 'جلد کا موسم';
+
+  @override
+  String get weatherOfferBody =>
+      'آپ کے شہر کی دھوپ، گرمی اور اسموگ کے مطابق روزانہ مشورے۔';
+
+  @override
+  String get weatherPickCity => 'اپنا شہر چنیں';
+
+  @override
+  String get weatherChangeCity => 'شہر بدلیں';
+
+  @override
+  String get weatherCitySheetTitle => 'آپ کا شہر';
+
+  @override
+  String get weatherCityNote =>
+      'اس کے لیے صرف آپ کا چنا ہوا شہر استعمال ہوتا ہے، آپ کی اصل جگہ کبھی نہیں۔';
+
+  @override
+  String weatherTitle(String city) {
+    return 'جلد کا موسم · $city';
+  }
+
+  @override
+  String weatherUv(String uv) {
+    return 'UV $uv';
+  }
+
+  @override
+  String weatherTemp(String t) {
+    return '$t°C';
+  }
+
+  @override
+  String weatherHumidity(String h) {
+    return '$h% نمی';
+  }
+
+  @override
+  String weatherAqi(String aqi) {
+    return 'AQI $aqi';
+  }
+
+  @override
+  String get weatherUnavailable => 'آج کا موسم لوڈ نہیں ہو سکا۔';
+
+  @override
+  String get weatherCredit =>
+      'موسم کا ڈیٹا Open-Meteo.com سے · ہوا کا معیار CAMS سے';
+
+  @override
+  String weatherTipUvExtreme(String uv) {
+    return 'آج بہت تیز دھوپ ہے (UV $uv)۔ باہر ہر 2 گھنٹے بعد دوبارہ سن اسکرین لگائیں، اور 11 سے 3 بجے تک سائے میں رہیں۔';
+  }
+
+  @override
+  String weatherTipUvHigh(String uv) {
+    return 'آج تیز دھوپ ہے (UV $uv)۔ باہر جائیں تو دوپہر کے قریب دوبارہ سن اسکرین لگائیں۔';
+  }
+
+  @override
+  String weatherTipUvModerate(String uv) {
+    return 'آج درمیانی دھوپ ہے (UV $uv)۔ صبح کی سن اسکرین کافی ہے، جب تک آپ دیر تک باہر نہ رہیں۔';
+  }
+
+  @override
+  String weatherTipUvLow(String uv) {
+    return 'آج دھوپ کم ہے (UV $uv)، پھر بھی سن اسکرین لگائیں: یہ داغوں کو مزید گہرا ہونے سے روکتی ہے۔';
+  }
+
+  @override
+  String weatherTipSmog(String aqi) {
+    return 'اسموگ والی ہوا (AQI $aqi)۔ آج رات اچھی طرح چہرہ صاف کریں؛ اگر سن اسکرین یا میک اپ لگایا تھا تو دو بار۔';
+  }
+
+  @override
+  String weatherTipHaze(String aqi) {
+    return 'دھندلی ہوا (AQI $aqi)۔ آج رات نرمی سے چہرہ دھوئیں تاکہ گرد صاف ہو جائے۔';
+  }
+
+  @override
+  String weatherTipHeat(String t) {
+    return 'گرم دن ($t°C)۔ پسینہ سن اسکرین بہا دیتا ہے: پسینہ تھپتھپا کر صاف کریں، دوبارہ لگائیں اور ہلکی تہیں رکھیں۔';
+  }
+
+  @override
+  String weatherTipHumid(String h) {
+    return 'مرطوب ہوا ($h%)۔ آج ہلکا جیل موئسچرائزر کافی ہے۔';
+  }
+
+  @override
+  String weatherTipDry(String h) {
+    return 'خشک ہوا ($h%)۔ گاڑھا موئسچرائزر لگائیں اور رات کو ہرگز نہ چھوڑیں۔';
+  }
+
+  @override
+  String get cityKarachi => 'کراچی';
+
+  @override
+  String get cityLahore => 'لاہور';
+
+  @override
+  String get cityIslamabad => 'اسلام آباد';
+
+  @override
+  String get cityRawalpindi => 'راولپنڈی';
+
+  @override
+  String get cityFaisalabad => 'فیصل آباد';
+
+  @override
+  String get cityMultan => 'ملتان';
+
+  @override
+  String get cityPeshawar => 'پشاور';
+
+  @override
+  String get cityQuetta => 'کوئٹہ';
+
+  @override
+  String get cityHyderabad => 'حیدرآباد';
+
+  @override
+  String get cityGujranwala => 'گوجرانوالہ';
+
+  @override
+  String get citySialkot => 'سیالکوٹ';
+
+  @override
+  String get cityBahawalpur => 'بہاولپور';
+
+  @override
+  String get citySukkur => 'سکھر';
+
+  @override
+  String get cityAbbottabad => 'ایبٹ آباد';
 }

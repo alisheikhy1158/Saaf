@@ -2356,4 +2356,143 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileAutoAnalyseHint =>
       'Sends each new scan’s front photo to Saaf AI for your results.';
+
+  @override
+  String get weatherOfferTitle => 'Skin weather';
+
+  @override
+  String get weatherOfferBody =>
+      'Daily tips for your city’s sun, heat and smog.';
+
+  @override
+  String get weatherPickCity => 'Choose your city';
+
+  @override
+  String get weatherChangeCity => 'Change city';
+
+  @override
+  String get weatherCitySheetTitle => 'Your city';
+
+  @override
+  String get weatherCityNote =>
+      'Only the city you choose is used for this, never your exact location.';
+
+  @override
+  String weatherTitle(String city) {
+    return 'Skin weather · $city';
+  }
+
+  @override
+  String weatherUv(String uv) {
+    return 'UV $uv';
+  }
+
+  @override
+  String weatherTemp(String t) {
+    return '$t°C';
+  }
+
+  @override
+  String weatherHumidity(String h) {
+    return '$h% humidity';
+  }
+
+  @override
+  String weatherAqi(String aqi) {
+    return 'AQI $aqi';
+  }
+
+  @override
+  String get weatherUnavailable => 'Couldn’t load today’s weather.';
+
+  @override
+  String get weatherCredit =>
+      'Weather data by Open-Meteo.com · air quality by CAMS';
+
+  @override
+  String weatherTipUvExtreme(String uv) {
+    return 'Very strong sun today (UV $uv). Reapply sunscreen every 2 hours outside, and keep to the shade from 11 to 3.';
+  }
+
+  @override
+  String weatherTipUvHigh(String uv) {
+    return 'Strong sun today (UV $uv). Reapply sunscreen around midday if you go out.';
+  }
+
+  @override
+  String weatherTipUvModerate(String uv) {
+    return 'Moderate sun today (UV $uv). Your morning sunscreen covers it unless you are outside for long.';
+  }
+
+  @override
+  String weatherTipUvLow(String uv) {
+    return 'Low sun today (UV $uv), but still wear sunscreen: it keeps dark marks from getting darker.';
+  }
+
+  @override
+  String weatherTipSmog(String aqi) {
+    return 'Smoggy air (AQI $aqi). Cleanse well tonight; if you wore sunscreen or make-up, cleanse twice.';
+  }
+
+  @override
+  String weatherTipHaze(String aqi) {
+    return 'Hazy air (AQI $aqi). Wash your face gently tonight to clear the dust.';
+  }
+
+  @override
+  String weatherTipHeat(String t) {
+    return 'Hot day ($t°C). Sweat washes sunscreen off: blot, reapply and keep layers light.';
+  }
+
+  @override
+  String weatherTipHumid(String h) {
+    return 'Humid air ($h%). A light gel moisturiser is enough today.';
+  }
+
+  @override
+  String weatherTipDry(String h) {
+    return 'Dry air ($h%). Use a richer moisturiser and don’t skip it at night.';
+  }
+
+  @override
+  String get cityKarachi => 'Karachi';
+
+  @override
+  String get cityLahore => 'Lahore';
+
+  @override
+  String get cityIslamabad => 'Islamabad';
+
+  @override
+  String get cityRawalpindi => 'Rawalpindi';
+
+  @override
+  String get cityFaisalabad => 'Faisalabad';
+
+  @override
+  String get cityMultan => 'Multan';
+
+  @override
+  String get cityPeshawar => 'Peshawar';
+
+  @override
+  String get cityQuetta => 'Quetta';
+
+  @override
+  String get cityHyderabad => 'Hyderabad';
+
+  @override
+  String get cityGujranwala => 'Gujranwala';
+
+  @override
+  String get citySialkot => 'Sialkot';
+
+  @override
+  String get cityBahawalpur => 'Bahawalpur';
+
+  @override
+  String get citySukkur => 'Sukkur';
+
+  @override
+  String get cityAbbottabad => 'Abbottabad';
 }

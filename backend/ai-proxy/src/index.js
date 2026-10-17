@@ -4,6 +4,7 @@
 //   POST /v1/routine   {context, scan, current}               ->  {summary, picks, current}
 //   POST /v1/product   {image | barcode | qr, context}       ->  {found, title, insight, webChecked}
 //   POST /v1/skin      {image, context}                       ->  {usable, summary, metrics} | {usable: false, problem}
+//   POST /v1/weather   {lat, lon}                             ->  {temperature, humidity, uvNow, uvMax, aqi, pm25}
 //   POST /v1/report    {reason, replyId, replyText}          ->  {ok: true}
 //   GET  /health                                           ->  {ok: true}
 //
@@ -15,7 +16,8 @@ import { AuthError, verifyFirebaseToken } from './auth.js';
 import { UpstreamError, askGroq } from './groq.js';
 import { lookUpProduct, planRoutine } from './products.js';
 import { analyseSkin } from './skin.js';
-import { validateChat, validateProduct, validateReport, validateRoutine, validateSkin } from './validate.js';
+import { fetchSkinWeather } from './weather.js';
+import { validateChat, validateProduct, validateReport, validateRoutine, validateSkin, validateWeather } from './validate.js';
 
 // A request (with up to three photos) may be this big.
 const MAX_BODY_BYTES = 9_000_000;
@@ -110,6 +112,27 @@ const skin = (request, env, deps) =>
 const product = (request, env, deps) =>
   aiRequest(request, env, deps, validateProduct, (value, options) => lookUpProduct(env, value, options));
 
+/** The skin weather: signed in, not counted as an AI question, cached 30 min per place. */
+async function weather(request, env, deps) {
+  await authenticate(request, env, deps);
+  const read = await readJson(request);
+  if (read.error) return json({ error: read.error }, read.status);
+  const checked = validateWeather(read.body);
+  if (!checked.ok) return json({ error: checked.error }, 400);
+
+  const key = `w:${checked.value.lat},${checked.value.lon}`;
+  const cached = env.LIMITS ? await env.LIMITS.get(key) : null;
+  if (cached) return json(JSON.parse(cached));
+  try {
+    const result = await fetchSkinWeather(env, checked.value, { fetchImpl: deps.fetchImpl });
+    if (env.LIMITS) await env.LIMITS.put(key, JSON.stringify(result), { expirationTtl: 30 * 60 });
+    return json(result);
+  } catch (error) {
+    if (error instanceof UpstreamError) return json({ error: error.code }, error.status);
+    throw error;
+  }
+}
+
 async function report(request, env, deps) {
   const { uid } = await authenticate(request, env, deps);
 
@@ -142,6 +165,7 @@ export async function handle(request, env, deps = {}) {
     if (request.method === 'POST' && url.pathname === '/v1/routine') return await routine(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/product') return await product(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/skin') return await skin(request, env, deps);
+    if (request.method === 'POST' && url.pathname === '/v1/weather') return await weather(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/report') return await report(request, env, deps);
     return json({ error: 'not_found' }, 404);
   } catch (error) {

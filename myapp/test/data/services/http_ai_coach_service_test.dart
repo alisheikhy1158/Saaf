@@ -12,6 +12,7 @@ import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
+import 'package:saaf/domain/entities/pk_city.dart';
 import 'package:saaf/domain/entities/budget_band.dart';
 import 'package:saaf/domain/entities/ingredient.dart';
 import 'package:saaf/domain/entities/product.dart';
@@ -483,6 +484,39 @@ void main() {
         context: _context,
       )).valueOrNull!;
       expect(insight.found, isFalse);
+    });
+  });
+
+  group('skin weather', () {
+    test('sends only the city’s place and reads the answer', () async {
+      late http.Request seen;
+      final s = service(
+        MockClient((request) async {
+          seen = request;
+          return ok({
+            'temperature': 36,
+            'humidity': 74,
+            'uvNow': 9.2,
+            'uvMax': 10.4,
+            'aqi': null,
+            'pm25': null,
+          });
+        }),
+      );
+      final weather = (await s.today(PkCity.byId('lahore')!)).valueOrNull!;
+      expect(seen.url.path, '/v1/weather');
+      expect(jsonDecode(seen.body), {'lat': 31.55, 'lon': 74.34});
+      expect(weather.temperatureC, 36);
+      expect(weather.uvMax, 10.4);
+      expect(weather.aqi, isNull);
+    });
+
+    test('an answer without a temperature is a failure', () async {
+      final s = service(MockClient((_) async => ok({'humidity': 3})));
+      expect(
+        (await s.today(PkCity.byId('lahore')!)).failureOrNull,
+        isA<UnknownFailure>(),
+      );
     });
   });
 }

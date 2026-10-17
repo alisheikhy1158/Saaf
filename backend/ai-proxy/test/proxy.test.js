@@ -7,8 +7,9 @@ import { askGroq, buildMessages, cleanReply } from '../src/groq.js';
 import { handle } from '../src/index.js';
 import { lookUpProduct, planRoutine } from '../src/products.js';
 import { analyseSkin } from '../src/skin.js';
+import { fetchSkinWeather } from '../src/weather.js';
 import { buildSystemPrompt } from '../src/prompt.js';
-import { sniffImage, validateChat, validateProduct, validateReport, validateRoutine, validateSkin } from '../src/validate.js';
+import { sniffImage, validateChat, validateProduct, validateReport, validateRoutine, validateSkin, validateWeather } from '../src/validate.js';
 
 const PROJECT = 'saaf-test';
 const NOW = Date.UTC(2026, 9, 17, 12, 0, 0);
@@ -573,4 +574,61 @@ test('server: skin analysis needs sign-in', async () => {
   const r = await call('/v1/skin', { token, body: { image: JPEG }, groq: groqSequence([skinReply()]).fetchImpl });
   assert.equal(r.status, 200);
   assert.equal(r.json.metrics.darkSpots.score, 0.2);
+});
+
+// ---------------------------------------------------------------- skin weather
+function weatherFetch(capture = []) {
+  return async (url) => {
+    capture.push(String(url));
+    if (String(url).includes('air-quality')) {
+      return new Response(JSON.stringify({ current: { us_aqi: 172, pm2_5: 95.4 } }), { status: 200 });
+    }
+    return new Response(JSON.stringify({
+      current: { temperature_2m: 36.2, relative_humidity_2m: 74, uv_index: 9.15 },
+      daily: { time: ['2026-10-18'], uv_index_max: [10.4] },
+    }), { status: 200 });
+  };
+}
+
+test('validate weather: a place on Earth, rounded so nobody is pinpointed', () => {
+  assert.deepEqual(validateWeather({ lat: 31.5497, lon: 74.3436 }).value, { lat: 31.55, lon: 74.34 });
+  assert.equal(validateWeather({ lat: 91, lon: 0 }).ok, false);
+  assert.equal(validateWeather({ lat: 'x', lon: 0 }).ok, false);
+  assert.equal(validateWeather(null).ok, false);
+});
+
+test('weather: forecast and air quality from Open-Meteo, in one tidy answer', async () => {
+  const urls = [];
+  const result = await fetchSkinWeather({}, { lat: 31.55, lon: 74.34 }, { fetchImpl: weatherFetch(urls) });
+  assert.deepEqual(result, { temperature: 36, humidity: 74, uvNow: 9.2, uvMax: 10.4, aqi: 172, pm25: 95 });
+  assert.ok(urls.some((u) => u.startsWith('https://api.open-meteo.com/v1/forecast?') && u.includes('uv_index_max') && u.includes('timezone=auto')));
+  assert.ok(urls.some((u) => u.startsWith('https://air-quality-api.open-meteo.com/v1/air-quality?') && u.includes('us_aqi')));
+});
+
+test('weather: missing air quality still gives the weather', async () => {
+  const fetchImpl = async (url) => String(url).includes('air-quality')
+    ? new Response('{}', { status: 500 })
+    : weatherFetch()(url);
+  const result = await fetchSkinWeather({}, { lat: 31.55, lon: 74.34 }, { fetchImpl });
+  assert.equal(result.aqi, null);
+  assert.equal(result.uvMax, 10.4);
+});
+
+test('weather: no forecast is an error', async () => {
+  const fetchImpl = async () => new Response('{}', { status: 500 });
+  await assert.rejects(fetchSkinWeather({}, { lat: 31.55, lon: 74.34 }, { fetchImpl }), { code: 'weather_unavailable' });
+});
+
+test('server: weather needs sign-in, is cached per place and does not use the AI limit', async () => {
+  const token = await makeToken();
+  const LIMITS = fakeKv();
+  const urls = [];
+  assert.equal((await call('/v1/weather', { body: { lat: 31.55, lon: 74.34 } })).status, 401);
+  const first = await call('/v1/weather', { token, body: { lat: 31.55, lon: 74.34 }, env: { LIMITS, DAILY_LIMIT: '1' }, groq: weatherFetch(urls) });
+  assert.equal(first.status, 200);
+  assert.equal(first.json.uvMax, 10.4);
+  const second = await call('/v1/weather', { token, body: { lat: 31.5501, lon: 74.3399 }, env: { LIMITS, DAILY_LIMIT: '1' }, groq: weatherFetch(urls) });
+  assert.equal(second.status, 200);
+  assert.equal(urls.length, 2); // the second came from the cache
+  assert.equal([...LIMITS.store.keys()].some((k) => k.startsWith('d:')), false);
 });

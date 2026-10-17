@@ -13,10 +13,13 @@ import 'package:saaf/domain/entities/product_insight.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/ai_skin_estimate.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
+import 'package:saaf/domain/entities/pk_city.dart';
+import 'package:saaf/domain/entities/skin_weather.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
 import 'package:saaf/domain/services/ai_skin_service.dart';
+import 'package:saaf/domain/services/weather_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
 
 /// The AI coach through OUR OWN server (a small proxy in front of an open-source
@@ -28,7 +31,7 @@ import 'package:saaf/domain/services/auth_token_provider.dart';
 /// user's skin are sent (see [AiContext]); never their name, number or safety
 /// answers. Saaf AI's product help (picks and look-ups) goes the same way.
 class HttpAiCoachService
-    implements AiCoachService, AiProductService, AiSkinService {
+    implements AiCoachService, AiProductService, AiSkinService, WeatherService {
   HttpAiCoachService({
     required String baseUrl,
     required AuthTokenProvider tokens,
@@ -103,6 +106,28 @@ class HttpAiCoachService
     return estimate == null
         ? const Err(UnknownFailure('ai-skin'))
         : Ok(estimate);
+  }
+
+  @override
+  Future<Result<SkinWeather>> today(PkCity city) async {
+    final sent = await _post('/v1/weather', {'lat': city.lat, 'lon': city.lon});
+    final body = _decode(sent);
+    if (body case Err(:final failure)) return Err(failure);
+    final data = body.valueOrNull!;
+    final temperature = data['temperature'];
+    if (temperature is! num) return const Err(UnknownFailure('weather'));
+    int? whole(Object? v) => v is num ? v.round() : null;
+    double? decimal(Object? v) => v is num ? v.toDouble() : null;
+    return Ok(
+      SkinWeather(
+        temperatureC: temperature.round(),
+        humidity: whole(data['humidity']),
+        uvNow: decimal(data['uvNow']),
+        uvMax: decimal(data['uvMax']),
+        aqi: whole(data['aqi']),
+        pm25: whole(data['pm25']),
+      ),
+    );
   }
 
   @override

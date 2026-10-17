@@ -169,6 +169,16 @@ export function validateSkin(body) {
   return { ok: true, value: { image, context: cleanContext(body.context) } };
 }
 
+/** A place for the skin weather, rounded to about 1 km (never more precise). */
+export function validateWeather(body) {
+  const lat = body?.lat;
+  const lon = body?.lon;
+  const ok = (v, max) => typeof v === 'number' && Number.isFinite(v) && Math.abs(v) <= max;
+  if (!ok(lat, 90) || !ok(lon, 180)) return { ok: false, error: 'bad_place' };
+  const round = (v) => Math.round(v * 100) / 100;
+  return { ok: true, value: { lat: round(lat), lon: round(lon) } };
+}
+
 export const MAX_QR = 500;
 
 /** A product to look up: exactly one of a label photo, a barcode or QR text. */

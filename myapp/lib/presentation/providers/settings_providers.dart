@@ -26,6 +26,9 @@ abstract final class SettingNames {
   /// "on" / "off": the answer to "analyse every scan automatically?"; none
   /// until the user is asked.
   static const autoAnalyseScans = 'autoAnalyseScans';
+
+  /// The city chosen for the skin weather (a `PkCity` id).
+  static const weatherCity = 'weatherCity';
 }
 
 /// Drift on the phone; in memory in tests and Chrome.

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' show DateFormat, NumberFormat;
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
+import 'package:saaf/presentation/features/home/widgets/skin_weather_card.dart';
 import 'package:saaf/core/utils/week.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/product.dart';
@@ -218,6 +219,8 @@ class _Content extends ConsumerWidget {
         ),
         SizedBox(height: space.x10),
         _Checklist(state: state),
+        SizedBox(height: space.sectionGapMedium),
+        const SkinWeatherCard(),
       ],
     );
   }
