@@ -14,10 +14,12 @@ import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/ai_skin_estimate.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/pk_city.dart';
+import 'package:saaf/domain/entities/safety_check.dart';
 import 'package:saaf/domain/entities/skin_weather.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
+import 'package:saaf/domain/services/ai_safety_service.dart';
 import 'package:saaf/domain/services/ai_skin_service.dart';
 import 'package:saaf/domain/services/weather_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
@@ -31,7 +33,12 @@ import 'package:saaf/domain/services/auth_token_provider.dart';
 /// user's skin are sent (see [AiContext]); never their name, number or safety
 /// answers. Saaf AI's product help (picks and look-ups) goes the same way.
 class HttpAiCoachService
-    implements AiCoachService, AiProductService, AiSkinService, WeatherService {
+    implements
+        AiCoachService,
+        AiProductService,
+        AiSkinService,
+        AiSafetyService,
+        WeatherService {
   HttpAiCoachService({
     required String baseUrl,
     required AuthTokenProvider tokens,
@@ -106,6 +113,56 @@ class HttpAiCoachService
     return estimate == null
         ? const Err(UnknownFailure('ai-skin'))
         : Ok(estimate);
+  }
+
+  @override
+  Future<Result<SafetyCheck>> checkSafety({
+    required CreamQuery query,
+    required AiContext context,
+  }) async {
+    final sent = await _post('/v1/safety', {
+      ...switch (query) {
+        CreamPhotoQuery(:final bytes) => {'image': base64Encode(bytes)},
+        CreamNameQuery(:final name) => {'name': name},
+      },
+      'context': _contextJson(context),
+    });
+    final body = _decode(sent);
+    if (body case Err(:final failure)) return Err(failure);
+    final data = body.valueOrNull!;
+    if (data['found'] != true) return const Ok(SafetyCheck(found: false));
+    String text(Object? v) => v is String ? v.trim() : '';
+    final printed = data['ingredientsPrinted'];
+    return Ok(
+      SafetyCheck(
+        found: true,
+        title: text(data['title']),
+        level: switch (data['level']) {
+          'danger' => SafetyLevel.danger,
+          'no_known_problem' => SafetyLevel.noKnownProblem,
+          _ => SafetyLevel.caution,
+        },
+        summary: text(data['summary']),
+        ingredients: [
+          if (data['ingredients'] case final List<Object?> list)
+            for (final i in list)
+              if (i is String && i.trim().isNotEmpty) i.trim(),
+        ],
+        ingredientsPrinted: printed is bool ? printed : null,
+        findings: [
+          if (data['findings'] case final List<Object?> list)
+            for (final f in list)
+              if (f case {'text': final String t} when t.trim().isNotEmpty)
+                SafetyFinding(
+                  text: t.trim(),
+                  source: switch (f['source']) {
+                    final String url when url.startsWith('http') => url,
+                    _ => null,
+                  },
+                ),
+        ],
+      ),
+    );
   }
 
   @override

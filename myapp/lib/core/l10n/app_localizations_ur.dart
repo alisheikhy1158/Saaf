@@ -2496,4 +2496,108 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get cityAbbottabad => 'ایبٹ آباد';
+
+  @override
+  String get creamTitle => 'کیا یہ کریم محفوظ ہے؟';
+
+  @override
+  String get creamIntro =>
+      'رنگ گورا کرنے والی اور “فارمولا” کریموں میں اکثر پارہ، ہائیڈروکوئنون یا تیز اسٹیرائڈ پائے جاتے ہیں جو جلد کو بری طرح نقصان پہنچا سکتے ہیں۔ ثاف اے آئی لیبل پڑھتا ہے اور اسی پروڈکٹ کے بارے میں انتباہات تلاش کرتا ہے۔';
+
+  @override
+  String get creamNameLabel => 'کریم کا نام';
+
+  @override
+  String get creamNameHint => 'نام لکھیں، یا لیبل کی تصویر لیں';
+
+  @override
+  String get creamTakePhoto => 'لیبل کی تصویر لیں';
+
+  @override
+  String get creamWhatIsSent =>
+      'صرف تصویر یا نام ثاف اے آئی (Groq، ثاف کے سرور کے ذریعے) کو جاتا ہے، آپ کے بارے میں کچھ نہیں۔';
+
+  @override
+  String get creamCheck => 'چیک کریں';
+
+  @override
+  String get creamChecking =>
+      'ثاف اے آئی لیبل پڑھ رہا ہے اور انتباہات تلاش کر رہا ہے۔ اس میں ایک منٹ لگ سکتا ہے…';
+
+  @override
+  String get creamNotFoundBody =>
+      'سامنے اور اجزا کی فہرست کی صاف تصویر لیں، یا پورا نام لکھیں۔';
+
+  @override
+  String get creamDangerTitle => 'خطرہ: اسے استعمال نہ کریں';
+
+  @override
+  String get creamDangerBody =>
+      'اسے استعمال کرنا بند کریں۔ پارہ، ہائیڈروکوئنون اور تیز اسٹیرائڈ آپ کی جلد اور صحت کو نقصان پہنچا سکتے ہیں۔ اگر آپ نے ہفتوں استعمال کی ہے تو ڈاکٹر یا ڈرماٹولوجسٹ سے ملیں: اسٹیرائڈ کریم چھوڑنے پر جلد بگڑ سکتی ہے جس میں وہ مدد کر سکتے ہیں۔';
+
+  @override
+  String get creamCautionTitle => 'احتیاط کریں';
+
+  @override
+  String get creamCautionBody =>
+      'اسے صرف احتیاط سے استعمال کریں، اور شک ہو تو ڈرماٹولوجسٹ سے پوچھیں۔ زخمی یا جلن والی جلد پر نہ لگائیں۔';
+
+  @override
+  String get creamNoKnownTitle => 'کوئی معلوم مسئلہ نہیں ملا';
+
+  @override
+  String get creamNoKnownBody =>
+      'ہمیں اس پروڈکٹ کے بارے میں کوئی انتباہ نہیں ملا۔ پھر بھی یہ ایسے مسائل پیدا کر سکتی ہے جو کسی نے رپورٹ نہیں کیے، اس لیے پہلے پیچ ٹیسٹ کریں۔';
+
+  @override
+  String get creamOnLabel => 'لیبل پر';
+
+  @override
+  String get creamFound => 'ثاف اے آئی کو کیا ملا';
+
+  @override
+  String get creamNoIngredients =>
+      'پیکٹ پر اجزا کی فہرست نہیں چھپی، اس لیے کوئی نہیں بتا سکتا کہ اس میں کیا ہے۔';
+
+  @override
+  String creamFlagMercury(String ingredient) {
+    return 'پارہ ($ingredient): جلد، گردوں اور اعصاب کو نقصان پہنچاتا ہے۔';
+  }
+
+  @override
+  String creamFlagHydroquinone(String ingredient) {
+    return 'ہائیڈروکوئنون ($ingredient): رنگ اڑانے والا جز جو سیاہ دھبے بنا سکتا ہے؛ کئی ممالک میں صرف نسخے پر۔';
+  }
+
+  @override
+  String creamFlagStrongSteroid(String ingredient) {
+    return 'تیز اسٹیرائڈ ($ingredient): جلد کو پتلا کرتا ہے، دانے اور دوبارہ سرخی پیدا کرتا ہے۔';
+  }
+
+  @override
+  String creamFlagSteroid(String ingredient) {
+    return 'اسٹیرائڈ ($ingredient): ڈاکٹر کے بغیر روزانہ چہرے پر استعمال کے لیے نہیں۔';
+  }
+
+  @override
+  String creamFlagRetinoid(String ingredient) {
+    return 'نسخے والا ریٹینائڈ ($ingredient): صرف ڈاکٹر کے کہنے پر، حمل میں کبھی نہیں۔';
+  }
+
+  @override
+  String get creamDisclaimer =>
+      'ثاف صرف وہی چیک کر سکتا ہے جو چھپا ہے اور جو رپورٹ ہوا ہے۔ یہ لیب ٹیسٹ یا طبی مشورہ نہیں۔';
+
+  @override
+  String get creamCheckAnother => 'دوسری کریم چیک کریں';
+
+  @override
+  String get creamHomeTitle => 'کیا آپ کی کریم محفوظ ہے؟';
+
+  @override
+  String get creamHomeBody =>
+      'رنگ گورا کرنے والی اور “فارمولا” کریموں میں پارہ اور اسٹیرائڈ چیک کریں۔';
+
+  @override
+  String get creamHomeAction => 'کریم چیک کریں';
 }

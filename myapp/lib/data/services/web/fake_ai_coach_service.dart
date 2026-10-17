@@ -8,6 +8,7 @@ import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
+import 'package:saaf/domain/entities/safety_check.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/ai_skin_estimate.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
@@ -15,6 +16,7 @@ import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
+import 'package:saaf/domain/services/ai_safety_service.dart';
 import 'package:saaf/domain/services/ai_skin_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
 
@@ -126,6 +128,25 @@ class FakeAiSkinService implements AiSkinService {
         for (final kind in SkinMetricKind.values)
           SkinMetric(kind: kind, amount: 0.5, confidence: Confidence.low),
       ],
+    ),
+  );
+}
+
+/// A pretend cream check for Chrome and builds without the real service.
+class FakeAiSafetyService implements AiSafetyService {
+  const FakeAiSafetyService();
+
+  @override
+  Future<Result<SafetyCheck>> checkSafety({
+    required CreamQuery query,
+    required AiContext context,
+  }) async => const Ok(
+    SafetyCheck(
+      found: true,
+      title: 'Demo cream',
+      level: SafetyLevel.caution,
+      summary: 'Demo answer: the real Saaf AI is not connected in this build.',
+      ingredientsPrinted: false,
     ),
   );
 }

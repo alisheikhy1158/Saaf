@@ -2495,4 +2495,108 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cityAbbottabad => 'Abbottabad';
+
+  @override
+  String get creamTitle => 'Is this cream safe?';
+
+  @override
+  String get creamIntro =>
+      'Fairness and “formula” creams are often found to contain mercury, hydroquinone or strong steroids, which can badly harm skin. Saaf AI reads the label and searches for warnings about this exact product.';
+
+  @override
+  String get creamNameLabel => 'Cream name';
+
+  @override
+  String get creamNameHint => 'Type the name, or take a photo of the label';
+
+  @override
+  String get creamTakePhoto => 'Take a photo of the label';
+
+  @override
+  String get creamWhatIsSent =>
+      'Only the photo or the name goes to Saaf AI (Groq, through Saaf’s server), nothing about you.';
+
+  @override
+  String get creamCheck => 'Check it';
+
+  @override
+  String get creamChecking =>
+      'Saaf AI is reading the label and searching for warnings. This can take a minute…';
+
+  @override
+  String get creamNotFoundBody =>
+      'Try a clear photo of the front and of the ingredient list, or type the exact name.';
+
+  @override
+  String get creamDangerTitle => 'Danger: don’t use it';
+
+  @override
+  String get creamDangerBody =>
+      'Stop using it. Mercury, hydroquinone and strong steroids can harm your skin and your health. If you used it for weeks, see a doctor or dermatologist: stopping a steroid cream can cause a flare that they can help with.';
+
+  @override
+  String get creamCautionTitle => 'Be careful';
+
+  @override
+  String get creamCautionBody =>
+      'Use it only with care, and ask a dermatologist if you are unsure. Avoid it on broken or irritated skin.';
+
+  @override
+  String get creamNoKnownTitle => 'No known problem found';
+
+  @override
+  String get creamNoKnownBody =>
+      'We found no warnings about this product. It can still cause problems nobody has reported, so patch test it first.';
+
+  @override
+  String get creamOnLabel => 'On the label';
+
+  @override
+  String get creamFound => 'What Saaf AI found';
+
+  @override
+  String get creamNoIngredients =>
+      'No ingredient list is printed on the pack, so nobody can tell what is in it.';
+
+  @override
+  String creamFlagMercury(String ingredient) {
+    return 'Mercury ($ingredient): damages skin, kidneys and nerves.';
+  }
+
+  @override
+  String creamFlagHydroquinone(String ingredient) {
+    return 'Hydroquinone ($ingredient): a bleaching agent that can cause dark patches; prescription-only in many countries.';
+  }
+
+  @override
+  String creamFlagStrongSteroid(String ingredient) {
+    return 'Strong steroid ($ingredient): thins the skin and causes acne and rebound redness.';
+  }
+
+  @override
+  String creamFlagSteroid(String ingredient) {
+    return 'Steroid ($ingredient): not for daily face use without a doctor.';
+  }
+
+  @override
+  String creamFlagRetinoid(String ingredient) {
+    return 'Prescription retinoid ($ingredient): use only as a doctor says, never in pregnancy.';
+  }
+
+  @override
+  String get creamDisclaimer =>
+      'Saaf can only check what is printed and what has been reported. This is not a lab test or medical advice.';
+
+  @override
+  String get creamCheckAnother => 'Check another cream';
+
+  @override
+  String get creamHomeTitle => 'Is your cream safe?';
+
+  @override
+  String get creamHomeBody =>
+      'Check fairness and “formula” creams for mercury and steroids.';
+
+  @override
+  String get creamHomeAction => 'Check a cream';
 }

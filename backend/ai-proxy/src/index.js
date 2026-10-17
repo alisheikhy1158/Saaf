@@ -4,6 +4,7 @@
 //   POST /v1/routine   {context, scan, current}               ->  {summary, picks, current}
 //   POST /v1/product   {image | barcode | qr, context}       ->  {found, title, insight, webChecked}
 //   POST /v1/skin      {image, context}                       ->  {usable, summary, metrics} | {usable: false, problem}
+//   POST /v1/safety    {image | barcode | qr | name, context} ->  {found, title, level, summary, ingredients, findings}
 //   POST /v1/weather   {lat, lon}                             ->  {temperature, humidity, uvNow, uvMax, aqi, pm25}
 //   POST /v1/report    {reason, replyId, replyText}          ->  {ok: true}
 //   GET  /health                                           ->  {ok: true}
@@ -15,9 +16,10 @@
 import { AuthError, verifyFirebaseToken } from './auth.js';
 import { UpstreamError, askGroq } from './groq.js';
 import { lookUpProduct, planRoutine } from './products.js';
+import { checkSafety } from './safety.js';
 import { analyseSkin } from './skin.js';
 import { fetchSkinWeather } from './weather.js';
-import { validateChat, validateProduct, validateReport, validateRoutine, validateSkin, validateWeather } from './validate.js';
+import { validateChat, validateProduct, validateReport, validateRoutine, validateSafety, validateSkin, validateWeather } from './validate.js';
 
 // A request (with up to three photos) may be this big.
 const MAX_BODY_BYTES = 9_000_000;
@@ -109,6 +111,9 @@ const routine = (request, env, deps) =>
 const skin = (request, env, deps) =>
   aiRequest(request, env, deps, validateSkin, (value, options) => analyseSkin(env, value, options));
 
+const safety = (request, env, deps) =>
+  aiRequest(request, env, deps, validateSafety, (value, options) => checkSafety(env, value, options));
+
 const product = (request, env, deps) =>
   aiRequest(request, env, deps, validateProduct, (value, options) => lookUpProduct(env, value, options));
 
@@ -165,6 +170,7 @@ export async function handle(request, env, deps = {}) {
     if (request.method === 'POST' && url.pathname === '/v1/routine') return await routine(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/product') return await product(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/skin') return await skin(request, env, deps);
+    if (request.method === 'POST' && url.pathname === '/v1/safety') return await safety(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/weather') return await weather(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/report') return await report(request, env, deps);
     return json({ error: 'not_found' }, 404);

@@ -305,7 +305,8 @@ abstract final class LegalDocuments {
               'review pages and Reddit, for products and reviews; your safety '
               'answers are never sent, and your phone checks its suggestions '
               'against them. When you '
-              'look a product up, we send only what you choose: its barcode '
+              'look a product up or check a cream for harmful ingredients, we send '
+              'only what you choose: its name, its barcode '
               'number, the text of its QR code, or a photo of its label. The AI '
               'model may search the web for that product; it never searches for '
               'you.',

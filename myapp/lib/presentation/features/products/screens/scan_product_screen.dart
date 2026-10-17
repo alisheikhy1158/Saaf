@@ -182,6 +182,11 @@ class _ScanProductScreenState extends ConsumerState<ScanProductScreen> {
             ),
           ),
           SaafButton.outline(
+            label: l10n.creamTitle,
+            leadingIcon: Icons.health_and_safety_outlined,
+            onPressed: () => context.push(SaafRoute.creamCheck.path),
+          ),
+          SaafButton.outline(
             label: l10n.scanProductPhotoButton,
             leadingIcon: Icons.photo_camera_outlined,
             onPressed: () => context.push(

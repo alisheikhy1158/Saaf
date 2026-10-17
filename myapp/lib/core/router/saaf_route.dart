@@ -114,6 +114,15 @@ class SaafRoute {
     'Products you use now',
   );
 
+  /// "Is this cream safe?", from Home and the product scan. Not a Figma
+  /// screen, so not in [all].
+  static const creamCheck = SaafRoute._(
+    0,
+    'creamCheck',
+    '/cream-check',
+    'Is this cream safe?',
+  );
+
   /// The tissue test for the skin type, opened from the skin quiz (step 1). Not
   /// a Figma screen, so not in [all].
   static const skinTypeTest = SaafRoute._(

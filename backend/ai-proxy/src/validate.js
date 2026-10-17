@@ -169,6 +169,19 @@ export function validateSkin(body) {
   return { ok: true, value: { image, context: cleanContext(body.context) } };
 }
 
+/** A product to check for harmful ingredients: a label photo, barcode, QR text or a typed name. */
+export function validateSafety(body) {
+  if (body && typeof body === 'object' && !Array.isArray(body) && typeof body.name === 'string' && body.name.trim()) {
+    if (['image', 'barcode', 'qr'].some((k) => body[k])) return { ok: false, error: 'bad_request' };
+    return {
+      ok: true,
+      value: { context: cleanContext(body.context), image: null, barcode: null, qr: null, name: cleanText(body.name, 120) },
+    };
+  }
+  const checked = validateProduct(body);
+  return checked.ok ? { ok: true, value: { ...checked.value, name: null } } : checked;
+}
+
 /** A place for the skin weather, rounded to about 1 km (never more precise). */
 export function validateWeather(body) {
   const lat = body?.lat;

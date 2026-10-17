@@ -6,10 +6,11 @@ import { AuthError, verifyFirebaseToken } from '../src/auth.js';
 import { askGroq, buildMessages, cleanReply } from '../src/groq.js';
 import { handle } from '../src/index.js';
 import { lookUpProduct, planRoutine } from '../src/products.js';
+import { checkSafety } from '../src/safety.js';
 import { analyseSkin } from '../src/skin.js';
 import { fetchSkinWeather } from '../src/weather.js';
 import { buildSystemPrompt } from '../src/prompt.js';
-import { sniffImage, validateChat, validateProduct, validateReport, validateRoutine, validateSkin, validateWeather } from '../src/validate.js';
+import { sniffImage, validateChat, validateProduct, validateReport, validateRoutine, validateSafety, validateSkin, validateWeather } from '../src/validate.js';
 
 const PROJECT = 'saaf-test';
 const NOW = Date.UTC(2026, 9, 17, 12, 0, 0);
@@ -631,4 +632,79 @@ test('server: weather needs sign-in, is cached per place and does not use the AI
   assert.equal(second.status, 200);
   assert.equal(urls.length, 2); // the second came from the cache
   assert.equal([...LIMITS.store.keys()].some((k) => k.startsWith('d:')), false);
+});
+
+// ---------------------------------------------------------------- is this cream safe?
+const safetyLabel = (extra = {}) => JSON.stringify({
+  isProduct: true, brand: 'Glow', name: 'Formula Beauty Cream', ingredients: ['Mercurous chloride', 'Paraffin'],
+  ingredientsPrinted: true, claims: ['whitening'], ...extra,
+});
+const SAFETY_NOTES = 'Notes: PSQCA tested Glow Formula Beauty Cream and found mercury: https://psqca.example.gov.pk/notice/12 . Users report peeling.';
+const safetyPlan = (extra = {}) => JSON.stringify({
+  found: true,
+  title: 'Glow Formula Beauty Cream',
+  level: 'danger',
+  summary: 'Reported to contain mercury.',
+  findings: [
+    { text: 'Pakistan standards authority found mercury.', source: 'https://psqca.example.gov.pk/notice/12' },
+    { text: 'A made-up warning.', source: 'https://invented.example/x' },
+  ],
+  ...extra,
+});
+
+test('validate safety: one of photo, barcode, QR or a typed name', () => {
+  assert.equal(validateSafety({ name: '  Faiza cream ' }).value.name, 'Faiza cream');
+  assert.equal(validateSafety({ image: JPEG }).ok, true);
+  assert.equal(validateSafety({}).ok, false);
+  assert.equal(validateSafety({ name: 'x', barcode: '12345678' }).ok, false);
+});
+
+test('safety: reads the label, searches for warnings, then strict JSON', async () => {
+  const groq = groqSequence([safetyLabel(), SAFETY_NOTES, safetyPlan()]);
+  const result = await checkSafety({ GROQ_API_KEY: 'k' }, validateSafety({ image: JPEG }).value, { fetchImpl: groq.fetchImpl });
+  assert.equal(groq.bodies[0].model, 'qwen/qwen3.8-27b');
+  assert.deepEqual(groq.bodies[1].tools, [{ type: 'browser_search' }]);
+  const asked = JSON.stringify(groq.bodies[1].messages);
+  for (const must of ['mercury', 'steroid', 'hydroquinone', 'PSQCA', 'DRAP', 'Formula Beauty Cream', 'Mercurous chloride']) {
+    assert.ok(asked.includes(must), must);
+  }
+  assert.equal(groq.bodies[2].response_format.json_schema.strict, true);
+  assert.deepEqual(result, {
+    found: true,
+    title: 'Glow Formula Beauty Cream',
+    level: 'danger',
+    summary: 'Reported to contain mercury.',
+    ingredients: ['Mercurous chloride', 'Paraffin'],
+    ingredientsPrinted: true,
+    findings: [
+      { text: 'Pakistan standards authority found mercury.', source: 'https://psqca.example.gov.pk/notice/12' },
+      { text: 'A made-up warning.', source: '' },
+    ],
+  });
+});
+
+test('safety: a typed name skips the photo step', async () => {
+  const groq = groqSequence([SAFETY_NOTES, safetyPlan()]);
+  await checkSafety({ GROQ_API_KEY: 'k' }, validateSafety({ name: 'Glow Formula' }).value, { fetchImpl: groq.fetchImpl });
+  assert.equal(groq.bodies.length, 2);
+  assert.ok(JSON.stringify(groq.bodies[0].messages).includes('Glow Formula'));
+});
+
+test('safety: not a product photo stops early; an unknown level becomes caution', async () => {
+  const notProduct = groqSequence([safetyLabel({ isProduct: false })]);
+  assert.deepEqual(
+    await checkSafety({ GROQ_API_KEY: 'k' }, validateSafety({ image: JPEG }).value, { fetchImpl: notProduct.fetchImpl }),
+    { found: false },
+  );
+  const odd = groqSequence([SAFETY_NOTES, safetyPlan({ level: 'totally safe' })]);
+  const result = await checkSafety({ GROQ_API_KEY: 'k' }, validateSafety({ name: 'x' }).value, { fetchImpl: odd.fetchImpl });
+  assert.equal(result.level, 'caution');
+});
+
+test('server: safety check needs sign-in', async () => {
+  assert.equal((await call('/v1/safety', { body: { name: 'x' } })).status, 401);
+  const token = await makeToken();
+  const r = await call('/v1/safety', { token, body: { name: 'Glow' }, groq: groqSequence([SAFETY_NOTES, safetyPlan()]).fetchImpl });
+  assert.equal(r.status, 200);
+  assert.equal(r.json.level, 'danger');
 });

@@ -4339,6 +4339,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Abbottabad'**
   String get cityAbbottabad;
+
+  /// Title of the cream check.
+  ///
+  /// In en, this message translates to:
+  /// **'Is this cream safe?'**
+  String get creamTitle;
+
+  /// What the cream check does.
+  ///
+  /// In en, this message translates to:
+  /// **'Fairness and “formula” creams are often found to contain mercury, hydroquinone or strong steroids, which can badly harm skin. Saaf AI reads the label and searches for warnings about this exact product.'**
+  String get creamIntro;
+
+  /// Label of the name field.
+  ///
+  /// In en, this message translates to:
+  /// **'Cream name'**
+  String get creamNameLabel;
+
+  /// Hint of the name field.
+  ///
+  /// In en, this message translates to:
+  /// **'Type the name, or take a photo of the label'**
+  String get creamNameHint;
+
+  /// Button: photograph the label.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of the label'**
+  String get creamTakePhoto;
+
+  /// What the cream check sends.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the photo or the name goes to Saaf AI (Groq, through Saaf’s server), nothing about you.'**
+  String get creamWhatIsSent;
+
+  /// Button that sends the check.
+  ///
+  /// In en, this message translates to:
+  /// **'Check it'**
+  String get creamCheck;
+
+  /// Shown while checking.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI is reading the label and searching for warnings. This can take a minute…'**
+  String get creamChecking;
+
+  /// When the product was not recognised.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a clear photo of the front and of the ingredient list, or type the exact name.'**
+  String get creamNotFoundBody;
+
+  /// Verdict: danger.
+  ///
+  /// In en, this message translates to:
+  /// **'Danger: don’t use it'**
+  String get creamDangerTitle;
+
+  /// Advice for danger.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop using it. Mercury, hydroquinone and strong steroids can harm your skin and your health. If you used it for weeks, see a doctor or dermatologist: stopping a steroid cream can cause a flare that they can help with.'**
+  String get creamDangerBody;
+
+  /// Verdict: caution.
+  ///
+  /// In en, this message translates to:
+  /// **'Be careful'**
+  String get creamCautionTitle;
+
+  /// Advice for caution.
+  ///
+  /// In en, this message translates to:
+  /// **'Use it only with care, and ask a dermatologist if you are unsure. Avoid it on broken or irritated skin.'**
+  String get creamCautionBody;
+
+  /// Verdict: nothing found (never 'safe').
+  ///
+  /// In en, this message translates to:
+  /// **'No known problem found'**
+  String get creamNoKnownTitle;
+
+  /// Advice when nothing was found.
+  ///
+  /// In en, this message translates to:
+  /// **'We found no warnings about this product. It can still cause problems nobody has reported, so patch test it first.'**
+  String get creamNoKnownBody;
+
+  /// Heading of the ingredients the phone flagged.
+  ///
+  /// In en, this message translates to:
+  /// **'On the label'**
+  String get creamOnLabel;
+
+  /// Heading of the findings.
+  ///
+  /// In en, this message translates to:
+  /// **'What Saaf AI found'**
+  String get creamFound;
+
+  /// When no ingredients are printed.
+  ///
+  /// In en, this message translates to:
+  /// **'No ingredient list is printed on the pack, so nobody can tell what is in it.'**
+  String get creamNoIngredients;
+
+  /// Flag.
+  ///
+  /// In en, this message translates to:
+  /// **'Mercury ({ingredient}): damages skin, kidneys and nerves.'**
+  String creamFlagMercury(String ingredient);
+
+  /// Flag.
+  ///
+  /// In en, this message translates to:
+  /// **'Hydroquinone ({ingredient}): a bleaching agent that can cause dark patches; prescription-only in many countries.'**
+  String creamFlagHydroquinone(String ingredient);
+
+  /// Flag.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong steroid ({ingredient}): thins the skin and causes acne and rebound redness.'**
+  String creamFlagStrongSteroid(String ingredient);
+
+  /// Flag.
+  ///
+  /// In en, this message translates to:
+  /// **'Steroid ({ingredient}): not for daily face use without a doctor.'**
+  String creamFlagSteroid(String ingredient);
+
+  /// Flag.
+  ///
+  /// In en, this message translates to:
+  /// **'Prescription retinoid ({ingredient}): use only as a doctor says, never in pregnancy.'**
+  String creamFlagRetinoid(String ingredient);
+
+  /// Limits of the check.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf can only check what is printed and what has been reported. This is not a lab test or medical advice.'**
+  String get creamDisclaimer;
+
+  /// Starts again.
+  ///
+  /// In en, this message translates to:
+  /// **'Check another cream'**
+  String get creamCheckAnother;
+
+  /// Home card title.
+  ///
+  /// In en, this message translates to:
+  /// **'Is your cream safe?'**
+  String get creamHomeTitle;
+
+  /// Home card body.
+  ///
+  /// In en, this message translates to:
+  /// **'Check fairness and “formula” creams for mercury and steroids.'**
+  String get creamHomeBody;
+
+  /// Home card button.
+  ///
+  /// In en, this message translates to:
+  /// **'Check a cream'**
+  String get creamHomeAction;
 }
 
 class _AppLocalizationsDelegate

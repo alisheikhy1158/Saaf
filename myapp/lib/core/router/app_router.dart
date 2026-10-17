@@ -16,6 +16,7 @@ import 'package:saaf/presentation/features/onboarding/screens/skin_quiz_screen.d
 import 'package:saaf/presentation/features/onboarding/screens/skin_type_test_screen.dart';
 import 'package:saaf/presentation/features/onboarding/screens/welcome_screen.dart';
 import 'package:saaf/presentation/features/paywall/screens/paywall_screen.dart';
+import 'package:saaf/presentation/features/products/screens/cream_safety_screen.dart';
 import 'package:saaf/presentation/features/products/screens/my_products_screen.dart';
 import 'package:saaf/presentation/features/products/screens/product_ai_screen.dart';
 import 'package:saaf/presentation/features/products/screens/product_scan_result_screen.dart';
@@ -135,6 +136,11 @@ GoRouter buildAppRouter({
         path: SaafRoute.myProducts.path,
         builder: (context, state) =>
             MyProductsScreen(setup: state.uri.queryParameters['setup'] == '1'),
+      ),
+      GoRoute(
+        name: SaafRoute.creamCheck.name,
+        path: SaafRoute.creamCheck.path,
+        builder: (context, state) => const CreamSafetyScreen(),
       ),
       GoRoute(
         name: SaafRoute.skinTypeTest.name,

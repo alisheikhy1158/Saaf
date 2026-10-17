@@ -9,11 +9,13 @@ import 'package:saaf/data/services/web/fake_ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
+import 'package:saaf/domain/services/ai_safety_service.dart';
 import 'package:saaf/domain/services/ai_skin_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
 import 'package:saaf/domain/services/photo_shrinker.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/usecases/ask_coach.dart';
+import 'package:saaf/domain/usecases/check_cream_safety.dart';
 import 'package:saaf/domain/usecases/estimate_skin.dart';
 import 'package:saaf/domain/usecases/look_up_product.dart';
 import 'package:saaf/domain/usecases/plan_routine.dart';
@@ -62,6 +64,23 @@ AiSkinService aiSkinService(Ref ref) => _pretendAi
         baseUrl: Env.aiProxyUrl,
         tokens: ref.watch(idTokenSourceProvider),
       );
+
+/// Saaf AI's cream check; pretend in the same builds as the coach.
+@Riverpod(keepAlive: true)
+AiSafetyService aiSafetyService(Ref ref) => _pretendAi
+    ? const FakeAiSafetyService()
+    : HttpAiCoachService(
+        baseUrl: Env.aiProxyUrl,
+        tokens: ref.watch(idTokenSourceProvider),
+        // Reading the label and a web search take a while.
+        timeout: const Duration(seconds: 150),
+      );
+
+@Riverpod(keepAlive: true)
+CheckCreamSafety checkCreamSafety(Ref ref) => CheckCreamSafety(
+  service: ref.watch(aiSafetyServiceProvider),
+  consent: ref.watch(aiConsentStoreProvider),
+);
 
 @Riverpod(keepAlive: true)
 EstimateSkin estimateSkin(Ref ref) => EstimateSkin(
