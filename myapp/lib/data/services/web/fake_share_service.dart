@@ -4,7 +4,7 @@ import 'package:saaf/domain/services/share_service.dart';
 /// Remembers what would have been shared (tests and Chrome demos).
 class FakeShareService implements ShareService {
   final List<String> shared = [];
-  final List<SharedImage> images = [];
+  final List<SharedFile> files = [];
 
   @override
   Future<Result<void>> shareText(String text) async {
@@ -13,8 +13,8 @@ class FakeShareService implements ShareService {
   }
 
   @override
-  Future<Result<void>> shareImage(SharedImage image, {String? text}) async {
-    images.add(image);
+  Future<Result<void>> shareFile(SharedFile file, {String? text}) async {
+    files.add(file);
     return const Ok<void>(null);
   }
 }

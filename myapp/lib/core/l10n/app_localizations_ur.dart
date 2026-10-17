@@ -2873,4 +2873,16 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get bodyCareNoBleach =>
       'جسم پر کبھی بلیچ یا رنگ گورا کرنے والی کریم نہ لگائیں: یہ جلد کو پتلا کرتی ہیں اور مزید دھبے چھوڑ سکتی ہیں۔ فرق مہینوں میں آتا ہے؛ اگر تیزی سے پھیلے تو ڈاکٹر سے ملیں۔';
+
+  @override
+  String get profileSectionDoctor => 'آپ کا ڈرماٹولوجسٹ';
+
+  @override
+  String get dermFind => 'ڈرماٹولوجسٹ تلاش کریں';
+
+  @override
+  String get dermReport => 'اپنے ڈاکٹر کے لیے رپورٹ';
+
+  @override
+  String get dermReportFailed => 'رپورٹ شیئر نہیں ہو سکی۔ دوبارہ کوشش کریں۔';
 }

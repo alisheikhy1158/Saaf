@@ -4939,6 +4939,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Never use bleaching or whitening creams on the body: they thin the skin and can leave worse patches. Change takes months; if it spreads fast, see a doctor.'**
   String get bodyCareNoBleach;
+
+  /// Profile section overline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your dermatologist'**
+  String get profileSectionDoctor;
+
+  /// Opens a Maps search.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a dermatologist'**
+  String get dermFind;
+
+  /// Shares a PDF summary.
+  ///
+  /// In en, this message translates to:
+  /// **'Report for your doctor'**
+  String get dermReport;
+
+  /// Report share failed.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t share the report. Please try again.'**
+  String get dermReportFailed;
 }
 
 class _AppLocalizationsDelegate

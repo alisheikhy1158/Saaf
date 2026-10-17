@@ -26,13 +26,13 @@ class PluginShareService implements ShareService {
   }
 
   @override
-  Future<Result<void>> shareImage(SharedImage image, {String? text}) async {
-    if (image.bytes.isEmpty) return const Err(ValidationFailure('image'));
+  Future<Result<void>> shareFile(SharedFile file, {String? text}) async {
+    if (file.bytes.isEmpty) return const Err(ValidationFailure('file'));
     try {
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile.fromData(image.bytes, mimeType: image.mimeType)],
-          fileNameOverrides: [image.fileName],
+          files: [XFile.fromData(file.bytes, mimeType: file.mimeType)],
+          fileNameOverrides: [file.fileName],
           text: text,
         ),
       );

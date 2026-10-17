@@ -2872,4 +2872,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get bodyCareNoBleach =>
       'Never use bleaching or whitening creams on the body: they thin the skin and can leave worse patches. Change takes months; if it spreads fast, see a doctor.';
+
+  @override
+  String get profileSectionDoctor => 'Your dermatologist';
+
+  @override
+  String get dermFind => 'Find a dermatologist';
+
+  @override
+  String get dermReport => 'Report for your doctor';
+
+  @override
+  String get dermReportFailed =>
+      'We couldn’t share the report. Please try again.';
 }

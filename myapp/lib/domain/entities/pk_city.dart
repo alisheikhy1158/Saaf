@@ -25,6 +25,9 @@ class PkCity {
     PkCity('abbottabad', 34.15, 73.21),
   ];
 
+  /// "Lahore" (the English name, for searches).
+  String get englishName => id[0].toUpperCase() + id.substring(1);
+
   static PkCity? byId(String? id) {
     for (final city in all) {
       if (city.id == id) return city;

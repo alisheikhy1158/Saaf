@@ -9,6 +9,10 @@ import 'package:saaf/domain/entities/auth_session.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/presentation/features/profile/screens/profile_screen.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
+import 'package:saaf/presentation/providers/analysis_providers.dart';
+import 'package:saaf/presentation/providers/product_providers.dart';
+import 'package:saaf/data/services/web/fake_share_service.dart';
+import 'package:saaf/data/services/web/fake_external_link_service.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
 
@@ -135,6 +139,54 @@ void main() {
         await settings.read(SettingNames.lifeEvent),
         contains('My wedding'),
       );
+    });
+  });
+
+  group('your dermatologist', () {
+    late FakeExternalLinkService links;
+    late FakeShareService share;
+
+    Future<void> openWith(
+      WidgetTester tester,
+      InMemorySettingsRepository settings,
+    ) async {
+      links = FakeExternalLinkService();
+      share = FakeShareService();
+      await pumpSaafApp(
+        tester,
+        location: '/profile',
+        overrides: [
+          ..._overrides(settings),
+          externalLinkServiceProvider.overrideWithValue(links),
+          shareServiceProvider.overrideWithValue(share),
+        ],
+      );
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+    }
+
+    testWidgets('finds a dermatologist in the chosen city', (tester) async {
+      final settings = InMemorySettingsRepository();
+      await settings.write(SettingNames.weatherCity, 'lahore');
+      await openWith(tester, settings);
+      await _tap(tester, find.text('Find a dermatologist'));
+      expect(links.opened.single, contains('dermatologist+in+Lahore'));
+    });
+
+    testWidgets('shares a PDF report for the doctor, only on a tap', (
+      tester,
+    ) async {
+      await openWith(tester, InMemorySettingsRepository());
+      expect(share.files, isEmpty);
+      await _tap(tester, find.text('Report for your doctor'));
+      for (var i = 0; i < 5; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 50)),
+        );
+        await tester.pump();
+      }
+      expect(share.files.single.mimeType, 'application/pdf');
     });
   });
 }

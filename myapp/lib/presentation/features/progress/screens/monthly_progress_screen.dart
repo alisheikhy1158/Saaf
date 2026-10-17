@@ -776,8 +776,8 @@ class _ShareAnimationState extends ConsumerState<_ShareAnimation> {
         ? null
         : await ref
               .read(shareServiceProvider)
-              .shareImage(
-                SharedImage(
+              .shareFile(
+                SharedFile(
                   bytes: gif,
                   mimeType: 'image/gif',
                   fileName: 'saaf-progress.gif',

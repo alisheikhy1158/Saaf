@@ -139,7 +139,7 @@ class _Shrinker implements PhotoShrinker {
 void main() {
   setUp(() {
     _share.shared.clear();
-    _share.images.clear();
+    _share.files.clear();
   });
 
   group('before & after animation', () {
@@ -147,7 +147,7 @@ void main() {
       tester,
     ) async {
       await _open(tester, overrides: _with(view: await _view()));
-      expect(_share.images, isEmpty);
+      expect(_share.files, isEmpty);
       await tester.ensureVisible(find.text('Share before & after'));
       await tester.tap(find.text('Share before & after'));
       for (var i = 0; i < 6; i++) {
@@ -156,9 +156,9 @@ void main() {
         );
         await tester.pump();
       }
-      expect(_share.images, hasLength(1));
-      expect(_share.images.single.mimeType, 'image/gif');
-      expect(_share.images.single.bytes, isNotEmpty);
+      expect(_share.files, hasLength(1));
+      expect(_share.files.single.mimeType, 'image/gif');
+      expect(_share.files.single.bytes, isNotEmpty);
     });
   });
 

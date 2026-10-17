@@ -13,7 +13,9 @@ import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/entities/safety_check.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/cream_safety_controller.dart';
+import 'package:saaf/core/utils/dermatologist_search.dart';
 import 'package:saaf/presentation/providers/product_providers.dart';
+import 'package:saaf/presentation/providers/weather_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
 import 'package:saaf/presentation/widgets/common/saaf_icon_circle.dart';
@@ -434,6 +436,17 @@ class _Verdict extends ConsumerWidget {
               ],
             ),
         ],
+        if (check.level == SafetyLevel.danger)
+          SaafButton.outline(
+            label: l10n.dermFind,
+            leadingIcon: Icons.local_hospital_outlined,
+            onPressed: () async {
+              final city = await ref.read(weatherCityProvider.future);
+              await ref
+                  .read(externalLinkServiceProvider)
+                  .open(dermatologistSearchUrl(city?.englishName));
+            },
+          ),
         Text(
           l10n.creamDisclaimer,
           style: tokens.styles.legal.copyWith(color: tokens.textMeta),

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:saaf/presentation/providers/weather_providers.dart';
+import 'package:saaf/presentation/providers/product_providers.dart';
+import 'package:saaf/presentation/providers/doctor_report_providers.dart';
+import 'package:saaf/domain/services/share_service.dart';
+import 'package:saaf/core/utils/dermatologist_search.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/life_providers.dart';
 import 'package:saaf/domain/entities/life_event.dart';
@@ -169,6 +174,23 @@ class ProfileScreen extends ConsumerWidget {
                       ref.watch(lifeEventControllerProvider).value?.name ??
                       l10n.profileValueNotSet,
                   onTap: () => _showSheet(context, const _EventSheet()),
+                ),
+              ],
+            ),
+            SizedBox(height: space.sectionGapSmall),
+            SaafOverline(l10n.profileSectionDoctor),
+            SizedBox(height: space.x8),
+            SaafSettingsGroup(
+              rows: [
+                SaafSettingsRow(
+                  icon: Icons.local_hospital_outlined,
+                  title: l10n.dermFind,
+                  onTap: () => _findDermatologist(ref),
+                ),
+                SaafSettingsRow(
+                  icon: Icons.picture_as_pdf_outlined,
+                  title: l10n.dermReport,
+                  onTap: () => _shareReport(context, ref),
                 ),
               ],
             ),
@@ -504,6 +526,33 @@ class _ProCard extends StatelessWidget {
 }
 
 /// The frame every bottom sheet shares: a title, the content and a Done button.
+/// Opens a Maps search for dermatologists in the user's weather city.
+Future<void> _findDermatologist(WidgetRef ref) async {
+  final city = await ref.read(weatherCityProvider.future);
+  await ref
+      .read(externalLinkServiceProvider)
+      .open(dermatologistSearchUrl(city?.englishName));
+}
+
+/// Makes the doctor's report and opens the share sheet (only on this tap).
+Future<void> _shareReport(BuildContext context, WidgetRef ref) async {
+  final l10n = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.of(context);
+  final pdf = await makeDoctorReport(ref);
+  final result = await ref
+      .read(shareServiceProvider)
+      .shareFile(
+        SharedFile(
+          bytes: pdf,
+          mimeType: 'application/pdf',
+          fileName: 'saaf-skin-summary.pdf',
+        ),
+      );
+  if (!result.isOk) {
+    messenger.showSnackBar(SnackBar(content: Text(l10n.dermReportFailed)));
+  }
+}
+
 class _SheetFrame extends StatelessWidget {
   const _SheetFrame({
     required this.title,

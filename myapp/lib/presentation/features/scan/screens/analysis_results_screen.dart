@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:saaf/presentation/providers/weather_providers.dart';
+import 'package:saaf/presentation/providers/product_providers.dart';
+import 'package:saaf/core/utils/dermatologist_search.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:saaf/core/config/env.dart';
@@ -176,6 +179,7 @@ class _Results extends StatelessWidget {
         _AiSeen(metrics: analysis.metrics),
         SizedBox(height: space.x16),
         SaafDisclaimer(l10n.resultsDisclaimer),
+        const _FindDermatologist(),
       ],
     );
   }
@@ -735,6 +739,29 @@ class _AiSeen extends StatelessWidget {
         ),
         SaafAiText(lines.join('\n')),
       ],
+    );
+  }
+}
+
+/// For anything that worries the user: dermatologists in their city.
+class _FindDermatologist extends ConsumerWidget {
+  const _FindDermatologist();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: SaafButton.text(
+        label: l10n.dermFind,
+        leadingIcon: Icons.local_hospital_outlined,
+        onPressed: () async {
+          final city = await ref.read(weatherCityProvider.future);
+          await ref
+              .read(externalLinkServiceProvider)
+              .open(dermatologistSearchUrl(city?.englishName));
+        },
+      ),
     );
   }
 }
