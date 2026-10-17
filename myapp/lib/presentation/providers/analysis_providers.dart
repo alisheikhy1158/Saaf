@@ -7,55 +7,43 @@ import 'package:saaf/data/services/ai_skin_estimate_json.dart';
 import 'package:saaf/domain/entities/ai_skin_estimate.dart';
 import 'package:saaf/domain/entities/completed_scan.dart';
 import 'package:saaf/core/config/env.dart';
-import 'package:saaf/data/services/demo_skin_analyzer.dart';
 import 'package:saaf/data/services/plugin_share_service.dart';
 import 'package:saaf/data/services/web/fake_share_service.dart';
 import 'package:saaf/domain/entities/skin_analysis.dart';
 import 'package:saaf/domain/services/share_service.dart';
-import 'package:saaf/domain/services/skin_analyzer.dart';
-import 'package:saaf/domain/usecases/analyse_scan.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
 import 'package:saaf/presentation/providers/progress_providers.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
 import 'package:saaf/presentation/providers/no_auto_retry.dart';
-import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 
 part 'analysis_providers.g.dart';
-
-/// PLACEHOLDER analyser (estimates from the quiz answers) until real on-device
-/// image analysis exists; swap it here (see handoff.md).
-@Riverpod(keepAlive: true)
-SkinAnalyzer skinAnalyzer(Ref ref) => const DemoSkinAnalyzer();
-
-@Riverpod(keepAlive: true)
-AnalyseScan analyseScan(Ref ref) =>
-    AnalyseScan(ref.watch(skinAnalyzerProvider));
 
 @Riverpod(keepAlive: true)
 ShareService shareService(Ref ref) =>
     Env.fakeCamera ? FakeShareService() : PluginShareService();
 
-/// The results for the latest finished scan; null when there is none yet.
-/// Saaf AI's estimate from the photo when the user asked for one, otherwise
-/// the starting guess from the quiz (the screen says which). A failure
-/// surfaces as an error state the screen can retry.
+/// The results for the latest finished scan: Saaf AI's estimate from its
+/// front photo. Null when there is no scan, or the scan has not been analysed
+/// yet; the app never shows numbers that were not read from the photo.
 @Riverpod(retry: noAutoRetry)
 Future<SkinAnalysis?> skinAnalysis(Ref ref) async {
   final scan = ref.watch(completedScanProvider);
   if (scan == null) return null;
   final estimates = await ref.watch(aiSkinEstimatesProvider.future);
+  return analysisOf(scan, estimates);
+}
+
+/// [scan]'s results from Saaf AI's estimate, or null when it has none.
+SkinAnalysis? analysisOf(
+  CompletedScan scan,
+  Map<String, AiSkinEstimate> estimates,
+) {
   final estimate = estimates[scan.id];
-  if (estimate != null && estimate.usable) {
-    return estimate.toAnalysis(scanId: scan.id, takenAt: scan.takenAt);
-  }
-  final profile = ref.watch(skinProfileControllerProvider);
-  final result = await ref.watch(analyseScanProvider)(scan, profile);
-  return result.when(
-    ok: (analysis) => analysis,
-    err: (failure) => throw failure,
-  );
+  return estimate != null && estimate.usable
+      ? estimate.toAnalysis(scanId: scan.id, takenAt: scan.takenAt)
+      : null;
 }
 
 /// Saaf AI's skin estimates, by scan id, kept on the phone. Only usable ones

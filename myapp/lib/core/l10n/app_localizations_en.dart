@@ -965,7 +965,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get howWeScoreIntro =>
-      'Your Saaf skin score is a number from 40 to 100 that sums up how your skin looks today. It is a guide for choosing a routine, not a medical measurement.';
+      'Your Saaf skin score is a number from 40 to 100 that sums up how your skin looks in your front photo, as Saaf AI sees it. It is a rough guide for choosing a routine, not a medical measurement.';
 
   @override
   String get howWeScoreLooksTitle => 'What we look at';
@@ -997,7 +997,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get howWeScorePhotos =>
-      'The three photos stay on your phone and your score is worked out there. They go to the AI coach only if you choose that.';
+      'Saaf AI estimates the four measures from your front photo. It is sent only after you say yes (to Groq, through Saaf’s server) and is not kept there; your side photos stay on your phone. Each measure says how sure Saaf AI is, and there are no numbers until a photo is analysed.';
 
   @override
   String get howWeScoreMedicalTitle => 'Not medical advice';
@@ -2262,13 +2262,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get routineYours => 'Yours';
 
   @override
-  String get resultsQuizEstimateTitle => 'Estimated from your quiz answers';
-
-  @override
-  String get resultsQuizEstimateBody =>
-      'Your photo hasn’t been analysed, so these bars are a starting guess from what you told us, not a measurement.';
-
-  @override
   String get resultsAnalysePhoto => 'Analyse my photo with Saaf AI';
 
   @override
@@ -2315,4 +2308,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resultsFrontPhotoLabel => 'Your front photo';
+
+  @override
+  String get resultsNotAnalysedTitle => 'Not analysed yet';
+
+  @override
+  String get resultsNotAnalysedBody =>
+      'Saaf AI reads your front photo to estimate dark spots, breakouts, oiliness and hydration. Until then there are no numbers here, never a guess.';
+
+  @override
+  String get progressNotAnalysedTitle => 'Skin measures not analysed yet';
+
+  @override
+  String get progressNotAnalysedBody =>
+      'Saaf AI reads the front photos of both scans to see what changed. Until both are analysed there are no numbers here.';
+
+  @override
+  String get progressAnalyse => 'Analyse with Saaf AI';
+
+  @override
+  String get progressAnalyseConfirmTitle => 'Send your front photos?';
+
+  @override
+  String get progressAnalyseConfirmBody =>
+      'Only the front photos of these scans go to Saaf AI (Groq, through Saaf’s server) to estimate the four measures. They are not kept there. Your side photos stay on your phone.';
+
+  @override
+  String get progressAnalyseFailed =>
+      'Saaf AI couldn’t analyse every scan. Try again, or take a new scan in good light.';
 }

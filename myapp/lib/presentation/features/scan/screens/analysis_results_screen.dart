@@ -32,7 +32,10 @@ import 'package:saaf/presentation/widgets/common/saaf_status_message.dart';
 import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
 
 /// Figma 07 Analysis results: the score, the four measures and the way on to
-/// the routine. Also the empty (no scan yet), loading and error states.
+/// the routine. The numbers come only from Saaf AI reading the front photo;
+/// until then the screen says the scan is not analysed yet and offers to
+/// analyse it (never a guess). Also the empty (no scan yet), loading and error
+/// states.
 class AnalysisResultsScreen extends ConsumerWidget {
   const AnalysisResultsScreen({super.key});
 
@@ -41,6 +44,7 @@ class AnalysisResultsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final analysis = ref.watch(skinAnalysisProvider);
     final result = analysis.value;
+    final hasScan = ref.watch(completedScanProvider) != null;
 
     void back() =>
         context.canPop() ? context.pop() : context.go(SaafRoute.home.path);
@@ -66,7 +70,7 @@ class AnalysisResultsScreen extends ConsumerWidget {
             )
           : analysis.isLoading && !analysis.hasValue
           ? const _Loading()
-          : result == null
+          : result == null && !hasScan
           ? SaafStatusMessage(
               icon: Icons.photo_camera_outlined,
               title: l10n.resultsEmptyTitle,
@@ -74,8 +78,10 @@ class AnalysisResultsScreen extends ConsumerWidget {
               actionLabel: l10n.resultsEmptyAction,
               onAction: () => context.go(SaafRoute.selfieCapture.path),
             )
+          : result == null
+          ? const _SourceCard(analysis: null)
           : _Results(analysis: result),
-      bottom: result == null
+      bottom: result == null && !hasScan
           ? null
           : SaafButton.primary(
               label: l10n.resultsSeeRoutine,
@@ -167,10 +173,8 @@ class _Results extends StatelessWidget {
         SizedBox(height: space.x12),
         _ConcernGrid(metrics: analysis.metrics),
         SizedBox(height: space.x16),
-        if (analysis.source == AnalysisSource.aiPhoto) ...[
-          _AiSeen(metrics: analysis.metrics),
-          SizedBox(height: space.x16),
-        ],
+        _AiSeen(metrics: analysis.metrics),
+        SizedBox(height: space.x16),
         SaafDisclaimer(l10n.resultsDisclaimer),
       ],
     );
@@ -346,13 +350,14 @@ class _ConcernCard extends StatelessWidget {
   }
 }
 
-/// Says plainly what the numbers are based on: a guess from the quiz (with a
-/// way to have Saaf AI look at the front photo, asked before every send) or
-/// Saaf AI's estimate from the photo (how accurate it is, a report button).
+/// Says plainly where the numbers come from: Saaf AI's estimate from the photo
+/// (how accurate it is, a report button), or, when [analysis] is null, that
+/// the scan is not analysed yet, with a way to have Saaf AI look at the front
+/// photo (asked before every send).
 class _SourceCard extends ConsumerStatefulWidget {
   const _SourceCard({required this.analysis});
 
-  final SkinAnalysis analysis;
+  final SkinAnalysis? analysis;
 
   @override
   ConsumerState<_SourceCard> createState() => _SourceCardState();
@@ -453,6 +458,7 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
     );
     if (reason == null || !mounted) return;
     final analysis = widget.analysis;
+    if (analysis == null) return;
     final text = [
       analysis.summary ?? '',
       for (final m in analysis.metrics)
@@ -484,7 +490,8 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
     final tokens = context.saaf;
     final space = tokens.space;
     final consent = ref.watch(aiConsentStateProvider);
-    final fromAi = widget.analysis.source == AnalysisSource.aiPhoto;
+    final analysis = widget.analysis;
+    final fromAi = analysis != null;
 
     Widget button(String label, VoidCallback onPressed) => Align(
       alignment: AlignmentDirectional.centerStart,
@@ -497,7 +504,7 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
         children: [
           ExcludeSemantics(
             child: Icon(
-              fromAi ? Icons.auto_awesome : Icons.info_outline,
+              fromAi ? Icons.auto_awesome : Icons.photo_camera_front_outlined,
               size: tokens.size.icon,
             ),
           ),
@@ -505,7 +512,7 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
             child: Semantics(
               header: true,
               child: Text(
-                fromAi ? l10n.resultsAiTitle : l10n.resultsQuizEstimateTitle,
+                fromAi ? l10n.resultsAiTitle : l10n.resultsNotAnalysedTitle,
                 style: tokens.styles.listTitle,
               ),
             ),
@@ -527,10 +534,10 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
                   ),
         ],
       ),
-      if (fromAi && widget.analysis.summary != null)
-        Text(widget.analysis.summary!, style: tokens.styles.pointCaption),
+      if (analysis?.summary case final summary?)
+        Text(summary, style: tokens.styles.pointCaption),
       Text(
-        fromAi ? l10n.resultsAiAccuracy : l10n.resultsQuizEstimateBody,
+        fromAi ? l10n.resultsAiAccuracy : l10n.resultsNotAnalysedBody,
         style: tokens.styles.pointCaption,
       ),
       if (!fromAi) ...[

@@ -1793,7 +1793,7 @@ abstract class AppLocalizations {
   /// Intro paragraph of the explanation page.
   ///
   /// In en, this message translates to:
-  /// **'Your Saaf skin score is a number from 40 to 100 that sums up how your skin looks today. It is a guide for choosing a routine, not a medical measurement.'**
+  /// **'Your Saaf skin score is a number from 40 to 100 that sums up how your skin looks in your front photo, as Saaf AI sees it. It is a rough guide for choosing a routine, not a medical measurement.'**
   String get howWeScoreIntro;
 
   /// Section heading.
@@ -1847,7 +1847,7 @@ abstract class AppLocalizations {
   /// Paragraph about photo privacy.
   ///
   /// In en, this message translates to:
-  /// **'The three photos stay on your phone and your score is worked out there. They go to the AI coach only if you choose that.'**
+  /// **'Saaf AI estimates the four measures from your front photo. It is sent only after you say yes (to Groq, through Saaf’s server) and is not kept there; your side photos stay on your phone. Each measure says how sure Saaf AI is, and there are no numbers until a photo is analysed.'**
   String get howWeScorePhotos;
 
   /// Section heading.
@@ -3956,18 +3956,6 @@ abstract class AppLocalizations {
   /// **'Yours'**
   String get routineYours;
 
-  /// Notice: the numbers are a guess from the quiz.
-  ///
-  /// In en, this message translates to:
-  /// **'Estimated from your quiz answers'**
-  String get resultsQuizEstimateTitle;
-
-  /// Body of the quiz-estimate notice.
-  ///
-  /// In en, this message translates to:
-  /// **'Your photo hasn’t been analysed, so these bars are a starting guess from what you told us, not a measurement.'**
-  String get resultsQuizEstimateBody;
-
   /// Button that asks to send the front photo.
   ///
   /// In en, this message translates to:
@@ -4051,6 +4039,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your front photo'**
   String get resultsFrontPhotoLabel;
+
+  /// Shown instead of results until the photo is analysed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not analysed yet'**
+  String get resultsNotAnalysedTitle;
+
+  /// Body of the not-analysed state.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI reads your front photo to estimate dark spots, breakouts, oiliness and hydration. Until then there are no numbers here, never a guess.'**
+  String get resultsNotAnalysedBody;
+
+  /// Progress: scans not analysed yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Skin measures not analysed yet'**
+  String get progressNotAnalysedTitle;
+
+  /// Progress: body of the not-analysed card.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI reads the front photos of both scans to see what changed. Until both are analysed there are no numbers here.'**
+  String get progressNotAnalysedBody;
+
+  /// Button that analyses the scans' front photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyse with Saaf AI'**
+  String get progressAnalyse;
+
+  /// Confirm before sending the scans' front photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Send your front photos?'**
+  String get progressAnalyseConfirmTitle;
+
+  /// What is sent, in the progress confirm dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the front photos of these scans go to Saaf AI (Groq, through Saaf’s server) to estimate the four measures. They are not kept there. Your side photos stay on your phone.'**
+  String get progressAnalyseConfirmBody;
+
+  /// When some scans could not be analysed.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI couldn’t analyse every scan. Try again, or take a new scan in good light.'**
+  String get progressAnalyseFailed;
 }
 
 class _AppLocalizationsDelegate

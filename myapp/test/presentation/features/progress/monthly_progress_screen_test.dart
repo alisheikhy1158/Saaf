@@ -1,20 +1,30 @@
 // Covers: Figma 12 Progress (every two weeks; was Monthly progress) (node 3:613): Pro gate, before / after
 // slider, two change cards, coach summary; design.md §9 (empty / error states),
 // PRV-2 (photos are never shared), A11Y-1/2/3/5/6/8
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:saaf/core/error/result.dart';
 import 'package:saaf/core/utils/solid_png.dart';
+import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
 import 'package:saaf/data/services/web/fake_share_service.dart';
 import 'package:saaf/data/services/web/in_memory_photo_store.dart';
+import 'package:saaf/domain/entities/ai_skin_estimate.dart';
 import 'package:saaf/domain/entities/completed_scan.dart';
 import 'package:saaf/domain/entities/face_pose.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
+import 'package:saaf/domain/services/ai_skin_service.dart';
+import 'package:saaf/domain/services/photo_shrinker.dart';
+import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/usecases/compare_progress.dart';
 import 'package:saaf/presentation/features/progress/screens/monthly_progress_screen.dart';
+import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/analysis_providers.dart';
 import 'package:saaf/presentation/providers/progress_providers.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
+import 'package:saaf/presentation/providers/settings_providers.dart';
 import 'package:saaf/presentation/providers/subscription_providers.dart';
 
 import '../../../helpers/pump_app.dart';
@@ -65,11 +75,11 @@ Progress _progress({
   ],
 );
 
-Future<ProgressView> _view({Progress? progress}) async {
+Future<ProgressView> _view({Progress? progress, bool analysed = true}) async {
   final before = await _scan('before', DateTime(2026, 9, 14));
   final after = await _scan('after', DateTime(2026, 10, 14));
   return ProgressView(
-    progress: progress ?? _progress(),
+    progress: analysed ? progress ?? _progress() : null,
     before: before,
     after: after,
     first: before,
@@ -108,8 +118,79 @@ Future<void> _open(
   await tester.pump();
 }
 
+class _SkinService implements AiSkinService {
+  int calls = 0;
+
+  @override
+  Future<Result<AiSkinEstimate>> estimateSkin({
+    required Uint8List photo,
+    required String languageCode,
+  }) async {
+    calls++;
+    return const Ok(AiSkinEstimate(usable: false, problem: 'Too dark.'));
+  }
+}
+
+class _Shrinker implements PhotoShrinker {
+  @override
+  Future<Uint8List?> shrink(Uint8List photo) async => photo;
+}
+
 void main() {
   setUp(_share.shared.clear);
+
+  group('scans not analysed by Saaf AI yet', () {
+    late _SkinService skin;
+    setUp(() => skin = _SkinService());
+
+    Future<List<Override>> unanalysed() async {
+      final settings = InMemorySettingsRepository();
+      await settings.write(
+        AiConsent.settingName,
+        DateTime(2026, 10, 17).toIso8601String(),
+      );
+      return [
+        ..._with(view: await _view(analysed: false)),
+        settingsRepositoryProvider.overrideWithValue(settings),
+        aiSkinServiceProvider.overrideWithValue(skin),
+        photoShrinkerProvider.overrideWithValue(_Shrinker()),
+      ];
+    }
+
+    testWidgets('shows the photos but no numbers, never a guess', (
+      tester,
+    ) async {
+      await _open(tester, overrides: await unanalysed());
+      expect(find.text('Your progress'), findsOneWidget);
+      expect(find.text('Skin measures not analysed yet'), findsOneWidget);
+      expect(find.text('Analyse with Saaf AI'), findsOneWidget);
+      expect(find.textContaining('%'), findsNothing);
+      expect(find.byTooltip('Share your progress'), findsNothing);
+    });
+
+    testWidgets('asks first, then sends the front photo of each scan', (
+      tester,
+    ) async {
+      await _open(tester, overrides: await unanalysed());
+      await tester.ensureVisible(find.text('Analyse with Saaf AI'));
+      await tester.tap(find.text('Analyse with Saaf AI'));
+      await tester.pumpAndSettle();
+      expect(find.text('Send your front photos?'), findsOneWidget);
+      await tester.tap(find.text('Not now'));
+      await tester.pumpAndSettle();
+      expect(skin.calls, 0);
+
+      await tester.ensureVisible(find.text('Analyse with Saaf AI'));
+      await tester.tap(find.text('Analyse with Saaf AI'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Send'));
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 50)),
+      );
+      await tester.pump();
+      expect(skin.calls, 2);
+    });
+  });
 
   group('Pro gate', () {
     testWidgets('free users are told it is part of Saaf Pro', (tester) async {

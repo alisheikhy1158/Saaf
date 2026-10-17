@@ -28,7 +28,6 @@ class AiSkinEstimate {
       scanId: scanId,
       takenAt: takenAt,
       metrics: sorted,
-      source: AnalysisSource.aiPhoto,
       summary: summary.isEmpty ? null : summary,
     );
   }

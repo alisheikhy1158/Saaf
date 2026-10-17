@@ -52,9 +52,10 @@ server answers without it and the app says it was not checked on the web. QR cod
 Digital Link / DataMatrix) are read on the phone (`ReadProductCode`) and go to the normal barcode look-up. Groq retired
 its `compound` web-search models in Sept 2026; browser search is the documented replacement.
 
-**Skin estimate from the photo (Results screen, `/v1/skin`).** The face scan's bars were a PLACEHOLDER guess from the
-quiz (`DemoSkinAnalyzer`); the screen now says so ("Estimated from your quiz answers"). With Saaf AI on, "Analyse my
-photo with Saaf AI" shows the FRONT photo and asks before sending it (shrunk on the phone). The vision model returns
+**Skin estimate from the photo (Results screen, `/v1/skin`).** The ONLY source of the skin numbers: the old quiz-based
+placeholder (`DemoSkinAnalyzer`) is gone. Until a scan is analysed, Results says "Not analysed yet" and Progress shows
+the photos without numbers (never a guess). With Saaf AI on, "Analyse my photo with Saaf AI" (Progress: "Analyse with
+Saaf AI" for both scans) shows what will be sent and asks before sending the FRONT photo (shrunk on the phone). The vision model returns
 each measure's score, confidence (low/medium/high) and what it saw (strict JSON); unusable photos (dark, blurry, no
 face) return a reason. Kept on the phone per scan (`aiSkinEstimates`), used by Results and Progress, can be reported.
 The screen says it is a rough estimate from one photo, not a measurement.

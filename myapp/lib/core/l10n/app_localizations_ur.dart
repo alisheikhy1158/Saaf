@@ -968,7 +968,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get howWeScoreIntro =>
-      'آپ کا ثاف جلد کا اسکور 40 سے 100 کے درمیان ایک عدد ہے جو بتاتا ہے کہ آج آپ کی جلد کیسی دکھائی دیتی ہے۔ یہ روٹین چننے میں رہنمائی ہے، طبی پیمائش نہیں۔';
+      'آپ کا ثاف جلد کا اسکور 40 سے 100 کے درمیان ایک عدد ہے جو بتاتا ہے کہ ثاف اے آئی کو آپ کی سامنے کی تصویر میں جلد کیسی دکھائی دیتی ہے۔ یہ روٹین چننے میں موٹی رہنمائی ہے، طبی پیمائش نہیں۔';
 
   @override
   String get howWeScoreLooksTitle => 'ہم کیا دیکھتے ہیں';
@@ -1000,7 +1000,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get howWeScorePhotos =>
-      'تینوں تصاویر آپ کے فون ہی میں رہتی ہیں اور اسکور وہیں بنتا ہے۔ وہ اے آئی کوچ کو صرف تب جاتی ہیں جب آپ خود انتخاب کریں۔';
+      'ثاف اے آئی آپ کی سامنے کی تصویر سے چاروں پیمانوں کا اندازہ لگاتا ہے۔ یہ صرف آپ کی اجازت کے بعد (Groq کو، ثاف کے سرور کے ذریعے) بھیجی جاتی ہے اور وہاں محفوظ نہیں رہتی؛ سائیڈ کی تصاویر آپ کے فون پر رہتی ہیں۔ ہر پیمانہ بتاتا ہے کہ ثاف اے آئی کو کتنا یقین ہے، اور تصویر کے تجزیے سے پہلے کوئی عدد نہیں دکھایا جاتا۔';
 
   @override
   String get howWeScoreMedicalTitle => 'طبی مشورہ نہیں';
@@ -2263,13 +2263,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get routineYours => 'آپ کی';
 
   @override
-  String get resultsQuizEstimateTitle => 'آپ کے کوئز کے جوابات سے اندازہ';
-
-  @override
-  String get resultsQuizEstimateBody =>
-      'آپ کی تصویر کا تجزیہ نہیں ہوا، اس لیے یہ بارز آپ کی بتائی ہوئی باتوں سے ایک ابتدائی اندازہ ہیں، پیمائش نہیں۔';
-
-  @override
   String get resultsAnalysePhoto => 'ثاف اے آئی سے میری تصویر کا تجزیہ کریں';
 
   @override
@@ -2316,4 +2309,32 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get resultsFrontPhotoLabel => 'آپ کی سامنے کی تصویر';
+
+  @override
+  String get resultsNotAnalysedTitle => 'ابھی تجزیہ نہیں ہوا';
+
+  @override
+  String get resultsNotAnalysedBody =>
+      'ثاف اے آئی آپ کی سامنے کی تصویر دیکھ کر داغ، دانے، چکنائی اور نمی کا اندازہ لگاتا ہے۔ تب تک یہاں کوئی عدد نہیں، کبھی کوئی اندازہ نہیں۔';
+
+  @override
+  String get progressNotAnalysedTitle => 'جلد کی پیمائش کا ابھی تجزیہ نہیں ہوا';
+
+  @override
+  String get progressNotAnalysedBody =>
+      'ثاف اے آئی دونوں اسکینز کی سامنے کی تصاویر دیکھ کر بتاتا ہے کیا بدلا۔ دونوں کا تجزیہ ہونے تک یہاں کوئی عدد نہیں۔';
+
+  @override
+  String get progressAnalyse => 'ثاف اے آئی سے تجزیہ کریں';
+
+  @override
+  String get progressAnalyseConfirmTitle => 'اپنی سامنے کی تصاویر بھیجیں؟';
+
+  @override
+  String get progressAnalyseConfirmBody =>
+      'صرف ان اسکینز کی سامنے کی تصاویر ثاف اے آئی (Groq، ثاف کے سرور کے ذریعے) کو جاتی ہیں تاکہ چاروں پیمانوں کا اندازہ لگایا جا سکے۔ یہ وہاں محفوظ نہیں رہتیں۔ آپ کی سائیڈ کی تصاویر آپ کے فون پر رہتی ہیں۔';
+
+  @override
+  String get progressAnalyseFailed =>
+      'ثاف اے آئی ہر اسکین کا تجزیہ نہیں کر سکا۔ دوبارہ کوشش کریں، یا اچھی روشنی میں نیا اسکین کریں۔';
 }

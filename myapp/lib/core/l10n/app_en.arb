@@ -851,7 +851,7 @@
   "howWeScoreTitle": "How we score",
   "@howWeScoreTitle": { "description": "Title of the explanation page." },
 
-  "howWeScoreIntro": "Your Saaf skin score is a number from 40 to 100 that sums up how your skin looks today. It is a guide for choosing a routine, not a medical measurement.",
+  "howWeScoreIntro": "Your Saaf skin score is a number from 40 to 100 that sums up how your skin looks in your front photo, as Saaf AI sees it. It is a rough guide for choosing a routine, not a medical measurement.",
   "@howWeScoreIntro": { "description": "Intro paragraph of the explanation page." },
 
   "howWeScoreLooksTitle": "What we look at",
@@ -878,7 +878,7 @@
   "howWeScorePhotosTitle": "Your photos",
   "@howWeScorePhotosTitle": { "description": "Section heading." },
 
-  "howWeScorePhotos": "The three photos stay on your phone and your score is worked out there. They go to the AI coach only if you choose that.",
+  "howWeScorePhotos": "Saaf AI estimates the four measures from your front photo. It is sent only after you say yes (to Groq, through Saaf’s server) and is not kept there; your side photos stay on your phone. Each measure says how sure Saaf AI is, and there are no numbers until a photo is analysed.",
   "@howWeScorePhotos": { "description": "Paragraph about photo privacy." },
 
   "howWeScoreMedicalTitle": "Not medical advice",
@@ -2013,10 +2013,6 @@
   "@myProductsChooseStep": {"description": "Error when no kind was chosen."},
   "routineYours": "Yours",
   "@routineYours": {"description": "Shown instead of a price for the user's own product."},
-  "resultsQuizEstimateTitle": "Estimated from your quiz answers",
-  "@resultsQuizEstimateTitle": {"description": "Notice: the numbers are a guess from the quiz."},
-  "resultsQuizEstimateBody": "Your photo hasn’t been analysed, so these bars are a starting guess from what you told us, not a measurement.",
-  "@resultsQuizEstimateBody": {"description": "Body of the quiz-estimate notice."},
   "resultsAnalysePhoto": "Analyse my photo with Saaf AI",
   "@resultsAnalysePhoto": {"description": "Button that asks to send the front photo."},
   "resultsAnalyseConfirmTitle": "Send your front photo?",
@@ -2044,5 +2040,21 @@
   "confidenceHigh": "High",
   "@confidenceHigh": {"description": "Confidence level."},
   "resultsFrontPhotoLabel": "Your front photo",
-  "@resultsFrontPhotoLabel": {"description": "Screen-reader label of the photo in the send dialog."}
+  "@resultsFrontPhotoLabel": {"description": "Screen-reader label of the photo in the send dialog."},
+  "resultsNotAnalysedTitle": "Not analysed yet",
+  "@resultsNotAnalysedTitle": {"description": "Shown instead of results until the photo is analysed."},
+  "resultsNotAnalysedBody": "Saaf AI reads your front photo to estimate dark spots, breakouts, oiliness and hydration. Until then there are no numbers here, never a guess.",
+  "@resultsNotAnalysedBody": {"description": "Body of the not-analysed state."},
+  "progressNotAnalysedTitle": "Skin measures not analysed yet",
+  "@progressNotAnalysedTitle": {"description": "Progress: scans not analysed yet."},
+  "progressNotAnalysedBody": "Saaf AI reads the front photos of both scans to see what changed. Until both are analysed there are no numbers here.",
+  "@progressNotAnalysedBody": {"description": "Progress: body of the not-analysed card."},
+  "progressAnalyse": "Analyse with Saaf AI",
+  "@progressAnalyse": {"description": "Button that analyses the scans' front photos."},
+  "progressAnalyseConfirmTitle": "Send your front photos?",
+  "@progressAnalyseConfirmTitle": {"description": "Confirm before sending the scans' front photos."},
+  "progressAnalyseConfirmBody": "Only the front photos of these scans go to Saaf AI (Groq, through Saaf’s server) to estimate the four measures. They are not kept there. Your side photos stay on your phone.",
+  "@progressAnalyseConfirmBody": {"description": "What is sent, in the progress confirm dialog."},
+  "progressAnalyseFailed": "Saaf AI couldn’t analyse every scan. Try again, or take a new scan in good light.",
+  "@progressAnalyseFailed": {"description": "When some scans could not be analysed."}
 }

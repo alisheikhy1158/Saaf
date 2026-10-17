@@ -246,8 +246,9 @@ void main() {
         find.byKey(const ValueKey('screen-analysisResults')),
         findsOneWidget,
       );
-      // The results are worked out from the saved scan.
-      expect(find.text('Here’s your skin today'), findsOneWidget);
+      // No numbers until Saaf AI has read the photo: never a guess.
+      expect(find.text('Not analysed yet'), findsOneWidget);
+      expect(find.text('Here’s your skin today'), findsNothing);
     });
 
     testWidgets('the X leaves the scan for Home', (tester) async {

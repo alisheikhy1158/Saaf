@@ -1,7 +1,7 @@
-// Covers: the results screen says honestly what its numbers are based on. Until
-// a photo is analysed they are a guess from the quiz; with the user's OK (per
-// send, store-compliance §5) Saaf AI estimates them from the front photo and
-// says how sure it is about each. The AI estimate can be reported.
+// Covers: the results screen only shows numbers read from the photo. Until
+// Saaf AI has analysed the front photo (with the user's OK per send,
+// store-compliance §5) it shows no numbers at all, never a guess from the quiz.
+// The estimate says how sure it is about each measure and can be reported.
 import 'dart:typed_data';
 
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -135,13 +135,16 @@ Future<void> _tap(WidgetTester tester, String text) async {
 void main() {
   setUp(() => _service = _SkinService());
 
-  testWidgets('says plainly that the numbers are a guess from the quiz', (
+  testWidgets('an unanalysed scan shows no numbers, only a way to analyse', (
     tester,
   ) async {
     await _open(tester);
-    expect(find.text('Estimated from your quiz answers'), findsOneWidget);
-    expect(find.textContaining('not a measurement'), findsOneWidget);
+    expect(find.text('Not analysed yet'), findsOneWidget);
+    expect(find.textContaining('never a guess'), findsOneWidget);
     expect(find.text('Analyse my photo with Saaf AI'), findsOneWidget);
+    expect(find.text('Skin score'), findsNothing);
+    expect(find.text('Dark spots'), findsNothing);
+    expect(find.textContaining('quiz'), findsNothing);
   });
 
   testWidgets('without Saaf AI: offers to turn it on, sends nothing', (
@@ -173,7 +176,8 @@ void main() {
     await _tap(tester, 'Send');
     expect(_service.sentSizes, hasLength(1));
     expect(find.text('Estimated by Saaf AI from your photo'), findsOneWidget);
-    expect(find.text('Estimated from your quiz answers'), findsNothing);
+    expect(find.text('Not analysed yet'), findsNothing);
+    expect(find.text('Skin score'), findsOneWidget);
     expect(
       find.text('Some shine on the forehead and a few small spots.'),
       findsOneWidget,
@@ -191,7 +195,7 @@ void main() {
     expect(await _settings.read('aiSkinEstimates'), contains('scan-1'));
   });
 
-  testWidgets('a photo Saaf AI cannot judge: says why, keeps the guess', (
+  testWidgets('a photo Saaf AI cannot judge: says why, still no numbers', (
     tester,
   ) async {
     _service.answer = const Ok(
@@ -201,7 +205,8 @@ void main() {
     await _tap(tester, 'Analyse my photo with Saaf AI');
     await _tap(tester, 'Send');
     expect(find.textContaining('The photo is too dark.'), findsOneWidget);
-    expect(find.text('Estimated from your quiz answers'), findsOneWidget);
+    expect(find.text('Not analysed yet'), findsOneWidget);
+    expect(find.text('Skin score'), findsNothing);
   });
 
   testWidgets('a failure can be tried again', (tester) async {
