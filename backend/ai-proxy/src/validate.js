@@ -117,69 +117,39 @@ export function cleanImage(image) {
 }
 
 export const STEPS = ['cleanser', 'treatment', 'moisturiser', 'sunscreen'];
-export const MAX_CANDIDATES = 40;
-const TIMES = ['morning', 'night'];
+export const MAX_CURRENT = 10;
 const METRICS = ['darkSpots', 'breakouts', 'oiliness', 'hydration'];
-const PRODUCT_ID = /^[a-z0-9-]{1,64}$/;
 
-function strings(value, allowed) {
-  return Array.isArray(value) ? [...new Set(value.filter((v) => allowed.includes(v)))] : [];
+/** The latest face scan's four scores (0 to 1), or null. Never photos. */
+export function cleanScan(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const metrics = {};
+  for (const name of METRICS) {
+    const value = raw[name];
+    if (typeof value === 'number' && value >= 0 && value <= 1) {
+      metrics[name] = Math.round(value * 100) / 100;
+    }
+  }
+  return Object.keys(metrics).length ? metrics : null;
 }
 
 /**
- * The products the app allows for this person (it has already removed any that
- * clash with their safety answers, which never leave the phone), their skin
- * facts and, optionally, the latest scan's scores.
+ * A routine request: the person's skin facts, optionally their latest scan
+ * scores, and the names of the products they use now (to keep or change).
+ * Their safety answers are never sent: the app checks the picks against them.
  */
-export function validateRecommend(body) {
+export function validateRoutine(body) {
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return { ok: false, error: 'bad_request' };
   }
-  if (!Array.isArray(body.candidates) || body.candidates.length > MAX_CANDIDATES) {
-    return { ok: false, error: 'bad_candidates' };
-  }
-  const candidates = [];
-  const seen = new Set();
-  for (const item of body.candidates) {
-    if (!item || typeof item !== 'object') return { ok: false, error: 'bad_candidates' };
-    const id = typeof item.id === 'string' && PRODUCT_ID.test(item.id) ? item.id : null;
-    const step = pick(item.step, STEPS);
-    const name = cleanText(item.name, 120);
-    const price = Number.isInteger(item.pricePkr) && item.pricePkr >= 0 && item.pricePkr <= 100_000
-      ? item.pricePkr
-      : null;
-    if (!id || !step || !name || price === null || seen.has(id)) {
-      return { ok: false, error: 'bad_candidates' };
-    }
-    seen.add(id);
-    candidates.push({
-      id,
-      step,
-      name,
-      pricePkr: price,
-      times: strings(item.times, TIMES),
-      forSkin: strings(item.forSkin, SKIN_TYPES),
-      helpsWith: strings(item.helpsWith, CONCERNS),
-      actives: Array.isArray(item.actives)
-        ? item.actives.map((a) => cleanText(a, 40)).filter(Boolean).slice(0, 8)
-        : [],
-    });
-  }
-  if (candidates.length === 0) return { ok: false, error: 'bad_candidates' };
-
-  let scan = null;
-  if (body.scan && typeof body.scan === 'object') {
-    const metrics = {};
-    for (const name of METRICS) {
-      const value = body.scan[name];
-      if (typeof value === 'number' && value >= 0 && value <= 1) {
-        metrics[name] = Math.round(value * 100) / 100;
-      }
-    }
-    if (Object.keys(metrics).length) scan = metrics;
-  }
-
-  return { ok: true, value: { context: cleanContext(body.context), scan, candidates } };
+  const raw = body.current ?? [];
+  if (!Array.isArray(raw)) return { ok: false, error: 'bad_request' };
+  if (raw.length > MAX_CURRENT) return { ok: false, error: 'too_many_products' };
+  const current = [...new Set(raw.map((name) => cleanText(name, 120)).filter(Boolean))];
+  return {
+    ok: true,
+    value: { context: cleanContext(body.context), scan: cleanScan(body.scan), current },
+  };
 }
 
 export const MAX_QR = 500;

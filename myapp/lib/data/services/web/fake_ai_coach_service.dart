@@ -2,12 +2,13 @@ import 'dart:typed_data';
 
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/core/utils/solid_png.dart';
+import 'package:saaf/data/repositories/real_product_catalog.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
-import 'package:saaf/domain/entities/product_picks.dart';
+import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
@@ -61,21 +62,29 @@ class FakeAiProductService implements AiProductService {
   const FakeAiProductService();
 
   @override
-  Future<Result<ProductPicks>> pickProducts({
+  Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<Product> candidates,
+    required List<String> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async {
     final firstPerStep = <ProductCategory, Product>{};
-    for (final product in candidates) {
+    for (final product in RealProductCatalog.products) {
       firstPerStep.putIfAbsent(product.category, () => product);
     }
     return Ok(
-      ProductPicks(
+      AiRoutinePlan(
         summary: 'Demo picks: the real Saaf AI is not connected in this build.',
         picks: [
           for (final product in firstPerStep.values)
-            ProductPick(productId: product.id, reason: 'A demo reason.'),
+            AiPick(product: product, brand: '', why: 'A demo reason.'),
+        ],
+        current: [
+          for (final name in currentProducts)
+            CurrentProductReview(
+              name: name,
+              verdict: ProductVerdict.keep,
+              why: 'A demo verdict.',
+            ),
         ],
       ),
     );

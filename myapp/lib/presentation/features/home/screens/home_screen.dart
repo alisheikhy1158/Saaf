@@ -472,9 +472,12 @@ class _ChecklistRow extends StatelessWidget {
       ProductCategory.moisturiser => l10n.stepMoisturiser,
       ProductCategory.sunscreen => l10n.stepSunscreen,
     };
-    final price = l10n.priceRs(
-      NumberFormat.decimalPattern(locale).format(step.product.pricePkr),
-    );
+    // 0 = Saaf AI found no price for a product from the web.
+    final price = step.product.pricePkr == 0
+        ? l10n.productCheckPrice
+        : l10n.priceRs(
+            NumberFormat.decimalPattern(locale).format(step.product.pricePkr),
+          );
     final name = step.product.name;
 
     return SaafRoutineStepRow(

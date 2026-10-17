@@ -581,7 +581,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get aiConsentShareBody =>
-      'آپ کا پیغام، آپ کی لگائی ہوئی یا بھیجنے کے لیے چنی ہوئی کوئی تصویر (پیش رفت کا جائزہ، یا معلوم کرنے کے لیے پروڈکٹ کا لیبل)، اور چند باتیں: آپ کی جلد کی قسم، مسائل، حساسیت، بجٹ، آپ کے روٹین کی پروڈکٹس کے نام اور، پروڈکٹس چننے کے لیے، آپ کے آخری اسکین کے اسکور۔ آپ کا نام، فون نمبر، سائیڈ کی تصاویر، یا حمل، دوائی اور الرجی کے جوابات ہرگز نہیں۔';
+      'آپ کا پیغام، آپ کی لگائی ہوئی یا بھیجنے کے لیے چنی ہوئی کوئی تصویر (پیش رفت کا جائزہ، یا معلوم کرنے کے لیے پروڈکٹ کا لیبل)، اور چند باتیں: آپ کی جلد کی قسم، مسائل، حساسیت، بجٹ، آپ کے روٹین اور موجودہ پروڈکٹس کے نام اور، پروڈکٹس چننے کے لیے، آپ کے آخری اسکین کے اسکور۔ آپ کا نام، فون نمبر، سائیڈ کی تصاویر، یا حمل، دوائی اور الرجی کے جوابات ہرگز نہیں۔';
 
   @override
   String get aiConsentWhoTitle => 'کس کو ملتا ہے';
@@ -2054,13 +2054,14 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get aiPicksOfferBody =>
-      'یہ پاکستان میں ملنے والی اصل پروڈکٹس میں سے آپ کی جلد، آخری اسکین اور بجٹ کے مطابق چنتا ہے۔';
+      'یہ ویب پر، بشمول Reddit کے r/PakistaniSkincare، پاکستان میں ملنے والی ایسی پروڈکٹس تلاش کرتا ہے جو آپ کی جلد، اسکین اور بجٹ کے مطابق ہوں، اور آپ کی موجودہ پروڈکٹس کا جائزہ لیتا ہے۔';
 
   @override
   String get aiPicksTurnOn => 'ثاف اے آئی آن کریں';
 
   @override
-  String get aiPicksLoading => 'ثاف اے آئی آپ کی جلد کے لیے پروڈکٹس چن رہا ہے…';
+  String get aiPicksLoading =>
+      'ثاف اے آئی آپ کی جلد کے لیے ویب پر پروڈکٹس تلاش کر رہا ہے۔ اس میں ایک منٹ لگ سکتا ہے…';
 
   @override
   String get aiPicksFailed =>
@@ -2077,7 +2078,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get aiPicksNote =>
-      'اے آئی کا انتخاب غلط ہو سکتا ہے۔ لیبل دیکھیں اور ہر نئی چیز کا پیچ ٹیسٹ کریں۔';
+      'اے آئی کا انتخاب غلط ہو سکتا ہے اور قیمتیں بدلتی رہتی ہیں۔ لیبل دیکھیں اور ہر نئی چیز کا پیچ ٹیسٹ کریں۔';
 
   @override
   String get productAiTitle => 'ثاف اے آئی سے معلوم کریں';
@@ -2151,4 +2152,98 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get productNotFoundAction => 'ثاف اے آئی سے معلوم کریں';
+
+  @override
+  String aiPicksPeopleSay(String text) {
+    return 'لوگ کیا کہتے ہیں: $text';
+  }
+
+  @override
+  String get aiPicksSources => 'ذرائع';
+
+  @override
+  String aiPicksSourceLink(String site) {
+    return '$site کھولیں';
+  }
+
+  @override
+  String get currentTitle => 'جو پروڈکٹس آپ ابھی استعمال کرتے ہیں';
+
+  @override
+  String get currentVerdictKeep => 'جاری رکھیں';
+
+  @override
+  String get currentVerdictReplace => 'بدل دیں';
+
+  @override
+  String get currentVerdictStop => 'بند کریں';
+
+  @override
+  String currentUseInstead(String name) {
+    return 'اس کے بجائے: $name';
+  }
+
+  @override
+  String get currentCautionPregnancy =>
+      'آپ کے جوابات کے مطابق: حمل یا دودھ پلانے کے دوران اسے استعمال کرنے سے پہلے ڈاکٹر سے پوچھیں۔';
+
+  @override
+  String get currentCautionPrescription =>
+      'آپ کے جوابات کے مطابق: پہلے اپنے ڈاکٹر سے پوچھیں، کیونکہ آپ جلد کی کوئی نسخے والی دوا استعمال کرتے ہیں۔';
+
+  @override
+  String get currentCautionSensitive =>
+      'آپ کی جلد اکثر ردعمل دیتی ہے: پہلے پیچ ٹیسٹ کریں اور آہستہ آہستہ استعمال کریں۔';
+
+  @override
+  String get currentAdd => 'اپنی استعمال کی پروڈکٹس شامل کریں';
+
+  @override
+  String get currentEdit => 'اپنی پروڈکٹس بدلیں';
+
+  @override
+  String get myProductsTitle => 'جو پروڈکٹس آپ ابھی استعمال کرتے ہیں';
+
+  @override
+  String get myProductsBody =>
+      'وہ پروڈکٹس شامل کریں جو آپ ابھی جلد کے لیے استعمال کرتے ہیں، جیسے فیس واش، کریم یا سن اسکرین۔ ثاف اے آئی بتائے گا کون سی جاری رکھیں اور کون سی بدلیں۔';
+
+  @override
+  String get myProductsFieldLabel => 'پروڈکٹ کا نام';
+
+  @override
+  String get myProductsFieldHint => 'مثلاً: Nivea Soft';
+
+  @override
+  String get myProductsAdd => 'شامل کریں';
+
+  @override
+  String get myProductsEmpty => 'ابھی کوئی پروڈکٹ شامل نہیں کی گئی۔';
+
+  @override
+  String get myProductsFull => 'آپ زیادہ سے زیادہ 10 پروڈکٹس شامل کر سکتے ہیں۔';
+
+  @override
+  String myProductsRemove(String name) {
+    return '$name ہٹائیں';
+  }
+
+  @override
+  String get myProductsPrivacy =>
+      'یہ نام آپ کے فون پر رہتے ہیں۔ یہ ثاف اے آئی کو صرف تب جاتے ہیں جب آپ اسے آن کریں۔';
+
+  @override
+  String get profileRowProducts => 'آپ کی پروڈکٹس';
+
+  @override
+  String profileProductsValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count پروڈکٹس',
+      one: '1 پروڈکٹ',
+      zero: 'کوئی نہیں',
+    );
+    return '$_temp0';
+  }
 }

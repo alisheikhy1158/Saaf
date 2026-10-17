@@ -9,11 +9,13 @@ import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/routine.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
-import 'package:saaf/domain/entities/product_picks.dart';
+import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
-import 'package:saaf/presentation/providers/product_picks_providers.dart';
+import 'package:saaf/presentation/providers/ai_routine_providers.dart';
+import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/providers/routine_providers.dart';
+import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_ai_text.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
@@ -316,7 +318,10 @@ class _StepRow extends StatelessWidget {
           fit: BoxFit.scaleDown,
           alignment: AlignmentDirectional.centerEnd,
           child: Text(
-            _rs(l10n, locale, step.product.pricePkr),
+            // 0 = Saaf AI found no price for a product from the web.
+            step.product.pricePkr == 0
+                ? l10n.productCheckPrice
+                : _rs(l10n, locale, step.product.pricePkr),
             style: tokens.styles.segment,
           ),
         ),
@@ -366,9 +371,10 @@ class _ResultsInfo extends StatelessWidget {
   }
 }
 
-/// Saaf AI and the routine: an offer to turn it on, its progress, its choice
-/// (marked as AI, with the reasons and a report button, as Google Play's AI
-/// policy asks) or a note that the app's own picks are shown.
+/// Saaf AI and the routine: an offer to turn it on, its progress, the products
+/// it found on the web (marked as AI, with reasons, what people say, sources
+/// and a report button, as Google Play's AI policy asks), its verdicts on the
+/// products the user uses now, or a note that the app's own picks are shown.
 class _AiPicksCard extends ConsumerStatefulWidget {
   const _AiPicksCard({required this.routine});
 
@@ -384,7 +390,7 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
   bool _open = false;
   bool _reported = false;
 
-  Future<void> _report(ProductPicks picks) async {
+  Future<void> _report(AiRoutinePlan plan) async {
     final l10n = AppLocalizations.of(context);
     final reason = await showModalBottomSheet<_ReportReason>(
       context: context,
@@ -419,14 +425,16 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
     );
     if (reason == null || !mounted) return;
     final text = [
-      picks.summary,
-      for (final pick in picks.picks) '${pick.productId}: ${pick.reason}',
+      plan.summary,
+      for (final pick in plan.picks) '${pick.product.name}: ${pick.why}',
+      for (final review in plan.current)
+        '${review.name}: ${review.verdict.name}. ${review.why}',
     ].join('\n');
     final result = await ref
         .read(aiCoachServiceProvider)
         .report(
           reply: AiMessage(
-            id: 'picks-${DateTime.now().millisecondsSinceEpoch}',
+            id: 'routine-${DateTime.now().millisecondsSinceEpoch}',
             role: AiRole.assistant,
             text: text,
             createdAt: DateTime.now(),
@@ -448,7 +456,7 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
     final tokens = context.saaf;
     final space = tokens.space;
     final consent = ref.watch(aiConsentStateProvider);
-    final async = ref.watch(aiProductPicksProvider);
+    final async = ref.watch(aiRoutinePlanControllerProvider);
 
     Widget card(List<Widget> children) => DecoratedBox(
       decoration: BoxDecoration(
@@ -463,6 +471,11 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
           children: children,
         ),
       ),
+    );
+
+    Widget link(String label, VoidCallback onPressed) => Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: SaafButton.text(label: label, onPressed: onPressed),
     );
 
     if (consent == null) return const SizedBox.shrink();
@@ -484,13 +497,7 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
           ],
         ),
         Text(l10n.aiPicksOfferBody, style: tokens.styles.pointCaption),
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: SaafButton.text(
-            label: l10n.aiPicksTurnOn,
-            onPressed: () => context.push(SaafRoute.aiCoach.path),
-          ),
-        ),
+        link(l10n.aiPicksTurnOn, () => context.push(SaafRoute.aiCoach.path)),
       ]);
     }
 
@@ -517,79 +524,222 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
     if (async.hasError) {
       return card([
         Text(l10n.aiPicksFailed, style: tokens.styles.pointCaption),
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: SaafButton.text(
-            label: l10n.scanTryAgain,
-            onPressed: () => ref.read(aiProductPicksProvider.notifier).retry(),
-          ),
+        link(
+          l10n.scanTryAgain,
+          () => ref.read(aiRoutinePlanControllerProvider.notifier).retry(),
         ),
       ]);
     }
 
-    final picks = async.value;
-    if (picks == null) return const SizedBox.shrink();
+    final plan = async.value;
+    if (plan == null) return const SizedBox.shrink();
 
-    // The reasons for the products actually in the routine (each once).
-    final shown = <String, String>{};
+    // The AI picks actually in the routine (the phone may have left some out).
+    final shown = <AiPick>[];
     for (final step in [...widget.routine.morning, ...widget.routine.night]) {
-      final reason = picks.reasonFor(step.product.id);
-      if (reason != null && reason.isNotEmpty) {
-        shown[step.product.name] = reason;
-      }
+      final pick = plan.pickFor(step.product.id);
+      if (pick != null && !shown.contains(pick)) shown.add(pick);
     }
+    final profile = ref.watch(skinProfileControllerProvider);
+    final hasProducts =
+        (ref.watch(currentProductsProvider).value ?? const []).isNotEmpty;
 
-    return card([
-      Row(
-        spacing: space.x8,
-        children: [
-          Expanded(
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: SaafChip(
-                label: l10n.aiPicksLabel,
-                icon: Icons.auto_awesome,
-                tone: SaafChipTone.cornsilk,
-                small: true,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: space.x14,
+      children: [
+        card([
+          Row(
+            spacing: space.x8,
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: SaafChip(
+                    label: l10n.aiPicksLabel,
+                    icon: Icons.auto_awesome,
+                    tone: SaafChipTone.cornsilk,
+                    small: true,
+                  ),
+                ),
               ),
-            ),
+              if (_reported)
+                Flexible(
+                  child: Text(
+                    l10n.aiReported,
+                    style: tokens.styles.legal.copyWith(color: tokens.textMeta),
+                  ),
+                )
+              else
+                IconButton(
+                  tooltip: l10n.aiReport,
+                  icon: const Icon(Icons.flag_outlined),
+                  onPressed: () => _report(plan),
+                ),
+            ],
           ),
-          if (_reported)
-            Flexible(
-              child: Text(
-                l10n.aiReported,
+          if (plan.summary.isNotEmpty) SaafAiText(plan.summary),
+          if (shown.isNotEmpty) ...[
+            link(
+              _open ? l10n.aiPicksHide : l10n.aiPicksWhy,
+              () => setState(() => _open = !_open),
+            ),
+            if (_open)
+              for (final pick in shown) _PickDetails(pick: pick),
+          ],
+          Text(
+            l10n.aiPicksNote,
+            style: tokens.styles.legal.copyWith(color: tokens.textMeta),
+          ),
+        ]),
+        if (plan.current.isNotEmpty)
+          card([
+            Semantics(
+              header: true,
+              child: Text(l10n.currentTitle, style: tokens.styles.listTitle),
+            ),
+            for (final review in plan.current)
+              _VerdictRow(review: review, caution: review.cautionFor(profile)),
+            link(
+              l10n.currentEdit,
+              () => context.push(SaafRoute.myProducts.path),
+            ),
+          ])
+        else if (!hasProducts)
+          link(l10n.currentAdd, () => context.push(SaafRoute.myProducts.path)),
+      ],
+    );
+  }
+}
+
+/// One AI pick: why it suits the user, what people say and where it came from.
+class _PickDetails extends ConsumerWidget {
+  const _PickDetails({required this.pick});
+
+  final AiPick pick;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: tokens.space.x4,
+      children: [
+        Text(
+          pick.product.name,
+          // Product names are English web data.
+          textDirection: TextDirection.ltr,
+          style: tokens.styles.segment,
+        ),
+        if (pick.why.isNotEmpty)
+          Text(pick.why, style: tokens.styles.pointCaption),
+        if (pick.reviews.isNotEmpty)
+          Text(
+            l10n.aiPicksPeopleSay(pick.reviews),
+            style: tokens.styles.pointCaption,
+          ),
+        if (pick.sources.isNotEmpty)
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: tokens.space.x4,
+            children: [
+              Text(
+                l10n.aiPicksSources,
                 style: tokens.styles.legal.copyWith(color: tokens.textMeta),
               ),
-            )
-          else
-            IconButton(
-              tooltip: l10n.aiReport,
-              icon: const Icon(Icons.flag_outlined),
-              onPressed: () => _report(picks),
+              for (final url in pick.sources)
+                Semantics(
+                  label: l10n.aiPicksSourceLink(_site(url)),
+                  excludeSemantics: true,
+                  button: true,
+                  child: SaafButton.text(
+                    label: _site(url),
+                    onPressed: () =>
+                        ref.read(externalLinkServiceProvider).open(url),
+                  ),
+                ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  /// "reddit.com" from a full address.
+  static String _site(String url) {
+    final host = Uri.tryParse(url)?.host ?? url;
+    return host.startsWith('www.') ? host.substring(4) : host;
+  }
+}
+
+/// Saaf AI's verdict on a product the user uses now, plus any warning the
+/// phone adds from the safety answers (which Saaf AI never sees).
+class _VerdictRow extends StatelessWidget {
+  const _VerdictRow({required this.review, required this.caution});
+
+  final CurrentProductReview review;
+  final ProductCaution? caution;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    final (label, tone) = switch (review.verdict) {
+      ProductVerdict.keep => (l10n.currentVerdictKeep, SaafChipTone.sage),
+      ProductVerdict.replace => (
+        l10n.currentVerdictReplace,
+        SaafChipTone.papaya,
+      ),
+      ProductVerdict.stop => (l10n.currentVerdictStop, SaafChipTone.strong),
+    };
+    final warning = switch (caution) {
+      ProductCaution.pregnancy => l10n.currentCautionPregnancy,
+      ProductCaution.prescription => l10n.currentCautionPrescription,
+      ProductCaution.sensitive => l10n.currentCautionSensitive,
+      null => null,
+    };
+
+    return MergeSemantics(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: tokens.space.x4,
+        children: [
+          Row(
+            spacing: tokens.space.x8,
+            children: [
+              Expanded(
+                child: Text(
+                  review.name,
+                  textDirection: TextDirection.ltr,
+                  style: tokens.styles.segment,
+                ),
+              ),
+              Flexible(
+                child: SaafChip(label: label, tone: tone, small: true),
+              ),
+            ],
+          ),
+          if (review.why.isNotEmpty)
+            Text(review.why, style: tokens.styles.pointCaption),
+          if (review.reviews.isNotEmpty)
+            Text(
+              l10n.aiPicksPeopleSay(review.reviews),
+              style: tokens.styles.pointCaption,
+            ),
+          if (review.replaceWith != null)
+            Text(
+              l10n.currentUseInstead(review.replaceWith!),
+              style: tokens.styles.segment,
+            ),
+          if (warning != null)
+            SaafMessageRow(
+              icon: Icons.warning_amber_outlined,
+              text: warning,
+              color: context.colors.onSurface,
             ),
         ],
       ),
-      if (picks.summary.isNotEmpty) SaafAiText(picks.summary),
-      if (shown.isNotEmpty) ...[
-        Align(
-          alignment: AlignmentDirectional.centerStart,
-          child: SaafButton.text(
-            label: _open ? l10n.aiPicksHide : l10n.aiPicksWhy,
-            onPressed: () => setState(() => _open = !_open),
-          ),
-        ),
-        if (_open)
-          SaafAiText(
-            [
-              for (final MapEntry(:key, :value) in shown.entries)
-                '- **$key**: $value',
-            ].join('\n'),
-          ),
-      ],
-      Text(
-        l10n.aiPicksNote,
-        style: tokens.styles.legal.copyWith(color: tokens.textMeta),
-      ),
-    ]);
+    );
   }
 }

@@ -43,7 +43,8 @@ class SkinQuizScreen extends ConsumerWidget {
         context.canPop() ? context.pop() : context.go(SaafRoute.profile.path);
       } else if (next == null) {
         ref.read(quizDoneProvider.notifier).markDone();
-        context.go(SaafRoute.selfieCapture.path);
+        // The products they use now, then the face scan.
+        context.go('${SaafRoute.myProducts.path}?setup=1');
       } else {
         context.push('${SaafRoute.skinQuiz.path}/${next.number}');
       }

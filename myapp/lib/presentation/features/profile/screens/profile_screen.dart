@@ -17,6 +17,7 @@ import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/usecases/notification_access.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
+import 'package:saaf/presentation/providers/ai_routine_providers.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/locale_controller.dart';
 import 'package:saaf/presentation/providers/notification_providers.dart';
@@ -72,6 +73,8 @@ class ProfileScreen extends ConsumerWidget {
             NumberFormat.decimalPattern(locale.toString()).format(budgetLimit),
           );
 
+    final products = ref.watch(currentProductsProvider).value ?? const [];
+
     final language = locale.languageCode == 'ur'
         ? l10n.profileLangUrdu
         : l10n.profileLangEnglish;
@@ -121,6 +124,12 @@ class ProfileScreen extends ConsumerWidget {
                   title: l10n.profileRowBudget,
                   value: budgetValue,
                   onTap: () => context.push(_editQuizPath(QuizStep.budget)),
+                ),
+                SaafSettingsRow(
+                  icon: Icons.inventory_2_outlined,
+                  title: l10n.profileRowProducts,
+                  value: l10n.profileProductsValue(products.length),
+                  onTap: () => context.push(SaafRoute.myProducts.path),
                 ),
                 SaafSettingsRow(
                   icon: Icons.notifications_none,

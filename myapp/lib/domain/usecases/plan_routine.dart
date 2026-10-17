@@ -1,20 +1,20 @@
 import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
-import 'package:saaf/domain/entities/product.dart';
-import 'package:saaf/domain/entities/product_picks.dart';
+import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/skin_analysis.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
-import 'package:saaf/domain/usecases/build_routine.dart';
 
-/// Asks Saaf AI to choose the routine's products. The safety answers are used
-/// HERE, on the phone, to remove products first; Saaf AI only ever sees the
-/// products that are left, plus the non-health facts in [AiContext].
-class PickProducts {
-  const PickProducts({
+/// Asks Saaf AI to research a routine on the web and to review the products
+/// the user uses now. Only the non-health facts in [AiContext], the scan
+/// scores and the product names are sent; the safety answers stay on the
+/// phone, where the routine and the verdicts are checked against them
+/// (`BuildRoutine`, [CurrentProductReview.cautionFor]).
+class PlanRoutine {
+  const PlanRoutine({
     required AiProductService service,
     required AiConsent consent,
   }) : _service = service,
@@ -23,22 +23,15 @@ class PickProducts {
   final AiProductService _service;
   final AiConsent _consent;
 
-  /// The server accepts at most this many products to choose from.
-  static const maxCandidates = 40;
-
-  Future<Result<ProductPicks>> call({
+  Future<Result<AiRoutinePlan>> call({
     required SkinProfile profile,
-    required List<Product> catalog,
+    required List<String> currentProducts,
     required String languageCode,
     SkinAnalysis? analysis,
   }) async {
     if (!await _consent.isGiven()) return const Err(ConsentMissing());
-
-    final candidates = BuildRoutine(catalog).allowedFor(profile);
-    if (candidates.isEmpty) return const Err(ValidationFailure('products'));
-
     try {
-      return await _service.pickProducts(
+      return await _service.planRoutine(
         context: AiContext(
           languageCode: languageCode,
           skinType: profile.skinType,
@@ -46,14 +39,14 @@ class PickProducts {
           sensitivity: profile.sensitivity,
           budget: profile.budget,
         ),
-        candidates: candidates.take(maxCandidates).toList(),
+        currentProducts: currentProducts,
         scan: {
           for (final metric in analysis?.metrics ?? const <SkinMetric>[])
             metric.kind: metric.amount,
         },
       );
     } on Object {
-      return const Err(UnknownFailure('ai-picks'));
+      return const Err(UnknownFailure('ai-routine'));
     }
   }
 }

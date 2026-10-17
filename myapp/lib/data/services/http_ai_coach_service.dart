@@ -3,15 +3,14 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
+import 'package:saaf/data/services/ai_routine_plan_json.dart';
 import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
-import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
-import 'package:saaf/domain/entities/product_picks.dart';
+import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
-import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
@@ -65,54 +64,20 @@ class HttpAiCoachService implements AiCoachService, AiProductService {
   }
 
   @override
-  Future<Result<ProductPicks>> pickProducts({
+  Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<Product> candidates,
+    required List<String> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async {
-    final sent = await _post('/v1/recommend', {
+    final sent = await _post('/v1/routine', {
       'context': _contextJson(context),
       'scan': {for (final e in scan.entries) e.key.name: e.value},
-      'candidates': [
-        for (final p in candidates)
-          {
-            'id': p.id,
-            'step': p.category.name,
-            'name': p.name,
-            'pricePkr': p.pricePkr,
-            'times': [
-              for (final t in RoutineTime.values)
-                if (p.times.contains(t)) t.name,
-            ],
-            'forSkin': [
-              for (final t in p.skinTypes)
-                if (t != SkinType.notSure) t.name,
-            ],
-            'helpsWith': [for (final c in p.targets) c.name],
-            'actives': [for (final i in p.ingredients) i.name],
-          },
-      ],
+      'current': currentProducts,
     });
     final body = _decode(sent);
     if (body case Err(:final failure)) return Err(failure);
-    final data = body.valueOrNull!;
-    final picks = [
-      if (data['picks'] case final List<Object?> list)
-        for (final item in list)
-          if (item case {
-            'productId': final String id,
-            'reason': final String reason,
-          })
-            ProductPick(productId: id, reason: reason.trim()),
-    ];
-    if (picks.isEmpty) return const Err(UnknownFailure('ai-picks'));
-    final summary = data['summary'];
-    return Ok(
-      ProductPicks(
-        summary: summary is String ? summary.trim() : '',
-        picks: picks,
-      ),
-    );
+    final plan = AiRoutinePlanJson.decode(body.valueOrNull);
+    return plan == null ? const Err(UnknownFailure('ai-routine')) : Ok(plan);
   }
 
   @override

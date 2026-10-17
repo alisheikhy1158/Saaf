@@ -331,21 +331,20 @@ void main() {
   });
 
   group('navigation', () {
-    testWidgets('Next walks through the steps and ends on the selfie capture', (
-      tester,
-    ) async {
-      await pumpQuiz(tester);
-      for (var step = 1; step <= 5; step++) {
-        expect(find.text('STEP $step OF 5'), findsOneWidget);
-        await choose(tester, _specs[step - 1].options.first.$1);
-        await pressNext(tester);
-      }
-      expect(
-        find.byKey(const ValueKey('screen-selfieCapture')),
-        findsOneWidget,
-      );
-      expect(repository.saved?.budget, BudgetBand.essential);
-    });
+    testWidgets(
+      'Next walks through the steps and ends on the products you use now',
+      (tester) async {
+        await pumpQuiz(tester);
+        for (var step = 1; step <= 5; step++) {
+          expect(find.text('STEP $step OF 5'), findsOneWidget);
+          await choose(tester, _specs[step - 1].options.first.$1);
+          await pressNext(tester);
+        }
+        // Then the selfie capture (see my_products_screen_test.dart).
+        expect(find.byKey(const ValueKey('screen-myProducts')), findsOneWidget);
+        expect(repository.saved?.budget, BudgetBand.essential);
+      },
+    );
 
     testWidgets('Skip moves on without saving', (tester) async {
       await pumpQuiz(tester);
@@ -355,16 +354,13 @@ void main() {
       expect(repository.saveCalls, 0);
     });
 
-    testWidgets('Skip on the last step opens the selfie capture', (
+    testWidgets('Skip on the last step opens the products you use now', (
       tester,
     ) async {
       await pumpQuiz(tester, location: '/skin-quiz/5');
       await tester.tap(skip());
       await tester.pump(const Duration(milliseconds: 600));
-      expect(
-        find.byKey(const ValueKey('screen-selfieCapture')),
-        findsOneWidget,
-      );
+      expect(find.byKey(const ValueKey('screen-myProducts')), findsOneWidget);
     });
 
     testWidgets('Back on step 1 returns to the privacy consent', (

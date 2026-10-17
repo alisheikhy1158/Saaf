@@ -1,7 +1,7 @@
 // Saaf AI proxy (Cloudflare Worker).
 //
 //   POST /v1/chat      {history, question, images, context}  ->  {reply}
-//   POST /v1/recommend {context, scan, candidates}            ->  {summary, picks}
+//   POST /v1/routine   {context, scan, current}               ->  {summary, picks, current}
 //   POST /v1/product   {image | barcode | qr, context}       ->  {found, title, insight, webChecked}
 //   POST /v1/report    {reason, replyId, replyText}          ->  {ok: true}
 //   GET  /health                                           ->  {ok: true}
@@ -12,8 +12,8 @@
 
 import { AuthError, verifyFirebaseToken } from './auth.js';
 import { UpstreamError, askGroq } from './groq.js';
-import { lookUpProduct, recommend } from './products.js';
-import { validateChat, validateProduct, validateRecommend, validateReport } from './validate.js';
+import { lookUpProduct, planRoutine } from './products.js';
+import { validateChat, validateProduct, validateReport, validateRoutine } from './validate.js';
 
 // A request (with up to three photos) may be this big.
 const MAX_BODY_BYTES = 9_000_000;
@@ -99,8 +99,8 @@ const chat = (request, env, deps) =>
     reply: await askGroq(env, value, options),
   }));
 
-const picks = (request, env, deps) =>
-  aiRequest(request, env, deps, validateRecommend, (value, options) => recommend(env, value, options));
+const routine = (request, env, deps) =>
+  aiRequest(request, env, deps, validateRoutine, (value, options) => planRoutine(env, value, options));
 
 const product = (request, env, deps) =>
   aiRequest(request, env, deps, validateProduct, (value, options) => lookUpProduct(env, value, options));
@@ -134,7 +134,7 @@ export async function handle(request, env, deps = {}) {
   try {
     if (request.method === 'GET' && url.pathname === '/health') return json({ ok: true });
     if (request.method === 'POST' && url.pathname === '/v1/chat') return await chat(request, env, deps);
-    if (request.method === 'POST' && url.pathname === '/v1/recommend') return await picks(request, env, deps);
+    if (request.method === 'POST' && url.pathname === '/v1/routine') return await routine(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/product') return await product(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/report') return await report(request, env, deps);
     return json({ error: 'not_found' }, 404);

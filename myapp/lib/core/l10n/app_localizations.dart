@@ -1139,7 +1139,7 @@ abstract class AppLocalizations {
   /// What is sent to the AI.
   ///
   /// In en, this message translates to:
-  /// **'Your message, any photo you attach or choose to send (a progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.'**
+  /// **'Your message, any photo you attach or choose to send (a progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and the products you use now, and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.'**
   String get aiConsentShareBody;
 
   /// Heading on the AI permission screen.
@@ -3611,7 +3611,7 @@ abstract class AppLocalizations {
   /// Body of the Saaf AI picks offer.
   ///
   /// In en, this message translates to:
-  /// **'It picks from real products sold in Pakistan to suit your skin, your latest scan and your budget.'**
+  /// **'It searches the web, including Reddit’s r/PakistaniSkincare, for products sold in Pakistan that suit your skin, scan and budget, and reviews the products you use now.'**
   String get aiPicksOfferBody;
 
   /// Button that opens the AI permission screen.
@@ -3623,7 +3623,7 @@ abstract class AppLocalizations {
   /// Shown while Saaf AI chooses products.
   ///
   /// In en, this message translates to:
-  /// **'Saaf AI is choosing products for your skin…'**
+  /// **'Saaf AI is searching the web for products for your skin. This can take a minute…'**
   String get aiPicksLoading;
 
   /// Shown when Saaf AI picks failed.
@@ -3653,7 +3653,7 @@ abstract class AppLocalizations {
   /// Small note under Saaf AI picks.
   ///
   /// In en, this message translates to:
-  /// **'AI picks can be wrong. Check the label and patch test anything new.'**
+  /// **'AI picks can be wrong and prices change. Check the label and patch test anything new.'**
   String get aiPicksNote;
 
   /// Top bar title of the product look-up screen.
@@ -3781,6 +3781,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Look it up with Saaf AI'**
   String get productNotFoundAction;
+
+  /// Summary of real reviews of an AI pick.
+  ///
+  /// In en, this message translates to:
+  /// **'What people say: {text}'**
+  String aiPicksPeopleSay(String text);
+
+  /// Label before the web pages an AI pick came from.
+  ///
+  /// In en, this message translates to:
+  /// **'Sources'**
+  String get aiPicksSources;
+
+  /// Screen-reader label of a source link.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {site}'**
+  String aiPicksSourceLink(String site);
+
+  /// Heading of Saaf AI's verdicts on the user's products.
+  ///
+  /// In en, this message translates to:
+  /// **'Products you use now'**
+  String get currentTitle;
+
+  /// Verdict chip: keep using it.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep'**
+  String get currentVerdictKeep;
+
+  /// Verdict chip: replace it.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get currentVerdictReplace;
+
+  /// Verdict chip: stop using it.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get currentVerdictStop;
+
+  /// Which pick replaces a product.
+  ///
+  /// In en, this message translates to:
+  /// **'Use instead: {name}'**
+  String currentUseInstead(String name);
+
+  /// Phone-side warning on a product the user keeps.
+  ///
+  /// In en, this message translates to:
+  /// **'From your answers: ask a doctor before using this while pregnant or breastfeeding.'**
+  String get currentCautionPregnancy;
+
+  /// Phone-side warning on a product the user keeps.
+  ///
+  /// In en, this message translates to:
+  /// **'From your answers: check with your doctor first, as you use a prescription skin treatment.'**
+  String get currentCautionPrescription;
+
+  /// Phone-side warning on a product the user keeps.
+  ///
+  /// In en, this message translates to:
+  /// **'Your skin often reacts: patch test first and use it slowly.'**
+  String get currentCautionSensitive;
+
+  /// Button that opens the current products screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the products you use'**
+  String get currentAdd;
+
+  /// Button that opens the current products screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit your products'**
+  String get currentEdit;
+
+  /// Title of the current products screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Products you use now'**
+  String get myProductsTitle;
+
+  /// Explanation on the current products screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the skin care products you use now, like your face wash, cream or sunscreen. Saaf AI will tell you which to keep and which to change.'**
+  String get myProductsBody;
+
+  /// Label of the product name field.
+  ///
+  /// In en, this message translates to:
+  /// **'Product name'**
+  String get myProductsFieldLabel;
+
+  /// Hint in the product name field.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: Nivea Soft'**
+  String get myProductsFieldHint;
+
+  /// Button that adds the typed product.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get myProductsAdd;
+
+  /// Shown when the list is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No products added yet.'**
+  String get myProductsEmpty;
+
+  /// Shown when the list is full.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add up to 10 products.'**
+  String get myProductsFull;
+
+  /// Tooltip of the remove button.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}'**
+  String myProductsRemove(String name);
+
+  /// Privacy note on the current products screen.
+  ///
+  /// In en, this message translates to:
+  /// **'These names stay on your phone. They go to Saaf AI only if you turn it on.'**
+  String get myProductsPrivacy;
+
+  /// Profile row for the current products.
+  ///
+  /// In en, this message translates to:
+  /// **'Products you use'**
+  String get profileRowProducts;
+
+  /// How many current products the user added.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{None} =1{1 product} other{{count} products}}'**
+  String profileProductsValue(int count);
 }
 
 class _AppLocalizationsDelegate

@@ -26,13 +26,23 @@ button and Try again). The server's instructions tell the model to compare hones
 how skin looks, and not to praise or alarm without reason. The rule-based "scores" are NOT sent: they come from the
 placeholder analyser and would mislead the model.
 
-**Product picks (Routine screen, `/v1/recommend`).** With Saaf AI on, it chooses the routine's products. The phone
-first removes every product the safety answers rule out (`BuildRoutine.allowedFor`), then sends only the remaining
-products (id, step, name, price, skin types, concerns, key actives), the skin facts and the latest scan scores (four
-numbers, never photos). The model (gpt-oss-120b, strict JSON schema) returns ids + one-line reasons; the server drops
-any id not in the list, and the app still applies the safety answers and the budget (`BuildRoutine(preferred:)`). Picks
-are cached on the phone (`aiProductPicks` setting) and only re-asked when the quiz, scan or language change. Without
-Saaf AI, or if it fails, the rule-based picks stay. The card shows "Picked by Saaf AI", the reasons and a report button.
+**Routine from the web (Routine screen, `/v1/routine`).** With Saaf AI on, it researches the routine on the web and
+reviews the products the user uses now (asked right after the quiz on `/my-products`, editable from Profile). Sent: the
+skin facts, the latest scan scores (four numbers, never photos) and the current product names. Two Groq calls:
+1. gpt-oss-120b + **browser search**: finds products sold in Pakistan with Rs prices, reads real reviews (Reddit,
+   especially r/PakistaniSkincare, and review pages), decides keep / replace / stop for each current product, and writes
+   notes with URLs. Whitening/hydroquinone/mercury/steroid products are never picked and are always "stop".
+2. gpt-oss-120b, strict JSON schema: turns the notes into picks + verdicts. The server keeps one product per step (two
+   treatments), only actives from the app's list, only **source URLs that appear in the research notes**, and only
+   verdicts for names the user typed. If the web search fails there is no answer (never made-up products or prices).
+
+The **safety answers never leave the phone**: the AI only reports each product's actives, and `ActiveRules` (on the
+phone) derives "strong" and "avoid in pregnancy"; `BuildRoutine` then leaves out picks that clash with the answers or
+budget, and `CurrentProductReview.cautionFor` adds a phone-side warning on a product the user keeps. AI products join
+the catalogue for the routine (`BuildRoutine(preferred:)`); price 0 shows "Check price". The plan is cached on the phone
+(`aiRoutinePlan` setting) and only re-asked when the quiz, scan, current products or language change. Without Saaf AI,
+or if it fails, the 22-product catalogue and rules stay. The card shows "Picked by Saaf AI", why, "What people say",
+source links (opened in the browser) and a report button; a second card shows the verdicts.
 
 **Product look-up (`/product-ai`, `/v1/product`).** For a barcode nobody knows, a QR code that is only a link, or a photo
 of the label when nothing scans. The user sees what will be sent and taps "Look it up". A photo is read first by the

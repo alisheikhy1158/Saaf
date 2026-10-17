@@ -10,6 +10,7 @@ import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/data/services/http_ai_coach_service.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
+import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/budget_band.dart';
 import 'package:saaf/domain/entities/ingredient.dart';
 import 'package:saaf/domain/entities/product.dart';
@@ -303,63 +304,104 @@ void main() {
     });
   });
 
-  group('product picks', () {
-    const cleanser = Product(
-      id: 'cleanser-a',
-      name: 'Gentle Cleanser',
-      category: ProductCategory.cleanser,
-      pricePkr: 900,
-      times: {RoutineTime.morning, RoutineTime.night},
-      skinTypes: {SkinType.oily, SkinType.notSure},
-      targets: {SkinConcern.acne},
-      ingredients: {Ingredient.niacinamide},
-    );
+  group('routine from the web', () {
+    final reply = {
+      'summary': 'A simple routine.',
+      'picks': [
+        {
+          'id': 'ai-treatment-the-ordinary-retinol',
+          'step': 'treatment',
+          'brand': 'The Ordinary',
+          'name': 'Retinol 0.5% in Squalane',
+          'pricePkr': 3200,
+          'times': ['night'],
+          'actives': ['retinol', 'glitter'],
+          'fragranceFree': true,
+          'why': 'For marks.',
+          'reviews': 'Liked on Reddit.',
+          'sources': [
+            'https://www.reddit.com/r/PakistaniSkincare/x',
+            'javascript:alert(1)',
+          ],
+        },
+        {'id': 'not-ai', 'step': 'cleanser', 'name': 'Skipped'},
+        {'id': 'ai-sunscreen-x', 'step': 'sunscreen', 'name': 'X SPF 50'},
+      ],
+      'current': [
+        {
+          'name': 'Nivea Soft',
+          'verdict': 'replace',
+          'why': 'Heavy.',
+          'reviews': 'Greasy.',
+          'actives': <String>[],
+          'replaceWith': 'Retinol 0.5% in Squalane',
+        },
+        {'name': 'Mystery', 'verdict': 'maybe'},
+      ],
+    };
 
-    test('sends the allowed products, the scan and the skin facts', () async {
+    test('sends the skin facts, the scan and the current products', () async {
       late http.Request seen;
       final s = service(
         MockClient((request) async {
           seen = request;
-          return ok({
-            'summary': 'A gentle routine.',
-            'picks': [
-              {'productId': 'cleanser-a', 'reason': 'Calms oil.'},
-            ],
-          });
+          return ok(reply);
         }),
       );
-      final result = await s.pickProducts(
+      await s.planRoutine(
         context: _context,
-        candidates: const [cleanser],
+        currentProducts: const ['Nivea Soft'],
         scan: const {SkinMetricKind.darkSpots: 0.5},
       );
-      expect(seen.url.path, '/v1/recommend');
+      expect(seen.url.path, '/v1/routine');
       expect(seen.headers['Authorization'], 'Bearer firebase-id-token');
       final body = jsonDecode(seen.body) as Map<String, dynamic>;
-      expect(body['candidates'], [
-        {
-          'id': 'cleanser-a',
-          'step': 'cleanser',
-          'name': 'Gentle Cleanser',
-          'pricePkr': 900,
-          'times': ['morning', 'night'],
-          'forSkin': ['oily'],
-          'helpsWith': ['acne'],
-          'actives': ['niacinamide'],
-        },
-      ]);
+      expect(body.keys, {'context', 'scan', 'current'});
+      expect(body['current'], ['Nivea Soft']);
       expect(body['scan'], {'darkSpots': 0.5});
       expect(body['context'], containsPair('skinType', 'oily'));
-      final picks = result.valueOrNull!;
-      expect(picks.summary, 'A gentle routine.');
-      expect(picks.reasonFor('cleanser-a'), 'Calms oil.');
     });
 
-    test('a reply without picks is a failure', () async {
-      final s = service(MockClient((_) async => ok({'summary': 'x'})));
-      final result = await s.pickProducts(
+    test('reads the picks, with flags worked out on the phone', () async {
+      final s = service(MockClient((_) async => ok(reply)));
+      final plan = (await s.planRoutine(
         context: _context,
-        candidates: const [cleanser],
+        currentProducts: const ['Nivea Soft'],
+      )).valueOrNull!;
+      expect(plan.summary, 'A simple routine.');
+      expect(plan.picks, hasLength(2));
+      final retinol = plan.picks.first;
+      expect(retinol.product.name, 'The Ordinary Retinol 0.5% in Squalane');
+      expect(retinol.product.category, ProductCategory.treatment);
+      expect(retinol.product.times, {RoutineTime.night});
+      expect(retinol.product.ingredients, {Ingredient.retinol});
+      expect(retinol.product.isStrongActive, isTrue);
+      expect(retinol.product.avoidInPregnancy, isTrue);
+      expect(retinol.sources, ['https://www.reddit.com/r/PakistaniSkincare/x']);
+      final sunscreen = plan.picks.last.product;
+      expect(sunscreen.pricePkr, 0);
+      expect(sunscreen.times, {RoutineTime.morning});
+    });
+
+    test('reads the verdicts on the current products', () async {
+      final s = service(MockClient((_) async => ok(reply)));
+      final plan = (await s.planRoutine(
+        context: _context,
+        currentProducts: const ['Nivea Soft'],
+      )).valueOrNull!;
+      expect(plan.current, hasLength(1));
+      expect(plan.current.single.verdict, ProductVerdict.replace);
+      expect(
+        plan.current.single.replaceWith,
+        'The Ordinary Retinol 0.5% in Squalane',
+      );
+    });
+
+    test('a plan without picks is a failure', () async {
+      final s = service(MockClient((_) async => ok({'summary': 'x'})));
+      final result = await s.planRoutine(
+        context: _context,
+        currentProducts: const [],
       );
       expect(result.failureOrNull, isA<UnknownFailure>());
     });

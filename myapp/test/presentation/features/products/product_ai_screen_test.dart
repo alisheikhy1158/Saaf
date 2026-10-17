@@ -12,9 +12,8 @@ import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
 import 'package:saaf/data/services/web/fake_ai_coach_service.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_photo_source.dart';
-import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
-import 'package:saaf/domain/entities/product_picks.dart';
+import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
@@ -47,9 +46,9 @@ class _Service implements AiProductService {
   }
 
   @override
-  Future<Result<ProductPicks>> pickProducts({
+  Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<Product> candidates,
+    required List<String> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async => const Err(ServiceUnavailable());
 }

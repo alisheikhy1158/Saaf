@@ -1,50 +1,78 @@
-// Covers: Saaf AI choosing products and looking products up (store-compliance
-// §5) — only after consent, only products the safety answers allow, and the
-// safety answers themselves never leave the phone
+// Covers: Saaf AI planning the routine from the web and looking products up
+// (store-compliance §5) — only after consent, the safety answers never leave
+// the phone, and the phone itself checks every AI product against them
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
-import 'package:saaf/data/repositories/real_product_catalog.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
+import 'package:saaf/domain/entities/ai_routine_plan.dart';
 import 'package:saaf/domain/entities/budget_band.dart';
+import 'package:saaf/domain/entities/ingredient.dart';
 import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
-import 'package:saaf/domain/entities/product_picks.dart';
 import 'package:saaf/domain/entities/safety_flag.dart';
+import 'package:saaf/domain/entities/sensitivity.dart';
 import 'package:saaf/domain/entities/skin_analysis.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/services/ai_product_service.dart';
+import 'package:saaf/domain/usecases/active_rules.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
+import 'package:saaf/domain/usecases/build_routine.dart';
 import 'package:saaf/domain/usecases/look_up_product.dart';
-import 'package:saaf/domain/usecases/pick_products.dart';
+import 'package:saaf/domain/usecases/plan_routine.dart';
+
+/// A product as Saaf AI would bring it back from the web.
+Product _web(
+  String id,
+  ProductCategory category,
+  Set<Ingredient> actives, {
+  bool fragranceFree = true,
+}) => ActiveRules.product(
+  id: id,
+  name: id,
+  category: category,
+  pricePkr: 1000,
+  times: category == ProductCategory.sunscreen
+      ? const {RoutineTime.morning}
+      : const {RoutineTime.morning, RoutineTime.night},
+  actives: actives,
+  fragranceFree: fragranceFree,
+);
 
 class _Service implements AiProductService {
   int calls = 0;
   AiContext? context;
-  List<Product>? candidates;
   Map<SkinMetricKind, double>? scan;
+  List<String>? current;
   ProductQuery? query;
 
   @override
-  Future<Result<ProductPicks>> pickProducts({
+  Future<Result<AiRoutinePlan>> planRoutine({
     required AiContext context,
-    required List<Product> candidates,
+    required List<String> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async {
     calls++;
     this.context = context;
-    this.candidates = candidates;
     this.scan = scan;
+    current = currentProducts;
     return Ok(
-      ProductPicks(
+      AiRoutinePlan(
         summary: 'Gentle picks.',
-        picks: [ProductPick(productId: candidates.first.id, reason: 'Gentle.')],
+        picks: [
+          AiPick(
+            product: _web('ai-c', ProductCategory.cleanser, const {}),
+            brand: 'CeraVe',
+            why: 'Gentle.',
+            reviews: 'Liked on Reddit.',
+          ),
+        ],
       ),
     );
   }
@@ -93,72 +121,132 @@ void main() {
   late _Service service;
   setUp(() => service = _Service());
 
-  group('PickProducts', () {
-    Future<Result<ProductPicks>> pick({
+  group('PlanRoutine', () {
+    Future<Result<AiRoutinePlan>> plan({
       bool consent = true,
       SkinProfile profile = _pregnantWithAcne,
-      List<Product> catalog = RealProductCatalog.products,
+      List<String> current = const ['Nivea Soft'],
       SkinAnalysis? analysis,
     }) async =>
-        PickProducts(
+        PlanRoutine(
           service: service,
           consent: await _consent(given: consent),
         )(
           profile: profile,
-          catalog: catalog,
+          currentProducts: current,
           analysis: analysis,
           languageCode: 'ur',
         );
 
     test('nothing is sent without consent', () async {
       expect(
-        (await pick(consent: false)).failureOrNull,
+        (await plan(consent: false)).failureOrNull,
         const ConsentMissing(),
       );
       expect(service.calls, 0);
     });
 
-    test('sends only products the safety answers allow', () async {
-      await pick();
-      expect(service.candidates, isNotEmpty);
-      expect(service.candidates!.any((p) => p.avoidInPregnancy), isFalse);
+    test('sends the skin facts, language and current products only', () async {
+      await plan();
+      final context = service.context!;
+      expect(context.languageCode, 'ur');
+      expect(context.skinType, SkinType.oily);
+      expect(context.concerns, {SkinConcern.acne, SkinConcern.darkSpots});
+      expect(context.budget, BudgetBand.balanced);
+      expect(service.current, ['Nivea Soft']);
+      // AiContext has no field for the safety answers at all.
     });
 
-    test(
-      'the skin facts and language go along, the safety answers do not',
-      () async {
-        await pick();
-        final context = service.context!;
-        expect(context.languageCode, 'ur');
-        expect(context.skinType, SkinType.oily);
-        expect(context.concerns, {SkinConcern.acne, SkinConcern.darkSpots});
-        expect(context.budget, BudgetBand.balanced);
-        // AiContext has no field for the safety answers at all.
-      },
-    );
-
     test('the latest scan scores go along when there is a scan', () async {
-      await pick(analysis: _analysis);
+      await plan(analysis: _analysis);
       expect(service.scan, {
         SkinMetricKind.darkSpots: 0.6,
         SkinMetricKind.hydration: 0.4,
       });
-      await pick();
+      await plan();
       expect(service.scan, isEmpty);
     });
 
-    test('with no products to choose from, nothing is sent', () async {
+    test('the plan comes back', () async {
+      final result = (await plan()).valueOrNull!;
+      expect(result.summary, 'Gentle picks.');
+      expect(result.productIds, {'ai-c'});
+      expect(result.pickFor('ai-c')?.brand, 'CeraVe');
+    });
+  });
+
+  group('the phone checks AI products against the safety answers', () {
+    test('ingredients decide strength, pregnancy advice and what it helps', () {
+      expect(ActiveRules.isStrong({Ingredient.retinol}), isTrue);
+      expect(ActiveRules.isStrong({Ingredient.niacinamide}), isFalse);
+      expect(ActiveRules.avoidInPregnancy({Ingredient.salicylicAcid}), isTrue);
+      expect(ActiveRules.avoidInPregnancy({Ingredient.azelaicAcid}), isFalse);
       expect(
-        (await pick(catalog: const [])).failureOrNull,
-        isA<ValidationFailure>(),
+        ActiveRules.helpsWith({Ingredient.salicylicAcid}),
+        contains(SkinConcern.acne),
       );
-      expect(service.calls, 0);
     });
 
-    test('the answer comes back', () async {
-      final picks = (await pick()).valueOrNull!;
-      expect(picks.summary, 'Gentle picks.');
-      expect(picks.productIds, hasLength(1));
+    test('a retinol pick never reaches a pregnant user’s routine', () {
+      final retinol = _web('ai-retinol', ProductCategory.treatment, {
+        Ingredient.retinol,
+      });
+      final cleanser = _web('ai-c', ProductCategory.cleanser, const {});
+      final routine = BuildRoutine(
+        [retinol, cleanser],
+        preferred: {'ai-retinol', 'ai-c'},
+      )(_pregnantWithAcne);
+      final ids = [
+        for (final s in [...routine.morning, ...routine.night]) s.product.id,
+      ];
+      expect(ids, isNot(contains('ai-retinol')));
+      expect(ids, contains('ai-c'));
+    });
+
+    test('a strong AI pick reaches a user with a matching concern', () {
+      final salicylic = _web('ai-bha', ProductCategory.treatment, {
+        Ingredient.salicylicAcid,
+      });
+      final routine = BuildRoutine([salicylic], preferred: {'ai-bha'})(
+        const SkinProfile(concerns: {SkinConcern.acne}),
+      );
+      expect(routine.morning.single.product.id, 'ai-bha');
+    });
+
+    test('a product the user keeps is flagged when it clashes with them', () {
+      const keepRetinol = CurrentProductReview(
+        name: 'Night serum',
+        verdict: ProductVerdict.keep,
+        why: 'Good for marks.',
+        actives: {Ingredient.retinol},
+      );
+      expect(
+        keepRetinol.cautionFor(_pregnantWithAcne),
+        ProductCaution.pregnancy,
+      );
+      expect(
+        keepRetinol.cautionFor(
+          const SkinProfile(safetyFlags: {SafetyFlag.prescriptionTreatment}),
+        ),
+        ProductCaution.prescription,
+      );
+      expect(
+        keepRetinol.cautionFor(
+          const SkinProfile(sensitivity: Sensitivity.high),
+        ),
+        ProductCaution.sensitive,
+      );
+      expect(keepRetinol.cautionFor(const SkinProfile()), isNull);
+    });
+
+    test('no caution on a product Saaf AI already says to stop', () {
+      const stop = CurrentProductReview(
+        name: 'Whitening cream',
+        verdict: ProductVerdict.stop,
+        why: 'Harmful.',
+        actives: {Ingredient.retinol},
+      );
+      expect(stop.cautionFor(_pregnantWithAcne), isNull);
     });
   });
 

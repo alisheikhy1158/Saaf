@@ -105,6 +105,15 @@ class SaafRoute {
     'Saaf AI look-up',
   );
 
+  /// The products the user uses now: after the skin quiz (?setup=1) and from
+  /// Profile. Not a Figma screen, so not in [all].
+  static const myProducts = SaafRoute._(
+    0,
+    'myProducts',
+    '/my-products',
+    'Products you use now',
+  );
+
   /// The tissue test for the skin type, opened from the skin quiz (step 1). Not
   /// a Figma screen, so not in [all].
   static const skinTypeTest = SaafRoute._(

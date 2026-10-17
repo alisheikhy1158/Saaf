@@ -5,9 +5,9 @@ import { test } from 'node:test';
 import { AuthError, verifyFirebaseToken } from '../src/auth.js';
 import { askGroq, buildMessages, cleanReply } from '../src/groq.js';
 import { handle } from '../src/index.js';
-import { lookUpProduct, parsePicks, recommend } from '../src/products.js';
+import { lookUpProduct, planRoutine } from '../src/products.js';
 import { buildSystemPrompt } from '../src/prompt.js';
-import { sniffImage, validateChat, validateProduct, validateRecommend, validateReport } from '../src/validate.js';
+import { sniffImage, validateChat, validateProduct, validateReport, validateRoutine } from '../src/validate.js';
 
 const PROJECT = 'saaf-test';
 const NOW = Date.UTC(2026, 9, 17, 12, 0, 0);
@@ -332,83 +332,6 @@ test('groq: web citation marks are removed', () => {
   assert.equal(cleanReply('Good for oily skin【3†L1-L4】.'), 'Good for oily skin.');
 });
 
-// ---------------------------------------------------------------- product picks
-const candidate = (id, step, extra = {}) => ({
-  id, step, name: `Product ${id}`, pricePkr: 1000, times: ['morning', 'night'], forSkin: ['oily'], helpsWith: ['acne'], actives: ['niacinamide'], ...extra,
-});
-const recommendBody = {
-  context: { language: 'en', skinType: 'oily', concerns: ['acne'], budget: 'essential' },
-  scan: { darkSpots: 0.6, breakouts: 0.3, oiliness: 0.7, hydration: 0.5 },
-  candidates: [
-    candidate('c-1', 'cleanser'),
-    candidate('c-2', 'cleanser'),
-    candidate('t-1', 'treatment', { times: ['night'] }),
-    candidate('m-1', 'moisturiser'),
-    candidate('s-1', 'sunscreen', { times: ['morning'] }),
-  ],
-};
-
-test('validate recommend: keeps the candidates and the scan, drops the rest', () => {
-  const r = validateRecommend({ ...recommendBody, pregnant: true, scan: { ...recommendBody.scan, mood: 3, oiliness: 7 } });
-  assert.equal(r.ok, true);
-  assert.equal(r.value.candidates.length, 5);
-  assert.deepEqual(r.value.scan, { darkSpots: 0.6, breakouts: 0.3, hydration: 0.5 });
-  assert.equal('pregnant' in r.value, false);
-  assert.equal(r.value.context.skinType, 'oily');
-});
-
-test('validate recommend: refuses bad or missing candidates', () => {
-  for (const candidates of [
-    [],
-    undefined,
-    [candidate('BAD ID', 'cleanser')],
-    [candidate('x', 'serum')],
-    [candidate('x', 'cleanser'), candidate('x', 'cleanser')],
-    [candidate('x', 'cleanser', { pricePkr: -5 })],
-    Array.from({ length: 41 }, (_, i) => candidate(`p-${i}`, 'cleanser')),
-  ]) {
-    assert.equal(validateRecommend({ ...recommendBody, candidates }).ok, false, JSON.stringify(candidates)?.slice(0, 60));
-  }
-});
-
-test('picks: only listed products, one per step (two treatments at most), cleaned', () => {
-  const { candidates } = validateRecommend(recommendBody).value;
-  const reply = JSON.stringify({
-    summary: '  Gentle picks for oily skin.  ',
-    picks: [
-      { productId: 'c-1', reason: 'Clears oil.' },
-      { productId: 'c-2', reason: 'A second cleanser is not needed.' },
-      { productId: 'made-up', reason: 'Invented.' },
-      { productId: 's-1', reason: 'x'.repeat(400) },
-    ],
-  });
-  const picks = parsePicks(reply, candidates);
-  assert.equal(picks.summary, 'Gentle picks for oily skin.');
-  assert.deepEqual(picks.picks.map((p) => p.productId), ['c-1', 's-1']);
-  assert.equal(picks.picks[1].reason.length <= 200, true);
-});
-
-test('picks: rubbish from the model is an error', () => {
-  const { candidates } = validateRecommend(recommendBody).value;
-  for (const reply of ['not json', '{}', JSON.stringify({ summary: 'x', picks: [{ productId: 'nope', reason: 'r' }] })]) {
-    assert.throws(() => parsePicks(reply, candidates), { code: 'bad_reply' });
-  }
-});
-
-test('picks: asks the text model for strict JSON, with the list and the scan', async () => {
-  const capture = {};
-  const reply = JSON.stringify({ summary: 'ok', picks: [{ productId: 'c-1', reason: 'r' }] });
-  const result = await recommend({ GROQ_API_KEY: 'k' }, validateRecommend(recommendBody).value, { fetchImpl: fakeGroq(reply, 200, capture) });
-  assert.deepEqual(result, { summary: 'ok', picks: [{ productId: 'c-1', reason: 'r' }] });
-  assert.equal(capture.body.model, 'openai/gpt-oss-120b');
-  assert.equal(capture.body.response_format.type, 'json_schema');
-  assert.equal(capture.body.response_format.json_schema.strict, true);
-  const prompt = capture.body.messages.map((m) => m.content).join('\n');
-  for (const must of ['c-1', 's-1', 'Rs 1000', 'under Rs 3,000', 'oiliness', 'Only choose from']) {
-    assert.ok(prompt.includes(must), must);
-  }
-});
-
 // ---------------------------------------------------------------- product look-up
 test('validate product: exactly one of photo, barcode or QR text', () => {
   assert.equal(validateProduct({ barcode: '3337875743563' }).ok, true);
@@ -486,19 +409,106 @@ test('look-up: if the web search fails, answers without it and says so', async (
   assert.equal('tools' in groq.bodies[1], false);
 });
 
-test('server: product picks and look-ups need sign-in and count toward the limit', async () => {
+// ---------------------------------------------------------------- routine from the web
+const routineBody = {
+  context: { language: 'en', skinType: 'oily', concerns: ['acne'], budget: 'essential' },
+  scan: { darkSpots: 0.6, breakouts: 0.3, oiliness: 0.7, hydration: 0.5 },
+  current: ['Fair & Lovely Advanced Multi Vitamin', 'Nivea Soft', '  '],
+};
+
+const NOTES = `Research notes
+- CeraVe Foaming Facial Cleanser, about Rs 3,400 at https://derma.pk/cerave-foaming. Reddit r/PakistaniSkincare users like it for oily skin: https://www.reddit.com/r/PakistaniSkincare/comments/abc/cerave/
+- The Ordinary Niacinamide 10% + Zinc 1%, Rs 2,900: https://shop.example.pk/ordinary-niacinamide
+- Fair & Lovely: users report irritation; whitening cream.`;
+
+const plan = (extra = {}) => JSON.stringify({
+  summary: '  A simple routine for oily skin.  ',
+  picks: [
+    { step: 'cleanser', brand: 'CeraVe', name: 'Foaming Facial Cleanser', priceRs: 3400, time: 'both', actives: ['niacinamide', 'ceramides', 'glitter'], fragranceFree: true, why: 'Gentle on oily skin.', reviews: 'Liked on Reddit for oily skin.', sources: ['https://derma.pk/cerave-foaming', 'https://made-up.example/not-in-notes', 'javascript:alert(1)'] },
+    { step: 'cleanser', brand: 'Second', name: 'Cleanser', priceRs: 500, time: 'both', actives: [], fragranceFree: false, why: 'x', reviews: '', sources: [] },
+    { step: 'treatment', brand: 'The Ordinary', name: 'Niacinamide 10% + Zinc 1%', priceRs: 2900, time: 'night', actives: ['niacinamide', 'zinc'], fragranceFree: true, why: 'Helps oil and marks.', reviews: 'Popular.', sources: ['https://shop.example.pk/ordinary-niacinamide'] },
+    { step: 'serum', brand: 'Bad', name: 'Step', priceRs: 1, time: 'both', actives: [], fragranceFree: false, why: '', reviews: '', sources: [] },
+  ],
+  current: [
+    { name: 'fair & lovely advanced multi vitamin', verdict: 'keep', why: 'Brightens.', reviews: 'Irritation reported.', actives: [], harmful: true, replaceWith: '' },
+    { name: 'Nivea Soft', verdict: 'replace', why: 'Heavy for oily skin.', reviews: 'Some find it greasy.', actives: ['glycerin'], harmful: false, replaceWith: 'Foaming Facial Cleanser' },
+    { name: 'Something the user never typed', verdict: 'stop', why: '', reviews: '', actives: [], harmful: false, replaceWith: '' },
+  ],
+  ...extra,
+});
+
+test('validate routine: keeps skin facts, scan and up to 10 current products', () => {
+  const r = validateRoutine({ ...routineBody, pregnant: true });
+  assert.equal(r.ok, true);
+  assert.deepEqual(r.value.current, ['Fair & Lovely Advanced Multi Vitamin', 'Nivea Soft']);
+  assert.deepEqual(r.value.scan, routineBody.scan);
+  assert.equal('pregnant' in r.value, false);
+  assert.equal(validateRoutine({ current: Array.from({ length: 11 }, (_, i) => `p${i}`) }).error, 'too_many_products');
+  assert.equal(validateRoutine({ current: 'Nivea' }).error, 'bad_request');
+  assert.equal(validateRoutine({}).ok, true);
+});
+
+test('routine: researches the web first (Reddit included), then structures it as strict JSON', async () => {
+  const groq = groqSequence([NOTES, plan()]);
+  await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl });
+  const [research, structure] = groq.bodies;
+  assert.deepEqual(research.tools, [{ type: 'browser_search' }]);
+  const asked = JSON.stringify(research.messages);
+  for (const must of ['r/PakistaniSkincare', 'Pakistan', 'Fair & Lovely Advanced Multi Vitamin', 'under Rs 3,000', 'oiliness', 'hydroquinone', 'keep, replace or stop']) {
+    assert.ok(asked.includes(must), must);
+  }
+  assert.equal(structure.response_format.type, 'json_schema');
+  assert.equal(structure.response_format.json_schema.strict, true);
+  assert.ok(JSON.stringify(structure.messages).includes('derma.pk/cerave-foaming'));
+  assert.equal('tools' in structure, false);
+});
+
+test('routine: picks are cleaned, one per step, sources only from the research', async () => {
+  const groq = groqSequence([NOTES, plan()]);
+  const result = await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl });
+  assert.equal(result.summary, 'A simple routine for oily skin.');
+  assert.deepEqual(result.picks.map((p) => p.name), ['Foaming Facial Cleanser', 'Niacinamide 10% + Zinc 1%']);
+  const cleanser = result.picks[0];
+  assert.equal(cleanser.id, 'ai-cleanser-cerave-foaming-facial-cleanser');
+  assert.deepEqual(cleanser.actives, ['niacinamide', 'ceramides']);
+  assert.deepEqual(cleanser.times, ['morning', 'night']);
+  assert.deepEqual(cleanser.sources, ['https://derma.pk/cerave-foaming']);
+  assert.equal(result.picks[1].pricePkr, 2900);
+  assert.deepEqual(result.picks[1].times, ['night']);
+});
+
+test('routine: current products keep the typed name; harmful ones are always "stop"', async () => {
+  const groq = groqSequence([NOTES, plan()]);
+  const result = await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl });
+  assert.deepEqual(result.current.map((c) => [c.name, c.verdict]), [
+    ['Fair & Lovely Advanced Multi Vitamin', 'stop'],
+    ['Nivea Soft', 'replace'],
+  ]);
+  assert.equal(result.current[1].replaceWith, 'Foaming Facial Cleanser');
+  assert.deepEqual(result.current[1].actives, []);
+});
+
+test('routine: no picks, or the web search failing, is an error (never made-up products)', async () => {
+  const empty = groqSequence([NOTES, plan({ picks: [] })]);
+  await assert.rejects(planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: empty.fetchImpl }), { code: 'bad_reply' });
+  const down = groqSequence([400]);
+  await assert.rejects(planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: down.fetchImpl }), { code: 'groq_400' });
+  assert.equal(down.bodies.length, 1);
+});
+
+test('server: routines and look-ups need sign-in and count toward the limit', async () => {
   const token = await makeToken();
   const LIMITS = fakeKv();
   const env = { LIMITS, DAILY_LIMIT: '2' };
-  assert.equal((await call('/v1/recommend', { body: recommendBody })).status, 401);
-  const picks = await call('/v1/recommend', {
-    token, body: recommendBody, env,
-    groq: fakeGroq(JSON.stringify({ summary: 'ok', picks: [{ productId: 'm-1', reason: 'r' }] })),
-  });
-  assert.deepEqual(picks, { status: 200, json: { summary: 'ok', picks: [{ productId: 'm-1', reason: 'r' }] } });
+  assert.equal((await call('/v1/routine', { body: routineBody })).status, 401);
+  const groq = groqSequence([NOTES, plan()]);
+  const routine = await call('/v1/routine', { token, body: routineBody, env, groq: groq.fetchImpl });
+  assert.equal(routine.status, 200);
+  assert.equal(routine.json.picks.length, 2);
   const found = await call('/v1/product', { token, body: { barcode: '3337875743563' }, env, groq: fakeGroq(insight) });
   assert.equal(found.status, 200);
   assert.equal(found.json.title, 'CeraVe Foaming Facial Cleanser');
   assert.equal((await call('/v1/product', { token, body: { barcode: '3337875743563' }, env, groq: fakeGroq(insight) })).status, 429);
-  assert.equal((await call('/v1/recommend', { token, body: { candidates: [] } })).status, 400);
+  assert.equal((await call('/v1/routine', { token, body: { current: 'x' } })).status, 400);
+  assert.equal((await call('/v1/recommend', { token, body: {} })).status, 404);
 });

@@ -13,6 +13,12 @@ abstract final class SettingNames {
   static const theme = 'theme';
   static const name = 'name';
   static const age = 'age';
+
+  /// The products the user uses now (JSON list of names).
+  static const currentProducts = 'currentProducts';
+
+  /// Saaf AI's last routine plan and what it was for (JSON).
+  static const aiRoutinePlan = 'aiRoutinePlan';
 }
 
 /// Drift on the phone; in memory in tests and Chrome.

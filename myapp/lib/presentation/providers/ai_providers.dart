@@ -14,7 +14,7 @@ import 'package:saaf/domain/services/photo_shrinker.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/usecases/ask_coach.dart';
 import 'package:saaf/domain/usecases/look_up_product.dart';
-import 'package:saaf/domain/usecases/pick_products.dart';
+import 'package:saaf/domain/usecases/plan_routine.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
 
 part 'ai_providers.g.dart';
@@ -39,20 +39,20 @@ AiCoachService aiCoachService(Ref ref) => _pretendAi
         tokens: ref.watch(idTokenSourceProvider),
       );
 
-/// Saaf AI's product help (picks for the routine, product look-ups); pretend
-/// in the same builds as the coach.
+/// Saaf AI's product help (a routine researched on the web, product look-ups);
+/// pretend in the same builds as the coach.
 @Riverpod(keepAlive: true)
 AiProductService aiProductService(Ref ref) => _pretendAi
     ? const FakeAiProductService()
     : HttpAiCoachService(
         baseUrl: Env.aiProxyUrl,
         tokens: ref.watch(idTokenSourceProvider),
-        // A web search takes longer than a chat answer.
-        timeout: const Duration(seconds: 90),
+        // Web research takes much longer than a chat answer.
+        timeout: const Duration(seconds: 150),
       );
 
 @Riverpod(keepAlive: true)
-PickProducts pickProducts(Ref ref) => PickProducts(
+PlanRoutine planRoutine(Ref ref) => PlanRoutine(
   service: ref.watch(aiProductServiceProvider),
   consent: ref.watch(aiConsentStoreProvider),
 );

@@ -582,7 +582,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiConsentShareBody =>
-      'Your message, any photo you attach or choose to send (a progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.';
+      'Your message, any photo you attach or choose to send (a progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and the products you use now, and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.';
 
   @override
   String get aiConsentWhoTitle => 'Who receives it';
@@ -2054,13 +2054,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiPicksOfferBody =>
-      'It picks from real products sold in Pakistan to suit your skin, your latest scan and your budget.';
+      'It searches the web, including Reddit’s r/PakistaniSkincare, for products sold in Pakistan that suit your skin, scan and budget, and reviews the products you use now.';
 
   @override
   String get aiPicksTurnOn => 'Turn on Saaf AI';
 
   @override
-  String get aiPicksLoading => 'Saaf AI is choosing products for your skin…';
+  String get aiPicksLoading =>
+      'Saaf AI is searching the web for products for your skin. This can take a minute…';
 
   @override
   String get aiPicksFailed =>
@@ -2077,7 +2078,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiPicksNote =>
-      'AI picks can be wrong. Check the label and patch test anything new.';
+      'AI picks can be wrong and prices change. Check the label and patch test anything new.';
 
   @override
   String get productAiTitle => 'Saaf AI look-up';
@@ -2150,4 +2151,98 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productNotFoundAction => 'Look it up with Saaf AI';
+
+  @override
+  String aiPicksPeopleSay(String text) {
+    return 'What people say: $text';
+  }
+
+  @override
+  String get aiPicksSources => 'Sources';
+
+  @override
+  String aiPicksSourceLink(String site) {
+    return 'Open $site';
+  }
+
+  @override
+  String get currentTitle => 'Products you use now';
+
+  @override
+  String get currentVerdictKeep => 'Keep';
+
+  @override
+  String get currentVerdictReplace => 'Replace';
+
+  @override
+  String get currentVerdictStop => 'Stop';
+
+  @override
+  String currentUseInstead(String name) {
+    return 'Use instead: $name';
+  }
+
+  @override
+  String get currentCautionPregnancy =>
+      'From your answers: ask a doctor before using this while pregnant or breastfeeding.';
+
+  @override
+  String get currentCautionPrescription =>
+      'From your answers: check with your doctor first, as you use a prescription skin treatment.';
+
+  @override
+  String get currentCautionSensitive =>
+      'Your skin often reacts: patch test first and use it slowly.';
+
+  @override
+  String get currentAdd => 'Add the products you use';
+
+  @override
+  String get currentEdit => 'Edit your products';
+
+  @override
+  String get myProductsTitle => 'Products you use now';
+
+  @override
+  String get myProductsBody =>
+      'Add the skin care products you use now, like your face wash, cream or sunscreen. Saaf AI will tell you which to keep and which to change.';
+
+  @override
+  String get myProductsFieldLabel => 'Product name';
+
+  @override
+  String get myProductsFieldHint => 'For example: Nivea Soft';
+
+  @override
+  String get myProductsAdd => 'Add';
+
+  @override
+  String get myProductsEmpty => 'No products added yet.';
+
+  @override
+  String get myProductsFull => 'You can add up to 10 products.';
+
+  @override
+  String myProductsRemove(String name) {
+    return 'Remove $name';
+  }
+
+  @override
+  String get myProductsPrivacy =>
+      'These names stay on your phone. They go to Saaf AI only if you turn it on.';
+
+  @override
+  String get profileRowProducts => 'Products you use';
+
+  @override
+  String profileProductsValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count products',
+      one: '1 product',
+      zero: 'None',
+    );
+    return '$_temp0';
+  }
 }

@@ -146,6 +146,12 @@ class AccountController extends _$AccountController {
     await ref.read(settingsRepositoryProvider).write(SettingNames.age, null);
     await ref
         .read(settingsRepositoryProvider)
+        .write(SettingNames.currentProducts, null);
+    await ref
+        .read(settingsRepositoryProvider)
+        .write(SettingNames.aiRoutinePlan, null);
+    await ref
+        .read(settingsRepositoryProvider)
         .write(AiConsent.settingName, null);
     ref
       ..invalidate(profileDetailsControllerProvider)
