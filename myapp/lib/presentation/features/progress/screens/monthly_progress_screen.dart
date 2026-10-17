@@ -1,3 +1,7 @@
+import 'package:saaf/presentation/providers/scan_providers.dart';
+import 'package:saaf/domain/services/share_service.dart';
+import 'package:saaf/data/services/before_after_gif.dart';
+import 'package:flutter/foundation.dart' show compute;
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -161,6 +165,8 @@ class _Content extends ConsumerWidget {
           afterLabel: l10n.progressAfter(toText),
           semanticLabel: l10n.progressCompare,
         ),
+        SizedBox(height: space.x8),
+        _ShareAnimation(view: view),
         SizedBox(height: space.x14),
         if (progress == null)
           _NotAnalysed(view: view)
@@ -718,6 +724,82 @@ class _NotAnalysedState extends ConsumerState<_NotAnalysed> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// "Share before & after": a looping animation of the first and latest front
+/// photos, made on the phone and shared only when the user taps.
+class _ShareAnimation extends ConsumerStatefulWidget {
+  const _ShareAnimation({required this.view});
+
+  final ProgressView view;
+
+  @override
+  ConsumerState<_ShareAnimation> createState() => _ShareAnimationState();
+}
+
+class _ShareAnimationState extends ConsumerState<_ShareAnimation> {
+  bool _busy = false;
+
+  Future<void> _share() async {
+    final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
+    final first = frontPhotoOf(widget.view.first);
+    final latest = frontPhotoOf(widget.view.after);
+    if (first == null || latest == null) return;
+    setState(() => _busy = true);
+    final store = ref.read(photoStoreProvider);
+    final before = (await store.load(first)).valueOrNull;
+    final after = (await store.load(latest)).valueOrNull;
+    Uint8List? gif;
+    if (before != null && after != null) {
+      gif = await compute(
+        makeBeforeAfterGif,
+        BeforeAfterFrames(
+          before: before,
+          after: after,
+          beforeLabel: DateFormat(
+            'd MMM y',
+            locale,
+          ).format(widget.view.first.takenAt),
+          afterLabel: DateFormat(
+            'd MMM y',
+            locale,
+          ).format(widget.view.after.takenAt),
+        ),
+      );
+    }
+    if (!mounted) return;
+    setState(() => _busy = false);
+    final result = gif == null
+        ? null
+        : await ref
+              .read(shareServiceProvider)
+              .shareImage(
+                SharedImage(
+                  bytes: gif,
+                  mimeType: 'image/gif',
+                  fileName: 'saaf-progress.gif',
+                ),
+                text: l10n.progressShareAnimationText(widget.view.week),
+              );
+    if (!mounted) return;
+    if (result == null || !result.isOk) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.progressShareAnimationFailed)),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SaafButton.text(
+      label: l10n.progressShareAnimation,
+      leadingIcon: Icons.gif_box_outlined,
+      isLoading: _busy,
+      onPressed: _busy ? null : _share,
     );
   }
 }

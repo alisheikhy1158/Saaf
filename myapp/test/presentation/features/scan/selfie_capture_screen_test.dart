@@ -14,6 +14,8 @@ import 'package:saaf/domain/entities/capture_quality.dart';
 import 'package:saaf/domain/entities/face_pose.dart';
 import 'package:saaf/domain/services/capture_quality_monitor.dart';
 import 'package:saaf/presentation/features/scan/screens/selfie_capture_screen.dart';
+import 'package:saaf/core/utils/solid_png.dart';
+import 'package:saaf/presentation/providers/progress_providers.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_camera_controls.dart';
 
@@ -165,6 +167,42 @@ void main() {
       await tester.pump();
       expect(_light.bright, isTrue);
       await tester.pumpWidget(const SizedBox());
+    });
+  });
+
+  group('lining up with the last scan', () {
+    Future<void> openWithLast(WidgetTester tester) async {
+      await pumpSaaf(
+        tester,
+        const SelfieCaptureScreen(),
+        scaffold: false,
+        overrides: [
+          ..._overrides(),
+          lastFrontPhotoProvider.overrideWith(
+            (ref) async =>
+                solidPng(width: 8, height: 8, red: 90, green: 90, blue: 90),
+          ),
+        ],
+      );
+      await tester.pump();
+      await tester.pump();
+    }
+
+    testWidgets('a faint outline of the last front photo, switchable', (
+      tester,
+    ) async {
+      await openWithLast(tester);
+      expect(find.byKey(const ValueKey('scan-ghost')), findsOneWidget);
+      await _tap(tester, find.byTooltip('Hide the last scan'));
+      expect(find.byKey(const ValueKey('scan-ghost')), findsNothing);
+      await _tap(tester, find.byTooltip('Show the last scan'));
+      expect(find.byKey(const ValueKey('scan-ghost')), findsOneWidget);
+    });
+
+    testWidgets('no earlier scan: no outline', (tester) async {
+      await _open(tester);
+      expect(find.byKey(const ValueKey('scan-ghost')), findsNothing);
+      expect(find.byTooltip('Hide the last scan'), findsNothing);
     });
   });
 

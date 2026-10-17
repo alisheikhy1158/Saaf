@@ -4507,6 +4507,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check a cream'**
   String get creamHomeAction;
+
+  /// Button that shares the progress animation.
+  ///
+  /// In en, this message translates to:
+  /// **'Share before & after'**
+  String get progressShareAnimation;
+
+  /// Text shared with the animation.
+  ///
+  /// In en, this message translates to:
+  /// **'My skin progress with Saaf, week {week}'**
+  String progressShareAnimationText(int week);
+
+  /// When the animation could not be made or shared.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t make the animation. Please try again.'**
+  String get progressShareAnimationFailed;
+
+  /// Tooltip: hide the outline of the last scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide the last scan'**
+  String get scanGhostHide;
+
+  /// Tooltip: show the outline of the last scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Show the last scan'**
+  String get scanGhostShow;
 }
 
 class _AppLocalizationsDelegate

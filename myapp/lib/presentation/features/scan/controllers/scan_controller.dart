@@ -314,4 +314,6 @@ class ScanController extends _$ScanController {
   }
 
   void toggleFillLight() => state = state.copyWith(fillLight: !state.fillLight);
+
+  void toggleGhost() => state = state.copyWith(ghost: !state.ghost);
 }

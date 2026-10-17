@@ -51,6 +51,7 @@ class ScanState {
     this.canFlip = false,
     this.countdown,
     this.fillLight = true,
+    this.ghost = true,
     this.failure,
     this.reviewPhoto,
     this.photoCheck,
@@ -74,6 +75,9 @@ class ScanState {
   /// The screen-light option (top-right sun button).
   final bool fillLight;
 
+  /// Show a faint outline of the last scan's front photo to line up with.
+  final bool ghost;
+
   /// The last thing that went wrong, for a message on screen.
   final Failure? failure;
 
@@ -96,6 +100,7 @@ class ScanState {
     bool? canFlip,
     Object? countdown = _keep,
     bool? fillLight,
+    bool? ghost,
     Object? failure = _keep,
     Object? reviewPhoto = _keep,
     Object? photoCheck = _keep,
@@ -108,6 +113,7 @@ class ScanState {
     canFlip: canFlip ?? this.canFlip,
     countdown: identical(countdown, _keep) ? this.countdown : countdown as int?,
     fillLight: fillLight ?? this.fillLight,
+    ghost: ghost ?? this.ghost,
     failure: identical(failure, _keep) ? this.failure : failure as Failure?,
     reviewPhoto: identical(reviewPhoto, _keep)
         ? this.reviewPhoto

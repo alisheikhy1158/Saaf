@@ -38,6 +38,9 @@ abstract final class SaafAlpha {
   static const double tint = 0.10;
   static const double inkTint = 0.05;
 
+  /// The last scan's photo over the live camera, to line up with.
+  static const double scanGhost = 0.35;
+
   // 08 product thumbnail placeholder (Figma node 3:245).
   static const double thumbnailBody = 0.8;
   static const double thumbnailDetail = 0.85;

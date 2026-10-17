@@ -137,7 +137,30 @@ class _Shrinker implements PhotoShrinker {
 }
 
 void main() {
-  setUp(_share.shared.clear);
+  setUp(() {
+    _share.shared.clear();
+    _share.images.clear();
+  });
+
+  group('before & after animation', () {
+    testWidgets('is made from the photos and shared only on a tap', (
+      tester,
+    ) async {
+      await _open(tester, overrides: _with(view: await _view()));
+      expect(_share.images, isEmpty);
+      await tester.ensureVisible(find.text('Share before & after'));
+      await tester.tap(find.text('Share before & after'));
+      for (var i = 0; i < 6; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 100)),
+        );
+        await tester.pump();
+      }
+      expect(_share.images, hasLength(1));
+      expect(_share.images.single.mimeType, 'image/gif');
+      expect(_share.images.single.bytes, isNotEmpty);
+    });
+  });
 
   group('scans not analysed by Saaf AI yet', () {
     late _SkinService skin;

@@ -2196,5 +2196,15 @@
   "creamHomeBody": "Check fairness and “formula” creams for mercury and steroids.",
   "@creamHomeBody": {"description": "Home card body."},
   "creamHomeAction": "Check a cream",
-  "@creamHomeAction": {"description": "Home card button."}
+  "@creamHomeAction": {"description": "Home card button."},
+  "progressShareAnimation": "Share before & after",
+  "@progressShareAnimation": {"description": "Button that shares the progress animation."},
+  "progressShareAnimationText": "My skin progress with Saaf, week {week}",
+  "@progressShareAnimationText": {"description": "Text shared with the animation.", "placeholders": {"week": {"type": "int"}}},
+  "progressShareAnimationFailed": "We couldn’t make the animation. Please try again.",
+  "@progressShareAnimationFailed": {"description": "When the animation could not be made or shared."},
+  "scanGhostHide": "Hide the last scan",
+  "@scanGhostHide": {"description": "Tooltip: hide the outline of the last scan."},
+  "scanGhostShow": "Show the last scan",
+  "@scanGhostShow": {"description": "Tooltip: show the outline of the last scan."}
 }

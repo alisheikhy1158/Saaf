@@ -98,3 +98,14 @@ Future<ProgressView?> progressView(Ref ref) async {
     first: history.first,
   );
 }
+
+/// The front photo of the last finished scan, for lining up the next one;
+/// null before the first scan.
+@riverpod
+Future<Uint8List?> lastFrontPhoto(Ref ref) async {
+  final history = ref.watch(scanHistoryProvider);
+  if (history.isEmpty) return null;
+  final front = frontPhotoOf(history.last);
+  if (front == null) return null;
+  return (await ref.watch(photoStoreProvider).load(front)).valueOrNull;
+}

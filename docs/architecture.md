@@ -113,7 +113,7 @@ myapp/
 | ID | Requirement |
 |----|-------------|
 | PRV-1 | Selfies are stored in the app's private documents folder only (never the public gallery) and are excluded from cloud backup unless "Photo backup" is ON. |
-| PRV-2 | Skin analysis runs **on-device** (bundled model in `assets/ml/`) — the consent screen promises "Your photos stay on your phone". If any future feature sends a photo or skin data to a server or third-party AI, it needs a new explicit consent screen first (see store-compliance.md). |
+| PRV-2 | Photos stay on the phone unless the user agrees: the skin numbers come from Saaf AI reading the FRONT photo, sent only after Saaf AI is turned on AND the user says yes (once for automatic, or per scan); side photos are never sent. Sharing (e.g. the before-and-after GIF) happens only on the user's tap, through the system share sheet. Any new feature that sends a photo or skin data needs its own explicit consent first (see store-compliance.md, docs/ai-coach.md). |
 | PRV-3 | Collect the minimum: phone number (auth), skin profile, budget, routine. No contacts, no location, no advertising ID. |
 | PRV-4 | Analytics/crash reporting (if added) must be declared in privacy labels and have no PII. |
 

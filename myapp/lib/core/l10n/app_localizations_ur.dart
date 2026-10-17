@@ -2600,4 +2600,22 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get creamHomeAction => 'کریم چیک کریں';
+
+  @override
+  String get progressShareAnimation => 'پہلے اور بعد شیئر کریں';
+
+  @override
+  String progressShareAnimationText(int week) {
+    return 'ثاف کے ساتھ میری جلد کی پیش رفت، ہفتہ $week';
+  }
+
+  @override
+  String get progressShareAnimationFailed =>
+      'اینیمیشن نہیں بن سکی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get scanGhostHide => 'پچھلا اسکین چھپائیں';
+
+  @override
+  String get scanGhostShow => 'پچھلا اسکین دکھائیں';
 }

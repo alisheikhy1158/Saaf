@@ -8,6 +8,9 @@ import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/core/theme/tokens.dart';
 import 'package:saaf/presentation/features/scan/state/scan_state.dart';
 import 'package:saaf/presentation/features/scan/widgets/pose_text.dart';
+import 'package:saaf/domain/entities/face_pose.dart';
+import 'package:saaf/presentation/features/scan/controllers/scan_controller.dart';
+import 'package:saaf/presentation/providers/progress_providers.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
 
 /// The rounded camera area (Figma 06 "Viewfinder", r28): the live picture with
@@ -42,6 +45,7 @@ class ScanViewfinder extends ConsumerWidget {
         ),
       );
     } else if (state.phase == ScanPhase.live) {
+      final ghost = ref.watch(lastFrontPhotoProvider).value;
       content = Stack(
         fit: StackFit.expand,
         children: [
@@ -49,6 +53,24 @@ class ScanViewfinder extends ConsumerWidget {
             label: l10n.scanCameraPreview,
             child: ref.watch(cameraPreviewSourceProvider).buildPreview(context),
           ),
+          if (state.pose == FacePose.front && state.ghost && ghost != null)
+            ExcludeSemantics(
+              child: Opacity(
+                key: const ValueKey('scan-ghost'),
+                opacity: SaafAlpha.scanGhost,
+                // The live front camera is shown mirrored; the saved photo is
+                // not, so it is flipped to line up.
+                child: Transform.flip(
+                  flipX: true,
+                  child: Image.memory(
+                    ghost,
+                    fit: BoxFit.cover,
+                    gaplessPlayback: true,
+                    errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                  ),
+                ),
+              ),
+            ),
           ExcludeSemantics(
             child: CustomPaint(
               painter: _GuidePainter(
@@ -59,6 +81,21 @@ class ScanViewfinder extends ConsumerWidget {
               ),
             ),
           ),
+          if (state.pose == FacePose.front && ghost != null)
+            PositionedDirectional(
+              top: tokens.space.x8,
+              start: tokens.space.x8,
+              child: IconButton.filledTonal(
+                tooltip: state.ghost ? l10n.scanGhostHide : l10n.scanGhostShow,
+                icon: Icon(
+                  state.ghost
+                      ? Icons.layers_clear_outlined
+                      : Icons.layers_outlined,
+                ),
+                onPressed: () =>
+                    ref.read(scanControllerProvider.notifier).toggleGhost(),
+              ),
+            ),
         ],
       );
     } else {

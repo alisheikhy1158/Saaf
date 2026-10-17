@@ -736,5 +736,10 @@
   "creamCheckAnother": "دوسری کریم چیک کریں",
   "creamHomeTitle": "کیا آپ کی کریم محفوظ ہے؟",
   "creamHomeBody": "رنگ گورا کرنے والی اور “فارمولا” کریموں میں پارہ اور اسٹیرائڈ چیک کریں۔",
-  "creamHomeAction": "کریم چیک کریں"
+  "creamHomeAction": "کریم چیک کریں",
+  "progressShareAnimation": "پہلے اور بعد شیئر کریں",
+  "progressShareAnimationText": "ثاف کے ساتھ میری جلد کی پیش رفت، ہفتہ {week}",
+  "progressShareAnimationFailed": "اینیمیشن نہیں بن سکی۔ دوبارہ کوشش کریں۔",
+  "scanGhostHide": "پچھلا اسکین چھپائیں",
+  "scanGhostShow": "پچھلا اسکین دکھائیں"
 }

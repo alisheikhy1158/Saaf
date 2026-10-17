@@ -24,4 +24,21 @@ class PluginShareService implements ShareService {
       return const Err(UnknownFailure('share'));
     }
   }
+
+  @override
+  Future<Result<void>> shareImage(SharedImage image, {String? text}) async {
+    if (image.bytes.isEmpty) return const Err(ValidationFailure('image'));
+    try {
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile.fromData(image.bytes, mimeType: image.mimeType)],
+          fileNameOverrides: [image.fileName],
+          text: text,
+        ),
+      );
+      return const Ok<void>(null);
+    } on Object {
+      return const Err(UnknownFailure('share'));
+    }
+  }
 }

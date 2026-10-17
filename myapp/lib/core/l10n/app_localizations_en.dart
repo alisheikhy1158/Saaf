@@ -2599,4 +2599,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get creamHomeAction => 'Check a cream';
+
+  @override
+  String get progressShareAnimation => 'Share before & after';
+
+  @override
+  String progressShareAnimationText(int week) {
+    return 'My skin progress with Saaf, week $week';
+  }
+
+  @override
+  String get progressShareAnimationFailed =>
+      'We couldn’t make the animation. Please try again.';
+
+  @override
+  String get scanGhostHide => 'Hide the last scan';
+
+  @override
+  String get scanGhostShow => 'Show the last scan';
 }
