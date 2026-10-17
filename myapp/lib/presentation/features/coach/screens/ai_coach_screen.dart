@@ -12,6 +12,7 @@ import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/usecases/ask_coach.dart';
 import 'package:saaf/presentation/providers/ai_chat_controller.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
+import 'package:saaf/presentation/widgets/common/saaf_ai_text.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
 import 'package:saaf/presentation/widgets/common/saaf_icon_circle.dart';
@@ -545,13 +546,15 @@ class _Bubble extends StatelessWidget {
                       color: user ? colors.onPrimary : tokens.textMeta,
                     ),
                   ),
-                if (message.text.isNotEmpty)
+                if (message.text.isNotEmpty && user)
                   Text(
                     message.text,
                     style: context.text.bodyMedium?.copyWith(
-                      color: user ? colors.onPrimary : colors.onSurface,
+                      color: colors.onPrimary,
                     ),
-                  ),
+                  )
+                else if (message.text.isNotEmpty)
+                  SaafAiText(message.text),
               ],
             ),
           ),

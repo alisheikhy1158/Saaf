@@ -289,6 +289,15 @@ abstract final class LegalDocuments {
               'name, phone number or email, or your '
               'safety answers (pregnancy or breastfeeding, prescription skin '
               'treatment, ingredient allergy).',
+          'With the AI coach on, Saaf AI also chooses the products for your '
+              'routine. For that we send the list of products the app allows '
+              'for you (your safety answers are used on your phone to remove '
+              'products first, and are never sent), the facts above and your '
+              'latest scan scores (four numbers, never the photos). When you '
+              'look a product up, we send only what you choose: its barcode '
+              'number, the text of its QR code, or a photo of its label. The AI '
+              'model may search the web for that product; it never searches for '
+              'you.',
           'Our server, run on Cloudflare, checks that you are signed in and '
               'passes your question to Groq, which runs an open-source AI model '
               'to write the reply. Groq handles it under its own privacy terms. '

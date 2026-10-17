@@ -96,6 +96,15 @@ class SaafRoute {
     'Scan a product',
   );
 
+  /// Look a product up with Saaf AI (unknown barcode, a QR link or a label
+  /// photo), opened from the product scan. Not a Figma screen, so not in [all].
+  static const productAi = SaafRoute._(
+    0,
+    'productAi',
+    '/product-ai',
+    'Saaf AI look-up',
+  );
+
   /// The tissue test for the skin type, opened from the skin quiz (step 1). Not
   /// a Figma screen, so not in [all].
   static const skinTypeTest = SaafRoute._(

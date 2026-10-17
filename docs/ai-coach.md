@@ -26,6 +26,25 @@ button and Try again). The server's instructions tell the model to compare hones
 how skin looks, and not to praise or alarm without reason. The rule-based "scores" are NOT sent: they come from the
 placeholder analyser and would mislead the model.
 
+**Product picks (Routine screen, `/v1/recommend`).** With Saaf AI on, it chooses the routine's products. The phone
+first removes every product the safety answers rule out (`BuildRoutine.allowedFor`), then sends only the remaining
+products (id, step, name, price, skin types, concerns, key actives), the skin facts and the latest scan scores (four
+numbers, never photos). The model (gpt-oss-120b, strict JSON schema) returns ids + one-line reasons; the server drops
+any id not in the list, and the app still applies the safety answers and the budget (`BuildRoutine(preferred:)`). Picks
+are cached on the phone (`aiProductPicks` setting) and only re-asked when the quiz, scan or language change. Without
+Saaf AI, or if it fails, the rule-based picks stay. The card shows "Picked by Saaf AI", the reasons and a report button.
+
+**Product look-up (`/product-ai`, `/v1/product`).** For a barcode nobody knows, a QR code that is only a link, or a photo
+of the label when nothing scans. The user sees what will be sent and taps "Look it up". A photo is read first by the
+vision model (strict JSON: brand, name, ingredients; "not a product" stops there), then gpt-oss-120b with Groq's
+**browser search** tool finds the product and writes the answer (first line `PRODUCT: …`). If the search tool fails the
+server answers without it and the app says it was not checked on the web. QR codes carrying a product number (GS1
+Digital Link / DataMatrix) are read on the phone (`ReadProductCode`) and go to the normal barcode look-up. Groq retired
+its `compound` web-search models in Sept 2026; browser search is the documented replacement.
+
+**Answer format.** The prompts ask for a 1–2 sentence answer, at most 3 bold headings with "- " bullets, no tables, under
+150 words. The app renders that with `SaafAiText` (`core/utils/ai_text.dart`), which also turns any table into bullets.
+
 The safety answers are health data and the quiz promises they never leave the phone. The coach asks about pregnancy and
 allergies **in the chat** before suggesting a strong active.
 
@@ -92,6 +111,8 @@ Without step 7 a store build shows "The AI coach isn't available right now" (it 
   input tokens. A typical question costs a fraction of a cent. Set a **spend limit** in the Groq console.
 - Cloudflare Workers free plan: 100,000 requests a day.
 - Per user: `DAILY_LIMIT` questions a day (default 30, in `wrangler.toml`). The app shows "You've reached today's limit".
+  Product picks and look-ups count toward the same limit. A look-up with browser search uses more tokens (the search
+  results are read by the model): budget roughly 5–10x a chat answer.
 
 ## Keeping it working
 

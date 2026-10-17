@@ -206,6 +206,32 @@ void main() {
     });
   });
 
+  group('a long answer is tidy', () {
+    testWidgets('headings, bullets and bold instead of ** and tables', (
+      tester,
+    ) async {
+      _service.answers.add(
+        const Ok(
+          'Your routine covers the basics.\n\n'
+          '**What’s working well**\n'
+          '- **Neem face wash** – good for oily skin.\n\n'
+          '| Step | Product | Tweak |\n'
+          '|---|---|---|\n'
+          '| Moisturiser | Nivea Soft | Try a gel |',
+        ),
+      );
+      await _open(tester);
+      await _ask(tester, 'Is my routine right for me?');
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text('What’s working well'), findsOneWidget);
+      expect(find.textContaining('Neem face wash'), findsOneWidget);
+      expect(find.textContaining('Nivea Soft · Try a gel'), findsOneWidget);
+      expect(find.textContaining('**'), findsNothing);
+      expect(find.textContaining('|'), findsNothing);
+    });
+  });
+
   group('reporting an answer', () {
     Future<void> answered(WidgetTester tester) async {
       await _open(tester);

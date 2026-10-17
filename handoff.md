@@ -5,19 +5,21 @@
 ## Current state
 - **Phase / step:** all 14 Figma screens + phone-test feedback round done. Android test builds work on Codemagic (workflow
   "Android test app", needs Mac minutes; see Native notes). GitHub: https://github.com/alisheikhy1158/Saaf (main).
-- **Waiting on the owner:** push + rebuild "Android test app", test on the Android 15 phone (checklist below); AI coach needs the
-  server (docs/ai-coach.md: Groq key + Cloudflare, then `AI_PROXY_URL` + `USE_FIREBASE=true` in Codemagic `app_config`).
-- **Tests:** 1538 Flutter + 33 backend (`cd backend/ai-proxy; node --test`) · **Analyze:** 0 issues · Flutter 3.47.7
-- Scans are now **every 2 weeks** ("WEEK N", next-scan countdown on Progress). Progress has an **AI progress review** (first,
-  previous, latest FRONT photos, shown to the user and sent only on Send; see docs/ai-coach.md).
+- **Waiting on the owner:** rebuild "Android test app" and test on the Android 15 phone (checklist below). Real Firebase
+  sign-in + AI server (https://saaf-ai.saafai.workers.dev) are live in the test build.
+- **Tests:** 1606 Flutter + 47 backend (`cd backend/ai-proxy; node --test`) · **Analyze:** 0 issues · Flutter 3.47.7
+- New: tidy AI answers (`SaafAiText`), **Saaf AI product picks** on Routine (from our catalogue only, safety-filtered on the
+  phone), **product look-up** `/product-ai` (photo of label / unknown barcode / QR link, Groq browser search), QR + DataMatrix
+  scanning (`ReadProductCode`). Details: docs/ai-coach.md.
 
 ## Phone-test checklist (new, unverified on a device)
 1. Scan: face/light/angle chips and hints react; shutter locked until green; side photos need ~20–55° turn. **If "turn left" is
    mirrored, flip `_yawSign` in `domain/usecases/analyse_frame.dart`** (and `mirrored` in `mlkit_capture_quality_monitor.dart` for iOS).
    Bad photos (also from gallery) show a warning with "Use it anyway". 2. Scan a product (Home icon): real barcode -> Open Beauty
    Facts; typed number works without camera. 3. Profile: edit one answer; name/age sheet; AI sharing row. 4. Tissue test on quiz step 1.
-5. Reminders sheet + notifications. 6. AI coach and the AI progress review are a labelled DEMO until the server is deployed.
-7. Progress: week label, next-scan text, review card -> photos dialog -> chat. (No scan-due notification yet.)
+5. Reminders. 6. AI coach chat + photo. 7. Progress: week label, next scan, AI review -> photos -> chat (no scan-due notification).
+8. AI answers show headings/bullets (no ** or tables). Routine: "Picked by Saaf AI" card + Why these products + report.
+9. Scan product: a QR code; "Take a photo of the product" -> Look it up; unknown barcode -> "Look it up with Saaf AI".
 
 ## Decisions made
 - Bundle ID `com.saafapp.saaf`. Material 3 like Figma (design.md §0). Backend: **Firebase** (project `saaf-01`, see memory file).
@@ -38,7 +40,7 @@
 - Widget tests use Ahem (16 dp/glyph): `FittedBox(scaleDown)`/`Flexible`; fixed pumps (no `pumpAndSettle` with spinners).
   `pumpSaaf`/`pumpSaafApp` default fakes for notifications; params `permissions:`/`scheduler:` (duplicate overrides throw).
 - Re-pumping `pumpSaafApp` in one test keeps the old ProviderScope: `pumpWidget(const SizedBox())` between.
-- `overrideWithBuild` pins state; Riverpod 3 retries: `noAutoRetry`. Bash heredocs with quotes hang: use the Write tool for scripts.
+- `overrideWithBuild` pins state; Riverpod 3 retries: `noAutoRetry`. Bash heredocs mangle `\\` and quotes: write scripts with Write.
 
 ## Native notes (only verifiable via Codemagic)
 - Android: Kotlin 2.4.0 + AGP 8.11.1 + `permission_handler 12.0.1` (13.x needs API 37). INTERNET, CAMERA, POST_NOTIFICATIONS,
@@ -53,7 +55,7 @@
   support email, public deletion page, Cloud Function for account deletion, drift on web (OFF-6), outbox/sync (OFF-2), RevenueCat.
 
 ## Log
-- 2026-10-17: 5-step quiz, legal drafts, Firebase auth. 586 tests.
-- 2026-10-19: screens 10–14 + delete account. 1132 tests. 2026-10-20: guard, drift, reminders. 1201 tests.
+- Earlier: quiz, legal, Firebase auth (586 tests); screens 10–14, guard, drift, reminders (1201 tests).
 - 2026-10-16/17 (device): Codemagic + Firebase wired; Android build fixed 4x. Feedback round: profile edit, name/age, tissue test,
   real camera checks, real products + barcode scanner, AI coach + proxy. 1508 tests.
+- 2026-10-17: sign-in works on the phone. Tidy AI answers, AI product picks, AI product look-up (photo/QR), QR scanning.

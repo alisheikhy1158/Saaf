@@ -7,6 +7,7 @@ import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/domain/usecases/camera_access.dart';
+import 'package:saaf/domain/usecases/read_product_code.dart';
 import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/providers/scan_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
@@ -99,16 +100,21 @@ class _ScanProductScreenState extends ConsumerState<ScanProductScreen> {
     );
   }
 
-  /// A barcode was read or typed: show the product (only the first one counts).
-  void _open(String code) {
+  /// A code was read or typed (only the first one counts): a product number
+  /// opens the product; any other QR code goes to the Saaf AI look-up.
+  void _open(String raw) {
     if (_handled) return;
+    final code = const ReadProductCode()(raw);
+    if (code == null) return;
     _handled = true;
-    context.pushReplacement(
-      Uri(
-        path: SaafRoute.productScanResult.path,
-        queryParameters: {'barcode': code},
-      ).toString(),
-    );
+    final (path, query) = switch (code) {
+      ProductBarcode(:final digits) => (
+        SaafRoute.productScanResult.path,
+        {'barcode': digits},
+      ),
+      ProductQrText(:final text) => (SaafRoute.productAi.path, {'qr': text}),
+    };
+    context.pushReplacement(Uri(path: path, queryParameters: query).toString());
   }
 
   void _lookUp() {
@@ -167,6 +173,24 @@ class _ScanProductScreenState extends ConsumerState<ScanProductScreen> {
             errorText: _typedError ? l10n.scanProductInvalid : null,
           ),
           SaafButton.outline(label: l10n.scanProductLookUp, onPressed: _lookUp),
+          SizedBox(height: space.x4),
+          Semantics(
+            header: true,
+            child: Text(
+              l10n.scanProductCantScanTitle,
+              style: context.text.titleSmall,
+            ),
+          ),
+          SaafButton.outline(
+            label: l10n.scanProductPhotoButton,
+            leadingIcon: Icons.photo_camera_outlined,
+            onPressed: () => context.push(
+              Uri(
+                path: SaafRoute.productAi.path,
+                queryParameters: {'photo': '1'},
+              ).toString(),
+            ),
+          ),
         ],
       ),
     );

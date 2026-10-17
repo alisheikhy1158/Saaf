@@ -1025,7 +1025,7 @@ abstract class AppLocalizations {
   /// Hint under the barcode camera.
   ///
   /// In en, this message translates to:
-  /// **'Point the camera at the barcode on the pack. Hold it flat and steady.'**
+  /// **'Point the camera at the barcode or QR code on the pack. Hold it steady.'**
   String get scanProductHint;
 
   /// Our own explanation before the system camera dialog on the barcode screen.
@@ -1139,7 +1139,7 @@ abstract class AppLocalizations {
   /// What is sent to the AI.
   ///
   /// In en, this message translates to:
-  /// **'Your message, any photo you attach or choose to send for a progress review, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.'**
+  /// **'Your message, any photo you attach or choose to send (a progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.'**
   String get aiConsentShareBody;
 
   /// Heading on the AI permission screen.
@@ -2405,7 +2405,7 @@ abstract class AppLocalizations {
   /// Body when the barcode is not in the catalogue.
   ///
   /// In en, this message translates to:
-  /// **'Check the barcode and try again.'**
+  /// **'Saaf AI can search the web for it instead.'**
   String get productNotFoundBody;
 
   /// Title when the product lookup fails.
@@ -3601,6 +3601,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log out'**
   String get logoutConfirm;
+
+  /// Card on the routine before Saaf AI is turned on.
+  ///
+  /// In en, this message translates to:
+  /// **'Let Saaf AI choose your products'**
+  String get aiPicksOfferTitle;
+
+  /// Body of the Saaf AI picks offer.
+  ///
+  /// In en, this message translates to:
+  /// **'It picks from real products sold in Pakistan to suit your skin, your latest scan and your budget.'**
+  String get aiPicksOfferBody;
+
+  /// Button that opens the AI permission screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Saaf AI'**
+  String get aiPicksTurnOn;
+
+  /// Shown while Saaf AI chooses products.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI is choosing products for your skin…'**
+  String get aiPicksLoading;
+
+  /// Shown when Saaf AI picks failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI couldn’t choose right now, so these are our picks.'**
+  String get aiPicksFailed;
+
+  /// Label on the routine when Saaf AI chose the products.
+  ///
+  /// In en, this message translates to:
+  /// **'Picked by Saaf AI'**
+  String get aiPicksLabel;
+
+  /// Button that shows the reason for each product.
+  ///
+  /// In en, this message translates to:
+  /// **'Why these products'**
+  String get aiPicksWhy;
+
+  /// Button that hides the reasons.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide the reasons'**
+  String get aiPicksHide;
+
+  /// Small note under Saaf AI picks.
+  ///
+  /// In en, this message translates to:
+  /// **'AI picks can be wrong. Check the label and patch test anything new.'**
+  String get aiPicksNote;
+
+  /// Top bar title of the product look-up screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI look-up'**
+  String get productAiTitle;
+
+  /// Title when looking a product up from a photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Look up a product from a photo'**
+  String get productAiPhotoTitle;
+
+  /// What is sent for a photo look-up.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a clear photo of the front label. Only this photo, with your skin type and concerns, goes to Saaf AI (Groq, through Saaf’s server). It reads the label and searches the web.'**
+  String get productAiPhotoBody;
+
+  /// Title when looking a barcode or QR code up.
+  ///
+  /// In en, this message translates to:
+  /// **'Look this product up with Saaf AI'**
+  String get productAiCodeTitle;
+
+  /// What is sent for a barcode look-up.
+  ///
+  /// In en, this message translates to:
+  /// **'Barcode {code}. Only this number, with your skin type and concerns, goes to Saaf AI (Groq, through Saaf’s server), which searches the web for the product.'**
+  String productAiBarcodeBody(String code);
+
+  /// What is sent for a QR look-up.
+  ///
+  /// In en, this message translates to:
+  /// **'The QR code says: {text}\nOnly this text, with your skin type and concerns, goes to Saaf AI (Groq, through Saaf’s server), which searches the web for the product. Saaf does not open the link.'**
+  String productAiQrBody(String text);
+
+  /// Button: take a photo of the product.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get productAiTakePhoto;
+
+  /// Button: choose a product photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get productAiChoosePhoto;
+
+  /// Button: take the product photo again.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake photo'**
+  String get productAiRetake;
+
+  /// Screen-reader label of the product photo preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo of the product to send'**
+  String get productAiPhotoLabel;
+
+  /// Button that sends the look-up.
+  ///
+  /// In en, this message translates to:
+  /// **'Look it up'**
+  String get productAiLookUp;
+
+  /// Shown while the look-up runs.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI is searching the web…'**
+  String get productAiSearching;
+
+  /// Title when the product was not found.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI couldn’t tell which product this is'**
+  String get productAiNotFoundTitle;
+
+  /// Advice after a photo was not recognised.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a clear, close photo of the front label in good light.'**
+  String get productAiNotFoundPhoto;
+
+  /// Advice after a code was not recognised.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a photo of the front label instead.'**
+  String get productAiNotFoundCode;
+
+  /// Note when the web search failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI couldn’t search the web this time, so this is from what it already knows. Check the label.'**
+  String get productAiNotWebChecked;
+
+  /// Button after a look-up.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan another product'**
+  String get productAiScanAnother;
+
+  /// Shown when Saaf AI has not been turned on.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI is off. Turn it on to look products up and to ask about your skin.'**
+  String get productAiNeedsConsent;
+
+  /// Heading above the photo look-up button.
+  ///
+  /// In en, this message translates to:
+  /// **'Can’t scan it?'**
+  String get scanProductCantScanTitle;
+
+  /// Button that opens the photo look-up.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of the product'**
+  String get scanProductPhotoButton;
+
+  /// Button on the not-found state.
+  ///
+  /// In en, this message translates to:
+  /// **'Look it up with Saaf AI'**
+  String get productNotFoundAction;
 }
 
 class _AppLocalizationsDelegate

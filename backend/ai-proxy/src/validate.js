@@ -61,18 +61,10 @@ export function validateChat(body) {
     return { ok: false, error: 'too_many_images' };
   }
   const images = [];
-  for (const image of rawImages) {
-    if (
-      typeof image !== 'string' ||
-      image.length < 16 ||
-      image.length > MAX_IMAGE_CHARS ||
-      !BASE64.test(image)
-    ) {
-      return { ok: false, error: 'bad_image' };
-    }
-    const type = sniffImage(image);
-    if (!type) return { ok: false, error: 'bad_image' };
-    images.push({ type, base64: image });
+  for (const raw of rawImages) {
+    const image = cleanImage(raw);
+    if (!image) return { ok: false, error: 'bad_image' };
+    images.push(image);
   }
 
   if (!question && images.length === 0) return { ok: false, error: 'empty' };
@@ -87,8 +79,13 @@ export function validateChat(body) {
     if (role && text) history.push({ role, text });
   }
 
-  const ctx = body.context && typeof body.context === 'object' ? body.context : {};
-  const context = {
+  return { ok: true, value: { question, images, history, context: cleanContext(body.context) } };
+}
+
+/** What the app may say about the person; anything else is dropped. */
+export function cleanContext(raw) {
+  const ctx = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+  return {
     language: pick(ctx.language, LANGUAGES) ?? 'en',
     skinType: pick(ctx.skinType, SKIN_TYPES),
     concerns: Array.isArray(ctx.concerns)
@@ -103,8 +100,113 @@ export function validateChat(body) {
           .slice(0, MAX_ROUTINE_PRODUCTS)
       : [],
   };
+}
 
-  return { ok: true, value: { question, images, history, context } };
+/** One photo as base64 text, or null when it is not a real picture. */
+export function cleanImage(image) {
+  if (
+    typeof image !== 'string' ||
+    image.length < 16 ||
+    image.length > MAX_IMAGE_CHARS ||
+    !BASE64.test(image)
+  ) {
+    return null;
+  }
+  const type = sniffImage(image);
+  return type ? { type, base64: image } : null;
+}
+
+export const STEPS = ['cleanser', 'treatment', 'moisturiser', 'sunscreen'];
+export const MAX_CANDIDATES = 40;
+const TIMES = ['morning', 'night'];
+const METRICS = ['darkSpots', 'breakouts', 'oiliness', 'hydration'];
+const PRODUCT_ID = /^[a-z0-9-]{1,64}$/;
+
+function strings(value, allowed) {
+  return Array.isArray(value) ? [...new Set(value.filter((v) => allowed.includes(v)))] : [];
+}
+
+/**
+ * The products the app allows for this person (it has already removed any that
+ * clash with their safety answers, which never leave the phone), their skin
+ * facts and, optionally, the latest scan's scores.
+ */
+export function validateRecommend(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { ok: false, error: 'bad_request' };
+  }
+  if (!Array.isArray(body.candidates) || body.candidates.length > MAX_CANDIDATES) {
+    return { ok: false, error: 'bad_candidates' };
+  }
+  const candidates = [];
+  const seen = new Set();
+  for (const item of body.candidates) {
+    if (!item || typeof item !== 'object') return { ok: false, error: 'bad_candidates' };
+    const id = typeof item.id === 'string' && PRODUCT_ID.test(item.id) ? item.id : null;
+    const step = pick(item.step, STEPS);
+    const name = cleanText(item.name, 120);
+    const price = Number.isInteger(item.pricePkr) && item.pricePkr >= 0 && item.pricePkr <= 100_000
+      ? item.pricePkr
+      : null;
+    if (!id || !step || !name || price === null || seen.has(id)) {
+      return { ok: false, error: 'bad_candidates' };
+    }
+    seen.add(id);
+    candidates.push({
+      id,
+      step,
+      name,
+      pricePkr: price,
+      times: strings(item.times, TIMES),
+      forSkin: strings(item.forSkin, SKIN_TYPES),
+      helpsWith: strings(item.helpsWith, CONCERNS),
+      actives: Array.isArray(item.actives)
+        ? item.actives.map((a) => cleanText(a, 40)).filter(Boolean).slice(0, 8)
+        : [],
+    });
+  }
+  if (candidates.length === 0) return { ok: false, error: 'bad_candidates' };
+
+  let scan = null;
+  if (body.scan && typeof body.scan === 'object') {
+    const metrics = {};
+    for (const name of METRICS) {
+      const value = body.scan[name];
+      if (typeof value === 'number' && value >= 0 && value <= 1) {
+        metrics[name] = Math.round(value * 100) / 100;
+      }
+    }
+    if (Object.keys(metrics).length) scan = metrics;
+  }
+
+  return { ok: true, value: { context: cleanContext(body.context), scan, candidates } };
+}
+
+export const MAX_QR = 500;
+
+/** A product to look up: exactly one of a label photo, a barcode or QR text. */
+export function validateProduct(body) {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) {
+    return { ok: false, error: 'bad_request' };
+  }
+  const given = ['image', 'barcode', 'qr'].filter((k) => body[k] !== undefined && body[k] !== null && body[k] !== '');
+  if (given.length !== 1) return { ok: false, error: 'bad_request' };
+
+  const value = { context: cleanContext(body.context), image: null, barcode: null, qr: null };
+  if (given[0] === 'image') {
+    value.image = cleanImage(body.image);
+    if (!value.image) return { ok: false, error: 'bad_image' };
+  } else if (given[0] === 'barcode') {
+    if (typeof body.barcode !== 'string' || !/^\d{8,14}$/.test(body.barcode)) {
+      return { ok: false, error: 'bad_barcode' };
+    }
+    value.barcode = body.barcode;
+  } else {
+    if (typeof body.qr !== 'string' || body.qr.length > MAX_QR) return { ok: false, error: 'bad_qr' };
+    value.qr = cleanText(body.qr, MAX_QR);
+    if (!value.qr) return { ok: false, error: 'bad_qr' };
+  }
+  return { ok: true, value };
 }
 
 export function validateReport(body) {

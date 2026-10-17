@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-/// The live barcode reader (phones), through the `mobile_scanner` plugin. It
-/// only reports numbers of 8 to 14 digits (EAN and UPC product codes); the
-/// picture is never saved or sent anywhere.
+/// The live code reader (phones), through the `mobile_scanner` plugin. It
+/// reports product barcodes (EAN, UPC) and the text of QR and DataMatrix codes
+/// (which may carry the product number); the screen decides what they mean.
+/// The picture is never saved or sent anywhere, and a QR link is never opened.
 Widget pluginBarcodeScannerView(
   BuildContext context,
   ValueChanged<String> onCode,
@@ -19,15 +20,15 @@ class _PluginBarcodeScanner extends StatefulWidget {
 }
 
 class _PluginBarcodeScannerState extends State<_PluginBarcodeScanner> {
-  static final _digits = RegExp(r'^\d{8,14}$');
-
   final MobileScannerController _controller = MobileScannerController(
-    // Product barcodes only: faster, and no QR codes from strangers.
+    // Product codes only: barcodes, and the QR / DataMatrix codes packs carry.
     formats: const [
       BarcodeFormat.ean13,
       BarcodeFormat.ean8,
       BarcodeFormat.upcA,
       BarcodeFormat.upcE,
+      BarcodeFormat.qrCode,
+      BarcodeFormat.dataMatrix,
     ],
     detectionSpeed: DetectionSpeed.noDuplicates,
   );
@@ -40,8 +41,8 @@ class _PluginBarcodeScannerState extends State<_PluginBarcodeScanner> {
 
   void _onDetect(BarcodeCapture capture) {
     for (final barcode in capture.barcodes) {
-      final value = barcode.rawValue?.trim();
-      if (value != null && _digits.hasMatch(value)) {
+      final value = barcode.rawValue;
+      if (value != null && value.trim().isNotEmpty) {
         widget.onCode(value);
         return;
       }

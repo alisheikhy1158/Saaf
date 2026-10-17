@@ -7,7 +7,13 @@ import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
+import 'package:saaf/domain/entities/product.dart';
+import 'package:saaf/domain/entities/product_insight.dart';
+import 'package:saaf/domain/entities/product_picks.dart';
+import 'package:saaf/domain/entities/skin_metric.dart';
+import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
+import 'package:saaf/domain/services/ai_product_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
 
 /// The AI coach through OUR OWN server (a small proxy in front of an open-source
@@ -17,8 +23,8 @@ import 'package:saaf/domain/services/auth_token_provider.dart';
 ///
 /// Only the chat, the optional photos and a few non-health facts about the
 /// user's skin are sent (see [AiContext]); never their name, number or safety
-/// answers.
-class HttpAiCoachService implements AiCoachService {
+/// answers. Saaf AI's product help (picks and look-ups) goes the same way.
+class HttpAiCoachService implements AiCoachService, AiProductService {
   HttpAiCoachService({
     required String baseUrl,
     required AuthTokenProvider tokens,
@@ -49,22 +55,112 @@ class HttpAiCoachService implements AiCoachService {
       ],
       'question': question,
       'images': [for (final photo in photos) base64Encode(photo)],
-      'context': {
-        'language': context.languageCode,
-        'skinType': context.skinType?.name,
-        'concerns': [for (final c in context.concerns) c.name]..sort(),
-        'sensitivity': context.sensitivity?.name,
-        'budget': context.budget?.name,
-        'routine': context.routineProducts,
-      },
+      'context': _contextJson(context),
     });
+    final body = _decode(sent);
+    if (body case Err(:final failure)) return Err(failure);
+    final reply = body.valueOrNull!['reply'];
+    if (reply is String && reply.trim().isNotEmpty) return Ok(reply.trim());
+    return const Err(UnknownFailure('ai-reply'));
+  }
+
+  @override
+  Future<Result<ProductPicks>> pickProducts({
+    required AiContext context,
+    required List<Product> candidates,
+    Map<SkinMetricKind, double> scan = const {},
+  }) async {
+    final sent = await _post('/v1/recommend', {
+      'context': _contextJson(context),
+      'scan': {for (final e in scan.entries) e.key.name: e.value},
+      'candidates': [
+        for (final p in candidates)
+          {
+            'id': p.id,
+            'step': p.category.name,
+            'name': p.name,
+            'pricePkr': p.pricePkr,
+            'times': [
+              for (final t in RoutineTime.values)
+                if (p.times.contains(t)) t.name,
+            ],
+            'forSkin': [
+              for (final t in p.skinTypes)
+                if (t != SkinType.notSure) t.name,
+            ],
+            'helpsWith': [for (final c in p.targets) c.name],
+            'actives': [for (final i in p.ingredients) i.name],
+          },
+      ],
+    });
+    final body = _decode(sent);
+    if (body case Err(:final failure)) return Err(failure);
+    final data = body.valueOrNull!;
+    final picks = [
+      if (data['picks'] case final List<Object?> list)
+        for (final item in list)
+          if (item case {
+            'productId': final String id,
+            'reason': final String reason,
+          })
+            ProductPick(productId: id, reason: reason.trim()),
+    ];
+    if (picks.isEmpty) return const Err(UnknownFailure('ai-picks'));
+    final summary = data['summary'];
+    return Ok(
+      ProductPicks(
+        summary: summary is String ? summary.trim() : '',
+        picks: picks,
+      ),
+    );
+  }
+
+  @override
+  Future<Result<ProductInsight>> lookUpProduct({
+    required ProductQuery query,
+    required AiContext context,
+  }) async {
+    final sent = await _post('/v1/product', {
+      ...switch (query) {
+        ProductPhotoQuery(:final bytes) => {'image': base64Encode(bytes)},
+        ProductBarcodeQuery(:final digits) => {'barcode': digits},
+        ProductQrQuery(:final text) => {'qr': text},
+      },
+      'context': _contextJson(context),
+    });
+    final body = _decode(sent);
+    if (body case Err(:final failure)) return Err(failure);
+    final data = body.valueOrNull!;
+    final text = data['insight'];
+    if (data['found'] != true || text is! String || text.trim().isEmpty) {
+      return const Ok(ProductInsight.notFound());
+    }
+    final title = data['title'];
+    return Ok(
+      ProductInsight(
+        title: title is String && title.trim().isNotEmpty ? title.trim() : null,
+        text: text.trim(),
+        webChecked: data['webChecked'] == true,
+      ),
+    );
+  }
+
+  static Map<String, Object?> _contextJson(AiContext context) => {
+    'language': context.languageCode,
+    'skinType': context.skinType?.name,
+    'concerns': [for (final c in context.concerns) c.name]..sort(),
+    'sensitivity': context.sensitivity?.name,
+    'budget': context.budget?.name,
+    'routine': context.routineProducts,
+  };
+
+  /// The JSON object our server answered with.
+  static Result<Map<String, dynamic>> _decode(Result<http.Response> sent) {
     final response = sent.valueOrNull;
     if (response == null) return Err(sent.failureOrNull!);
-
     try {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
-      final reply = body is Map<String, dynamic> ? body['reply'] : null;
-      if (reply is String && reply.trim().isNotEmpty) return Ok(reply.trim());
+      if (body is Map<String, dynamic>) return Ok(body);
     } on Object {
       // Fall through to the failure below.
     }

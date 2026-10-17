@@ -76,8 +76,13 @@ class ProductScanResultScreen extends ConsumerWidget {
         icon: Icons.search_off,
         title: l10n.productNotFoundTitle,
         body: l10n.productNotFoundBody,
-        actionLabel: l10n.productNoneAction,
-        onAction: () => context.go(SaafRoute.home.path),
+        actionLabel: l10n.productNotFoundAction,
+        onAction: () => context.pushReplacement(
+          Uri(
+            path: SaafRoute.productAi.path,
+            queryParameters: {'barcode': code},
+          ).toString(),
+        ),
       );
     } else {
       body = _Result(product: product);

@@ -5,8 +5,9 @@ import { test } from 'node:test';
 import { AuthError, verifyFirebaseToken } from '../src/auth.js';
 import { askGroq, buildMessages, cleanReply } from '../src/groq.js';
 import { handle } from '../src/index.js';
+import { lookUpProduct, parsePicks, recommend } from '../src/products.js';
 import { buildSystemPrompt } from '../src/prompt.js';
-import { sniffImage, validateChat, validateReport } from '../src/validate.js';
+import { sniffImage, validateChat, validateProduct, validateRecommend, validateReport } from '../src/validate.js';
 
 const PROJECT = 'saaf-test';
 const NOW = Date.UTC(2026, 9, 17, 12, 0, 0);
@@ -317,4 +318,187 @@ test('server: reports are kept without the user id', async () => {
 
 test('server: unknown paths', async () => {
   assert.equal((await call('/nope', { method: 'GET' })).status, 404);
+});
+
+// ---------------------------------------------------------------- tidy answers
+test('prompt: asks for short, tidy answers a phone can show (no tables)', () => {
+  const text = buildSystemPrompt({ language: 'en', skinType: null, concerns: [], sensitivity: null, budget: null, routine: [] });
+  for (const must of ['No tables', '"- "', 'at most 3 short sections', 'under 150 words']) {
+    assert.ok(text.includes(must), must);
+  }
+});
+
+test('groq: web citation marks are removed', () => {
+  assert.equal(cleanReply('Good for oily skin【3†L1-L4】.'), 'Good for oily skin.');
+});
+
+// ---------------------------------------------------------------- product picks
+const candidate = (id, step, extra = {}) => ({
+  id, step, name: `Product ${id}`, pricePkr: 1000, times: ['morning', 'night'], forSkin: ['oily'], helpsWith: ['acne'], actives: ['niacinamide'], ...extra,
+});
+const recommendBody = {
+  context: { language: 'en', skinType: 'oily', concerns: ['acne'], budget: 'essential' },
+  scan: { darkSpots: 0.6, breakouts: 0.3, oiliness: 0.7, hydration: 0.5 },
+  candidates: [
+    candidate('c-1', 'cleanser'),
+    candidate('c-2', 'cleanser'),
+    candidate('t-1', 'treatment', { times: ['night'] }),
+    candidate('m-1', 'moisturiser'),
+    candidate('s-1', 'sunscreen', { times: ['morning'] }),
+  ],
+};
+
+test('validate recommend: keeps the candidates and the scan, drops the rest', () => {
+  const r = validateRecommend({ ...recommendBody, pregnant: true, scan: { ...recommendBody.scan, mood: 3, oiliness: 7 } });
+  assert.equal(r.ok, true);
+  assert.equal(r.value.candidates.length, 5);
+  assert.deepEqual(r.value.scan, { darkSpots: 0.6, breakouts: 0.3, hydration: 0.5 });
+  assert.equal('pregnant' in r.value, false);
+  assert.equal(r.value.context.skinType, 'oily');
+});
+
+test('validate recommend: refuses bad or missing candidates', () => {
+  for (const candidates of [
+    [],
+    undefined,
+    [candidate('BAD ID', 'cleanser')],
+    [candidate('x', 'serum')],
+    [candidate('x', 'cleanser'), candidate('x', 'cleanser')],
+    [candidate('x', 'cleanser', { pricePkr: -5 })],
+    Array.from({ length: 41 }, (_, i) => candidate(`p-${i}`, 'cleanser')),
+  ]) {
+    assert.equal(validateRecommend({ ...recommendBody, candidates }).ok, false, JSON.stringify(candidates)?.slice(0, 60));
+  }
+});
+
+test('picks: only listed products, one per step (two treatments at most), cleaned', () => {
+  const { candidates } = validateRecommend(recommendBody).value;
+  const reply = JSON.stringify({
+    summary: '  Gentle picks for oily skin.  ',
+    picks: [
+      { productId: 'c-1', reason: 'Clears oil.' },
+      { productId: 'c-2', reason: 'A second cleanser is not needed.' },
+      { productId: 'made-up', reason: 'Invented.' },
+      { productId: 's-1', reason: 'x'.repeat(400) },
+    ],
+  });
+  const picks = parsePicks(reply, candidates);
+  assert.equal(picks.summary, 'Gentle picks for oily skin.');
+  assert.deepEqual(picks.picks.map((p) => p.productId), ['c-1', 's-1']);
+  assert.equal(picks.picks[1].reason.length <= 200, true);
+});
+
+test('picks: rubbish from the model is an error', () => {
+  const { candidates } = validateRecommend(recommendBody).value;
+  for (const reply of ['not json', '{}', JSON.stringify({ summary: 'x', picks: [{ productId: 'nope', reason: 'r' }] })]) {
+    assert.throws(() => parsePicks(reply, candidates), { code: 'bad_reply' });
+  }
+});
+
+test('picks: asks the text model for strict JSON, with the list and the scan', async () => {
+  const capture = {};
+  const reply = JSON.stringify({ summary: 'ok', picks: [{ productId: 'c-1', reason: 'r' }] });
+  const result = await recommend({ GROQ_API_KEY: 'k' }, validateRecommend(recommendBody).value, { fetchImpl: fakeGroq(reply, 200, capture) });
+  assert.deepEqual(result, { summary: 'ok', picks: [{ productId: 'c-1', reason: 'r' }] });
+  assert.equal(capture.body.model, 'openai/gpt-oss-120b');
+  assert.equal(capture.body.response_format.type, 'json_schema');
+  assert.equal(capture.body.response_format.json_schema.strict, true);
+  const prompt = capture.body.messages.map((m) => m.content).join('\n');
+  for (const must of ['c-1', 's-1', 'Rs 1000', 'under Rs 3,000', 'oiliness', 'Only choose from']) {
+    assert.ok(prompt.includes(must), must);
+  }
+});
+
+// ---------------------------------------------------------------- product look-up
+test('validate product: exactly one of photo, barcode or QR text', () => {
+  assert.equal(validateProduct({ barcode: '3337875743563' }).ok, true);
+  assert.equal(validateProduct({ qr: '  https://brand.example/p/1 ' }).value.qr, 'https://brand.example/p/1');
+  assert.equal(validateProduct({ image: JPEG }).value.image.type, 'image/jpeg');
+  assert.equal(validateProduct({}).ok, false);
+  assert.equal(validateProduct({ barcode: '123', qr: 'x' }).ok, false);
+  assert.equal(validateProduct({ barcode: '12ab' }).error, 'bad_barcode');
+  assert.equal(validateProduct({ image: 'not base64!!' }).error, 'bad_image');
+  assert.equal(validateProduct({ qr: 'x'.repeat(501) }).error, 'bad_qr');
+});
+
+/** A fake Groq that answers each call in turn and remembers the bodies. */
+function groqSequence(replies) {
+  const bodies = [];
+  const fetchImpl = async (url, init) => {
+    const body = JSON.parse(init.body);
+    bodies.push(body);
+    const next = replies.shift();
+    if (typeof next === 'number') return new Response('{}', { status: next });
+    return new Response(JSON.stringify({ choices: [{ message: { content: next } }] }), { status: 200 });
+  };
+  return { bodies, fetchImpl };
+}
+
+const label = (extra = {}) => JSON.stringify({ isProduct: true, brand: 'CeraVe', name: 'Foaming Cleanser', kind: 'cleanser', ingredients: ['niacinamide'], barcode: '', ...extra });
+const insight = 'PRODUCT: CeraVe Foaming Facial Cleanser\nA gentle foaming wash【1†L2-L3】.\n**For your skin**\n- Suits oily skin.';
+
+test('look-up: a photo is read first, then searched on the web', async () => {
+  const groq = groqSequence([label(), insight]);
+  const request = validateProduct({ image: JPEG, context: { language: 'en', skinType: 'oily' } }).value;
+  const result = await lookUpProduct({ GROQ_API_KEY: 'k' }, request, { fetchImpl: groq.fetchImpl });
+  assert.deepEqual(result, {
+    found: true,
+    title: 'CeraVe Foaming Facial Cleanser',
+    insight: 'A gentle foaming wash.\n**For your skin**\n- Suits oily skin.',
+    webChecked: true,
+  });
+  assert.equal(groq.bodies[0].model, 'qwen/qwen3.8-27b');
+  assert.equal(groq.bodies[0].response_format.type, 'json_schema');
+  assert.equal(groq.bodies[1].model, 'openai/gpt-oss-120b');
+  assert.deepEqual(groq.bodies[1].tools, [{ type: 'browser_search' }]);
+  assert.equal(JSON.stringify(groq.bodies[1]).includes('base64'), false);
+  assert.ok(JSON.stringify(groq.bodies[1].messages).includes('CeraVe'));
+});
+
+test('look-up: a photo that is not a product stops before the web search', async () => {
+  const groq = groqSequence([label({ isProduct: false })]);
+  const result = await lookUpProduct({ GROQ_API_KEY: 'k' }, validateProduct({ image: JPEG }).value, { fetchImpl: groq.fetchImpl });
+  assert.deepEqual(result, { found: false });
+  assert.equal(groq.bodies.length, 1);
+});
+
+test('look-up: a barcode or QR text goes straight to the web search', async () => {
+  for (const body of [{ barcode: '3337875743563' }, { qr: 'https://brand.example/p/1' }]) {
+    const groq = groqSequence([insight]);
+    const result = await lookUpProduct({ GROQ_API_KEY: 'k' }, validateProduct(body).value, { fetchImpl: groq.fetchImpl });
+    assert.equal(result.found, true);
+    assert.equal(groq.bodies.length, 1);
+    assert.ok(JSON.stringify(groq.bodies[0].messages).includes(body.barcode ?? body.qr));
+  }
+});
+
+test('look-up: an unknown product is not found', async () => {
+  const groq = groqSequence(['PRODUCT: unknown\nI could not find it.']);
+  const result = await lookUpProduct({ GROQ_API_KEY: 'k' }, validateProduct({ barcode: '12345678' }).value, { fetchImpl: groq.fetchImpl });
+  assert.deepEqual(result, { found: false });
+});
+
+test('look-up: if the web search fails, answers without it and says so', async () => {
+  const groq = groqSequence([400, insight]);
+  const result = await lookUpProduct({ GROQ_API_KEY: 'k' }, validateProduct({ barcode: '12345678' }).value, { fetchImpl: groq.fetchImpl });
+  assert.equal(result.webChecked, false);
+  assert.equal(result.found, true);
+  assert.equal('tools' in groq.bodies[1], false);
+});
+
+test('server: product picks and look-ups need sign-in and count toward the limit', async () => {
+  const token = await makeToken();
+  const LIMITS = fakeKv();
+  const env = { LIMITS, DAILY_LIMIT: '2' };
+  assert.equal((await call('/v1/recommend', { body: recommendBody })).status, 401);
+  const picks = await call('/v1/recommend', {
+    token, body: recommendBody, env,
+    groq: fakeGroq(JSON.stringify({ summary: 'ok', picks: [{ productId: 'm-1', reason: 'r' }] })),
+  });
+  assert.deepEqual(picks, { status: 200, json: { summary: 'ok', picks: [{ productId: 'm-1', reason: 'r' }] } });
+  const found = await call('/v1/product', { token, body: { barcode: '3337875743563' }, env, groq: fakeGroq(insight) });
+  assert.equal(found.status, 200);
+  assert.equal(found.json.title, 'CeraVe Foaming Facial Cleanser');
+  assert.equal((await call('/v1/product', { token, body: { barcode: '3337875743563' }, env, groq: fakeGroq(insight) })).status, 429);
+  assert.equal((await call('/v1/recommend', { token, body: { candidates: [] } })).status, 400);
 });

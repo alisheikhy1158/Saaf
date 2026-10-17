@@ -8,10 +8,13 @@ import 'package:saaf/data/services/plugin_ai_photo_picker.dart';
 import 'package:saaf/data/services/web/fake_ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_coach_service.dart';
 import 'package:saaf/domain/services/ai_photo_picker.dart';
+import 'package:saaf/domain/services/ai_product_service.dart';
 import 'package:saaf/domain/services/auth_token_provider.dart';
 import 'package:saaf/domain/services/photo_shrinker.dart';
 import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/usecases/ask_coach.dart';
+import 'package:saaf/domain/usecases/look_up_product.dart';
+import 'package:saaf/domain/usecases/pick_products.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
 
 part 'ai_providers.g.dart';
@@ -35,6 +38,30 @@ AiCoachService aiCoachService(Ref ref) => _pretendAi
         baseUrl: Env.aiProxyUrl,
         tokens: ref.watch(idTokenSourceProvider),
       );
+
+/// Saaf AI's product help (picks for the routine, product look-ups); pretend
+/// in the same builds as the coach.
+@Riverpod(keepAlive: true)
+AiProductService aiProductService(Ref ref) => _pretendAi
+    ? const FakeAiProductService()
+    : HttpAiCoachService(
+        baseUrl: Env.aiProxyUrl,
+        tokens: ref.watch(idTokenSourceProvider),
+        // A web search takes longer than a chat answer.
+        timeout: const Duration(seconds: 90),
+      );
+
+@Riverpod(keepAlive: true)
+PickProducts pickProducts(Ref ref) => PickProducts(
+  service: ref.watch(aiProductServiceProvider),
+  consent: ref.watch(aiConsentStoreProvider),
+);
+
+@Riverpod(keepAlive: true)
+LookUpProduct lookUpProduct(Ref ref) => LookUpProduct(
+  service: ref.watch(aiProductServiceProvider),
+  consent: ref.watch(aiConsentStoreProvider),
+);
 
 @Riverpod(keepAlive: true)
 AiPhotoPicker aiPhotoPicker(Ref ref) => (kIsWeb || Env.fakeCamera)

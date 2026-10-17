@@ -519,7 +519,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get scanProductHint =>
-      'کیمرہ پیکٹ پر بنے بار کوڈ کی طرف کریں۔ اسے سیدھا اور مستحکم رکھیں۔';
+      'کیمرہ پیکٹ پر بنے بار کوڈ یا کیو آر کوڈ کی طرف کریں۔ اسے مستحکم رکھیں۔';
 
   @override
   String get scanProductRationaleBody =>
@@ -581,7 +581,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get aiConsentShareBody =>
-      'آپ کا پیغام، آپ کی لگائی ہوئی یا پیش رفت کے جائزے کے لیے چنی ہوئی کوئی تصویر، اور چند باتیں: آپ کی جلد کی قسم، مسائل، حساسیت، بجٹ اور آپ کے روٹین کی پروڈکٹس کے نام۔ آپ کا نام، فون نمبر، سائیڈ کی تصاویر، یا حمل، دوائی اور الرجی کے جوابات ہرگز نہیں۔';
+      'آپ کا پیغام، آپ کی لگائی ہوئی یا بھیجنے کے لیے چنی ہوئی کوئی تصویر (پیش رفت کا جائزہ، یا معلوم کرنے کے لیے پروڈکٹ کا لیبل)، اور چند باتیں: آپ کی جلد کی قسم، مسائل، حساسیت، بجٹ، آپ کے روٹین کی پروڈکٹس کے نام اور، پروڈکٹس چننے کے لیے، آپ کے آخری اسکین کے اسکور۔ آپ کا نام، فون نمبر، سائیڈ کی تصاویر، یا حمل، دوائی اور الرجی کے جوابات ہرگز نہیں۔';
 
   @override
   String get aiConsentWhoTitle => 'کس کو ملتا ہے';
@@ -1349,7 +1349,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String get productNotFoundTitle => 'ہمیں یہ پروڈکٹ نہیں ملی';
 
   @override
-  String get productNotFoundBody => 'بار کوڈ چیک کر کے دوبارہ کوشش کریں۔';
+  String get productNotFoundBody =>
+      'ثاف اے آئی اس کے بجائے ویب پر اسے تلاش کر سکتا ہے۔';
 
   @override
   String get productErrorTitle => 'ہم یہ پروڈکٹ لوڈ نہیں کر سکے';
@@ -2047,4 +2048,107 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get logoutConfirm => 'لاگ آؤٹ';
+
+  @override
+  String get aiPicksOfferTitle => 'ثاف اے آئی کو اپنی پروڈکٹس چننے دیں';
+
+  @override
+  String get aiPicksOfferBody =>
+      'یہ پاکستان میں ملنے والی اصل پروڈکٹس میں سے آپ کی جلد، آخری اسکین اور بجٹ کے مطابق چنتا ہے۔';
+
+  @override
+  String get aiPicksTurnOn => 'ثاف اے آئی آن کریں';
+
+  @override
+  String get aiPicksLoading => 'ثاف اے آئی آپ کی جلد کے لیے پروڈکٹس چن رہا ہے…';
+
+  @override
+  String get aiPicksFailed =>
+      'ثاف اے آئی ابھی نہیں چن سکا، اس لیے یہ ہماری چنی ہوئی پروڈکٹس ہیں۔';
+
+  @override
+  String get aiPicksLabel => 'ثاف اے آئی کی چنی ہوئی';
+
+  @override
+  String get aiPicksWhy => 'یہ پروڈکٹس کیوں';
+
+  @override
+  String get aiPicksHide => 'وجوہات چھپائیں';
+
+  @override
+  String get aiPicksNote =>
+      'اے آئی کا انتخاب غلط ہو سکتا ہے۔ لیبل دیکھیں اور ہر نئی چیز کا پیچ ٹیسٹ کریں۔';
+
+  @override
+  String get productAiTitle => 'ثاف اے آئی سے معلوم کریں';
+
+  @override
+  String get productAiPhotoTitle => 'تصویر سے پروڈکٹ معلوم کریں';
+
+  @override
+  String get productAiPhotoBody =>
+      'سامنے والے لیبل کی صاف تصویر لیں۔ صرف یہ تصویر، آپ کی جلد کی قسم اور مسائل کے ساتھ، ثاف اے آئی (Groq، ثاف کے سرور کے ذریعے) کو جاتی ہے۔ یہ لیبل پڑھ کر ویب پر تلاش کرتا ہے۔';
+
+  @override
+  String get productAiCodeTitle => 'یہ پروڈکٹ ثاف اے آئی سے معلوم کریں';
+
+  @override
+  String productAiBarcodeBody(String code) {
+    return 'بار کوڈ $code۔ صرف یہ نمبر، آپ کی جلد کی قسم اور مسائل کے ساتھ، ثاف اے آئی (Groq، ثاف کے سرور کے ذریعے) کو جاتا ہے، جو ویب پر پروڈکٹ تلاش کرتا ہے۔';
+  }
+
+  @override
+  String productAiQrBody(String text) {
+    return 'کیو آر کوڈ میں لکھا ہے: $text\nصرف یہ تحریر، آپ کی جلد کی قسم اور مسائل کے ساتھ، ثاف اے آئی (Groq، ثاف کے سرور کے ذریعے) کو جاتی ہے، جو ویب پر پروڈکٹ تلاش کرتا ہے۔ ثاف لنک نہیں کھولتا۔';
+  }
+
+  @override
+  String get productAiTakePhoto => 'تصویر لیں';
+
+  @override
+  String get productAiChoosePhoto => 'گیلری سے چنیں';
+
+  @override
+  String get productAiRetake => 'دوبارہ تصویر لیں';
+
+  @override
+  String get productAiPhotoLabel => 'بھیجنے کے لیے پروڈکٹ کی تصویر';
+
+  @override
+  String get productAiLookUp => 'معلوم کریں';
+
+  @override
+  String get productAiSearching => 'ثاف اے آئی ویب پر تلاش کر رہا ہے…';
+
+  @override
+  String get productAiNotFoundTitle =>
+      'ثاف اے آئی نہیں بتا سکا کہ یہ کون سی پروڈکٹ ہے';
+
+  @override
+  String get productAiNotFoundPhoto =>
+      'اچھی روشنی میں سامنے والے لیبل کی صاف اور قریب سے تصویر لیں۔';
+
+  @override
+  String get productAiNotFoundCode =>
+      'اس کے بجائے سامنے والے لیبل کی تصویر آزمائیں۔';
+
+  @override
+  String get productAiNotWebChecked =>
+      'ثاف اے آئی اس بار ویب پر تلاش نہیں کر سکا، اس لیے یہ اس کی اپنی معلومات ہیں۔ لیبل ضرور دیکھیں۔';
+
+  @override
+  String get productAiScanAnother => 'ایک اور پروڈکٹ اسکین کریں';
+
+  @override
+  String get productAiNeedsConsent =>
+      'ثاف اے آئی بند ہے۔ پروڈکٹس معلوم کرنے اور اپنی جلد کے بارے میں پوچھنے کے لیے اسے آن کریں۔';
+
+  @override
+  String get scanProductCantScanTitle => 'اسکین نہیں ہو رہا؟';
+
+  @override
+  String get scanProductPhotoButton => 'پروڈکٹ کی تصویر لیں';
+
+  @override
+  String get productNotFoundAction => 'ثاف اے آئی سے معلوم کریں';
 }

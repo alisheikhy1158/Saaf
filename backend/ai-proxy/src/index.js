@@ -1,7 +1,9 @@
 // Saaf AI proxy (Cloudflare Worker).
 //
-//   POST /v1/chat    {history, question, images, context}  ->  {reply}
-//   POST /v1/report  {reason, replyId, replyText}          ->  {ok: true}
+//   POST /v1/chat      {history, question, images, context}  ->  {reply}
+//   POST /v1/recommend {context, scan, candidates}            ->  {summary, picks}
+//   POST /v1/product   {image | barcode | qr, context}       ->  {found, title, insight, webChecked}
+//   POST /v1/report    {reason, replyId, replyText}          ->  {ok: true}
 //   GET  /health                                           ->  {ok: true}
 //
 // The app never holds an AI key. Every request must carry a valid Firebase
@@ -10,7 +12,8 @@
 
 import { AuthError, verifyFirebaseToken } from './auth.js';
 import { UpstreamError, askGroq } from './groq.js';
-import { validateChat, validateReport } from './validate.js';
+import { lookUpProduct, recommend } from './products.js';
+import { validateChat, validateProduct, validateRecommend, validateReport } from './validate.js';
 
 // A request (with up to three photos) may be this big.
 const MAX_BODY_BYTES = 9_000_000;
@@ -67,26 +70,40 @@ async function withinDailyLimit(env, uid, now) {
   return true;
 }
 
-async function chat(request, env, deps) {
+/**
+ * One AI request: sign-in, a checked body, the daily limit, then [run]. Every
+ * kind of AI request counts toward the same daily limit.
+ */
+async function aiRequest(request, env, deps, validate, run) {
   const { uid } = await authenticate(request, env, deps);
 
   const read = await readJson(request);
   if (read.error) return json({ error: read.error }, read.status);
 
-  const checked = validateChat(read.body);
+  const checked = validate(read.body);
   if (!checked.ok) return json({ error: checked.error }, 400);
 
   const now = deps.now?.() ?? Date.now();
   if (!(await withinDailyLimit(env, uid, now))) return json({ error: 'daily_limit' }, 429);
 
   try {
-    const reply = await askGroq(env, checked.value, { fetchImpl: deps.fetchImpl });
-    return json({ reply });
+    return json(await run(checked.value, { fetchImpl: deps.fetchImpl }));
   } catch (error) {
     if (error instanceof UpstreamError) return json({ error: error.code }, error.status === 504 ? 503 : error.status);
     throw error;
   }
 }
+
+const chat = (request, env, deps) =>
+  aiRequest(request, env, deps, validateChat, async (value, options) => ({
+    reply: await askGroq(env, value, options),
+  }));
+
+const picks = (request, env, deps) =>
+  aiRequest(request, env, deps, validateRecommend, (value, options) => recommend(env, value, options));
+
+const product = (request, env, deps) =>
+  aiRequest(request, env, deps, validateProduct, (value, options) => lookUpProduct(env, value, options));
 
 async function report(request, env, deps) {
   const { uid } = await authenticate(request, env, deps);
@@ -117,6 +134,8 @@ export async function handle(request, env, deps = {}) {
   try {
     if (request.method === 'GET' && url.pathname === '/health') return json({ ok: true });
     if (request.method === 'POST' && url.pathname === '/v1/chat') return await chat(request, env, deps);
+    if (request.method === 'POST' && url.pathname === '/v1/recommend') return await picks(request, env, deps);
+    if (request.method === 'POST' && url.pathname === '/v1/product') return await product(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/report') return await report(request, env, deps);
     return json({ error: 'not_found' }, 404);
   } catch (error) {

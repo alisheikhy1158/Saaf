@@ -518,7 +518,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanProductHint =>
-      'Point the camera at the barcode on the pack. Hold it flat and steady.';
+      'Point the camera at the barcode or QR code on the pack. Hold it steady.';
 
   @override
   String get scanProductRationaleBody =>
@@ -582,7 +582,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aiConsentShareBody =>
-      'Your message, any photo you attach or choose to send for a progress review, and a few facts: your skin type, concerns, sensitivity, budget and the names of your routine products. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.';
+      'Your message, any photo you attach or choose to send (a progress review, or a product label to look up), and a few facts: your skin type, concerns, sensitivity, budget, the names of your routine products and, to choose products for you, your latest scan scores. Never your name, phone number, side photos, or your pregnancy, medication and allergy answers.';
 
   @override
   String get aiConsentWhoTitle => 'Who receives it';
@@ -1346,7 +1346,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productNotFoundTitle => 'We couldn’t find that product';
 
   @override
-  String get productNotFoundBody => 'Check the barcode and try again.';
+  String get productNotFoundBody =>
+      'Saaf AI can search the web for it instead.';
 
   @override
   String get productErrorTitle => 'We couldn’t load this product';
@@ -2047,4 +2048,106 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logoutConfirm => 'Log out';
+
+  @override
+  String get aiPicksOfferTitle => 'Let Saaf AI choose your products';
+
+  @override
+  String get aiPicksOfferBody =>
+      'It picks from real products sold in Pakistan to suit your skin, your latest scan and your budget.';
+
+  @override
+  String get aiPicksTurnOn => 'Turn on Saaf AI';
+
+  @override
+  String get aiPicksLoading => 'Saaf AI is choosing products for your skin…';
+
+  @override
+  String get aiPicksFailed =>
+      'Saaf AI couldn’t choose right now, so these are our picks.';
+
+  @override
+  String get aiPicksLabel => 'Picked by Saaf AI';
+
+  @override
+  String get aiPicksWhy => 'Why these products';
+
+  @override
+  String get aiPicksHide => 'Hide the reasons';
+
+  @override
+  String get aiPicksNote =>
+      'AI picks can be wrong. Check the label and patch test anything new.';
+
+  @override
+  String get productAiTitle => 'Saaf AI look-up';
+
+  @override
+  String get productAiPhotoTitle => 'Look up a product from a photo';
+
+  @override
+  String get productAiPhotoBody =>
+      'Take a clear photo of the front label. Only this photo, with your skin type and concerns, goes to Saaf AI (Groq, through Saaf’s server). It reads the label and searches the web.';
+
+  @override
+  String get productAiCodeTitle => 'Look this product up with Saaf AI';
+
+  @override
+  String productAiBarcodeBody(String code) {
+    return 'Barcode $code. Only this number, with your skin type and concerns, goes to Saaf AI (Groq, through Saaf’s server), which searches the web for the product.';
+  }
+
+  @override
+  String productAiQrBody(String text) {
+    return 'The QR code says: $text\nOnly this text, with your skin type and concerns, goes to Saaf AI (Groq, through Saaf’s server), which searches the web for the product. Saaf does not open the link.';
+  }
+
+  @override
+  String get productAiTakePhoto => 'Take a photo';
+
+  @override
+  String get productAiChoosePhoto => 'Choose from gallery';
+
+  @override
+  String get productAiRetake => 'Retake photo';
+
+  @override
+  String get productAiPhotoLabel => 'Photo of the product to send';
+
+  @override
+  String get productAiLookUp => 'Look it up';
+
+  @override
+  String get productAiSearching => 'Saaf AI is searching the web…';
+
+  @override
+  String get productAiNotFoundTitle =>
+      'Saaf AI couldn’t tell which product this is';
+
+  @override
+  String get productAiNotFoundPhoto =>
+      'Try a clear, close photo of the front label in good light.';
+
+  @override
+  String get productAiNotFoundCode => 'Try a photo of the front label instead.';
+
+  @override
+  String get productAiNotWebChecked =>
+      'Saaf AI couldn’t search the web this time, so this is from what it already knows. Check the label.';
+
+  @override
+  String get productAiScanAnother => 'Scan another product';
+
+  @override
+  String get productAiNeedsConsent =>
+      'Saaf AI is off. Turn it on to look products up and to ask about your skin.';
+
+  @override
+  String get scanProductCantScanTitle => 'Can’t scan it?';
+
+  @override
+  String get scanProductPhotoButton => 'Take a photo of the product';
+
+  @override
+  String get productNotFoundAction => 'Look it up with Saaf AI';
 }

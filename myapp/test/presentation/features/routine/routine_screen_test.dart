@@ -3,7 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:saaf/core/error/failure.dart';
+import 'package:saaf/core/error/result.dart';
+import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
 import 'package:saaf/data/repositories/seed_product_catalog.dart';
+import 'package:saaf/data/services/web/fake_ai_coach_service.dart';
+import 'package:saaf/domain/entities/ai_context.dart';
+import 'package:saaf/domain/entities/product_insight.dart';
+import 'package:saaf/domain/entities/product_picks.dart';
+import 'package:saaf/domain/entities/skin_metric.dart';
+import 'package:saaf/domain/services/ai_product_service.dart';
+import 'package:saaf/domain/usecases/ai_consent.dart';
 import 'package:saaf/domain/entities/budget_band.dart';
 import 'package:saaf/domain/entities/completed_scan.dart';
 import 'package:saaf/domain/entities/product.dart';
@@ -12,8 +22,11 @@ import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/repositories/product_catalog.dart';
 import 'package:saaf/presentation/features/routine/screens/routine_screen.dart';
+import 'package:saaf/presentation/providers/ai_providers.dart';
+import 'package:saaf/presentation/providers/analysis_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
 import 'package:saaf/presentation/providers/routine_providers.dart';
+import 'package:saaf/presentation/providers/settings_providers.dart';
 import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 
 import '../../../helpers/pump_app.dart';
@@ -306,6 +319,112 @@ void main() {
     });
   });
 
+  group('Saaf AI picks', () {
+    late _PickService service;
+    late InMemorySettingsRepository consentedSettings;
+    setUp(() {
+      service = _PickService();
+      consentedSettings = InMemorySettingsRepository()
+        ..write(
+          AiConsent.settingName,
+          DateTime(2026, 10, 17).toIso8601String(),
+        );
+    });
+
+    List<Override> withAi({bool consented = true}) {
+      final settings = consented
+          ? consentedSettings
+          : InMemorySettingsRepository();
+      return [
+        ..._with(),
+        settingsRepositoryProvider.overrideWithValue(settings),
+        aiProductServiceProvider.overrideWithValue(service),
+        aiCoachServiceProvider.overrideWithValue(const FakeAiCoachService()),
+        skinAnalysisProvider.overrideWith((ref) async => null),
+      ];
+    }
+
+    Future<void> openAi(WidgetTester tester, {bool consented = true}) async {
+      await _open(tester, overrides: withAi(consented: consented));
+      for (var i = 0; i < 5; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+    }
+
+    testWidgets('without Saaf AI: offers it, and uses our standard picks', (
+      tester,
+    ) async {
+      await openAi(tester, consented: false);
+      expect(find.text('Let Saaf AI choose your products'), findsOneWidget);
+      expect(find.text('Turn on Saaf AI'), findsOneWidget);
+      expect(find.text('Neem Face Wash'), findsOneWidget);
+      expect(service.calls, 0);
+    });
+
+    testWidgets('with Saaf AI: its choice is in the routine, with the reason', (
+      tester,
+    ) async {
+      await openAi(tester);
+      expect(service.calls, 1);
+      expect(find.text('Picked by Saaf AI'), findsOneWidget);
+      expect(find.text('Chosen for oily skin with breakouts.'), findsOneWidget);
+      // The AI chose the gentle cleanser over the neem wash.
+      expect(find.text('Gel Cleanser'), findsOneWidget);
+      expect(find.text('Neem Face Wash'), findsNothing);
+
+      await tester.ensureVisible(find.text('Why these products'));
+      await tester.tap(find.text('Why these products'));
+      await tester.pump();
+      expect(find.textContaining('Kind to oily skin.'), findsOneWidget);
+    });
+
+    testWidgets('a picks answer can be reported', (tester) async {
+      await openAi(tester);
+      await tester.ensureVisible(find.byTooltip('Report this answer'));
+      await tester.tap(find.byTooltip('Report this answer'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Wrong or misleading'));
+      await tester.pumpAndSettle();
+      expect(find.text('Reported'), findsOneWidget);
+    });
+
+    testWidgets('when Saaf AI fails, our picks stay and it can be retried', (
+      tester,
+    ) async {
+      service.fail = true;
+      await openAi(tester);
+      expect(find.text('Neem Face Wash'), findsOneWidget);
+      expect(
+        find.text('Saaf AI couldn’t choose right now, so these are our picks.'),
+        findsOneWidget,
+      );
+      service.fail = false;
+      await tester.ensureVisible(find.text('Try again'));
+      await tester.tap(find.text('Try again'));
+      for (var i = 0; i < 5; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(find.text('Gel Cleanser'), findsOneWidget);
+    });
+
+    testWidgets('the same answers are not sent twice', (tester) async {
+      await openAi(tester);
+      await openAi(tester);
+      expect(service.calls, 1);
+    });
+
+    testWidgets('is robust at every size, 200 % text and in Urdu', (
+      tester,
+    ) async {
+      await expectRobustLayoutSettled(
+        tester,
+        () => const RoutineScreen(),
+        scaffold: false,
+        overrides: withAi(),
+      );
+    });
+  });
+
   group('layout', () {
     testWidgets('morning and night are robust and accessible', (tester) async {
       await expectRobustLayoutSettled(
@@ -328,6 +447,8 @@ void main() {
           await tester.pump();
         },
       );
+      // Start from a fresh screen, not the one scrolled to the night tab.
+      await tester.pumpWidget(const SizedBox());
       await _open(tester);
       await expectTapTargetsAccessible(tester);
     });
@@ -348,4 +469,35 @@ void main() {
 class _FailingCatalog implements ProductCatalog {
   @override
   Future<List<Product>> all() async => throw StateError('offline');
+}
+
+/// Saaf AI choosing the gel cleanser (instead of the neem wash) for the Figma
+/// profile; [fail] makes it unavailable.
+class _PickService implements AiProductService {
+  int calls = 0;
+  bool fail = false;
+
+  @override
+  Future<Result<ProductPicks>> pickProducts({
+    required AiContext context,
+    required List<Product> candidates,
+    Map<SkinMetricKind, double> scan = const {},
+  }) async {
+    calls++;
+    if (fail) return const Err(ServiceUnavailable());
+    return const Ok(
+      ProductPicks(
+        summary: 'Chosen for oily skin with breakouts.',
+        picks: [
+          ProductPick(productId: 'cleanser-gel', reason: 'Kind to oily skin.'),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Future<Result<ProductInsight>> lookUpProduct({
+    required ProductQuery query,
+    required AiContext context,
+  }) async => const Ok(ProductInsight.notFound());
 }

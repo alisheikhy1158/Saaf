@@ -5,6 +5,9 @@ import { PHOTO_ONLY_QUESTION, buildSystemPrompt } from './prompt.js';
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
+export const TEXT_MODEL = 'openai/gpt-oss-120b';
+export const VISION_MODEL = 'qwen/qwen3.8-27b';
+
 export class UpstreamError extends Error {
   constructor(status, code) {
     super(code);
@@ -23,47 +26,47 @@ export function buildMessages({ question, images, history, context }) {
   if (images.length === 0) {
     messages.push({ role: 'user', content: text });
   } else {
-    messages.push({
-      role: 'user',
-      content: [
-        { type: 'text', text },
-        ...images.map((image) => ({
-          type: 'image_url',
-          image_url: { url: `data:${image.type};base64,${image.base64}` },
-        })),
-      ],
-    });
+    messages.push({ role: 'user', content: withImages(text, images) });
   }
   return messages;
 }
 
-/** Removes any visible "thinking" some models add, and tidies the text. */
+/** A user message with pictures, as Groq's vision models expect it. */
+export function withImages(text, images) {
+  return [
+    { type: 'text', text },
+    ...images.map((image) => ({
+      type: 'image_url',
+      image_url: { url: `data:${image.type};base64,${image.base64}` },
+    })),
+  ];
+}
+
+/**
+ * Removes any visible "thinking" some models add and the citation marks the web
+ * search leaves (like 【3†L1-L4】), and tidies the text.
+ */
 export function cleanReply(text) {
   return String(text ?? '')
     .replace(/<think>[\s\S]*?<\/think>/gi, '')
     .replace(/<think>[\s\S]*$/i, '')
+    .replace(/【[^】]*】/g, '')
     .trim();
 }
 
-export async function askGroq(env, request, { fetchImpl = fetch, timeoutMs = 45_000 } = {}) {
+/** The text model for questions, the vision model when there are photos. */
+export function modelFor(env, hasImages) {
+  return hasImages
+    ? { model: env.MODEL_VISION || VISION_MODEL, effort: env.REASONING_VISION ?? 'none' }
+    : { model: env.MODEL_TEXT || TEXT_MODEL, effort: env.REASONING_TEXT ?? 'low' };
+}
+
+/**
+ * Sends one chat completion to Groq and gives back the reply text (unclean).
+ * Every Groq call goes through here, so the key is only ever in this header.
+ */
+export async function callGroq(env, body, { fetchImpl = fetch, timeoutMs = 45_000 } = {}) {
   if (!env.GROQ_API_KEY) throw new UpstreamError(503, 'not_configured');
-
-  const hasImages = request.images.length > 0;
-  const model = hasImages
-    ? (env.MODEL_VISION || 'qwen/qwen3.8-27b')
-    : (env.MODEL_TEXT || 'openai/gpt-oss-120b');
-  // Qwen can skip its reasoning ("none"); GPT-OSS cannot, "low" keeps it quick.
-  const effort = hasImages ? (env.REASONING_VISION ?? 'none') : (env.REASONING_TEXT ?? 'low');
-
-  const body = {
-    model,
-    messages: buildMessages(request),
-    temperature: 0.4,
-    max_completion_tokens: 900,
-    include_reasoning: false,
-    stream: false,
-  };
-  if (effort) body.reasoning_effort = effort;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -75,7 +78,7 @@ export async function askGroq(env, request, { fetchImpl = fetch, timeoutMs = 45_
         'Content-Type': 'application/json',
         Authorization: `Bearer ${env.GROQ_API_KEY}`,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ include_reasoning: false, stream: false, ...body }),
       signal: controller.signal,
     });
   } catch {
@@ -88,13 +91,25 @@ export async function askGroq(env, request, { fetchImpl = fetch, timeoutMs = 45_
   if (response.status === 429) throw new UpstreamError(503, 'busy');
   if (!response.ok) throw new UpstreamError(502, `groq_${response.status}`);
 
-  let data;
   try {
-    data = await response.json();
+    const data = await response.json();
+    return String(data?.choices?.[0]?.message?.content ?? '');
   } catch {
     throw new UpstreamError(502, 'bad_reply');
   }
-  const reply = cleanReply(data?.choices?.[0]?.message?.content);
+}
+
+export async function askGroq(env, request, options = {}) {
+  const { model, effort } = modelFor(env, request.images.length > 0);
+  const body = {
+    model,
+    messages: buildMessages(request),
+    temperature: 0.4,
+    max_completion_tokens: 900,
+  };
+  if (effort) body.reasoning_effort = effort;
+
+  const reply = cleanReply(await callGroq(env, body, options));
   if (!reply) throw new UpstreamError(502, 'empty_reply');
   return reply;
 }

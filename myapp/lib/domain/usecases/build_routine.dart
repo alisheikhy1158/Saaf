@@ -11,10 +11,23 @@ import 'package:saaf/domain/entities/skin_type.dart';
 ///
 /// Pure and deterministic. The safety answers only remove products; they are
 /// never a diagnosis. A step with no safe product is left out rather than forced.
+///
+/// [preferred] are the ids Saaf AI chose: they come first in their step, but
+/// the safety answers and the budget still apply to them like to any product.
 class BuildRoutine {
-  const BuildRoutine(this._catalog);
+  const BuildRoutine(this._catalog, {Set<String> preferred = const {}})
+    : _preferred = preferred;
 
   final List<Product> _catalog;
+  final Set<String> _preferred;
+
+  /// Score bonus that puts a Saaf AI pick ahead of every rule-based choice.
+  static const int _preferredBonus = 100;
+
+  /// Every product the safety answers allow for [profile] (what Saaf AI may
+  /// choose from).
+  List<Product> allowedFor(SkinProfile profile) =>
+      _catalog.where((p) => _isAllowed(p, profile)).toList();
 
   /// Cost of losing a treatment compared with swapping it for a cheaper one:
   /// the budget drops a treatment only after cheaper swaps run out.
@@ -93,7 +106,8 @@ class BuildRoutine {
         ? 1
         : (knowsType && p.skinTypes.contains(type) ? 3 : 0);
     final concernScore = 2 * p.targets.where(profile.concerns.contains).length;
-    return typeScore + concernScore;
+    final aiScore = _preferred.contains(p.id) ? _preferredBonus : 0;
+    return typeScore + concernScore + aiScore;
   }
 
   // ── Budget ───────────────────────────────────────────────────────────────

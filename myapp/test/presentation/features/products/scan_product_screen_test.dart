@@ -10,6 +10,7 @@ import 'package:saaf/data/services/web/fake_permission_service.dart';
 import 'package:saaf/domain/entities/camera_permission.dart';
 import 'package:saaf/domain/entities/scanned_product.dart';
 import 'package:saaf/domain/services/product_lookup.dart';
+import 'package:saaf/presentation/features/products/screens/product_ai_screen.dart';
 import 'package:saaf/presentation/features/products/screens/product_scan_result_screen.dart';
 import 'package:saaf/presentation/features/products/screens/scan_product_screen.dart';
 import 'package:saaf/presentation/providers/product_providers.dart';
@@ -40,12 +41,24 @@ class _Lookup implements ProductLookup {
 
 late _Lookup _lookup;
 
-/// A stand-in for the live camera: one button that "reads" a barcode.
+/// A stand-in for the live camera: buttons that "read" a barcode or a QR code.
 Widget _fakeScanner(BuildContext context, ValueChanged<String> onCode) =>
-    Center(
-      child: FilledButton(
-        onPressed: () => onCode('3337875743563'),
-        child: const Text('simulate barcode'),
+    SingleChildScrollView(
+      child: Column(
+        children: [
+          FilledButton(
+            onPressed: () => onCode('3337875743563'),
+            child: const Text('simulate barcode'),
+          ),
+          FilledButton(
+            onPressed: () => onCode('https://id.gs1.org/01/03337875743563'),
+            child: const Text('simulate product QR'),
+          ),
+          FilledButton(
+            onPressed: () => onCode('https://brand.pk/neem'),
+            child: const Text('simulate link QR'),
+          ),
+        ],
       ),
     );
 
@@ -99,6 +112,30 @@ void main() {
       await _tap(tester, find.text('simulate barcode'));
       expect(find.byType(ProductScanResultScreen), findsOneWidget);
       expect(_lookup.asked, ['3337875743563']);
+    });
+
+    testWidgets('a QR code with the product number opens the result', (
+      tester,
+    ) async {
+      await _open(tester);
+      await _tap(tester, find.text('simulate product QR'));
+      expect(find.byType(ProductScanResultScreen), findsOneWidget);
+      expect(_lookup.asked, ['3337875743563']);
+    });
+
+    testWidgets('any other QR code goes to the Saaf AI look-up', (
+      tester,
+    ) async {
+      await _open(tester);
+      await _tap(tester, find.text('simulate link QR'));
+      expect(find.byType(ProductAiScreen), findsOneWidget);
+      expect(find.textContaining('https://brand.pk/neem'), findsOneWidget);
+      expect(_lookup.asked, isEmpty);
+    });
+
+    testWidgets('the hint mentions QR codes', (tester) async {
+      await _open(tester);
+      expect(find.textContaining('QR code'), findsWidgets);
     });
 
     testWidgets('only the first reading counts', (tester) async {
@@ -164,6 +201,18 @@ void main() {
       expect(find.text('Allow camera access'), findsNothing);
       await _tap(tester, find.text('Open Settings'));
       expect(permissions.settingsOpened, 1);
+    });
+  });
+
+  group('no code that scans', () {
+    testWidgets('a photo of the product can be looked up with Saaf AI', (
+      tester,
+    ) async {
+      await _open(tester, permission: CameraPermission.permanentlyDenied);
+      expect(find.text('Can’t scan it?'), findsOneWidget);
+      await _tap(tester, find.text('Take a photo of the product'));
+      expect(find.byType(ProductAiScreen), findsOneWidget);
+      expect(find.text('Look up a product from a photo'), findsOneWidget);
     });
   });
 

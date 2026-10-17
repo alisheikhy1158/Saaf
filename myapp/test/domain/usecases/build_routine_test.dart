@@ -409,4 +409,66 @@ void main() {
       expect(r.fitsBudget, isTrue);
     });
   });
+
+  group('Saaf AI picks', () {
+    final catalog = [
+      p('c-cheap', ProductCategory.cleanser, 400, skinTypes: {SkinType.oily}),
+      p('c-ai', ProductCategory.cleanser, 900),
+      p('m-1', ProductCategory.moisturiser, 800),
+      p('m-ai', ProductCategory.moisturiser, 1200),
+      p('s-1', ProductCategory.sunscreen, 1000),
+      p(
+        'retinol',
+        ProductCategory.treatment,
+        1500,
+        times: {RoutineTime.night},
+        targets: {SkinConcern.acne},
+        strong: true,
+        noPregnancy: true,
+      ),
+    ];
+    const oily = SkinProfile(skinType: SkinType.oily);
+
+    test('the products Saaf AI chose come first in their step', () {
+      final routine = BuildRoutine(catalog, preferred: {'c-ai', 'm-ai'})(oily);
+      expect(ids(routine.morning), ['c-ai', 'm-ai', 's-1']);
+      expect(ids(BuildRoutine(catalog)(oily).morning).first, 'c-cheap');
+    });
+
+    test('an AI pick never gets past the safety answers', () {
+      const pregnant = SkinProfile(
+        concerns: {SkinConcern.acne},
+        safetyFlags: {SafetyFlag.pregnantOrBreastfeeding},
+      );
+      final routine = BuildRoutine(catalog, preferred: {'retinol'})(pregnant);
+      expect(ids(routine.night), isNot(contains('retinol')));
+    });
+
+    test('the budget still applies to AI picks', () {
+      const tight = SkinProfile(
+        skinType: SkinType.oily,
+        budget: BudgetBand.essential,
+      );
+      final dear = [...catalog, p('c-gold', ProductCategory.cleanser, 2900)];
+      final routine = BuildRoutine(dear, preferred: {'c-gold'})(tight);
+      expect(routine.fitsBudget, isTrue);
+      expect(ids(routine.morning), isNot(contains('c-gold')));
+    });
+
+    test('allowedFor lists only what the safety answers allow', () {
+      const pregnant = SkinProfile(
+        concerns: {SkinConcern.acne},
+        safetyFlags: {SafetyFlag.pregnantOrBreastfeeding},
+      );
+      final allowed = BuildRoutine(catalog).allowedFor(pregnant);
+      expect(allowed.map((x) => x.id), isNot(contains('retinol')));
+      expect(allowed.map((x) => x.id), contains('c-ai'));
+      expect(
+        BuildRoutine(
+          catalog,
+        ).allowedFor(const SkinProfile(concerns: {SkinConcern.acne})),
+        contains(catalog.last),
+      );
+    });
+  });
 }

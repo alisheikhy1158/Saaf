@@ -322,7 +322,11 @@ void main() {
     testWidgets('a barcode that is not known', (tester) async {
       await _open(tester, barcode: '0000000000000');
       expect(find.text('We couldn’t find that product'), findsOneWidget);
-      expect(find.text('Check the barcode and try again.'), findsOneWidget);
+      expect(
+        find.text('Saaf AI can search the web for it instead.'),
+        findsOneWidget,
+      );
+      expect(find.text('Look it up with Saaf AI'), findsOneWidget);
     });
 
     testWidgets('a lookup that fails can be retried', (tester) async {

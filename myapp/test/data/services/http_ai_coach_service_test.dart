@@ -11,6 +11,10 @@ import 'package:saaf/data/services/http_ai_coach_service.dart';
 import 'package:saaf/domain/entities/ai_context.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/budget_band.dart';
+import 'package:saaf/domain/entities/ingredient.dart';
+import 'package:saaf/domain/entities/product.dart';
+import 'package:saaf/domain/entities/product_insight.dart';
+import 'package:saaf/domain/entities/skin_metric.dart';
 import 'package:saaf/domain/entities/sensitivity.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/skin_type.dart';
@@ -296,6 +300,130 @@ void main() {
       final s = service(MockClient((_) async => http.Response('', 503)));
       final result = await s.report(reply: reply, reason: 'wrong');
       expect(result.failureOrNull, const ServiceUnavailable());
+    });
+  });
+
+  group('product picks', () {
+    const cleanser = Product(
+      id: 'cleanser-a',
+      name: 'Gentle Cleanser',
+      category: ProductCategory.cleanser,
+      pricePkr: 900,
+      times: {RoutineTime.morning, RoutineTime.night},
+      skinTypes: {SkinType.oily, SkinType.notSure},
+      targets: {SkinConcern.acne},
+      ingredients: {Ingredient.niacinamide},
+    );
+
+    test('sends the allowed products, the scan and the skin facts', () async {
+      late http.Request seen;
+      final s = service(
+        MockClient((request) async {
+          seen = request;
+          return ok({
+            'summary': 'A gentle routine.',
+            'picks': [
+              {'productId': 'cleanser-a', 'reason': 'Calms oil.'},
+            ],
+          });
+        }),
+      );
+      final result = await s.pickProducts(
+        context: _context,
+        candidates: const [cleanser],
+        scan: const {SkinMetricKind.darkSpots: 0.5},
+      );
+      expect(seen.url.path, '/v1/recommend');
+      expect(seen.headers['Authorization'], 'Bearer firebase-id-token');
+      final body = jsonDecode(seen.body) as Map<String, dynamic>;
+      expect(body['candidates'], [
+        {
+          'id': 'cleanser-a',
+          'step': 'cleanser',
+          'name': 'Gentle Cleanser',
+          'pricePkr': 900,
+          'times': ['morning', 'night'],
+          'forSkin': ['oily'],
+          'helpsWith': ['acne'],
+          'actives': ['niacinamide'],
+        },
+      ]);
+      expect(body['scan'], {'darkSpots': 0.5});
+      expect(body['context'], containsPair('skinType', 'oily'));
+      final picks = result.valueOrNull!;
+      expect(picks.summary, 'A gentle routine.');
+      expect(picks.reasonFor('cleanser-a'), 'Calms oil.');
+    });
+
+    test('a reply without picks is a failure', () async {
+      final s = service(MockClient((_) async => ok({'summary': 'x'})));
+      final result = await s.pickProducts(
+        context: _context,
+        candidates: const [cleanser],
+      );
+      expect(result.failureOrNull, isA<UnknownFailure>());
+    });
+  });
+
+  group('product look-up', () {
+    Future<Map<String, dynamic>> sent(ProductQuery query) async {
+      late Map<String, dynamic> body;
+      final s = service(
+        MockClient((request) async {
+          expect(request.url.path, '/v1/product');
+          body = jsonDecode(request.body) as Map<String, dynamic>;
+          return ok({'found': false});
+        }),
+      );
+      await s.lookUpProduct(query: query, context: _context);
+      return body;
+    }
+
+    test(
+      'sends exactly one of the photo, the barcode or the QR text',
+      () async {
+        expect(
+          (await sent(ProductPhotoQuery(Uint8List.fromList([1, 2]))))['image'],
+          base64Encode([1, 2]),
+        );
+        final barcode = await sent(const ProductBarcodeQuery('3337875743563'));
+        expect(barcode['barcode'], '3337875743563');
+        expect(barcode.containsKey('image'), isFalse);
+        expect(
+          (await sent(const ProductQrQuery('https://x.example')))['qr'],
+          'https://x.example',
+        );
+      },
+    );
+
+    test('a found product comes back with its title and text', () async {
+      final s = service(
+        MockClient(
+          (_) async => ok({
+            'found': true,
+            'title': 'CeraVe Foaming Cleanser',
+            'insight': '**What it is**\n- A gel wash.',
+            'webChecked': false,
+          }),
+        ),
+      );
+      final insight = (await s.lookUpProduct(
+        query: const ProductBarcodeQuery('3337875743563'),
+        context: _context,
+      )).valueOrNull!;
+      expect(insight.found, isTrue);
+      expect(insight.title, 'CeraVe Foaming Cleanser');
+      expect(insight.text, '**What it is**\n- A gel wash.');
+      expect(insight.webChecked, isFalse);
+    });
+
+    test('not found is an answer, not a failure', () async {
+      final s = service(MockClient((_) async => ok({'found': false})));
+      final insight = (await s.lookUpProduct(
+        query: const ProductQrQuery('hello'),
+        context: _context,
+      )).valueOrNull!;
+      expect(insight.found, isFalse);
     });
   });
 }
