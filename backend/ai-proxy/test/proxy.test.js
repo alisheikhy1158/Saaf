@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import { AuthError, verifyFirebaseToken } from '../src/auth.js';
-import { askGroq, buildMessages, cleanReply } from '../src/groq.js';
+import { askGroq, buildMessages, callGroq, cleanReply } from '../src/groq.js';
 import { handle } from '../src/index.js';
 import { lookUpProduct, planRoutine } from '../src/products.js';
 import { checkSafety } from '../src/safety.js';
@@ -732,4 +732,43 @@ test('validate: the body pigmentation concern is kept and described', () => {
   assert.deepEqual(r.value.context.concerns, ['bodyPigmentation', 'acne']);
   const text = buildSystemPrompt(r.value.context);
   assert.ok(text.includes('underarms'), 'underarms');
+});
+
+// ---------------------------------------------------------------- Groq rate limits
+function limitedThenOk(waitSeconds, reply = 'ok') {
+  let calls = 0;
+  const fetchImpl = async () => {
+    calls++;
+    if (calls === 1) {
+      return new Response(JSON.stringify({ error: { message: 'Rate limit reached: tokens per minute (TPM)' } }), {
+        status: 429,
+        headers: { 'retry-after': String(waitSeconds) },
+      });
+    }
+    return new Response(JSON.stringify({ choices: [{ message: { content: reply } }] }), { status: 200 });
+  };
+  return { fetchImpl, calls: () => calls };
+}
+
+test('groq: a short rate-limit wait is waited out once', async () => {
+  const groq = limitedThenOk(0);
+  const reply = await callGroq({ GROQ_API_KEY: 'k' }, { model: 'm', messages: [] }, { fetchImpl: groq.fetchImpl });
+  assert.equal(reply, 'ok');
+  assert.equal(groq.calls(), 2);
+});
+
+test('groq: a long rate-limit wait is reported as busy at once', async () => {
+  const groq = limitedThenOk(120);
+  await assert.rejects(
+    callGroq({ GROQ_API_KEY: 'k' }, { model: 'm', messages: [] }, { fetchImpl: groq.fetchImpl }),
+    { code: 'busy' },
+  );
+  assert.equal(groq.calls(), 1);
+});
+
+test('routine: notes are structured by the smaller model (its own rate limit)', async () => {
+  const groq = groqSequence([NOTES, plan()]);
+  await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl });
+  assert.equal(groq.bodies[0].model, 'openai/gpt-oss-120b');
+  assert.equal(groq.bodies[1].model, 'openai/gpt-oss-20b');
 });

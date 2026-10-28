@@ -8,6 +8,9 @@ const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 export const TEXT_MODEL = 'openai/gpt-oss-120b';
 export const VISION_MODEL = 'qwen/qwen3.8-27b';
 
+/** Turns research notes into JSON: a smaller model with its own rate limit. */
+export const STRUCTURE_MODEL = 'openai/gpt-oss-20b';
+
 export class UpstreamError extends Error {
   constructor(status, code) {
     super(code);
@@ -65,49 +68,86 @@ export function modelFor(env, hasImages) {
  * Sends one chat completion to Groq and gives back the reply text (unclean).
  * Every Groq call goes through here, so the key is only ever in this header.
  */
-export async function callGroq(env, body, { fetchImpl = fetch, timeoutMs = 45_000 } = {}) {
+/** The longest Groq "retry after" we wait out (seconds); longer is "busy". */
+const MAX_RETRY_WAIT = 15;
+
+const label = (body) => `${body.model}${body.tools ? ', tools' : ''}`;
+
+/**
+ * Sends one chat completion to Groq and gives back the reply text (unclean).
+ * Every Groq call goes through here, so the key is only ever in this header.
+ * A rate limit with a short "retry after" is waited out once; Groq's limits
+ * are per model and per minute (8,000 tokens a minute on the base plan).
+ */
+export async function callGroq(env, body, { fetchImpl = fetch, timeoutMs = 45_000, sleep = defaultSleep } = {}) {
   if (!env.GROQ_API_KEY) throw new UpstreamError(503, 'not_configured');
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  let response;
-  try {
-    response = await fetchImpl(GROQ_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${env.GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({ include_reasoning: false, stream: false, ...body }),
-      signal: controller.signal,
-    });
-  } catch {
-    console.error(`groq timeout after ${timeoutMs} ms (${body.model}${body.tools ? ', tools' : ''})`);
-    throw new UpstreamError(504, 'timeout');
-  } finally {
-    clearTimeout(timer);
-  }
-
-  // Groq's own limits or an outage are "busy" for the app, not the user's fault.
-  if (response.status === 429) throw new UpstreamError(503, 'busy');
-  if (!response.ok) {
-    // Groq's own error message (never the person's question) helps fix problems.
-    let detail = '';
+  for (let attempt = 0; ; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    let response;
     try {
-      detail = (await response.text()).slice(0, 300);
+      response = await fetchImpl(GROQ_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${env.GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({ include_reasoning: false, stream: false, ...body }),
+        signal: controller.signal,
+      });
     } catch {
-      // No detail.
+      console.error(`groq timeout after ${timeoutMs} ms (${label(body)})`);
+      throw new UpstreamError(504, 'timeout');
+    } finally {
+      clearTimeout(timer);
     }
-    console.error(`groq ${response.status} (${body.model}${body.tools ? ', tools' : ''}): ${detail}`);
-    throw new UpstreamError(502, `groq_${response.status}`);
-  }
 
-  try {
-    const data = await response.json();
-    return String(data?.choices?.[0]?.message?.content ?? '');
-  } catch {
-    throw new UpstreamError(502, 'bad_reply');
+    if (response.status === 429) {
+      // Which limit was hit (tokens or requests, per minute or per day) decides
+      // what to do about it, so it is logged (never the person's question).
+      const wait = Number(response.headers.get('retry-after'));
+      let detail = '';
+      try {
+        detail = (await response.text()).slice(0, 300);
+      } catch {
+        // No detail.
+      }
+      console.error(
+        `groq 429 (${label(body)}) retry-after=${response.headers.get('retry-after')} ` +
+          `remaining-tokens=${response.headers.get('x-ratelimit-remaining-tokens')} ` +
+          `remaining-requests=${response.headers.get('x-ratelimit-remaining-requests')}: ${detail}`,
+      );
+      if (attempt === 0 && Number.isFinite(wait) && wait >= 0 && wait <= MAX_RETRY_WAIT) {
+        await sleep(wait * 1000);
+        continue;
+      }
+      // Groq's own limits are "busy" for the app, not the user's fault.
+      throw new UpstreamError(503, 'busy');
+    }
+    if (!response.ok) {
+      // Groq's own error message (never the person's question) helps fix problems.
+      let detail = '';
+      try {
+        detail = (await response.text()).slice(0, 300);
+      } catch {
+        // No detail.
+      }
+      console.error(`groq ${response.status} (${label(body)}): ${detail}`);
+      throw new UpstreamError(502, `groq_${response.status}`);
+    }
+
+    try {
+      const data = await response.json();
+      return String(data?.choices?.[0]?.message?.content ?? '');
+    } catch {
+      throw new UpstreamError(502, 'bad_reply');
+    }
   }
+}
+
+function defaultSleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export async function askGroq(env, request, options = {}) {

@@ -5,7 +5,7 @@
 // app adds fixed ingredient rules on top. Never says "safe": only "no known
 // problem".
 
-import { TEXT_MODEL, UpstreamError, callGroq, cleanReply, modelFor, withImages } from './groq.js';
+import { STRUCTURE_MODEL, TEXT_MODEL, UpstreamError, callGroq, cleanReply, modelFor, withImages } from './groq.js';
 import { languageInstruction } from './prompt.js';
 import { cleanText } from './validate.js';
 
@@ -139,7 +139,7 @@ export async function checkSafety(env, request, options = {}) {
   let data;
   try {
     data = JSON.parse(cleanReply(await callGroq(env, {
-      model: env.MODEL_TEXT || TEXT_MODEL,
+      model: env.MODEL_STRUCTURE || STRUCTURE_MODEL,
       messages: planMessages(notes, known, request.context),
       temperature: 0,
       max_completion_tokens: 1500,

@@ -10,7 +10,7 @@
 // https://console.groq.com/docs/structured-outputs
 // https://console.groq.com/docs/tool-use/built-in-tools/browser-search
 
-import { TEXT_MODEL, UpstreamError, callGroq, cleanReply, modelFor, withImages } from './groq.js';
+import { STRUCTURE_MODEL, TEXT_MODEL, UpstreamError, callGroq, cleanReply, modelFor, withImages } from './groq.js';
 import { FORMAT_RULES, describePerson, languageInstruction } from './prompt.js';
 import { STEPS, cleanText } from './validate.js';
 
@@ -240,7 +240,7 @@ export async function planRoutine(env, request, options = {}) {
   if (!notes) throw new UpstreamError(502, 'empty_reply');
 
   const content = await callGroq(env, {
-    model: env.MODEL_TEXT || TEXT_MODEL,
+    model: env.MODEL_STRUCTURE || STRUCTURE_MODEL,
     messages: structurePrompt(notes, request),
     temperature: 0,
     max_completion_tokens: 4000,
