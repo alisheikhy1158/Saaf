@@ -259,16 +259,21 @@ abstract final class LegalDocuments {
         '3. Your face photos',
         paragraphs: [
           'Photos you take are saved in private storage on your phone, not in '
-              'your gallery. The skin analysis runs on your device, so your '
-              'photos are not sent to us or to anyone else to be analysed. Photos '
-              'are never uploaded unless you turn on backup, which is off by '
-              'default. If you turn it on, your photos are copied to your account '
-              'storage and deleted with your account. Your photos are never sent '
-              'anywhere else, except photos you choose to attach to a question, '
-              'or the progress photos you choose to send for an AI progress '
-              'review, in the optional AI coach (see section 6). If we ever add another '
-              'feature that sends a photo or skin data elsewhere, we will ask '
-              'for your permission first, and say who receives it.',
+              'your gallery. Each photo is checked on your device (a clear face, '
+              'the right angle, enough light). Photos are not uploaded for storage '
+              'unless you turn on backup, which is off by default. If you turn it '
+              'on, your photos are copied to your account storage and deleted with '
+              'your account.',
+          'Your skin results come from Saaf AI, and only if you agree: the FRONT '
+              'photo of a scan is sent to Saaf AI to estimate your skin, then it is '
+              'not stored by us or by Saaf AI (see section 6). You can choose to '
+              'have every new scan analysed this way, and turn that off in '
+              'Profile. Your side photos never leave your phone.',
+          'Other photos are sent only when you choose to: a photo you attach to '
+              'a question, the front photos you choose for an AI progress review, '
+              'or a photo of a product label to check a product. If we ever add '
+              'another feature that sends a photo or skin data elsewhere, we will '
+              'ask for your permission first, and say who receives it.',
         ],
       ),
       const LegalSection(

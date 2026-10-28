@@ -290,8 +290,9 @@ Keep the Figma layout. Additions, all styled with existing tokens:
   (12/18, ink@0.5, underlined on press, each with a 48-dp hit area).
 
 ### 9.3 Sign up (02)
-- On iOS, add a **"Continue with Apple"** button using `SaafButton.outline` (same size, Apple logo as leading icon),
-  placed above "Continue with Google", equal prominence. Android shows Figma as-is.
+- Add a **"Continue with Apple"** button using `SaafButton.outline` (same size, Apple logo as leading icon),
+  placed above "Continue with Google", equal prominence. Required on iOS (App Store 4.8); since 2026-10-29 also shown
+  on Android (owner's request; Firebase signs in with Apple in a browser there).
 - "Terms of Use" and "Privacy Policy" in the legal line become real tappable links.
 
 ### 9.4 Verify code (03)

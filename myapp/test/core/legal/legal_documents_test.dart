@@ -54,10 +54,20 @@ void main() {
   group('privacy policy states what the app really does', () {
     final text = allText(privacy);
 
-    test('face photos stay on the phone and are analysed on the device', () {
+    test('face photos stay on the phone; only the front one goes to Saaf AI, '
+        'with consent, and is not stored', () {
       expect(text, contains('on your phone'));
-      expect(text, contains('on your device'));
-      expect(text, contains('never uploaded unless you turn on backup'));
+      expect(text, contains('checked on your device'));
+      expect(text, contains('only if you agree'));
+      expect(text, contains('front photo'));
+      expect(text, contains('not stored'));
+      expect(text, contains('side photos never leave your phone'));
+      expect(
+        text,
+        contains('not uploaded for storage unless you turn on backup'),
+      );
+      // The old promise is no longer true since Saaf AI reads the scan.
+      expect(text, isNot(contains('the skin analysis runs on your device')));
     });
 
     test('health-related quiz answers never leave the phone', () {
@@ -183,8 +193,12 @@ void main() {
     });
 
     test('the photo promise is still honest about the AI coach', () {
-      expect(text, contains('never uploaded unless you turn on backup'));
-      expect(text, contains('except photos you choose to attach'));
+      expect(
+        text,
+        contains('not uploaded for storage unless you turn on backup'),
+      );
+      expect(text, contains('sent only when you choose to'));
+      expect(text, contains('a photo you attach to a question'));
     });
   });
 
