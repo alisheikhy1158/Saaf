@@ -4993,6 +4993,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Voice input isn’t available on this phone, or the microphone is off for Saaf.'**
   String get voiceUnavailable;
+
+  /// Setup city title.
+  ///
+  /// In en, this message translates to:
+  /// **'Which city do you live in?'**
+  String get cityQuestion;
+
+  /// Setup city body.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf adjusts your daily tips to your city’s sun, heat and smog.'**
+  String get cityWhy;
 }
 
 class _AppLocalizationsDelegate

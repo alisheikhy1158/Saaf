@@ -2902,4 +2902,11 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get voiceUnavailable =>
       'اس فون پر آواز سے لکھنا دستیاب نہیں، یا ثاف کے لیے مائیکروفون بند ہے۔';
+
+  @override
+  String get cityQuestion => 'آپ کس شہر میں رہتے ہیں؟';
+
+  @override
+  String get cityWhy =>
+      'ثاف آپ کے روزانہ مشورے آپ کے شہر کی دھوپ، گرمی اور اسموگ کے مطابق بناتا ہے۔';
 }

@@ -118,18 +118,18 @@ void main() {
     expect(find.text('You can add up to 10 products.'), findsOneWidget);
   });
 
-  testWidgets('in setup, Continue and Skip both go on to the face scan', (
+  testWidgets('in setup, Continue and Skip both go on to choosing a city', (
     tester,
   ) async {
     await _open(tester, setup: true);
     await _add(tester, 'Nivea Soft');
     await _tap(tester, find.text('Continue'));
-    expect(find.byKey(const ValueKey('screen-selfieCapture')), findsOneWidget);
+    expect(find.byKey(const ValueKey('screen-chooseCity')), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
     await _open(tester, setup: true);
     await _tap(tester, find.text('Skip'));
-    expect(find.byKey(const ValueKey('screen-selfieCapture')), findsOneWidget);
+    expect(find.byKey(const ValueKey('screen-chooseCity')), findsOneWidget);
   });
 
   testWidgets('from Profile it has Done instead of the setup buttons', (

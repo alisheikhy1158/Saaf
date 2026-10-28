@@ -11,6 +11,7 @@ import 'package:saaf/presentation/features/coach/screens/ai_coach_screen.dart';
 import 'package:saaf/presentation/features/home/screens/home_screen.dart';
 import 'package:saaf/presentation/features/legal/screens/privacy_policy_screen.dart';
 import 'package:saaf/presentation/features/legal/screens/terms_screen.dart';
+import 'package:saaf/presentation/features/onboarding/screens/choose_city_screen.dart';
 import 'package:saaf/presentation/features/onboarding/screens/privacy_consent_screen.dart';
 import 'package:saaf/presentation/features/onboarding/screens/skin_quiz_screen.dart';
 import 'package:saaf/presentation/features/onboarding/screens/skin_type_test_screen.dart';
@@ -149,6 +150,11 @@ GoRouter buildAppRouter({
         name: SaafRoute.reminders.name,
         path: SaafRoute.reminders.path,
         builder: (context, state) => const RemindersScreen(),
+      ),
+      GoRoute(
+        name: SaafRoute.chooseCity.name,
+        path: SaafRoute.chooseCity.path,
+        builder: (context, state) => const ChooseCityScreen(),
       ),
       GoRoute(
         name: SaafRoute.skinTypeTest.name,

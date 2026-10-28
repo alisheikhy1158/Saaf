@@ -2902,4 +2902,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get voiceUnavailable =>
       'Voice input isn’t available on this phone, or the microphone is off for Saaf.';
+
+  @override
+  String get cityQuestion => 'Which city do you live in?';
+
+  @override
+  String get cityWhy =>
+      'Saaf adjusts your daily tips to your city’s sun, heat and smog.';
 }

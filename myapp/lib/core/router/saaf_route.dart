@@ -136,6 +136,15 @@ class SaafRoute {
     'Reminders',
   );
 
+  /// Setup: the user's city for the skin weather. Not a Figma screen, so not
+  /// in [all].
+  static const chooseCity = SaafRoute._(
+    0,
+    'chooseCity',
+    '/choose-city',
+    'Your city',
+  );
+
   /// The tissue test for the skin type, opened from the skin quiz (step 1). Not
   /// a Figma screen, so not in [all].
   static const skinTypeTest = SaafRoute._(

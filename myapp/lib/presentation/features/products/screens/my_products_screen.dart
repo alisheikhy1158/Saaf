@@ -136,7 +136,7 @@ class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
     _Kind.other => l10n.myProductsStepOther,
   };
 
-  void _next() => context.go(SaafRoute.selfieCapture.path);
+  void _next() => context.go(SaafRoute.chooseCity.path);
 
   void _leave() => widget.setup
       ? context.go(SaafRoute.skinQuiz.path)
