@@ -473,7 +473,7 @@ test('routine: researches the web first (Reddit included), then structures it as
   assert.equal('tools' in structure, false);
 });
 
-test('routine: picks are cleaned, one per step, sources only from the research', async () => {
+test('routine: picks are cleaned, sources only from the research', async () => {
   const groq = groqSequence([NOTES, plan()]);
   const result = await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl });
   assert.equal(result.summary, 'A simple routine for oily skin.');
@@ -485,6 +485,44 @@ test('routine: picks are cleaned, one per step, sources only from the research',
   assert.deepEqual(cleanser.sources, ['https://derma.pk/cerave-foaming']);
   assert.equal(result.picks[1].pricePkr, 0);
   assert.deepEqual(result.picks[1].times, ['night']);
+});
+
+const option = (step, name, extra = {}) => ({
+  step, brand: 'Brand', name, time: 'both', actives: [], fragranceFree: true,
+  why: 'Suits oily skin.', reviews: 'Reddit users like it.', sources: ['https://derma.pk/cerave-foaming'], ...extra,
+});
+
+test('routine: up to 3 options per step, so the person can choose', async () => {
+  const picks = [
+    option('cleanser', 'One'), option('cleanser', 'Two'), option('cleanser', 'Three'), option('cleanser', 'Four'),
+    option('sunscreen', 'Sun'),
+  ];
+  const groq = groqSequence([NOTES, plan({ picks })]);
+  const result = await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl });
+  assert.deepEqual(result.picks.map((p) => p.name), ['One', 'Two', 'Three', 'Sun']);
+  const asked = JSON.stringify(groq.bodies[0].messages);
+  assert.ok(asked.includes('2 or 3 options'), 'asks for options');
+  assert.ok(asked.includes('reviews'), 'asks for reviews');
+});
+
+test('routine: an option without reviews or without a link the research found is left out', async () => {
+  const picks = [
+    option('cleanser', 'No reviews', { reviews: '  ' }),
+    option('cleanser', 'Made-up link', { sources: ['https://made-up.example/x'] }),
+    option('cleanser', 'No links', { sources: [] }),
+    option('moisturiser', 'Reviewed'),
+  ];
+  const groq = groqSequence([NOTES, plan({ picks })]);
+  const result = await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl });
+  assert.deepEqual(result.picks.map((p) => p.name), ['Reviewed']);
+});
+
+test('routine: when no option has reviews it says so (its own error)', async () => {
+  const groq = groqSequence([NOTES, plan({ picks: [option('cleanser', 'No reviews', { reviews: '' })] })]);
+  await assert.rejects(
+    planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl }),
+    { code: 'no_reviewed_picks' },
+  );
 });
 
 test('routine: current products keep the typed name; harmful ones are always "stop"', async () => {
