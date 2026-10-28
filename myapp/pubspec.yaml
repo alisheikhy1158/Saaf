@@ -64,6 +64,7 @@ dependencies:
   screen_brightness: ^2.1.11
   pdf: ^3.13.1
   speech_to_text: ^7.5.0
+  purchases_flutter: ^11.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

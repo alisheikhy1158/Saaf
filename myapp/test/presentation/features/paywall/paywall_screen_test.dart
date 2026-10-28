@@ -104,7 +104,8 @@ void main() {
       await _open(tester);
       expect(
         find.text(
-          'Free for 7 days, then Rs 3,999/year. Cancel anytime in Google Play.',
+          'Free for 7 days, then Rs 3,999/year. Renews automatically. '
+          'Cancel anytime in Google Play.',
         ),
         findsOneWidget,
       );
@@ -123,6 +124,34 @@ void main() {
         ),
         findsOneWidget,
       );
+    });
+
+    testWidgets('Android: paid in Google Play with a card or Google Pay', (
+      tester,
+    ) async {
+      await _open(tester, platform: TargetPlatform.android);
+      expect(
+        find.text(
+          'You pay through Google Play with a card, Google Pay or another '
+          'method set up there. We never see your payment details.',
+        ),
+        findsOneWidget,
+      );
+      debugDefaultTargetPlatformOverride = null;
+    });
+
+    testWidgets('iPhone: paid with your Apple ID, a card or Apple Pay', (
+      tester,
+    ) async {
+      await _open(tester, platform: TargetPlatform.iOS);
+      expect(
+        find.text(
+          'You pay through your Apple ID with a card or Apple Pay. We never '
+          'see your payment details.',
+        ),
+        findsOneWidget,
+      );
+      debugDefaultTargetPlatformOverride = null;
     });
 
     testWidgets('on iPhone it says App Store', (tester) async {

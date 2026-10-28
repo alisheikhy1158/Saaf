@@ -55,11 +55,7 @@ void main() {
     test('says it uses only standard encryption (export compliance)', () {
       expect(
         plist,
-        matches(
-          RegExp(
-            r'<key>ITSAppUsesNonExemptEncryption</key>\s*<false/>',
-          ),
-        ),
+        matches(RegExp(r'<key>ITSAppUsesNonExemptEncryption</key>\s*<false/>')),
       );
     });
 

@@ -1585,7 +1585,7 @@ class AppLocalizationsUr extends AppLocalizations {
     String period,
     String store,
   ) {
-    return '$days دن مفت، پھر $price فی $period۔ $store میں کسی بھی وقت منسوخ کریں۔';
+    return '$days دن مفت، پھر $price/$period۔ خود بخود تجدید ہوتی ہے۔ $store میں کسی بھی وقت منسوخ کریں۔';
   }
 
   @override
@@ -2978,4 +2978,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String scanStatusNext(String instruction) {
     return 'ہو گیا! اب آہستہ سے مڑیں: $instruction';
   }
+
+  @override
+  String get paywallPayGoogle =>
+      'آپ Google Play کے ذریعے کارڈ، Google Pay یا وہاں موجود کسی اور طریقے سے ادائیگی کرتے ہیں۔ ہم آپ کی ادائیگی کی تفصیلات کبھی نہیں دیکھتے۔';
+
+  @override
+  String get paywallPayApple =>
+      'آپ اپنی Apple ID کے ذریعے کارڈ یا Apple Pay سے ادائیگی کرتے ہیں۔ ہم آپ کی ادائیگی کی تفصیلات کبھی نہیں دیکھتے۔';
 }

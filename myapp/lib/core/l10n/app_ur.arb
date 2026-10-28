@@ -451,7 +451,7 @@
   "paywallStoreApple": "ایپ اسٹور",
   "paywallStoreGoogle": "گوگل پلے",
   "paywallStoreOther": "آپ کے اسٹور کی سیٹنگز",
-  "paywallFinePrintTrial": "{days} دن مفت، پھر {price} فی {period}۔ {store} میں کسی بھی وقت منسوخ کریں۔",
+  "paywallFinePrintTrial": "{days} دن مفت، پھر {price}/{period}۔ خود بخود تجدید ہوتی ہے۔ {store} میں کسی بھی وقت منسوخ کریں۔",
   "paywallFinePrint": "{price} فی {period}۔ خودکار تجدید ہوتی ہے۔ {store} میں کسی بھی وقت منسوخ کریں۔",
   "paywallRestore": "خریداری بحال کریں",
   "paywallRestored": "ثاف پرو میں خوش آمدید۔",
@@ -837,5 +837,7 @@
   "myProductsSpendLeft": "آپ ان پر مہینے میں تقریباً {spent} خرچ کرتے ہیں۔ آپ کے {limit} کے بجٹ میں سے نئی پروڈکٹس کے لیے {left} باقی ہیں۔",
   "myProductsSpendOver": "آپ ان پر مہینے میں تقریباً {spent} خرچ کرتے ہیں، جو آپ کے {limit} کے بجٹ سے زیادہ ہے۔",
   "scanStatusChecking": "ہو گیا! تصویر چیک ہو رہی ہے…",
-  "scanStatusNext": "ہو گیا! اب آہستہ سے مڑیں: {instruction}"
+  "scanStatusNext": "ہو گیا! اب آہستہ سے مڑیں: {instruction}",
+  "paywallPayGoogle": "آپ Google Play کے ذریعے کارڈ، Google Pay یا وہاں موجود کسی اور طریقے سے ادائیگی کرتے ہیں۔ ہم آپ کی ادائیگی کی تفصیلات کبھی نہیں دیکھتے۔",
+  "paywallPayApple": "آپ اپنی Apple ID کے ذریعے کارڈ یا Apple Pay سے ادائیگی کرتے ہیں۔ ہم آپ کی ادائیگی کی تفصیلات کبھی نہیں دیکھتے۔"
 }

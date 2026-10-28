@@ -2802,7 +2802,7 @@ abstract class AppLocalizations {
   /// Fine print under the button when there is a free trial.
   ///
   /// In en, this message translates to:
-  /// **'Free for {days} days, then {price}/{period}. Cancel anytime in {store}.'**
+  /// **'Free for {days} days, then {price}/{period}. Renews automatically. Cancel anytime in {store}.'**
   String paywallFinePrintTrial(
     int days,
     String price,
@@ -5113,6 +5113,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Got it! Now turn slowly: {instruction}'**
   String scanStatusNext(String instruction);
+
+  /// Paywall: how payment works on Android.
+  ///
+  /// In en, this message translates to:
+  /// **'You pay through Google Play with a card, Google Pay or another method set up there. We never see your payment details.'**
+  String get paywallPayGoogle;
+
+  /// Paywall: how payment works on iPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'You pay through your Apple ID with a card or Apple Pay. We never see your payment details.'**
+  String get paywallPayApple;
 }
 
 class _AppLocalizationsDelegate

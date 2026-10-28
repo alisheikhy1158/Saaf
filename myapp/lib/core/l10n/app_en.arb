@@ -1449,7 +1449,7 @@
   "paywallStoreOther": "your store settings",
   "@paywallStoreOther": { "description": "Where to cancel elsewhere." },
 
-  "paywallFinePrintTrial": "Free for {days} days, then {price}/{period}. Cancel anytime in {store}.",
+  "paywallFinePrintTrial": "Free for {days} days, then {price}/{period}. Renews automatically. Cancel anytime in {store}.",
   "@paywallFinePrintTrial": {
     "description": "Fine print under the button when there is a free trial.",
     "placeholders": { "days": { "type": "int" }, "price": { "type": "String" }, "period": { "type": "String" }, "store": { "type": "String" } }
@@ -2398,5 +2398,9 @@
   "scanStatusChecking": "Got it! Checking the photo…",
   "@scanStatusChecking": {"description": "Status line while a photo taken by itself is checked."},
   "scanStatusNext": "Got it! Now turn slowly: {instruction}",
-  "@scanStatusNext": {"description": "Status line after a photo was taken by itself, before the next pose.", "placeholders": {"instruction": {"type": "String"}}}
+  "@scanStatusNext": {"description": "Status line after a photo was taken by itself, before the next pose.", "placeholders": {"instruction": {"type": "String"}}},
+  "paywallPayGoogle": "You pay through Google Play with a card, Google Pay or another method set up there. We never see your payment details.",
+  "@paywallPayGoogle": {"description": "Paywall: how payment works on Android."},
+  "paywallPayApple": "You pay through your Apple ID with a card or Apple Pay. We never see your payment details.",
+  "@paywallPayApple": {"description": "Paywall: how payment works on iPhone."}
 }

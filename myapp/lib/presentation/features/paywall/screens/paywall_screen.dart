@@ -292,6 +292,19 @@ class _Purchase extends StatelessWidget {
           textAlign: TextAlign.center,
           style: tokens.styles.legal.copyWith(color: tokens.textMeta),
         ),
+        // How payment works: the store's own sheet, never in Saaf.
+        if (switch (Theme.of(context).platform) {
+              TargetPlatform.iOS ||
+              TargetPlatform.macOS => l10n.paywallPayApple,
+              TargetPlatform.android => l10n.paywallPayGoogle,
+              _ => null,
+            }
+            case final howToPay?)
+          Text(
+            howToPay,
+            textAlign: TextAlign.center,
+            style: tokens.styles.legal.copyWith(color: tokens.textMeta),
+          ),
         SaafButton.text(
           label: l10n.paywallRestore,
           onPressed: busy ? null : onRestore,

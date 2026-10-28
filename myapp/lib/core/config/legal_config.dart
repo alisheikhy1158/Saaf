@@ -18,13 +18,15 @@ class LegalConfig {
   static const LegalConfig current = LegalConfig(
     operatorName: 'Saaf',
     contactEmail: String.fromEnvironment('SUPPORT_EMAIL'),
-    // Our server's public page (backend/ai-proxy/src/web_pages.js).
-    deletionUrl: String.fromEnvironment(
-      'DELETION_URL',
-      defaultValue: 'https://saaf-ai.saafai.workers.dev/delete-account',
-    ),
+    // Our server's public page (backend/ai-proxy/src/web_pages.js) unless
+    // Codemagic sets another (an empty DELETION_URL counts as not set).
+    deletionUrl: _deletionUrl.length == 0 ? _ourDeletionPage : _deletionUrl,
     isReviewed: bool.fromEnvironment('LEGAL_REVIEWED'),
   );
+
+  static const String _deletionUrl = String.fromEnvironment('DELETION_URL');
+  static const String _ourDeletionPage =
+      'https://saaf-ai.saafai.workers.dev/delete-account';
 
   /// Who the documents say "we" are.
   final String operatorName;

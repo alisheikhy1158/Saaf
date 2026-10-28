@@ -6,6 +6,7 @@ import 'package:saaf/presentation/providers/app_router_provider.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/locale_controller.dart';
 import 'package:saaf/presentation/providers/notification_providers.dart';
+import 'package:saaf/presentation/providers/subscription_providers.dart';
 
 /// Root widget: Saaf themes (system light/dark/high-contrast), English + Urdu
 /// localisation, go_router navigation.
@@ -16,6 +17,7 @@ class SaafApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(authSessionSyncProvider);
     ref.watch(reminderSyncProvider);
+    ref.watch(subscriptionUserSyncProvider);
     return MaterialApp.router(
       onGenerateTitle: (context) => AppLocalizations.of(context).appName,
       // Always light: Saaf has no dark theme (only the camera screens are

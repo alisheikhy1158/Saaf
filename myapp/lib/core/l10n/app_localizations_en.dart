@@ -1583,7 +1583,7 @@ class AppLocalizationsEn extends AppLocalizations {
     String period,
     String store,
   ) {
-    return 'Free for $days days, then $price/$period. Cancel anytime in $store.';
+    return 'Free for $days days, then $price/$period. Renews automatically. Cancel anytime in $store.';
   }
 
   @override
@@ -2978,4 +2978,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String scanStatusNext(String instruction) {
     return 'Got it! Now turn slowly: $instruction';
   }
+
+  @override
+  String get paywallPayGoogle =>
+      'You pay through Google Play with a card, Google Pay or another method set up there. We never see your payment details.';
+
+  @override
+  String get paywallPayApple =>
+      'You pay through your Apple ID with a card or Apple Pay. We never see your payment details.';
 }

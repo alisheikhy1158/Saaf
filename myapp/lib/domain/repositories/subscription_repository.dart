@@ -18,4 +18,8 @@ abstract interface class SubscriptionRepository {
 
   /// Emits whenever the Pro state changes.
   Stream<bool> get proChanges;
+
+  /// Ties purchases to the signed-in account ([userId]), or to nobody after
+  /// sign-out, so Pro follows the user to a new phone.
+  Future<void> setUser(String? userId);
 }

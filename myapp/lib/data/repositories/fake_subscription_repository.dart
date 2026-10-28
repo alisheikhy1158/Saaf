@@ -59,4 +59,7 @@ class FakeSubscriptionRepository implements SubscriptionRepository {
 
   @override
   Stream<bool> get proChanges => _changes.stream;
+
+  @override
+  Future<void> setUser(String? userId) async {}
 }

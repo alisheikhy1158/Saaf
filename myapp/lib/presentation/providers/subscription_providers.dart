@@ -1,27 +1,51 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kDebugMode, kIsWeb;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saaf/core/config/env.dart';
 import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/data/repositories/fake_subscription_repository.dart';
+import 'package:saaf/data/repositories/revenuecat_subscription_repository.dart';
 import 'package:saaf/domain/entities/subscription_plan.dart';
 import 'package:saaf/domain/repositories/subscription_repository.dart';
 import 'package:saaf/domain/usecases/purchase_plan.dart';
+import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/no_auto_retry.dart';
 
 part 'subscription_providers.g.dart';
 
-/// Until RevenueCat is connected (PLAN Phase 9), debug builds and
-/// `--dart-define=FAKE_PURCHASES=true` use a pretend store that "buys" for free.
-/// A release build without it gets a store that offers nothing, so the fake can
-/// never hand out Pro by accident.
+/// With a RevenueCat key for this phone, Saaf Pro is sold through Google Play
+/// or the App Store (card, Google Pay, Apple Pay in the store's own sheet).
+/// Without one, debug builds and `--dart-define=FAKE_PURCHASES=true` use a
+/// pretend store that "buys" for free, and a release build gets a store that
+/// offers nothing, so the fake can never hand out Pro by accident.
 @Riverpod(keepAlive: true)
-SubscriptionRepository subscriptionRepository(Ref ref) =>
-    kDebugMode || Env.fakePurchases
-    ? FakeSubscriptionRepository()
-    : const UnavailableSubscriptionRepository();
+SubscriptionRepository subscriptionRepository(Ref ref) {
+  final key = revenueCatKeyFor(
+    defaultTargetPlatform,
+    isWeb: kIsWeb,
+    android: Env.revenueCatAndroidKey,
+    ios: Env.revenueCatIosKey,
+  );
+  if (key != null) return RevenueCatSubscriptionRepository(key);
+  return kDebugMode || Env.fakePurchases
+      ? FakeSubscriptionRepository()
+      : const UnavailableSubscriptionRepository();
+}
+
+/// Keeps the store's user the same as the signed-in Saaf user. Watched by the
+/// app root.
+@Riverpod(keepAlive: true)
+void subscriptionUserSync(Ref ref) {
+  final repository = ref.watch(subscriptionRepositoryProvider);
+  ref.listen(authSessionControllerProvider, (previous, next) {
+    if (previous?.userId != next?.userId) {
+      unawaited(repository.setUser(next?.userId));
+    }
+  }, fireImmediately: true);
+}
 
 /// Offers nothing and sells nothing (a release build with no store connected).
 class UnavailableSubscriptionRepository implements SubscriptionRepository {
@@ -42,6 +66,9 @@ class UnavailableSubscriptionRepository implements SubscriptionRepository {
 
   @override
   Stream<bool> get proChanges => const Stream.empty();
+
+  @override
+  Future<void> setUser(String? userId) async {}
 }
 
 @Riverpod(keepAlive: true)

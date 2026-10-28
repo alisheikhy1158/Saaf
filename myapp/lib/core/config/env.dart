@@ -14,6 +14,16 @@ abstract final class Env {
   /// builds use it too. `--dart-define=FAKE_PURCHASES=true`.
   static const bool fakePurchases = bool.fromEnvironment('FAKE_PURCHASES');
 
+  /// RevenueCat's public SDK keys (Codemagic `app_config`, already passed by
+  /// the store workflows). With one set, Saaf Pro is sold through Google Play /
+  /// the App Store.
+  static const String revenueCatAndroidKey = String.fromEnvironment(
+    'RC_GOOGLE_API_KEY',
+  );
+  static const String revenueCatIosKey = String.fromEnvironment(
+    'RC_APPLE_API_KEY',
+  );
+
   /// Address of our AI proxy (a small server in front of the AI model; it holds
   /// the secret key, the app never does). Empty on builds without it.
   /// `--dart-define=AI_PROXY_URL=https://saaf-ai.<you>.workers.dev`
