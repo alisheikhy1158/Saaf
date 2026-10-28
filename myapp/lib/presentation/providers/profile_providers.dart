@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart' show ThemeMode;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/profile_details.dart';
@@ -44,27 +43,6 @@ class ReminderSettingsController extends _$ReminderSettingsController {
     ref
         .read(settingsRepositoryProvider)
         .write(SettingNames.reminders, settings.encode());
-  }
-}
-
-/// Light, dark, or whatever the phone uses.
-@Riverpod(keepAlive: true)
-class ThemeModeController extends _$ThemeModeController {
-  bool _changed = false;
-
-  @override
-  ThemeMode build() {
-    ref.read(settingsRepositoryProvider).read(SettingNames.theme).then((name) {
-      final saved = ThemeMode.values.where((m) => m.name == name).firstOrNull;
-      if (ref.mounted && !_changed && saved != null) state = saved;
-    });
-    return ThemeMode.system;
-  }
-
-  void set(ThemeMode mode) {
-    _changed = true;
-    state = mode;
-    ref.read(settingsRepositoryProvider).write(SettingNames.theme, mode.name);
   }
 }
 

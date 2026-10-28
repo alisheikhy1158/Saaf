@@ -1781,9 +1781,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get profileRowLanguage => 'زبان';
 
   @override
-  String get profileRowAppearance => 'ظاہری شکل';
-
-  @override
   String get profileRowBackup => 'تصاویر کا بیک اپ';
 
   @override
@@ -1811,15 +1808,6 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get profileLangUrdu => 'اردو';
-
-  @override
-  String get profileThemeSystem => 'سسٹم';
-
-  @override
-  String get profileThemeLight => 'روشن';
-
-  @override
-  String get profileThemeDark => 'گہرا';
 
   @override
   String get commonDone => 'مکمل';
@@ -1964,9 +1952,6 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get languageSemantics => 'زبان';
-
-  @override
-  String get appearanceTitle => 'ظاہری شکل';
 
   @override
   String get remindersTitle => 'یاد دہانیاں';

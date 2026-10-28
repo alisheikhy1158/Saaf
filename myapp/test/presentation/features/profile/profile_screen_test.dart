@@ -174,11 +174,12 @@ void main() {
       expect(find.text('Delete my account'), findsOneWidget);
     });
 
-    testWidgets('app group: appearance, legal and log out', (tester) async {
+    testWidgets('app group: legal and log out (no dark theme to choose)', (
+      tester,
+    ) async {
       await _open(tester);
       await tester.ensureVisible(find.text('Log out'));
-      expect(find.text('Appearance'), findsOneWidget);
-      expect(find.text('System'), findsOneWidget);
+      expect(find.text('Appearance'), findsNothing);
       expect(find.text('Terms of Use'), findsOneWidget);
       expect(find.text('Privacy Policy'), findsOneWidget);
       expect(find.text('Log out'), findsOneWidget);
@@ -248,16 +249,6 @@ void main() {
         const Locale('ur'),
       );
       expect(find.text('پروفائل'), findsOneWidget);
-    });
-
-    testWidgets('Appearance: choosing Dark', (tester) async {
-      await _open(tester);
-      await _tap(tester, find.text('Appearance'));
-      await _tap(tester, find.text('Dark'));
-      expect(
-        _container(tester).read(themeModeControllerProvider),
-        ThemeMode.dark,
-      );
     });
 
     testWidgets('Photo backup explains that photos stay on the phone', (

@@ -15,7 +15,7 @@
 - [ ] Does it touch login or accounts? → §3 (account deletion, Sign in with Apple)
 - [ ] Does it unlock paid features? → §4 (RevenueCat, paywall rules)
 - [ ] Does it give skin/health guidance or use AI? → §5
-- [ ] UI: dark mode, 48×48 dp hit areas, no placeholder text, works on tablet & foldable → §6
+- [ ] UI: 48×48 dp hit areas, no placeholder text, works on tablet & foldable → §6
 - [ ] Visuals match the Figma screen; any addition below is styled with Figma tokens (design.md §0 and §9)
 - [ ] Any text mentioning "Google Play" / "App Store" / prices is platform-aware → §4.3
 - [ ] Copy is real and final (no lorem ipsum, "TODO", "Test", fake names in production builds)
@@ -124,8 +124,8 @@ styled as `SaafButton.outline` per design.md §9.3). Phone OTP alone does not ne
   - Add guardrails: no medical diagnoses; suggest a dermatologist for concerning symptoms.
 
 ## 6. UI/UX requirements
-- **Dark Mode:** full dark theme (tokens in design.md). Follow system setting by default (`ThemeMode.system`),
-  with an in-app override in Profile. Every screen is checked in both modes.
+- **Dark Mode:** none, the owner's decision (2026-10-29). The app is always light; neither store requires a dark
+  theme. Only the camera screens are dark by design (design.md §2.3).
 - **Touch targets ≥ 48×48 dp** (Google/Material; Apple's minimum is 44×44 pt — 48 satisfies both). Keep the Figma
   visual sizes (40 dp icon buttons, 36 dp checkbox rows, 40 dp text button, 44 dp days, 22–26 dp checks) and expand the
   **hit area** invisibly to 48 dp (design.md §9.1).

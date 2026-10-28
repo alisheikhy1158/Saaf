@@ -46,7 +46,7 @@ import 'package:saaf/presentation/widgets/common/saaf_text_field.dart';
 
 /// Figma 14 Profile & privacy: who you are, your plan, the answers behind your
 /// routine, privacy choices (including deleting the account, store requirement
-/// A-1) and the app settings (language, appearance, legal pages, log out).
+/// A-1) and the app settings (language, legal pages, log out).
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -60,7 +60,6 @@ class ProfileScreen extends ConsumerWidget {
     final session = ref.watch(authSessionControllerProvider);
     final isPro = ref.watch(proStatusProvider);
     final reminders = ref.watch(reminderSettingsControllerProvider);
-    final themeMode = ref.watch(themeModeControllerProvider);
     final aiSharing = ref.watch(aiConsentStateProvider);
 
     final details = ref.watch(profileDetailsControllerProvider);
@@ -88,11 +87,6 @@ class ProfileScreen extends ConsumerWidget {
     final language = locale.languageCode == 'ur'
         ? l10n.profileLangUrdu
         : l10n.profileLangEnglish;
-    final appearance = switch (themeMode) {
-      ThemeMode.system => l10n.profileThemeSystem,
-      ThemeMode.light => l10n.profileThemeLight,
-      ThemeMode.dark => l10n.profileThemeDark,
-    };
 
     return SaafMainNav(
       current: SaafMainTab.profile,
@@ -226,12 +220,6 @@ class ProfileScreen extends ConsumerWidget {
             SizedBox(height: space.x8),
             SaafSettingsGroup(
               rows: [
-                SaafSettingsRow(
-                  icon: Icons.contrast,
-                  title: l10n.profileRowAppearance,
-                  value: appearance,
-                  onTap: () => _showSheet(context, const _AppearanceSheet()),
-                ),
                 SaafSettingsRow(
                   icon: Icons.description_outlined,
                   title: l10n.termsTitle,
@@ -621,34 +609,6 @@ class _LanguageSheet extends ConsumerWidget {
               .read(localeControllerProvider.notifier)
               .setLocale(Locale(i == 1 ? 'ur' : 'en')),
           semanticLabel: l10n.languageSemantics,
-        ),
-      ],
-    );
-  }
-}
-
-class _AppearanceSheet extends ConsumerWidget {
-  const _AppearanceSheet();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final mode = ref.watch(themeModeControllerProvider);
-    const modes = [ThemeMode.system, ThemeMode.light, ThemeMode.dark];
-
-    return _SheetFrame(
-      title: l10n.appearanceTitle,
-      children: [
-        SaafSegmentedControl(
-          segments: [
-            SaafSegment(label: l10n.profileThemeSystem),
-            SaafSegment(label: l10n.profileThemeLight),
-            SaafSegment(label: l10n.profileThemeDark),
-          ],
-          selectedIndex: modes.indexOf(mode),
-          onChanged: (i) =>
-              ref.read(themeModeControllerProvider.notifier).set(modes[i]),
-          semanticLabel: l10n.appearanceTitle,
         ),
       ],
     );

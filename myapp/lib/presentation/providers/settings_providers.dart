@@ -10,7 +10,6 @@ part 'settings_providers.g.dart';
 abstract final class SettingNames {
   static const reminders = 'reminders';
   static const language = 'language';
-  static const theme = 'theme';
   static const name = 'name';
   static const age = 'age';
 

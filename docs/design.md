@@ -95,9 +95,9 @@ no literal `TextStyle(fontSize: …)`, no numeric literals in `EdgeInsets`/`Size
 | `outline` / `outlineVariant` | ink @ 0.12 / ink @ 0.07 | cornsilk @ 0.12 / cornsilk @ 0.07 |
 | `error` / `onError` | not in Figma — add `#B3261E` / cornsilk (§9) | `#F2B8B5` / ink |
 
-**Dark mode** (not drawn in Figma except 06) follows the 06 Selfie-capture recipe: ink background, cornsilk text with the
-same alpha ladder, cornsilk-tinted translucent surfaces, sage stays the accent. `ThemeMode.system` by default, override in
-Profile.
+**No dark mode** (owner's decision, 2026-10-29): the app is always light (`ThemeMode.light`), whatever the phone uses,
+and Profile has no Appearance setting. Only the camera screens are dark, by design (06 Selfie-capture: ink background,
+cornsilk text with the same alpha ladder, sage accent), through `SaafDarkScope` and `SaafTheme.dark()`.
 
 ### 2.4 Contrast note
 Figma's lighter text (`textCaption` 0.55 ≈ 3.9:1, `textMeta` 0.50, `textOverline` 0.45) is below WCAG AA 4.5:1 for small

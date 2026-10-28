@@ -1781,9 +1781,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileRowLanguage => 'Language';
 
   @override
-  String get profileRowAppearance => 'Appearance';
-
-  @override
   String get profileRowBackup => 'Photo backup';
 
   @override
@@ -1811,15 +1808,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileLangUrdu => 'اردو';
-
-  @override
-  String get profileThemeSystem => 'System';
-
-  @override
-  String get profileThemeLight => 'Light';
-
-  @override
-  String get profileThemeDark => 'Dark';
 
   @override
   String get commonDone => 'Done';
@@ -1963,9 +1951,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageSemantics => 'Language';
-
-  @override
-  String get appearanceTitle => 'Appearance';
 
   @override
   String get remindersTitle => 'Reminders';

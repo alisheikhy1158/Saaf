@@ -74,7 +74,7 @@ Every screen's widget test file MUST include:
 4. **Responsive matrix:** run the key assertions at `Size(320, 568)` (small/flip cover), `390×844` (phone),
    `768×1024` (iPad portrait), `1280×800` (tablet landscape / unfolded). Assert no overflow
    (`tester.takeException()` is null) and the right navigation (bottom bar vs rail).
-5. **Dark mode + text scale 2.0 + Urdu (RTL)** render without exceptions.
+5. **Text scale 2.0 + Urdu (RTL) + high contrast** render without exceptions (there is no dark mode).
 6. **Compliance assertions** where relevant, e.g.:
    - Paywall shows "Restore purchases", Terms and Privacy links, price from `FakePurchasesService` (not a literal),
      and the Android vs iOS cancellation sentence.

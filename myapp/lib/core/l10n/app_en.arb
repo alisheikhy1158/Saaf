@@ -1648,8 +1648,6 @@
   "profileRowLanguage": "Language",
   "@profileRowLanguage": { "description": "Settings row." },
 
-  "profileRowAppearance": "Appearance",
-  "@profileRowAppearance": { "description": "Settings row." },
 
   "profileRowBackup": "Photo backup",
   "@profileRowBackup": { "description": "Settings row." },
@@ -1681,14 +1679,8 @@
   "profileLangUrdu": "اردو",
   "@profileLangUrdu": { "description": "Language name in its own script." },
 
-  "profileThemeSystem": "System",
-  "@profileThemeSystem": { "description": "Appearance option: follow the phone." },
 
-  "profileThemeLight": "Light",
-  "@profileThemeLight": { "description": "Appearance option." },
 
-  "profileThemeDark": "Dark",
-  "@profileThemeDark": { "description": "Appearance option." },
 
   "commonDone": "Done",
   "@commonDone": { "description": "Button that closes a sheet." },
@@ -1819,8 +1811,6 @@
   "languageSemantics": "Language",
   "@languageSemantics": { "description": "Screen-reader name of the language switch." },
 
-  "appearanceTitle": "Appearance",
-  "@appearanceTitle": { "description": "Title of the appearance sheet." },
 
   "remindersTitle": "Reminders",
   "@remindersTitle": { "description": "Title of the reminders sheet." },

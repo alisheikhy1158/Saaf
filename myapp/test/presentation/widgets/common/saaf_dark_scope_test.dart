@@ -9,7 +9,6 @@ import '../../../helpers/pump_app.dart';
 void main() {
   Future<Color> surfaceUnder(
     WidgetTester tester, {
-    ThemeMode mode = ThemeMode.light,
     bool highContrast = false,
   }) async {
     late Color surface;
@@ -23,7 +22,6 @@ void main() {
           },
         ),
       ),
-      themeMode: mode,
       highContrast: highContrast,
     );
     return surface;
@@ -31,10 +29,6 @@ void main() {
 
   testWidgets('is ink even when the app is light', (tester) async {
     expect(await surfaceUnder(tester), SaafPalette.ink);
-  });
-
-  testWidgets('stays ink in dark mode', (tester) async {
-    expect(await surfaceUnder(tester, mode: ThemeMode.dark), SaafPalette.ink);
   });
 
   testWidgets('follows the high-contrast setting', (tester) async {

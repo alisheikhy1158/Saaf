@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/core/theme/tokens.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
+import 'package:saaf/presentation/widgets/common/saaf_dark_scope.dart';
 
 import '../../../helpers/pump_app.dart';
 
@@ -51,13 +52,14 @@ void main() {
     (tester) async {
       await pumpSaaf(
         tester,
-        const Center(
-          child: SaafChip(
-            label: 'Move to softer light',
-            tone: SaafChipTone.strong,
+        const SaafDarkScope(
+          child: Center(
+            child: SaafChip(
+              label: 'Move to softer light',
+              tone: SaafChipTone.strong,
+            ),
           ),
         ),
-        themeMode: ThemeMode.dark,
       );
       expect(decorationOf(tester).color, SaafPalette.cornsilk);
       final text = tester.widget<Text>(find.text('Move to softer light'));

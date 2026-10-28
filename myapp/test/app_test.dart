@@ -19,26 +19,24 @@ void main() {
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 
-  testWidgets('follows the system theme and uses Saaf themes everywhere', (
+  testWidgets('always light (no dark theme), with the Saaf themes', (
     tester,
   ) async {
     final app = await pumpApp(tester);
-    expect(app.themeMode, ThemeMode.system);
-    for (final theme in [
-      app.theme,
-      app.darkTheme,
-      app.highContrastTheme,
-      app.highContrastDarkTheme,
-    ]) {
+    expect(app.themeMode, ThemeMode.light);
+    expect(app.darkTheme, isNull);
+    for (final theme in [app.theme, app.highContrastTheme]) {
       expect(theme?.extension<SaafTokens>(), isNotNull);
     }
   });
 
-  testWidgets('dark mode renders the ink surface', (tester) async {
+  testWidgets('a phone in dark mode still gets the light theme', (
+    tester,
+  ) async {
     tester.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
     addTearDown(tester.platformDispatcher.clearAllTestValues);
     await pumpApp(tester);
     final context = tester.element(find.byType(Scaffold));
-    expect(Theme.of(context).brightness, Brightness.dark);
+    expect(Theme.of(context).brightness, Brightness.light);
   });
 }

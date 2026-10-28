@@ -3125,12 +3125,6 @@ abstract class AppLocalizations {
   /// Settings row.
   ///
   /// In en, this message translates to:
-  /// **'Appearance'**
-  String get profileRowAppearance;
-
-  /// Settings row.
-  ///
-  /// In en, this message translates to:
   /// **'Photo backup'**
   String get profileRowBackup;
 
@@ -3181,24 +3175,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'اردو'**
   String get profileLangUrdu;
-
-  /// Appearance option: follow the phone.
-  ///
-  /// In en, this message translates to:
-  /// **'System'**
-  String get profileThemeSystem;
-
-  /// Appearance option.
-  ///
-  /// In en, this message translates to:
-  /// **'Light'**
-  String get profileThemeLight;
-
-  /// Appearance option.
-  ///
-  /// In en, this message translates to:
-  /// **'Dark'**
-  String get profileThemeDark;
 
   /// Button that closes a sheet.
   ///
@@ -3457,12 +3433,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language'**
   String get languageSemantics;
-
-  /// Title of the appearance sheet.
-  ///
-  /// In en, this message translates to:
-  /// **'Appearance'**
-  String get appearanceTitle;
 
   /// Title of the reminders sheet.
   ///

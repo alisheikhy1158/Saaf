@@ -361,29 +361,14 @@ void main() {
       CameraPermission permission = CameraPermission.granted,
       Future<void> Function()? advance,
     }) async {
-      final configs = <(String, Size, ThemeMode, double, Locale, bool)>[
+      final configs = <(String, Size, double, Locale, bool)>[
         for (final size in matrixSizes)
-          ('$size', size, ThemeMode.light, 1, const Locale('en'), false),
-        ('dark', matrixSizes[1], ThemeMode.dark, 1, const Locale('en'), false),
-        (
-          'text 200%',
-          matrixSizes[1],
-          ThemeMode.light,
-          2,
-          const Locale('en'),
-          false,
-        ),
-        ('Urdu', matrixSizes[1], ThemeMode.light, 1, const Locale('ur'), false),
-        (
-          'contrast',
-          matrixSizes[1],
-          ThemeMode.light,
-          1,
-          const Locale('en'),
-          true,
-        ),
+          ('$size', size, 1, const Locale('en'), false),
+        ('text 200%', matrixSizes[1], 2, const Locale('en'), false),
+        ('Urdu', matrixSizes[1], 1, const Locale('ur'), false),
+        ('contrast', matrixSizes[1], 1, const Locale('en'), true),
       ];
-      for (final (name, size, mode, scale, locale, contrast) in configs) {
+      for (final (name, size, scale, locale, contrast) in configs) {
         // Drop the previous screen and its state first.
         await tester.pumpWidget(const SizedBox());
         await pumpSaaf(
@@ -391,7 +376,6 @@ void main() {
           const SelfieCaptureScreen(),
           scaffold: false,
           size: size,
-          themeMode: mode,
           textScale: scale,
           locale: locale,
           highContrast: contrast,

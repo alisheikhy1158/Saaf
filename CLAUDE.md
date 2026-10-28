@@ -73,7 +73,7 @@ Mandatory before writing UI code: read `docs/architecture.md` (structure) and
 ## Definition of Done
 - [ ] Tests written first and passing · `flutter analyze` clean · `dart format` applied
 - [ ] Works in Chrome at 360×640, 390×844, 768×1024 and 1280×800 (DevTools device toolbar)
-- [ ] Light + dark mode checked · text scale 200% doesn't overflow · Urdu (RTL) doesn't break layout
+- [ ] Light theme only (no dark mode, owner's call 2026-10-29) · text scale 200% doesn't overflow · Urdu (RTL) doesn't break layout
 - [ ] Matches the Figma node exactly (tokens, spacing, radii, copy) + design.md §9 additions
 - [ ] Semantics labels on every interactive/meaningful element · hit areas ≥ 48×48 dp (visuals as in Figma)
 - [ ] store-compliance checklist passed · `handoff.md` updated

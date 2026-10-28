@@ -45,7 +45,6 @@ Future<void> pumpSaaf(
   Widget child, {
   List<Override> overrides = const [],
   Size size = const Size(390, 844),
-  ThemeMode themeMode = ThemeMode.light,
   Locale locale = const Locale('en'),
   double textScale = 1.0,
   bool highContrast = false,
@@ -71,11 +70,10 @@ Future<void> pumpSaaf(
     ProviderScope(
       overrides: [..._phoneFakes(permissions, scheduler), ...overrides],
       child: MaterialApp(
+        // Like the app: always light (no dark theme).
         theme: SaafTheme.light(),
-        darkTheme: SaafTheme.dark(),
         highContrastTheme: SaafTheme.highContrastLight(),
-        highContrastDarkTheme: SaafTheme.highContrastDark(),
-        themeMode: themeMode,
+        themeMode: ThemeMode.light,
         locale: locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
@@ -114,7 +112,7 @@ Future<void> pumpSaafApp(
   await tester.pump(const Duration(milliseconds: 400));
 }
 
-/// Renders [build] at every size of the matrix, in dark mode, at 200 % text
+/// Renders [build] at every size of the matrix, at 200 % text
 /// scale, in Urdu (RTL) and with high contrast, failing on any exception
 /// (e.g. RenderFlex overflow).
 Future<void> expectRobustLayout(
@@ -133,14 +131,6 @@ Future<void> expectRobustLayout(
     );
     expect(tester.takeException(), isNull, reason: 'light at $size');
   }
-  await pumpSaaf(
-    tester,
-    build(),
-    themeMode: ThemeMode.dark,
-    scaffold: scaffold,
-    overrides: overrides,
-  );
-  expect(tester.takeException(), isNull, reason: 'dark');
 
   await pumpSaaf(
     tester,
@@ -191,36 +181,20 @@ Future<void> expectRobustLayoutSettled(
   int settlePumps = 2,
   Future<void> Function()? after,
 }) async {
-  final configs = <(String, Size, ThemeMode, double, Locale, bool)>[
+  final configs = <(String, Size, double, Locale, bool)>[
     for (final size in matrixSizes)
-      ('$size', size, ThemeMode.light, 1, const Locale('en'), false),
-    ('dark', matrixSizes[1], ThemeMode.dark, 1, const Locale('en'), false),
-    (
-      'text scale 2.0',
-      matrixSizes[1],
-      ThemeMode.light,
-      2,
-      const Locale('en'),
-      false,
-    ),
-    ('Urdu RTL', matrixSizes[1], ThemeMode.light, 1, const Locale('ur'), false),
-    (
-      'high contrast',
-      matrixSizes[1],
-      ThemeMode.light,
-      1,
-      const Locale('en'),
-      true,
-    ),
+      ('$size', size, 1, const Locale('en'), false),
+    ('text scale 2.0', matrixSizes[1], 2, const Locale('en'), false),
+    ('Urdu RTL', matrixSizes[1], 1, const Locale('ur'), false),
+    ('high contrast', matrixSizes[1], 1, const Locale('en'), true),
   ];
-  for (final (name, size, mode, scale, locale, contrast) in configs) {
+  for (final (name, size, scale, locale, contrast) in configs) {
     // Drop the previous screen (and its provider state) first.
     await tester.pumpWidget(const SizedBox());
     await pumpSaaf(
       tester,
       build(),
       size: size,
-      themeMode: mode,
       textScale: scale,
       locale: locale,
       highContrast: contrast,
