@@ -2394,5 +2394,9 @@
   "myProductsSpendLeft": "You spend about {spent} a month on these. {left} of your {limit} budget is left for new products.",
   "@myProductsSpendLeft": {"description": "What the user's own products cost against the budget.", "placeholders": {"spent": {"type": "String"}, "left": {"type": "String"}, "limit": {"type": "String"}}},
   "myProductsSpendOver": "You spend about {spent} a month on these, more than your {limit} budget.",
-  "@myProductsSpendOver": {"description": "When the user's own products cost more than the budget.", "placeholders": {"spent": {"type": "String"}, "limit": {"type": "String"}}}
+  "@myProductsSpendOver": {"description": "When the user's own products cost more than the budget.", "placeholders": {"spent": {"type": "String"}, "limit": {"type": "String"}}},
+  "scanStatusChecking": "Got it! Checking the photo…",
+  "@scanStatusChecking": {"description": "Status line while a photo taken by itself is checked."},
+  "scanStatusNext": "Got it! Now turn slowly: {instruction}",
+  "@scanStatusNext": {"description": "Status line after a photo was taken by itself, before the next pose.", "placeholders": {"instruction": {"type": "String"}}}
 }

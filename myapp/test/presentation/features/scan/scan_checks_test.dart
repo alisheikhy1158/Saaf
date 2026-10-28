@@ -179,9 +179,7 @@ void main() {
       expect(read(c).shutterLocked, isFalse);
     });
 
-    testWidgets('the 2-second auto-capture still fires when ready', (
-      tester,
-    ) async {
+    testWidgets('the auto-capture still fires when ready', (tester) async {
       final c = make(tester);
       await settle(tester);
       monitor.emit(_readyAssessed);
@@ -189,7 +187,7 @@ void main() {
       expect(read(c).countdown, ScanController.countdownSeconds);
       await tester.pump(const Duration(seconds: 3));
       await tester.pump();
-      expect(read(c).phase, ScanPhase.reviewing);
+      expect(read(c).session.capturedCount, 1);
     });
   });
 

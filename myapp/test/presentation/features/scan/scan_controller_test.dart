@@ -19,6 +19,8 @@ import 'package:saaf/domain/entities/stored_photo.dart';
 import 'package:saaf/domain/services/capture_quality_monitor.dart';
 import 'package:saaf/domain/services/clock.dart';
 import 'package:saaf/domain/services/photo_picker.dart';
+import 'package:saaf/domain/services/photo_verifier.dart';
+import 'package:saaf/domain/entities/photo_check.dart';
 import 'package:saaf/presentation/features/scan/controllers/scan_controller.dart';
 import 'package:saaf/presentation/features/scan/state/scan_state.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
@@ -69,6 +71,15 @@ class _FailingStore extends InMemoryPhotoStore {
   }) async => const Err(StorageFailure());
 }
 
+/// Finds [verdict] in every photo.
+class _Verifier implements PhotoVerifier {
+  _Verifier(this.verdict);
+  PhotoCheck verdict;
+
+  @override
+  Future<PhotoCheck> check(FacePose pose, Uint8List bytes) async => verdict;
+}
+
 class _CancelPicker implements PhotoPicker {
   @override
   Future<Result<Uint8List?>> pickFromGallery() async => const Ok(null);
@@ -100,6 +111,7 @@ void main() {
     FakeCameraService? cameraOverride,
     PhotoPicker? picker,
     InMemoryPhotoStore? storeOverride,
+    PhotoVerifier? verifier,
   }) {
     final container = ProviderContainer(
       overrides: [
@@ -114,6 +126,9 @@ void main() {
         photoPickerProvider.overrideWithValue(picker ?? FakePhotoPicker()),
         photoStoreProvider.overrideWithValue(storeOverride ?? store),
         clockProvider.overrideWithValue(_Clock()),
+        photoVerifierProvider.overrideWithValue(
+          verifier ?? _Verifier(PhotoCheck.ok),
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -219,21 +234,60 @@ void main() {
       expect(read(c).countdown, isNull);
     });
 
-    testWidgets('when ready, counts down 2, 1 and then takes the photo', (
+    Future<void> holdStill(WidgetTester tester) async {
+      monitor.emit(_ready);
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      for (var i = 0; i < 4; i++) {
+        await tester.pump();
+      }
+    }
+
+    testWidgets('when ready, holds 1 second, takes it and moves on by itself', (
       tester,
     ) async {
       final c = make(tester);
       await settle(tester);
       monitor.emit(_ready);
       await tester.pump();
-      expect(read(c).countdown, 2);
-      await tester.pump(const Duration(seconds: 1));
       expect(read(c).countdown, 1);
       expect(read(c).phase, ScanPhase.live);
       await tester.pump(const Duration(seconds: 1));
-      await tester.pump();
-      expect(read(c).phase, ScanPhase.reviewing);
+      for (var i = 0; i < 4; i++) {
+        await tester.pump();
+      }
+      // No review in between: like a video, on to the next angle.
+      expect(read(c).phase, ScanPhase.live);
       expect(read(c).session.photos.keys, [FacePose.front]);
+      expect(read(c).pose, FacePose.left);
+      expect(read(c).justTaken, FacePose.front);
+      expect(monitor.watched, [FacePose.front, FacePose.left]);
+    });
+
+    testWidgets('turning the head through all three angles saves the scan', (
+      tester,
+    ) async {
+      final c = make(tester);
+      await settle(tester);
+      for (var i = 0; i < FacePose.values.length; i++) {
+        await holdStill(tester);
+      }
+      expect(read(c).phase, ScanPhase.done);
+      expect(
+        c.read(completedScanProvider)!.photos.map((p) => p.pose),
+        FacePose.values,
+      );
+    });
+
+    testWidgets('a photo that fails the check stops for a retake', (
+      tester,
+    ) async {
+      final c = make(tester, verifier: _Verifier(PhotoCheck.wrongPose));
+      await settle(tester);
+      await holdStill(tester);
+      expect(read(c).phase, ScanPhase.reviewing);
+      expect(read(c).pose, FacePose.front);
+      expect(read(c).photoCheck, PhotoCheck.wrongPose);
     });
 
     testWidgets('losing the light cancels the countdown', (tester) async {
@@ -241,7 +295,7 @@ void main() {
       await settle(tester);
       monitor.emit(_ready);
       await tester.pump();
-      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(milliseconds: 500));
       monitor.emit(_dark);
       await tester.pump();
       expect(read(c).countdown, isNull);

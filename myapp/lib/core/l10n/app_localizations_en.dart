@@ -2970,4 +2970,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String myProductsSpendOver(String spent, String limit) {
     return 'You spend about $spent a month on these, more than your $limit budget.';
   }
+
+  @override
+  String get scanStatusChecking => 'Got it! Checking the photo…';
+
+  @override
+  String scanStatusNext(String instruction) {
+    return 'Got it! Now turn slowly: $instruction';
+  }
 }

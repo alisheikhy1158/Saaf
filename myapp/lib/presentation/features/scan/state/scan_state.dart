@@ -55,6 +55,8 @@ class ScanState {
     this.failure,
     this.reviewPhoto,
     this.photoCheck,
+    this.checkingPhoto = false,
+    this.justTaken,
   });
 
   factory ScanState.initial(ScanSession session) =>
@@ -87,6 +89,13 @@ class ScanState {
   /// What the check of [reviewPhoto] found; null while it is still checking.
   final PhotoCheck? photoCheck;
 
+  /// A photo the scan took by itself is being checked (the camera stays on).
+  final bool checkingPhoto;
+
+  /// The pose the scan just took by itself, to say "Got it" while the user
+  /// turns to the next one; null otherwise.
+  final FacePose? justTaken;
+
   /// The phone is really checking the camera picture and it is not good enough
   /// yet, so the shutter waits (the 2-second auto-capture also needs it).
   bool get shutterLocked => quality.assessed && !quality.isReady;
@@ -104,6 +113,8 @@ class ScanState {
     Object? failure = _keep,
     Object? reviewPhoto = _keep,
     Object? photoCheck = _keep,
+    bool? checkingPhoto,
+    Object? justTaken = _keep,
   }) => ScanState(
     phase: phase ?? this.phase,
     session: session ?? this.session,
@@ -121,5 +132,9 @@ class ScanState {
     photoCheck: identical(photoCheck, _keep)
         ? this.photoCheck
         : photoCheck as PhotoCheck?,
+    checkingPhoto: checkingPhoto ?? this.checkingPhoto,
+    justTaken: identical(justTaken, _keep)
+        ? this.justTaken
+        : justTaken as FacePose?,
   );
 }

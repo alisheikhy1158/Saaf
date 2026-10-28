@@ -125,7 +125,7 @@ void main() {
 
     testWidgets('shows the countdown once everything is ready', (tester) async {
       await _open(tester, monitor: _Monitor(_ready));
-      expect(find.text('Hold still — capturing in 2s'), findsOneWidget);
+      expect(find.text('Hold still — capturing in 1s'), findsOneWidget);
       // Leave the screen so the countdown timer is cancelled.
       await tester.pumpWidget(const SizedBox());
     });

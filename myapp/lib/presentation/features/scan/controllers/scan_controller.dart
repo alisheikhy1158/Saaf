@@ -18,11 +18,14 @@ import 'package:saaf/presentation/providers/scan_providers.dart';
 part 'scan_controller.g.dart';
 
 /// Runs the three-pose face scan (front, left, right): permission, camera,
-/// quality hints, the 2-second auto-capture, review and saving.
+/// quality hints and saving. Like a video: each pose is taken by itself once
+/// the face is ready for a moment, checked on the phone and kept, and the
+/// scan moves on to the next angle; it only stops for a review when a photo
+/// fails its check. The shutter and the gallery still lead to a review.
 @riverpod
 class ScanController extends _$ScanController {
   /// Seconds the face must stay "ready" before the photo is taken by itself.
-  static const int countdownSeconds = 2;
+  static const int countdownSeconds = 1;
 
   StreamSubscription<CaptureQuality>? _quality;
   Timer? _timer;
@@ -161,7 +164,7 @@ class ScanController extends _$ScanController {
         state = state.copyWith(countdown: remaining);
       } else {
         _cancelCountdown();
-        unawaited(capture());
+        unawaited(capture(auto: true));
       }
     });
   }
@@ -176,8 +179,9 @@ class ScanController extends _$ScanController {
 
   /// The shutter. With the demo monitor it works at once; when the phone is
   /// really checking the picture it waits until the checks pass (the screen
-  /// also disables the button).
-  Future<void> capture() async {
+  /// also disables the button). [auto]: taken by itself, so it is kept
+  /// without a review when its check passes.
+  Future<void> capture({bool auto = false}) async {
     if (state.phase != ScanPhase.live || _capturing) return;
     if (state.shutterLocked) return;
     _capturing = true;
@@ -191,7 +195,50 @@ class ScanController extends _$ScanController {
       state = state.copyWith(failure: result.failureOrNull);
       return;
     }
-    _review(photo);
+    if (auto) {
+      await _keepIfClear(photo);
+    } else {
+      _review(photo);
+    }
+  }
+
+  /// Checks a photo taken by itself while the camera stays on: a clear one is
+  /// kept and the scan moves on (or saves after the last); one with a
+  /// problem is shown for a retake.
+  Future<void> _keepIfClear(ScanPhoto photo) async {
+    _stopWatching();
+    state = state.copyWith(
+      session: state.session.withPhoto(photo),
+      checkingPhoto: true,
+      justTaken: null,
+      failure: null,
+    );
+    PhotoCheck verdict;
+    try {
+      verdict = await ref
+          .read(photoVerifierProvider)
+          .check(photo.pose, photo.bytes);
+    } on Object {
+      verdict = PhotoCheck.unavailable;
+    }
+    if (!ref.mounted) return;
+    state = state.copyWith(checkingPhoto: false);
+    if (verdict.needsRetake) {
+      state = state.copyWith(
+        phase: ScanPhase.reviewing,
+        pose: photo.pose,
+        reviewPhoto: photo,
+        photoCheck: verdict,
+      );
+      return;
+    }
+    final next = state.session.nextMissing;
+    if (next == null) {
+      await _finish();
+      return;
+    }
+    state = state.copyWith(pose: next, justTaken: photo.pose);
+    _watchQuality();
   }
 
   /// "Choose from gallery". Allowed without the camera (the app stays usable).
@@ -221,6 +268,7 @@ class ScanController extends _$ScanController {
     _stopWatching();
     state = state.copyWith(
       phase: ScanPhase.reviewing,
+      justTaken: null,
       session: state.session.withPhoto(photo),
       pose: photo.pose,
       reviewPhoto: photo,

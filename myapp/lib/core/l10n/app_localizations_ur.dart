@@ -2970,4 +2970,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String myProductsSpendOver(String spent, String limit) {
     return 'آپ ان پر مہینے میں تقریباً $spent خرچ کرتے ہیں، جو آپ کے $limit کے بجٹ سے زیادہ ہے۔';
   }
+
+  @override
+  String get scanStatusChecking => 'ہو گیا! تصویر چیک ہو رہی ہے…';
+
+  @override
+  String scanStatusNext(String instruction) {
+    return 'ہو گیا! اب آہستہ سے مڑیں: $instruction';
+  }
 }

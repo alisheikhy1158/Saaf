@@ -5101,6 +5101,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You spend about {spent} a month on these, more than your {limit} budget.'**
   String myProductsSpendOver(String spent, String limit);
+
+  /// Status line while a photo taken by itself is checked.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it! Checking the photo…'**
+  String get scanStatusChecking;
+
+  /// Status line after a photo was taken by itself, before the next pose.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it! Now turn slowly: {instruction}'**
+  String scanStatusNext(String instruction);
 }
 
 class _AppLocalizationsDelegate

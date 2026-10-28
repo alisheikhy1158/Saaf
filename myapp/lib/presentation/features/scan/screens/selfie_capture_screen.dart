@@ -294,8 +294,12 @@ class _StatusLine extends StatelessWidget {
       ),
       (ScanPhase.live, final Failure _) => (l10n.scanCaptureFailed, true),
       (ScanPhase.live, _) => (
-        state.countdown != null
+        state.checkingPhoto
+            ? l10n.scanStatusChecking
+            : state.countdown != null
             ? l10n.scanStatusCountdown(state.countdown!)
+            : state.justTaken != null
+            ? l10n.scanStatusNext(state.pose.instruction(l10n))
             : state.shutterLocked
             ? l10n.scanStatusLocked
             : l10n.scanStatusManual,
