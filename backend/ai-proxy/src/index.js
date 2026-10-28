@@ -8,6 +8,7 @@
 //   POST /v1/weather   {lat, lon}                             ->  {temperature, humidity, uvNow, uvMax, aqi, pm25}
 //   POST /v1/report    {reason, replyId, replyText}          ->  {ok: true}
 //   GET  /health                                           ->  {ok: true}
+//   GET  /privacy, /terms, /delete-account                 ->  public web pages (HTML)
 //
 // The app never holds an AI key. Every request must carry a valid Firebase
 // sign-in token. Questions, photos and replies are NOT stored or logged here;
@@ -19,6 +20,7 @@ import { lookUpProduct, planRoutine } from './products.js';
 import { checkSafety } from './safety.js';
 import { analyseSkin } from './skin.js';
 import { fetchSkinWeather } from './weather.js';
+import { webPage } from './web_pages.js';
 import { validateChat, validateProduct, validateReport, validateRoutine, validateSafety, validateSkin, validateWeather } from './validate.js';
 
 // A request (with up to three photos) may be this big.
@@ -185,6 +187,10 @@ export async function handle(request, env, deps = {}) {
   const url = new URL(request.url);
   try {
     if (request.method === 'GET' && url.pathname === '/health') return json({ ok: true });
+    if (request.method === 'GET') {
+      const page = webPage(url.pathname, env);
+      if (page) return page;
+    }
     if (request.method === 'POST' && url.pathname === '/v1/chat') return await chat(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/routine') return await routine(request, env, deps);
     if (request.method === 'POST' && url.pathname === '/v1/product') return await product(request, env, deps);

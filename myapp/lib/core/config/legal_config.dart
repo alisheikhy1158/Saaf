@@ -18,7 +18,11 @@ class LegalConfig {
   static const LegalConfig current = LegalConfig(
     operatorName: 'Saaf',
     contactEmail: String.fromEnvironment('SUPPORT_EMAIL'),
-    deletionUrl: String.fromEnvironment('DELETION_URL'),
+    // Our server's public page (backend/ai-proxy/src/web_pages.js).
+    deletionUrl: String.fromEnvironment(
+      'DELETION_URL',
+      defaultValue: 'https://saaf-ai.saafai.workers.dev/delete-account',
+    ),
     isReviewed: bool.fromEnvironment('LEGAL_REVIEWED'),
   );
 

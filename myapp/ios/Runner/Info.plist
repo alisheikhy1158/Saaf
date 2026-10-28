@@ -72,6 +72,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- Only standard HTTPS encryption (export compliance, App Store Connect). -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<!-- Firebase Auth: the encoded iOS app ID, so Google / Apple sign-in and the
 	     phone-number check can return to the app (not a secret). -->
 	<key>CFBundleURLTypes</key>

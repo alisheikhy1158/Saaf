@@ -51,5 +51,42 @@ void main() {
     test('App Transport Security is not switched off', () {
       expect(plist, isNot(contains('NSAllowsArbitraryLoads')));
     });
+
+    test('says it uses only standard encryption (export compliance)', () {
+      expect(
+        plist,
+        matches(
+          RegExp(
+            r'<key>ITSAppUsesNonExemptEncryption</key>\s*<false/>',
+          ),
+        ),
+      );
+    });
+
+    test('has a privacy manifest, bundled with the app, and no tracking', () {
+      final manifest = File(
+        'ios/Runner/PrivacyInfo.xcprivacy',
+      ).readAsStringSync();
+      expect(
+        manifest,
+        matches(RegExp(r'<key>NSPrivacyTracking</key>\s*<false/>')),
+      );
+      for (final type in [
+        'NSPrivacyCollectedDataTypePhoneNumber',
+        'NSPrivacyCollectedDataTypeEmailAddress',
+        'NSPrivacyCollectedDataTypeUserID',
+        'NSPrivacyCollectedDataTypePhotosorVideos',
+        'NSPrivacyCollectedDataTypePurchaseHistory',
+      ]) {
+        expect(manifest, contains(type), reason: type);
+      }
+      final project = File(
+        'ios/Runner.xcodeproj/project.pbxproj',
+      ).readAsStringSync();
+      expect(
+        RegExp('PrivacyInfo.xcprivacy in Resources').allMatches(project).length,
+        2,
+      );
+    });
   });
 }

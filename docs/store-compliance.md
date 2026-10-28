@@ -60,6 +60,16 @@ Flow (implemented once in `PermissionService`, used everywhere):
   "delete anytime") are **contractual** — code must make them true.
 - No tracking/advertising SDKs. If any SDK ever tracks across apps → App Tracking Transparency prompt required. Avoid.
 
+**Public web pages (2026-10-29)** — served by our Worker, generated from the in-app text
+(`myapp/test/tool/legal_web_pages_test.dart` keeps them in sync; set `SUPPORT_EMAIL` on the Worker):
+`https://saaf-ai.saafai.workers.dev/privacy`, `/terms`, `/delete-account` (Play's account deletion URL).
+- **Refunds:** Terms §7 — store payments are refunded by Apple (reportaproblem.apple.com) or Google (self-serve within
+  48 h, then us / Play support); consumer-law rights unaffected.
+- **Cookies:** none in the app or on the pages (no scripts, no Set-Cookie), so no cookie banner is needed. Add one only
+  if a page ever sets non-essential cookies (analytics/ads).
+- **iOS:** `ios/Runner/PrivacyInfo.xcprivacy` (no tracking; collected types listed) must match App Store Connect App
+  Privacy answers; `ITSAppUsesNonExemptEncryption = false`.
+
 ## 2. Data handling
 - Collect the minimum (architecture.md PRV-3). Every new field → update privacy labels + Data safety + privacy policy *before* release.
 - Age: 04 has "I am 16 or older". Do not target children; set the Play target audience to 16+/18+ and answer the

@@ -187,4 +187,33 @@ void main() {
       expect(text, contains('except photos you choose to attach'));
     });
   });
+
+  group('payments, refunds and cookies (store and consumer rules)', () {
+    final termsText = allText(terms);
+    final privacyText = allText(privacy);
+
+    test('payment is by the store: card, Google Pay or Apple Pay', () {
+      for (final word in ['card', 'google pay', 'apple pay', 'not by us']) {
+        expect(termsText, contains(word), reason: word);
+      }
+      expect(termsText, contains('we never see your card'));
+    });
+
+    test('refunds: how to ask Apple or Google, and when to ask us', () {
+      expect(termsText, contains('refunds'));
+      expect(termsText, contains('reportaproblem.apple.com'));
+      expect(termsText, contains('48 hours'));
+      expect(termsText, contains('play.google.com'));
+    });
+
+    test('no cookies or tracking in the app or on our web pages', () {
+      expect(privacyText, contains('cookies'));
+      expect(privacyText, contains('does not use cookies'));
+    });
+
+    test('says what the routine research sends, including prices', () {
+      expect(privacyText, contains('prices'));
+      expect(privacyText, contains('reviews'));
+    });
+  });
 }

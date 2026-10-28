@@ -110,13 +110,35 @@ abstract final class LegalDocuments {
               'or cancel it in your Apple ID settings (Subscriptions) or in Google '
               'Play (Payments and subscriptions). Deleting your Saaf account does '
               'not cancel a subscription, so cancel first.',
-          'Refunds and price changes follow the rules of the store you bought '
-              'from. A free trial turns into a paid subscription unless you cancel '
-              'before it ends.',
+          'You pay with whatever your store account offers: a debit or credit '
+              'card, Google Pay, Apple Pay, your mobile carrier or store balance. '
+              'The store handles the payment, not us, so we never see your card '
+              'or bank details.',
+          'Price changes follow the rules of the store you bought from, which '
+              'tells you before a higher price applies. A free trial turns into a '
+              'paid subscription unless you cancel before it ends.',
         ],
       ),
       const LegalSection(
-        '7. Product information and links',
+        '7. Refunds',
+        paragraphs: [
+          'Because Apple or Google takes the payment, refunds are decided by '
+              'them under their own rules, and we cannot refund a store payment '
+              'ourselves. Your rights under consumer law are not affected.',
+        ],
+        bullets: [
+          'App Store: ask Apple at reportaproblem.apple.com, or contact Apple '
+              'Support.',
+          'Google Play: within 48 hours of buying you can ask for a refund '
+              'yourself in Google Play (play.google.com, Account, Order '
+              'history). After 48 hours, contact us and we will look at your '
+              'request, or ask Google Play support.',
+          'Cancelling stops the next renewal; the period you already paid for '
+              'stays usable until it ends.',
+        ],
+      ),
+      const LegalSection(
+        '8. Product information and links',
         paragraphs: [
           'Saaf shows products, ingredients and prices gathered from third '
               'parties. They may be out of date or wrong, and a product being '
@@ -127,7 +149,7 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '8. Our content',
+        '9. Our content',
         paragraphs: [
           'The app, its design, text, routines and scoring belong to us or our '
               'licensors. You may use them personally, not commercially. All '
@@ -135,14 +157,14 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '9. Changes to Saaf',
+        '10. Changes to Saaf',
         paragraphs: [
           'We may add, change or remove features, and Saaf may sometimes be '
               'unavailable. We will try to give notice of changes that matter to you.',
         ],
       ),
       const LegalSection(
-        '10. Ending your use',
+        '11. Ending your use',
         paragraphs: [
           'You can stop at any time and delete your account in the app '
               '(Profile, then Privacy, then Delete my account). We may suspend or '
@@ -151,7 +173,7 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '11. No guarantees',
+        '12. No guarantees',
         paragraphs: [
           'Saaf is provided "as is". Skin results vary from person to person and '
               'there is no guarantee that any routine or product will improve '
@@ -160,7 +182,7 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '12. Our responsibility',
+        '13. Our responsibility',
         paragraphs: [
           'To the extent the law allows, we are not responsible for indirect or '
               'consequential losses, or for harm from using a product you chose. '
@@ -168,7 +190,7 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '13. Changes to these terms',
+        '14. Changes to these terms',
         paragraphs: [
           'We may update these terms. When we make a material change we will tell '
               'you in the app and ask you to accept the new version. Using Saaf '
@@ -176,14 +198,14 @@ abstract final class LegalDocuments {
         ],
       ),
       const LegalSection(
-        '14. Governing law',
+        '15. Governing law',
         paragraphs: [
           'These terms are governed by the laws of Pakistan, and the courts of '
               'Pakistan can decide disputes about them, without affecting any '
               'rights you have under the law where you live.',
         ],
       ),
-      LegalSection('15. Contact us', paragraphs: [_contact(c)]),
+      LegalSection('16. Contact us', paragraphs: [_contact(c)]),
     ],
   );
 
@@ -226,6 +248,11 @@ abstract final class LegalDocuments {
               'your advertising ID. Saaf contains no advertising and no tracking '
               'or analytics tools. Your data is never sold or shared with '
               'advertisers or brands.',
+          'Cookies: the Saaf app does not use cookies, and neither do our web '
+              'pages (this policy, the terms and the account deletion page), so '
+              'there is nothing to accept or turn off.',
+          'Payments: we never receive your card, Google Pay or Apple Pay '
+              'details; Apple or Google handles them.',
         ],
       ),
       const LegalSection(
@@ -328,6 +355,14 @@ abstract final class LegalDocuments {
         bullets: [
           'You can stop sharing at any time in Profile. This also clears the '
               'conversation.',
+          'When Saaf AI builds your routine (only after it has read a face '
+              'scan), we send your skin facts as above, the latest scan estimates '
+              '(numbers, not the photo), and the products you use now: their '
+              'names, their kind and, if you added them, their prices, so new '
+              'products fit what is left of your budget. Saaf AI searches the web '
+              'for products sold in Pakistan and for what real users say in '
+              'reviews (for example on Reddit), and suggests a few options for '
+              'each step for you to choose from.',
           'Deleting your account removes the permission you gave.',
         ],
       ),

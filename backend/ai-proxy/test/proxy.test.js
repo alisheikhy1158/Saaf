@@ -348,6 +348,44 @@ test('server: reports are kept without the user id', async () => {
   assert.equal(saved.includes('user-123'), false);
 });
 
+async function page(path, env = {}) {
+  const response = await handle(new Request(`https://proxy.example${path}`), { FIREBASE_PROJECT_ID: PROJECT, ...env }, {});
+  return { status: response.status, headers: response.headers, text: await response.text() };
+}
+
+test('web: privacy policy, terms and account deletion pages, no sign-in, no cookies', async () => {
+  const env = { SUPPORT_EMAIL: 'help@saaf.example' };
+  for (const [path, must] of [
+    ['/privacy', 'Privacy Policy'],
+    ['/terms', '7. Refunds'],
+    ['/delete-account', 'Delete your Saaf account'],
+  ]) {
+    const r = await page(path, env);
+    assert.equal(r.status, 200, path);
+    assert.match(r.headers.get('content-type'), /^text\/html/, path);
+    assert.equal(r.headers.get('set-cookie'), null, path);
+    assert.equal(r.headers.get('x-content-type-options'), 'nosniff', path);
+    assert.match(r.headers.get('content-security-policy'), /default-src 'none'/, path);
+    assert.ok(r.text.includes(must), `${path}: ${must}`);
+    assert.ok(r.text.includes('help@saaf.example'), `${path}: contact`);
+    assert.equal(r.text.includes('__SUPPORT_EMAIL__'), false, path);
+    assert.equal(r.text.includes('<script'), false, path);
+  }
+  const deletion = (await page('/delete-account', env)).text;
+  for (const must of ['Profile', 'Delete my account', '30 days', 'subscription']) {
+    assert.ok(deletion.includes(must), must);
+  }
+});
+
+test('web: without a support address the pages still read well', async () => {
+  for (const path of ['/privacy', '/terms', '/delete-account']) {
+    const r = await page(path);
+    assert.equal(r.status, 200);
+    assert.equal(r.text.includes('__SUPPORT_EMAIL__'), false, path);
+    assert.equal(r.text.includes('undefined'), false, path);
+  }
+});
+
 test('server: unknown paths', async () => {
   assert.equal((await call('/nope', { method: 'GET' })).status, 404);
 });
