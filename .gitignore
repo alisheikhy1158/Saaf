@@ -4,6 +4,12 @@
 *.p8
 key.properties
 .env
+*.p12
+*.pem
+.dev.vars
+service-account*.json
+google-services.json
+GoogleService-Info.plist
 
 # Generated code — regenerate with build_runner (architecture.md §2)
 *.g.dart

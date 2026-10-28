@@ -266,11 +266,40 @@ async function call(path, { method = 'POST', token, body, env = {}, groq = fakeG
     { FIREBASE_PROJECT_ID: PROJECT, GROQ_API_KEY: 'k', ...env },
     { now: () => NOW, fetchImpl: groq, verify: (t, p, o) => verifyFirebaseToken(t, p, { ...o, fetchKeys }) },
   );
-  return { status: response.status, json: await response.json() };
+  const result = { status: response.status, json: await response.json() };
+  // Kept out of deepEqual comparisons; the headers test reads it.
+  Object.defineProperty(result, 'headers', { value: response.headers, enumerable: false });
+  return result;
 }
 
 test('server: health check needs no sign-in', async () => {
-  assert.deepEqual(await call('/health', { method: 'GET' }), { status: 200, json: { ok: true } });
+  const r = await call('/health', { method: 'GET' });
+  assert.deepEqual({ status: r.status, json: r.json }, { status: 200, json: { ok: true } });
+});
+
+test('server: every answer has the security headers', async () => {
+  for (const r of [await call('/health', { method: 'GET' }), await call('/nope', { method: 'GET' }), await call('/v1/chat', { body: {} })]) {
+    assert.equal(r.headers.get('x-content-type-options'), 'nosniff');
+    assert.match(r.headers.get('strict-transport-security'), /max-age=\d+/);
+    assert.equal(r.headers.get('content-security-policy'), "default-src 'none'; frame-ancestors 'none'");
+    assert.equal(r.headers.get('referrer-policy'), 'no-referrer');
+    assert.equal(r.headers.get('x-frame-options'), 'DENY');
+    assert.equal(r.headers.get('cache-control'), 'no-store');
+  }
+});
+
+test('server: weather and reports have their own daily limit per user', async () => {
+  const token = await makeToken();
+  const LIMITS = fakeKv();
+  const env = { LIMITS, WEATHER_LIMIT: '1', REPORT_LIMIT: '1', REPORTS: fakeKv() };
+  assert.equal((await call('/v1/weather', { token, body: { lat: 31.55, lon: 74.34 }, env, groq: weatherFetch([]) })).status, 200);
+  assert.equal((await call('/v1/weather', { token, body: { lat: 24.86, lon: 67.0 }, env, groq: weatherFetch([]) })).status, 429);
+  const report = { reason: 'harmful', replyId: 'r1', replyText: 'bad advice' };
+  assert.equal((await call('/v1/report', { token, body: report, env })).status, 200);
+  assert.equal((await call('/v1/report', { token, body: report, env })).status, 429);
+  // Neither counts toward the AI limit, and no plain user id is stored.
+  assert.equal([...LIMITS.store.keys()].some((k) => k.startsWith('d:')), false);
+  assert.equal([...LIMITS.store.keys()].some((k) => k.includes('user-123')), false);
 });
 
 test('server: no token, bad token', async () => {

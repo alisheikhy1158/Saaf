@@ -24,14 +24,19 @@ import { validateChat, validateProduct, validateReport, validateRoutine, validat
 // A request (with up to three photos) may be this big.
 const MAX_BODY_BYTES = 9_000_000;
 
+/** On every answer: JSON only, never cached, framed or sniffed, HTTPS only. */
+const SECURITY_HEADERS = {
+  'Content-Type': 'application/json; charset=utf-8',
+  'Cache-Control': 'no-store',
+  'X-Content-Type-Options': 'nosniff',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'Content-Security-Policy': "default-src 'none'; frame-ancestors 'none'",
+  'Referrer-Policy': 'no-referrer',
+  'X-Frame-Options': 'DENY',
+};
+
 function json(body, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'no-store',
-    },
-  });
+  return new Response(JSON.stringify(body), { status, headers: SECURITY_HEADERS });
 }
 
 async function hashUser(uid) {
@@ -65,11 +70,18 @@ async function authenticate(request, env, deps) {
 }
 
 /** Counts today's questions for this user; false when the limit is reached. */
-async function withinDailyLimit(env, uid, now) {
+function withinDailyLimit(env, uid, now) {
+  return withinLimit(env, uid, now, 'd', Number(env.DAILY_LIMIT || 30));
+}
+
+/**
+ * Counts today's requests of one kind ([prefix]) for this user (by a short
+ * fingerprint, never the id); false when [limit] is reached.
+ */
+async function withinLimit(env, uid, now, prefix, limit) {
   if (!env.LIMITS) return true; // no counter set up: Groq's own limits protect us
-  const limit = Number(env.DAILY_LIMIT || 30);
   const day = new Date(now).toISOString().slice(0, 10);
-  const key = `d:${await hashUser(uid)}:${day}`;
+  const key = `${prefix}:${await hashUser(uid)}:${day}`;
   const used = Number((await env.LIMITS.get(key)) ?? 0);
   if (used >= limit) return false;
   await env.LIMITS.put(key, String(used + 1), { expirationTtl: 60 * 60 * 36 });
@@ -119,11 +131,15 @@ const product = (request, env, deps) =>
 
 /** The skin weather: signed in, not counted as an AI question, cached 30 min per place. */
 async function weather(request, env, deps) {
-  await authenticate(request, env, deps);
+  const { uid } = await authenticate(request, env, deps);
   const read = await readJson(request);
   if (read.error) return json({ error: read.error }, read.status);
   const checked = validateWeather(read.body);
   if (!checked.ok) return json({ error: checked.error }, 400);
+  const now = deps.now?.() ?? Date.now();
+  if (!(await withinLimit(env, uid, now, 'wl', Number(env.WEATHER_LIMIT || 100)))) {
+    return json({ error: 'daily_limit' }, 429);
+  }
 
   const key = `w:${checked.value.lat},${checked.value.lon}`;
   const cached = env.LIMITS ? await env.LIMITS.get(key) : null;
@@ -147,6 +163,9 @@ async function report(request, env, deps) {
   if (!checked.ok) return json({ error: checked.error }, 400);
 
   const now = deps.now?.() ?? Date.now();
+  if (!(await withinLimit(env, uid, now, 'rl', Number(env.REPORT_LIMIT || 20)))) {
+    return json({ error: 'daily_limit' }, 429);
+  }
   const entry = {
     at: new Date(now).toISOString(),
     user: await hashUser(uid), // a short fingerprint, not the user id
