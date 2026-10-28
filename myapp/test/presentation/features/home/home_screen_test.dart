@@ -17,6 +17,7 @@ import 'package:saaf/domain/repositories/routine_log_repository.dart';
 import 'package:saaf/domain/usecases/build_routine.dart';
 import 'package:saaf/domain/services/clock.dart';
 import 'package:saaf/presentation/features/home/screens/home_screen.dart';
+import 'package:saaf/presentation/providers/analysis_providers.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/home_providers.dart';
@@ -24,6 +25,7 @@ import 'package:saaf/presentation/providers/routine_providers.dart';
 import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 
 import '../../../helpers/pump_app.dart';
+import '../../../helpers/ai_routine.dart';
 
 class _Clock implements Clock {
   const _Clock(this.value);
@@ -59,9 +61,14 @@ List<Override> _with({
   ProductCatalog catalog = const SeedProductCatalog(),
   AuthSession? session,
   InMemoryRoutineLogRepository? log,
+  bool analysed = true,
 }) => [
   clockProvider.overrideWithValue(_Clock(now ?? _morning)),
   productCatalogProvider.overrideWithValue(catalog),
+  if (analysed)
+    ...aiRoutineFrom(catalog)
+  else
+    skinAnalysisProvider.overrideWith((ref) async => null),
   skinProfileControllerProvider.overrideWithBuild((ref, n) => _profile),
   routineLogRepositoryProvider.overrideWithValue(
     log ?? InMemoryRoutineLogRepository(),
@@ -251,6 +258,19 @@ void main() {
   });
 
   group('states', () {
+    testWidgets('no analysed face scan: nothing to show, and a way to scan', (
+      tester,
+    ) async {
+      await _open(tester, overrides: _with(analysed: false));
+      expect(find.text('Nothing to show here'), findsOneWidget);
+      expect(
+        find.text('Scan your face to get AI insights and build your routine.'),
+        findsOneWidget,
+      );
+      expect(find.text('Scan your face'), findsOneWidget);
+      expect(find.text('Neem Face Wash'), findsNothing);
+    });
+
     testWidgets('no products: empty state with a way to the quiz', (
       tester,
     ) async {
@@ -259,9 +279,11 @@ void main() {
       expect(find.text('Take the skin quiz'), findsOneWidget);
     });
 
-    testWidgets('a failure can be retried', (tester) async {
+    testWidgets('Saaf AI failing to build the routine can be retried', (
+      tester,
+    ) async {
       await _open(tester, overrides: _with(catalog: _Failing()));
-      expect(find.text('We couldn’t load today’s routine'), findsOneWidget);
+      expect(find.text('Saaf AI couldn’t build your routine'), findsOneWidget);
       expect(find.text('Try again'), findsOneWidget);
     });
   });

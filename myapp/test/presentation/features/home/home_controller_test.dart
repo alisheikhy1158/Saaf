@@ -11,11 +11,13 @@ import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/repositories/product_catalog.dart';
 import 'package:saaf/domain/repositories/routine_log_repository.dart';
 import 'package:saaf/domain/services/clock.dart';
+import 'package:saaf/presentation/providers/ai_routine_providers.dart';
 import 'package:saaf/presentation/features/home/controllers/home_controller.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/home_providers.dart';
 import 'package:saaf/presentation/providers/routine_providers.dart';
 import 'package:saaf/presentation/providers/skin_profile_providers.dart';
+import '../../../helpers/ai_routine.dart';
 
 class _Clock implements Clock {
   _Clock(this.value);
@@ -42,6 +44,7 @@ void main() {
         ),
         routineLogRepositoryProvider.overrideWithValue(log),
         productCatalogProvider.overrideWithValue(const SeedProductCatalog()),
+        ...aiRoutineFrom(const SeedProductCatalog()),
         skinProfileControllerProvider.overrideWithBuild((ref, n) => _profile),
       ],
     );
@@ -81,7 +84,10 @@ void main() {
     });
 
     test('steps done earlier today are ticked', () async {
-      final routine = await make().read(routineProvider.future);
+      final c = make();
+      // The routine is built once Saaf AI's plan is there.
+      await c.read(aiRoutinePlanControllerProvider.future);
+      final routine = await c.read(routineProvider.future);
       final first = routine.morning.first.product;
       await log.setDone(
         DateTime(2026, 10, 15),
@@ -206,6 +212,7 @@ void main() {
           clockProvider.overrideWithValue(_Clock(DateTime(2026, 10, 15, 9))),
           routineLogRepositoryProvider.overrideWithValue(log),
           productCatalogProvider.overrideWithValue(const _Empty()),
+          ...aiRoutineFrom(const _Empty()),
           skinProfileControllerProvider.overrideWithBuild((ref, n) => _profile),
         ],
       );

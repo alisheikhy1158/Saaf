@@ -20,6 +20,9 @@ abstract final class SettingNames {
   /// Saaf AI's last routine plan and what it was for (JSON).
   static const aiRoutinePlan = 'aiRoutinePlan';
 
+  /// Which Saaf AI option the user chose for each routine step (JSON map).
+  static const routineChoices = 'routineChoices';
+
   /// Saaf AI's skin estimates, by scan id (JSON).
   static const aiSkinEstimates = 'aiSkinEstimates';
 

@@ -589,7 +589,7 @@
   "aiPicksOfferBody": "یہ ویب پر، بشمول Reddit کے r/PakistaniSkincare، پاکستان میں ملنے والی ایسی پروڈکٹس تلاش کرتا ہے جو آپ کی جلد، اسکین اور بجٹ کے مطابق ہوں، اور آپ کی موجودہ پروڈکٹس کا جائزہ لیتا ہے۔",
   "aiPicksTurnOn": "ثاف اے آئی آن کریں",
   "aiPicksLoading": "ثاف اے آئی آپ کی جلد کے لیے ویب پر پروڈکٹس تلاش کر رہا ہے۔ اس میں ایک منٹ لگ سکتا ہے…",
-  "aiPicksFailed": "ثاف اے آئی ابھی نہیں چن سکا، اس لیے یہ ہماری چنی ہوئی پروڈکٹس ہیں۔",
+  "aiPicksFailed": "Saaf AI ابھی آپ کی روٹین اپ ڈیٹ نہیں کر سکا۔",
   "aiPicksLabel": "ثاف اے آئی کی چنی ہوئی",
   "aiPicksWhy": "یہ پروڈکٹس کیوں",
   "aiPicksHide": "وجوہات چھپائیں",
@@ -821,5 +821,18 @@
   "cityQuestion": "آپ کس شہر میں رہتے ہیں؟",
   "cityWhy": "ثاف آپ کے روزانہ مشورے آپ کے شہر کی دھوپ، گرمی اور اسموگ کے مطابق بناتا ہے۔",
   "homeViewingDay": "{day} کو آپ نے کیا کیا",
-  "homeBackToToday": "آج پر واپس"
+  "homeBackToToday": "آج پر واپس",
+  "routineWaitingTitle": "آپ کی روٹین بن رہی ہے…",
+  "routineNoScanTitle": "یہاں ابھی کچھ نہیں",
+  "routineNoScanBody": "AI جائزہ لینے اور اپنی روٹین بنانے کے لیے اپنا چہرہ اسکین کریں۔",
+  "routineNoScanAction": "چہرہ اسکین کریں",
+  "routineNoAiBody": "Saaf AI آن کریں تاکہ وہ آپ کا اسکین پڑھ کر آپ کی جلد کے لیے، اصل ریویوز کی بنیاد پر، پروڈکٹس ڈھونڈ سکے۔",
+  "routinePlanFailedTitle": "Saaf AI آپ کی روٹین نہیں بنا سکا",
+  "routinePlanFailedBody": "شاید یہ مصروف ہے۔ ایک منٹ بعد دوبارہ کوشش کریں۔",
+  "routineNoneSuitBody": "Saaf AI کو ملنے والی کوئی پروڈکٹ آپ کے جوابات کے مطابق نہیں۔ اپنے جوابات دیکھیں یا بعد میں دوبارہ کوشش کریں۔",
+  "aiPicksChoose": "پروڈکٹس کا موازنہ کریں اور چنیں",
+  "aiPicksOptionsHide": "آپشنز چھپائیں",
+  "aiPicksInRoutine": "آپ کی روٹین میں",
+  "aiPicksUseThis": "یہ استعمال کریں",
+  "aiPicksUseThisLabel": "{name} اپنی روٹین میں استعمال کریں"
 }

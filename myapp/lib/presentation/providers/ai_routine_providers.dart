@@ -83,10 +83,11 @@ class CurrentProducts extends _$CurrentProducts {
   }
 }
 
-/// The routine Saaf AI researched on the web, with its verdicts on the
-/// products the user uses now: null when Saaf AI is off or the quiz is not
-/// answered (the routine then uses the app's own catalogue and rules). An
-/// error keeps the app's routine and can be retried with [retry].
+/// The routine Saaf AI researched on the web (2–3 reviewed options per step),
+/// with its verdicts on the products the user uses now: null when Saaf AI is
+/// off, the quiz is not answered or no scan has been analysed yet (there is no
+/// routine then: the app never suggests products nobody checked for this
+/// user). An error can be retried with [retry].
 ///
 /// Kept on the phone and only asked again when the quiz answers, the scan, the
 /// current products or the language change (web research is slow and counts
@@ -108,13 +109,15 @@ class AiRoutinePlanController extends _$AiRoutinePlanController {
     final profile = ref.watch(skinProfileControllerProvider);
     if (profile.skinType == null && profile.concerns.isEmpty) return null;
 
-    final current = await ref.watch(currentProductsProvider.future);
     SkinAnalysis? analysis;
     try {
       analysis = await ref.watch(skinAnalysisProvider.future);
     } on Object {
-      // No scan results: the plan still works from the quiz.
+      // Treated like no analysed scan.
     }
+    // The routine is built from the face scan, never from the quiz alone.
+    if (analysis == null) return null;
+    final current = await ref.watch(currentProductsProvider.future);
     final language = _language(
       ref.watch(localeControllerProvider)?.languageCode,
     );
@@ -156,6 +159,8 @@ class AiRoutinePlanController extends _$AiRoutinePlanController {
     List<String> names(Iterable<Enum> values) =>
         [for (final v in values) v.name]..sort();
     return [
+      // v2: several options per step (older single-pick plans are asked again).
+      'v2',
       profile.skinType?.name,
       names(profile.concerns).join(','),
       profile.sensitivity?.name,
@@ -182,5 +187,37 @@ class AiRoutinePlanController extends _$AiRoutinePlanController {
       // A damaged entry is simply asked for again.
     }
     return null;
+  }
+}
+
+/// Which of Saaf AI's options the user chose for each step (step key → product
+/// id, see `pickSlotKey`). A step with no choice uses the best option the
+/// safety answers allow. Kept on the phone.
+@Riverpod(keepAlive: true)
+class RoutineChoices extends _$RoutineChoices {
+  @override
+  Future<Map<String, String>> build() async {
+    final json = await ref
+        .read(settingsRepositoryProvider)
+        .read(SettingNames.routineChoices);
+    if (json == null) return const {};
+    try {
+      final data = jsonDecode(json);
+      if (data is! Map<String, Object?>) return const {};
+      return {
+        for (final MapEntry(:key, :value) in data.entries)
+          if (value is String) key: value,
+      };
+    } on Object {
+      return const {};
+    }
+  }
+
+  Future<void> choose(String slot, String productId) async {
+    final now = {...await future, slot: productId};
+    await ref
+        .read(settingsRepositoryProvider)
+        .write(SettingNames.routineChoices, jsonEncode(now));
+    state = AsyncData(now);
   }
 }

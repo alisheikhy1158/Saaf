@@ -15,6 +15,7 @@ import 'package:saaf/domain/entities/routine.dart';
 import 'package:saaf/domain/entities/skin_concern.dart';
 import 'package:saaf/domain/entities/ai_message.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/usecases/build_routine.dart';
 import 'package:saaf/presentation/widgets/common/routine_time_name.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/life_providers.dart';
@@ -23,6 +24,7 @@ import 'package:saaf/presentation/providers/ai_routine_providers.dart';
 import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/providers/routine_providers.dart';
 import 'package:saaf/presentation/providers/skin_profile_providers.dart';
+import 'package:saaf/presentation/widgets/common/no_routine_message.dart';
 import 'package:saaf/presentation/widgets/common/saaf_ai_text.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
@@ -85,13 +87,7 @@ class _RoutineScreenState extends ConsumerState<RoutineScreen> {
               child: const Center(child: CircularProgressIndicator()),
             )
           : !hasSteps
-          ? SaafStatusMessage(
-              icon: Icons.spa_outlined,
-              title: l10n.routineEmptyTitle,
-              body: l10n.routineEmptyBody,
-              actionLabel: l10n.routineEmptyAction,
-              onAction: () => context.go(SaafRoute.skinQuiz.path),
-            )
+          ? const NoRoutineMessage()
           : _Content(
               routine: routine,
               time: _time,
@@ -565,13 +561,30 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
     final plan = async.value;
     if (plan == null) return const SizedBox.shrink();
 
-    // The AI picks actually in the routine (the phone may have left some out).
-    final shown = <AiPick>[];
-    for (final step in [...widget.routine.morning, ...widget.routine.night]) {
-      final pick = plan.pickFor(step.product.id);
-      if (pick != null && !shown.contains(pick)) shown.add(pick);
-    }
     final profile = ref.watch(skinProfileControllerProvider);
+    // Saaf AI's options for each step it fills, only those the safety answers
+    // allow (so a choice never vanishes from the routine).
+    final allowed = {
+      for (final p in BuildRoutine(plan.products).allowedFor(profile)) p.id,
+    };
+    final groups = <String, _StepOptions>{};
+    for (final time in RoutineTime.values) {
+      for (final step in widget.routine.stepsFor(time)) {
+        if (plan.pickFor(step.product.id) == null) continue;
+        final slot = pickSlotKey(step.category, time);
+        if (groups.containsKey(slot)) continue;
+        final options = [
+          for (final pick in plan.optionsFor(step.category, time))
+            if (allowed.contains(pick.product.id)) pick,
+        ];
+        groups[slot] = _StepOptions(
+          slot: slot,
+          category: step.category,
+          options: options,
+          chosenId: step.product.id,
+        );
+      }
+    }
     final hasProducts =
         (ref.watch(currentProductsProvider).value ?? const []).isNotEmpty;
 
@@ -610,13 +623,12 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
             ],
           ),
           if (plan.summary.isNotEmpty) SaafAiText(plan.summary),
-          if (shown.isNotEmpty) ...[
+          if (groups.isNotEmpty) ...[
             link(
-              _open ? l10n.aiPicksHide : l10n.aiPicksWhy,
+              _open ? l10n.aiPicksOptionsHide : l10n.aiPicksChoose,
               () => setState(() => _open = !_open),
             ),
-            if (_open)
-              for (final pick in shown) _PickDetails(pick: pick),
+            if (_open) ...groups.values,
           ],
           Text(
             l10n.aiPicksNote,
@@ -638,6 +650,91 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
           ])
         else if (!hasProducts)
           link(l10n.currentAdd, () => context.push(SaafRoute.myProducts.path)),
+      ],
+    );
+  }
+}
+
+/// Saaf AI's options for one step: each with why it suits the user and what
+/// people say; the one in the routine is marked, the others can replace it.
+class _StepOptions extends ConsumerWidget {
+  const _StepOptions({
+    required this.slot,
+    required this.category,
+    required this.options,
+    required this.chosenId,
+  });
+
+  final String slot;
+  final ProductCategory category;
+  final List<AiPick> options;
+  final String chosenId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = context.saaf;
+    final name = switch (category) {
+      ProductCategory.cleanser => l10n.stepCleanser,
+      ProductCategory.treatment => l10n.stepTreatment,
+      ProductCategory.moisturiser => l10n.stepMoisturiser,
+      ProductCategory.sunscreen => l10n.stepSunscreen,
+    };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: tokens.space.x8,
+      children: [
+        Semantics(
+          header: true,
+          child: Text(name, style: tokens.styles.listTitle),
+        ),
+        for (final pick in options)
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              borderRadius: BorderRadius.circular(tokens.radius.r14),
+              border: Border.all(
+                color: pick.product.id == chosenId
+                    ? context.colors.onSurface
+                    : tokens.borderCard,
+                width: pick.product.id == chosenId
+                    ? tokens.size.borderFocus
+                    : tokens.size.borderThin,
+              ),
+            ),
+            child: Padding(
+              padding: EdgeInsetsDirectional.all(tokens.space.x12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: tokens.space.x4,
+                children: [
+                  _PickDetails(pick: pick),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: pick.product.id == chosenId
+                        ? SaafChip(
+                            label: l10n.aiPicksInRoutine,
+                            icon: Icons.check,
+                            tone: SaafChipTone.sage,
+                            small: true,
+                          )
+                        : Semantics(
+                            label: l10n.aiPicksUseThisLabel(pick.product.name),
+                            button: true,
+                            excludeSemantics: true,
+                            child: SaafButton.text(
+                              label: l10n.aiPicksUseThis,
+                              onPressed: () => ref
+                                  .read(routineChoicesProvider.notifier)
+                                  .choose(slot, pick.product.id),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }

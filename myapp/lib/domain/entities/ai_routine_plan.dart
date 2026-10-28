@@ -98,4 +98,27 @@ class AiRoutinePlan {
     }
     return null;
   }
+
+  /// The options Saaf AI found for one step of the routine at [time], best
+  /// first (the user chooses among them).
+  List<AiPick> optionsFor(ProductCategory category, RoutineTime time) => [
+    for (final pick in picks)
+      if (pick.product.category == category &&
+          pick.product.times.contains(time))
+        pick,
+  ];
+
+  /// The ids of the user's [choices] (step → product id) that are still in
+  /// this plan.
+  Set<String> chosenIds(Map<String, String> choices) => {
+    for (final id in choices.values)
+      if (pickFor(id) != null) id,
+  };
 }
+
+/// Which step a choice is for: the category, and for treatments the time too
+/// (one for the morning and one for the night).
+String pickSlotKey(ProductCategory category, RoutineTime time) =>
+    category == ProductCategory.treatment
+    ? '${category.name}-${time.name}'
+    : category.name;

@@ -14,6 +14,8 @@ import 'package:saaf/domain/entities/skin_type.dart';
 ///
 /// [preferred] are the ids Saaf AI chose: they come first in their step, but
 /// the safety answers and the budget still apply to them like to any product.
+/// [rank] is Saaf AI's order (best first), used when two products score the
+/// same and cost the same.
 /// [owned] are the user's own products: they come before everything else, and
 /// a strong one stays even without a matching concern (they already use it),
 /// but the safety answers still apply.
@@ -22,12 +24,15 @@ class BuildRoutine {
     this._catalog, {
     Set<String> preferred = const {},
     Set<String> owned = const {},
+    List<String> rank = const [],
   }) : _preferred = preferred,
-       _owned = owned;
+       _owned = owned,
+       _rank = rank;
 
   final List<Product> _catalog;
   final Set<String> _preferred;
   final Set<String> _owned;
+  final List<String> _rank;
 
   /// Score bonus that puts a Saaf AI pick ahead of every rule-based choice.
   static const int _preferredBonus = 100;
@@ -87,9 +92,16 @@ class BuildRoutine {
       final byScore = _score(b, profile).compareTo(_score(a, profile));
       if (byScore != 0) return byScore;
       final byPrice = a.pricePkr.compareTo(b.pricePkr);
-      return byPrice != 0 ? byPrice : a.id.compareTo(b.id);
+      if (byPrice != 0) return byPrice;
+      final byRank = _rankOf(a).compareTo(_rankOf(b));
+      return byRank != 0 ? byRank : a.id.compareTo(b.id);
     });
     return list;
+  }
+
+  int _rankOf(Product p) {
+    final i = _rank.indexOf(p.id);
+    return i < 0 ? _rank.length : i;
   }
 
   bool _isAllowed(Product p, SkinProfile profile) {

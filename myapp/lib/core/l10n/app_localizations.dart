@@ -3629,7 +3629,7 @@ abstract class AppLocalizations {
   /// Shown when Saaf AI picks failed.
   ///
   /// In en, this message translates to:
-  /// **'Saaf AI couldn’t choose right now, so these are our picks.'**
+  /// **'Saaf AI couldn’t update your routine right now.'**
   String get aiPicksFailed;
 
   /// Label on the routine when Saaf AI chose the products.
@@ -5017,6 +5017,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to today'**
   String get homeBackToToday;
+
+  /// Shown while the scan or Saaf AI's research loads.
+  ///
+  /// In en, this message translates to:
+  /// **'Building your routine…'**
+  String get routineWaitingTitle;
+
+  /// Title when there is no routine yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to show here'**
+  String get routineNoScanTitle;
+
+  /// Body when no face scan has been analysed.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan your face to get AI insights and build your routine.'**
+  String get routineNoScanBody;
+
+  /// Button that opens the face scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan your face'**
+  String get routineNoScanAction;
+
+  /// Body when there is a scan but Saaf AI is off.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Saaf AI so it can read your scan and find products for your skin, backed by real reviews.'**
+  String get routineNoAiBody;
+
+  /// Title when the AI routine failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Saaf AI couldn’t build your routine'**
+  String get routinePlanFailedTitle;
+
+  /// Body when the AI routine failed.
+  ///
+  /// In en, this message translates to:
+  /// **'It may be busy. Please try again in a minute.'**
+  String get routinePlanFailedBody;
+
+  /// Body when every AI option was removed by the safety answers.
+  ///
+  /// In en, this message translates to:
+  /// **'None of the products Saaf AI found suit your answers. Check your answers, or try again later.'**
+  String get routineNoneSuitBody;
+
+  /// Button that shows Saaf AI's options per step.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare and choose products'**
+  String get aiPicksChoose;
+
+  /// Button that hides the options.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide the options'**
+  String get aiPicksOptionsHide;
+
+  /// Label on the chosen option.
+  ///
+  /// In en, this message translates to:
+  /// **'In your routine'**
+  String get aiPicksInRoutine;
+
+  /// Button that puts this option in the routine.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this one'**
+  String get aiPicksUseThis;
+
+  /// Screen reader label for choosing an option.
+  ///
+  /// In en, this message translates to:
+  /// **'Use {name} in your routine'**
+  String aiPicksUseThisLabel(String name);
 }
 
 class _AppLocalizationsDelegate

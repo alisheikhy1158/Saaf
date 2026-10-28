@@ -46,6 +46,33 @@ void main() {
   final seed = SeedProductCatalog.products;
   BuildRoutine seeded() => BuildRoutine(seed);
 
+  group('Saaf AI options', () {
+    test('equal options: the order Saaf AI gave decides (best first)', () {
+      final options = [
+        p('b-second', ProductCategory.cleanser, 0),
+        p('a-first', ProductCategory.cleanser, 0),
+      ];
+      final routine = BuildRoutine(
+        options,
+        rank: const ['b-second', 'a-first'],
+      )(const SkinProfile());
+      expect(ids(routine.morning), ['b-second']);
+    });
+
+    test('the option the user chose wins over the best one', () {
+      final options = [
+        p('best', ProductCategory.cleanser, 0),
+        p('chosen', ProductCategory.cleanser, 0),
+      ];
+      final routine = BuildRoutine(
+        options,
+        preferred: const {'chosen'},
+        rank: const ['best', 'chosen'],
+      )(const SkinProfile());
+      expect(ids(routine.morning), ['chosen']);
+    });
+  });
+
   group('shape', () {
     test(
       'morning is cleanser, treatment, moisturiser, sunscreen, numbered 1–4',

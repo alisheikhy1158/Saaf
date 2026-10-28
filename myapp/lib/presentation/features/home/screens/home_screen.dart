@@ -21,6 +21,7 @@ import 'package:saaf/presentation/features/home/controllers/home_controller.dart
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_check.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
+import 'package:saaf/presentation/widgets/common/no_routine_message.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_icon_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_ink_card.dart';
@@ -61,13 +62,7 @@ class HomeScreen extends ConsumerWidget {
                 child: const Center(child: CircularProgressIndicator()),
               )
             : !state.hasRoutine
-            ? SaafStatusMessage(
-                icon: Icons.spa_outlined,
-                title: l10n.routineEmptyTitle,
-                body: l10n.routineEmptyBody,
-                actionLabel: l10n.routineEmptyAction,
-                onAction: () => context.go(SaafRoute.skinQuiz.path),
-              )
+            ? const NoRoutineMessage()
             : _Content(state: state),
       ),
     );

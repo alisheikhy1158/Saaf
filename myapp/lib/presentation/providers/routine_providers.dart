@@ -15,22 +15,31 @@ part 'routine_providers.g.dart';
 @Riverpod(keepAlive: true)
 ProductCatalog productCatalog(Ref ref) => const RealProductCatalog();
 
-/// The user's routine, rebuilt whenever the quiz answers change. The products
-/// the user already uses take their steps first (unless Saaf AI says to
-/// replace or stop them). When the user has turned Saaf AI on, the products it
-/// found on the web fill the other steps, but the safety answers and the
-/// budget still decide, here on the phone. Until the plan arrives, or if it
-/// fails, the app's own catalogue and rules fill them.
+/// The user's routine: empty until Saaf AI has read a face scan and researched
+/// products for it (the app never fills it with products nobody checked for
+/// this user). Then the products the user already uses take their steps first
+/// (unless Saaf AI says to replace or stop them), and Saaf AI's reviewed
+/// options fill the others: the one the user chose, or the best one. The
+/// safety answers and the budget still decide, here on the phone.
 @Riverpod(retry: noAutoRetry)
 Future<Routine> routine(Ref ref) async {
-  final products = await ref.watch(productCatalogProvider).all();
   final profile = ref.watch(skinProfileControllerProvider);
   final plan = ref.watch(aiRoutinePlanControllerProvider).value;
+  if (plan == null) {
+    return Routine(
+      morning: const [],
+      night: const [],
+      concerns: profile.concerns.toList(),
+      budget: profile.budget,
+    );
+  }
   final owned = await ref.watch(currentProductsProvider.future);
+  final choices = await ref.watch(routineChoicesProvider.future);
   final mine = OwnedProduct.productsFor(owned, plan);
   return BuildRoutine(
-    [...products, ...?plan?.products, ...mine],
-    preferred: plan?.productIds ?? const {},
+    [...plan.products, ...mine],
+    preferred: plan.chosenIds(choices),
     owned: {for (final p in mine) p.id},
+    rank: [for (final p in plan.picks) p.product.id],
   )(profile);
 }

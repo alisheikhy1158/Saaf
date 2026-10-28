@@ -72,16 +72,25 @@ class FakeAiProductService implements AiProductService {
     required List<OwnedProduct> currentProducts,
     Map<SkinMetricKind, double> scan = const {},
   }) async {
-    final firstPerStep = <ProductCategory, Product>{};
+    // Up to 3 options per step, like the real server.
+    final perStep = <ProductCategory, List<Product>>{};
     for (final product in RealProductCatalog.products) {
-      firstPerStep.putIfAbsent(product.category, () => product);
+      final options = perStep.putIfAbsent(product.category, () => []);
+      if (options.length < 3) options.add(product);
     }
     return Ok(
       AiRoutinePlan(
         summary: 'Demo picks: the real Saaf AI is not connected in this build.',
         picks: [
-          for (final product in firstPerStep.values)
-            AiPick(product: product, brand: '', why: 'A demo reason.'),
+          for (final options in perStep.values)
+            for (final product in options)
+              AiPick(
+                product: product,
+                brand: '',
+                why: 'A demo reason.',
+                reviews: 'Demo reviews.',
+                sources: const ['https://www.reddit.com/r/PakistaniSkincare/'],
+              ),
         ],
         current: [
           for (final owned in currentProducts)

@@ -36,6 +36,7 @@ import 'package:saaf/presentation/providers/settings_providers.dart';
 import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 
 import '../../../helpers/pump_app.dart';
+import '../../../helpers/ai_routine.dart';
 
 class _Catalog implements ProductCatalog {
   const _Catalog(this.products);
@@ -56,9 +57,11 @@ List<Override> _with({
   SkinProfile profile = _figma,
   ProductCatalog catalog = const SeedProductCatalog(),
   CompletedScan? scan,
+  bool aiPlan = true,
 }) => [
   skinProfileControllerProvider.overrideWithBuild((ref, n) => profile),
   productCatalogProvider.overrideWithValue(catalog),
+  if (aiPlan) ...aiRoutineFrom(catalog),
   completedScanProvider.overrideWithBuild((ref, n) => scan),
 ];
 
@@ -261,23 +264,6 @@ void main() {
       expect(find.text('Take the skin quiz'), findsOneWidget);
       expect(find.text('Start my routine'), findsNothing);
     });
-
-    testWidgets('a catalogue that fails can be retried', (tester) async {
-      await pumpSaaf(
-        tester,
-        const RoutineScreen(),
-        scaffold: false,
-        overrides: [
-          skinProfileControllerProvider.overrideWithBuild((ref, n) => _figma),
-          productCatalogProvider.overrideWithValue(_FailingCatalog()),
-          completedScanProvider.overrideWithBuild((ref, n) => null),
-        ],
-      );
-      await tester.pump();
-      await tester.pump();
-      expect(find.text('We couldn’t load your routine'), findsOneWidget);
-      expect(find.text('Try again'), findsOneWidget);
-    });
   });
 
   group('navigation', () {
@@ -375,28 +361,36 @@ void main() {
 
     List<Override> withAi({
       bool consented = true,
+      bool analysed = true,
       SkinProfile profile = _figma,
     }) {
       final settings = consented
           ? consentedSettings
           : InMemorySettingsRepository();
       return [
-        ..._with(profile: profile),
+        ..._with(profile: profile, aiPlan: false),
         settingsRepositoryProvider.overrideWithValue(settings),
         aiProductServiceProvider.overrideWithValue(service),
         aiCoachServiceProvider.overrideWithValue(const FakeAiCoachService()),
-        skinAnalysisProvider.overrideWith((ref) async => null),
+        skinAnalysisProvider.overrideWith(
+          (ref) async => analysed ? testAnalysis : null,
+        ),
       ];
     }
 
     Future<void> openAi(
       WidgetTester tester, {
       bool consented = true,
+      bool analysed = true,
       SkinProfile profile = _figma,
     }) async {
       await _open(
         tester,
-        overrides: withAi(consented: consented, profile: profile),
+        overrides: withAi(
+          consented: consented,
+          analysed: analysed,
+          profile: profile,
+        ),
       );
       for (var i = 0; i < 5; i++) {
         await tester.pump(const Duration(milliseconds: 50));
@@ -431,15 +425,76 @@ void main() {
       expect(find.text('Lip balm'), findsNothing);
     });
 
-    testWidgets('without Saaf AI: offers it, and uses our standard picks', (
+    testWidgets('without Saaf AI: no routine, and it offers Saaf AI', (
       tester,
     ) async {
       await openAi(tester, consented: false);
-      expect(find.text('Let Saaf AI choose your products'), findsOneWidget);
-      expect(find.textContaining('r/PakistaniSkincare'), findsOneWidget);
+      expect(find.text('Nothing to show here'), findsOneWidget);
+      expect(find.textContaining('real reviews'), findsOneWidget);
       expect(find.text('Turn on Saaf AI'), findsOneWidget);
-      expect(find.text('Neem Face Wash'), findsOneWidget);
+      // Never products nobody checked for this user.
+      expect(find.text('Neem Face Wash'), findsNothing);
       expect(service.calls, 0);
+    });
+
+    testWidgets('no analysed face scan: nothing to show, and a way to scan', (
+      tester,
+    ) async {
+      await openAi(tester, analysed: false);
+      expect(find.text('Nothing to show here'), findsOneWidget);
+      expect(
+        find.text('Scan your face to get AI insights and build your routine.'),
+        findsOneWidget,
+      );
+      expect(find.text('Scan your face'), findsOneWidget);
+      expect(find.text('Neem Face Wash'), findsNothing);
+      expect(find.text('Start my routine'), findsNothing);
+      expect(service.calls, 0);
+    });
+
+    testWidgets('Scan your face opens the face scan', (tester) async {
+      await pumpSaafApp(
+        tester,
+        location: '/routine',
+        overrides: withAi(analysed: false),
+      );
+      await tester.pump();
+      await tester.pump();
+      await tester.tap(find.text('Scan your face'));
+      await tester.pump(const Duration(seconds: 1));
+      expect(
+        find.byKey(const ValueKey('screen-selfieCapture')),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('several options: the best is used, the user can choose', (
+      tester,
+    ) async {
+      await openAi(tester);
+      expect(find.text('CeraVe Foaming Facial Cleanser'), findsOneWidget);
+      expect(find.text('Simple Refreshing Face Wash'), findsNothing);
+
+      await tapText(tester, 'Compare and choose products');
+      expect(find.text('Simple Refreshing Face Wash'), findsOneWidget);
+      expect(find.text('In your routine'), findsWidgets);
+      final handle = tester.ensureSemantics();
+      final use = find.bySemanticsLabel(
+        'Use Simple Refreshing Face Wash in your routine',
+      );
+      await tester.ensureVisible(use);
+      await tester.tap(use);
+      handle.dispose();
+      for (var i = 0; i < 3; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(
+        await consentedSettings.read(SettingNames.routineChoices),
+        contains('ai-cleanser-simple'),
+      );
+      // In the routine list now, and still among the options.
+      expect(find.text('Simple Refreshing Face Wash'), findsNWidgets(2));
+      expect(find.text('CeraVe Foaming Facial Cleanser'), findsOneWidget);
     });
 
     testWidgets('sends the products the user uses now', (tester) async {
@@ -473,13 +528,16 @@ void main() {
       for (var i = 0; i < 5; i++) {
         await tester.pump(const Duration(milliseconds: 50));
       }
-      await tapText(tester, 'Why these products');
+      await tapText(tester, 'Compare and choose products');
       expect(find.text('Gentle and liked for oily skin.'), findsOneWidget);
       expect(
         find.text('What people say: Popular on r/PakistaniSkincare.'),
         findsOneWidget,
       );
-      await tapText(tester, 'reddit.com');
+      // The first option's source.
+      await tester.ensureVisible(find.text('reddit.com').first);
+      await tester.tap(find.text('reddit.com').first);
+      await tester.pump();
       expect(links.opened, [
         'https://www.reddit.com/r/PakistaniSkincare/comments/abc',
       ]);
@@ -550,16 +608,13 @@ void main() {
       expect(find.text('Reported'), findsOneWidget);
     });
 
-    testWidgets('when Saaf AI fails, our picks stay and it can be retried', (
+    testWidgets('when Saaf AI fails, it says so and can be retried', (
       tester,
     ) async {
       service.fail = true;
       await openAi(tester);
-      expect(find.text('Neem Face Wash'), findsOneWidget);
-      expect(
-        find.text('Saaf AI couldn’t choose right now, so these are our picks.'),
-        findsOneWidget,
-      );
+      expect(find.text('Neem Face Wash'), findsNothing);
+      expect(find.text('Saaf AI couldn’t build your routine'), findsOneWidget);
       service.fail = false;
       await tapText(tester, 'Try again');
       for (var i = 0; i < 5; i++) {
@@ -628,11 +683,6 @@ void main() {
   });
 }
 
-class _FailingCatalog implements ProductCatalog {
-  @override
-  Future<List<Product>> all() async => throw StateError('offline');
-}
-
 /// Saaf AI with a plan from the web: a cleanser instead of the neem wash, a
 /// retinol serum for the night, and verdicts on the user's two products;
 /// [fail] makes it unavailable.
@@ -670,6 +720,21 @@ class _PlanService implements AiProductService {
             sources: const [
               'https://www.reddit.com/r/PakistaniSkincare/comments/abc',
             ],
+          ),
+          AiPick(
+            product: ActiveRules.product(
+              id: 'ai-cleanser-simple',
+              name: 'Simple Refreshing Face Wash',
+              category: ProductCategory.cleanser,
+              pricePkr: 500,
+              times: const {RoutineTime.morning, RoutineTime.night},
+              actives: const {},
+              fragranceFree: true,
+            ),
+            brand: 'Simple',
+            why: 'Mild and cheap.',
+            reviews: 'Liked for sensitive skin.',
+            sources: const ['https://www.reddit.com/r/PakistaniSkincare/x'],
           ),
           AiPick(
             product: ActiveRules.product(

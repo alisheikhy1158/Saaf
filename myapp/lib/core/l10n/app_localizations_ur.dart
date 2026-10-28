@@ -2064,8 +2064,7 @@ class AppLocalizationsUr extends AppLocalizations {
       'ثاف اے آئی آپ کی جلد کے لیے ویب پر پروڈکٹس تلاش کر رہا ہے۔ اس میں ایک منٹ لگ سکتا ہے…';
 
   @override
-  String get aiPicksFailed =>
-      'ثاف اے آئی ابھی نہیں چن سکا، اس لیے یہ ہماری چنی ہوئی پروڈکٹس ہیں۔';
+  String get aiPicksFailed => 'Saaf AI ابھی آپ کی روٹین اپ ڈیٹ نہیں کر سکا۔';
 
   @override
   String get aiPicksLabel => 'ثاف اے آئی کی چنی ہوئی';
@@ -2917,4 +2916,49 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get homeBackToToday => 'آج پر واپس';
+
+  @override
+  String get routineWaitingTitle => 'آپ کی روٹین بن رہی ہے…';
+
+  @override
+  String get routineNoScanTitle => 'یہاں ابھی کچھ نہیں';
+
+  @override
+  String get routineNoScanBody =>
+      'AI جائزہ لینے اور اپنی روٹین بنانے کے لیے اپنا چہرہ اسکین کریں۔';
+
+  @override
+  String get routineNoScanAction => 'چہرہ اسکین کریں';
+
+  @override
+  String get routineNoAiBody =>
+      'Saaf AI آن کریں تاکہ وہ آپ کا اسکین پڑھ کر آپ کی جلد کے لیے، اصل ریویوز کی بنیاد پر، پروڈکٹس ڈھونڈ سکے۔';
+
+  @override
+  String get routinePlanFailedTitle => 'Saaf AI آپ کی روٹین نہیں بنا سکا';
+
+  @override
+  String get routinePlanFailedBody =>
+      'شاید یہ مصروف ہے۔ ایک منٹ بعد دوبارہ کوشش کریں۔';
+
+  @override
+  String get routineNoneSuitBody =>
+      'Saaf AI کو ملنے والی کوئی پروڈکٹ آپ کے جوابات کے مطابق نہیں۔ اپنے جوابات دیکھیں یا بعد میں دوبارہ کوشش کریں۔';
+
+  @override
+  String get aiPicksChoose => 'پروڈکٹس کا موازنہ کریں اور چنیں';
+
+  @override
+  String get aiPicksOptionsHide => 'آپشنز چھپائیں';
+
+  @override
+  String get aiPicksInRoutine => 'آپ کی روٹین میں';
+
+  @override
+  String get aiPicksUseThis => 'یہ استعمال کریں';
+
+  @override
+  String aiPicksUseThisLabel(String name) {
+    return '$name اپنی روٹین میں استعمال کریں';
+  }
 }

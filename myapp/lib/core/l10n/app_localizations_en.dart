@@ -2064,8 +2064,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Saaf AI is searching the web for products for your skin. This can take a minute…';
 
   @override
-  String get aiPicksFailed =>
-      'Saaf AI couldn’t choose right now, so these are our picks.';
+  String get aiPicksFailed => 'Saaf AI couldn’t update your routine right now.';
 
   @override
   String get aiPicksLabel => 'Picked by Saaf AI';
@@ -2917,4 +2916,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeBackToToday => 'Back to today';
+
+  @override
+  String get routineWaitingTitle => 'Building your routine…';
+
+  @override
+  String get routineNoScanTitle => 'Nothing to show here';
+
+  @override
+  String get routineNoScanBody =>
+      'Scan your face to get AI insights and build your routine.';
+
+  @override
+  String get routineNoScanAction => 'Scan your face';
+
+  @override
+  String get routineNoAiBody =>
+      'Turn on Saaf AI so it can read your scan and find products for your skin, backed by real reviews.';
+
+  @override
+  String get routinePlanFailedTitle => 'Saaf AI couldn’t build your routine';
+
+  @override
+  String get routinePlanFailedBody =>
+      'It may be busy. Please try again in a minute.';
+
+  @override
+  String get routineNoneSuitBody =>
+      'None of the products Saaf AI found suit your answers. Check your answers, or try again later.';
+
+  @override
+  String get aiPicksChoose => 'Compare and choose products';
+
+  @override
+  String get aiPicksOptionsHide => 'Hide the options';
+
+  @override
+  String get aiPicksInRoutine => 'In your routine';
+
+  @override
+  String get aiPicksUseThis => 'Use this one';
+
+  @override
+  String aiPicksUseThisLabel(String name) {
+    return 'Use $name in your routine';
+  }
 }
