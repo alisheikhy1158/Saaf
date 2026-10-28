@@ -440,6 +440,20 @@ const plan = (extra = {}) => JSON.stringify({
   ...extra,
 });
 
+test('routine: what the person already spends on their own products counts toward the budget', async () => {
+  const body = {
+    ...routineBody,
+    current: [{ name: 'Nivea Soft', step: 'moisturiser', pricePkr: 900 }, { name: 'Cetaphil', step: 'cleanser', pricePkr: 3200 }, { name: 'Odd', step: 'cleanser', pricePkr: -5 }],
+  };
+  const value = validateRoutine(body).value;
+  assert.deepEqual(value.current[2], { name: 'Odd', step: 'cleanser' });
+  const groq = groqSequence([NOTES, plan()]);
+  await planRoutine({ GROQ_API_KEY: 'k' }, value, { fetchImpl: groq.fetchImpl });
+  const asked = JSON.stringify(groq.bodies[0].messages);
+  assert.ok(asked.includes('Nivea Soft (moisturiser, Rs 900)'));
+  assert.ok(asked.includes('already spend about Rs 4,100 a month'));
+});
+
 test('validate routine: keeps skin facts, scan and up to 10 current products with their step', () => {
   const r = validateRoutine({ ...routineBody, pregnant: true });
   assert.equal(r.ok, true);

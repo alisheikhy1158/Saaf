@@ -145,13 +145,17 @@ export function validateRoutine(body) {
   const raw = body.current ?? [];
   if (!Array.isArray(raw)) return { ok: false, error: 'bad_request' };
   if (raw.length > MAX_CURRENT) return { ok: false, error: 'too_many_products' };
-  // Each is a name, or {name, step} when the person said what kind it is.
+  // Each is a name, or {name, step, pricePkr?} when the person said what kind
+  // it is (and what it costs them).
   const current = [];
   for (const item of raw) {
     const name = cleanText(typeof item === 'string' ? item : item?.name, 120);
     if (!name || current.some((c) => c.name.toLowerCase() === name.toLowerCase())) continue;
     const step = typeof item === 'object' && STEPS.includes(item?.step) ? item.step : 'other';
-    current.push({ name, step });
+    const price = typeof item === 'object' ? item?.pricePkr : undefined;
+    current.push(Number.isInteger(price) && price > 0 && price <= 1_000_000
+      ? { name, step, pricePkr: price }
+      : { name, step });
   }
   return {
     ok: true,

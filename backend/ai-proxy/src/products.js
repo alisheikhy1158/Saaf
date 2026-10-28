@@ -47,6 +47,10 @@ const TIME_TEXT = { morning: ['morning'], night: ['night'], both: ['morning', 'n
 const MAX_REVIEWS = 300;
 const MAX_SOURCES = 3;
 
+function rupees(amount) {
+  return amount.toLocaleString('en-US');
+}
+
 function routineResearchPrompt({ context, scan, current }) {
   const person = describePerson(context);
   const lines = [
@@ -57,8 +61,12 @@ function routineResearchPrompt({ context, scan, current }) {
     lines.push(`Latest face scan (rough estimates from phone photos, 0 = none, 1 = a lot; for hydration higher is better): ${scores.join(', ')}.`);
   }
   lines.push(current.length
-    ? `Products they use now, with the step they told us (decide keep, replace or stop for each):\n${current.map((c) => `- ${c.name} (${c.step})`).join('\n')}`
+    ? `Products they use now, with the step they told us (decide keep, replace or stop for each):\n${current.map((c) => `- ${c.name} (${c.step}${c.pricePkr ? `, Rs ${rupees(c.pricePkr)}` : ''})`).join('\n')}`
     : 'They did not list any products they use now.');
+  const spent = current.reduce((sum, c) => sum + (c.pricePkr ?? 0), 0);
+  if (spent > 0) {
+    lines.push(`They already spend about Rs ${rupees(spent)} a month on their own products. Their budget covers those too, so choose new products that fit in what is left.`);
+  }
 
   const system = `You research skin care products for one person in Pakistan, for Saaf, a skin care app. Use the browser search tool several times.
 
