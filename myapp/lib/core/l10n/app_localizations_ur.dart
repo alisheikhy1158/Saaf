@@ -2909,4 +2909,12 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get cityWhy =>
       'ثاف آپ کے روزانہ مشورے آپ کے شہر کی دھوپ، گرمی اور اسموگ کے مطابق بناتا ہے۔';
+
+  @override
+  String homeViewingDay(String day) {
+    return '$day کو آپ نے کیا کیا';
+  }
+
+  @override
+  String get homeBackToToday => 'آج پر واپس';
 }

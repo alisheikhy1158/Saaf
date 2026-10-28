@@ -367,4 +367,54 @@ void main() {
       );
     });
   });
+
+  group('history', () {
+    testWidgets('tapping an earlier day shows what was done that day', (
+      tester,
+    ) async {
+      final log = InMemoryRoutineLogRepository();
+      final routine = const BuildRoutine(SeedProductCatalog.products)(_profile);
+      final first = routine.morning.first;
+      await log.setDone(
+        DateTime(2026, 10, 14),
+        routineStepKey(RoutineTime.morning, first.product),
+        true,
+      );
+      await _open(tester, overrides: _with(log: log));
+      expect(
+        find.text('0 of ${routine.morning.length} steps done'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.bySemanticsLabel(RegExp('Wednesday 14')));
+      await tester.pump();
+      expect(find.text('What you did on Wednesday 14 October'), findsOneWidget);
+      expect(
+        find.text('1 of ${routine.morning.length} steps done'),
+        findsOneWidget,
+      );
+
+      // An earlier day is only looked at, not changed.
+      await tester.tap(find.text(first.product.name));
+      await tester.pump();
+      expect(
+        find.text('1 of ${routine.morning.length} steps done'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('Back to today'));
+      await tester.pump();
+      expect(
+        find.text('0 of ${routine.morning.length} steps done'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('days still to come cannot be opened', (tester) async {
+      await _open(tester);
+      await tester.tap(find.bySemanticsLabel(RegExp('Friday 16')));
+      await tester.pump();
+      expect(find.textContaining('What you did on'), findsNothing);
+    });
+  });
 }

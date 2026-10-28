@@ -21,6 +21,7 @@ import 'package:saaf/presentation/features/home/controllers/home_controller.dart
 import 'package:saaf/presentation/providers/auth_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_check.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
+import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_icon_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_ink_card.dart';
 import 'package:saaf/presentation/widgets/common/saaf_main_nav.dart';
@@ -140,7 +141,7 @@ class _Content extends ConsumerWidget {
           ],
         ),
         SizedBox(height: space.x18),
-        _WeekStrip(state: state),
+        _WeekStrip(state: state, onDay: controller.selectDay),
         SizedBox(height: space.x16),
         SaafInkCard(
           child: Row(
@@ -223,6 +224,24 @@ class _Content extends ConsumerWidget {
             ),
           ],
         ),
+        if (!state.viewingToday)
+          Row(
+            spacing: space.x8,
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.homeViewingDay(
+                    DateFormat('EEEE d MMMM', locale).format(state.selectedDay),
+                  ),
+                  style: tokens.styles.meta.copyWith(color: tokens.textCaption),
+                ),
+              ),
+              SaafButton.text(
+                label: l10n.homeBackToToday,
+                onPressed: () => controller.selectDay(state.today),
+              ),
+            ],
+          ),
         SizedBox(height: space.x10),
         _Checklist(state: state),
         SizedBox(height: space.sectionGapMedium),
@@ -246,9 +265,10 @@ class _Content extends ConsumerWidget {
 
 /// Monday to Sunday, today filled in ink.
 class _WeekStrip extends StatelessWidget {
-  const _WeekStrip({required this.state});
+  const _WeekStrip({required this.state, required this.onDay});
 
   final HomeState state;
+  final ValueChanged<DateTime> onDay;
 
   @override
   Widget build(BuildContext context) {
@@ -267,17 +287,22 @@ class _WeekStrip extends StatelessWidget {
             tokens.size.dayWidth,
             (box.maxWidth - minGap * 6) / 7,
           );
+          // Each day's tap area is its whole seventh of the row, so it is
+          // wider than the pill itself.
           return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               for (final day in state.week)
-                _DayPill(
-                  width: width,
-                  letter: DateFormat.EEEEE(locale).format(day),
-                  number: NumberFormat.decimalPattern(locale).format(day.day),
-                  isToday: sameDay(day, state.today),
-                  isComplete: state.isDayComplete(day),
-                  spoken: _spoken(l10n, locale, day, state),
+                Expanded(
+                  child: _DayPill(
+                    width: width,
+                    isSelected: sameDay(day, state.selectedDay),
+                    onTap: day.isAfter(state.today) ? null : () => onDay(day),
+                    letter: DateFormat.EEEEE(locale).format(day),
+                    number: NumberFormat.decimalPattern(locale).format(day.day),
+                    isToday: sameDay(day, state.today),
+                    isComplete: state.isDayComplete(day),
+                    spoken: _spoken(l10n, locale, day, state),
+                  ),
                 ),
             ],
           );
@@ -303,6 +328,8 @@ class _WeekStrip extends StatelessWidget {
 class _DayPill extends StatelessWidget {
   const _DayPill({
     required this.width,
+    required this.isSelected,
+    required this.onTap,
     required this.letter,
     required this.number,
     required this.isToday,
@@ -311,6 +338,12 @@ class _DayPill extends StatelessWidget {
   });
 
   final double width;
+
+  /// The day the checklist shows (outlined when it is not today).
+  final bool isSelected;
+
+  /// Null for days still to come.
+  final VoidCallback? onTap;
   final String letter;
   final String number;
   final bool isToday;
@@ -331,45 +364,59 @@ class _DayPill extends StatelessWidget {
     return Semantics(
       container: true,
       label: spoken,
+      button: onTap != null,
+      selected: isSelected,
       excludeSemantics: true,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: isToday ? colors.inverseSurface : null,
-          borderRadius: BorderRadius.circular(tokens.radius.r22),
-          border: isToday
-              ? null
-              : Border.all(
-                  color: tokens.borderCard,
-                  width: tokens.size.borderThin,
-                ),
-        ),
-        child: SizedBox(
-          width: width,
-          height: tokens.size.dayHeight,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Padding(
-              padding: EdgeInsets.all(tokens.space.x2),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: tokens.space.x4,
-                children: [
-                  Text(
-                    letter,
-                    style: tokens.styles.micro.copyWith(color: letterColor),
-                  ),
-                  Text(
-                    number,
-                    style: tokens.styles.listTitle.copyWith(color: numberColor),
-                  ),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: dotColor,
-                      shape: BoxShape.circle,
+      onTap: onTap,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Center(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: isToday ? colors.inverseSurface : null,
+              borderRadius: BorderRadius.circular(tokens.radius.r22),
+              // An earlier day being looked at is outlined; today is filled.
+              border: isToday
+                  ? null
+                  : Border.all(
+                      color: isSelected ? colors.onSurface : tokens.borderCard,
+                      width: isSelected
+                          ? tokens.size.borderFocus
+                          : tokens.size.borderThin,
                     ),
-                    child: SizedBox.square(dimension: tokens.size.dayDot),
+            ),
+            child: SizedBox(
+              width: width,
+              height: tokens.size.dayHeight,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Padding(
+                  padding: EdgeInsets.all(tokens.space.x2),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: tokens.space.x4,
+                    children: [
+                      Text(
+                        letter,
+                        style: tokens.styles.micro.copyWith(color: letterColor),
+                      ),
+                      Text(
+                        number,
+                        style: tokens.styles.listTitle.copyWith(
+                          color: numberColor,
+                        ),
+                      ),
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: dotColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: SizedBox.square(dimension: tokens.size.dayDot),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -463,7 +510,9 @@ class _Checklist extends ConsumerWidget {
                 l10n: l10n,
                 done: state.isDone(step),
                 isLast: i == steps.length - 1,
-                onTap: () => controller.toggle(step),
+                onTap: state.viewingToday
+                    ? () => controller.toggle(step)
+                    : null,
               ),
           ],
         ),
@@ -487,7 +536,9 @@ class _ChecklistRow extends StatelessWidget {
   final AppLocalizations l10n;
   final bool done;
   final bool isLast;
-  final VoidCallback onTap;
+
+  /// Null when an earlier day is only being looked at.
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

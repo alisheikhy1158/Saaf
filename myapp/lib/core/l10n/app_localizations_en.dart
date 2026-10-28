@@ -2909,4 +2909,12 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cityWhy =>
       'Saaf adjusts your daily tips to your city’s sun, heat and smog.';
+
+  @override
+  String homeViewingDay(String day) {
+    return 'What you did on $day';
+  }
+
+  @override
+  String get homeBackToToday => 'Back to today';
 }

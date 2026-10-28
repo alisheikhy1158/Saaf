@@ -2362,5 +2362,9 @@
   "cityQuestion": "Which city do you live in?",
   "@cityQuestion": {"description": "Setup city title."},
   "cityWhy": "Saaf adjusts your daily tips to your city’s sun, heat and smog.",
-  "@cityWhy": {"description": "Setup city body."}
+  "@cityWhy": {"description": "Setup city body."},
+  "homeViewingDay": "What you did on {day}",
+  "@homeViewingDay": {"description": "Shown when an earlier day is selected.", "placeholders": {"day": {"type": "String"}}},
+  "homeBackToToday": "Back to today",
+  "@homeBackToToday": {"description": "Returns to today."}
 }

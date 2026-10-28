@@ -18,7 +18,14 @@ class HomeState {
     required this.today,
     required this.week,
     required this.doneByDay,
-  });
+    DateTime? selectedDay,
+  }) : selectedDay = selectedDay ?? today;
+
+  /// The day the checklist shows: today, or an earlier day of this week
+  /// (looked at, not changed).
+  final DateTime selectedDay;
+
+  bool get viewingToday => selectedDay == today;
 
   final Routine routine;
 
@@ -35,7 +42,7 @@ class HomeState {
   List<RoutineStep> get steps => routine.stepsFor(time);
   bool get hasRoutine => routine.morning.isNotEmpty || routine.night.isNotEmpty;
 
-  bool isDone(RoutineStep step) => (doneByDay[today] ?? const <String>{})
+  bool isDone(RoutineStep step) => (doneByDay[selectedDay] ?? const <String>{})
       .contains(routineStepKey(time, step.product));
 
   int get doneCount => steps.where(isDone).length;
@@ -56,12 +63,14 @@ class HomeState {
   HomeState copyWith({
     RoutineTime? time,
     Map<DateTime, Set<String>>? doneByDay,
+    DateTime? selectedDay,
   }) => HomeState(
     routine: routine,
     time: time ?? this.time,
     today: today,
     week: week,
     doneByDay: doneByDay ?? this.doneByDay,
+    selectedDay: selectedDay ?? this.selectedDay,
   );
 }
 
@@ -105,11 +114,19 @@ class HomeController extends _$HomeController {
     state = AsyncData(current.copyWith(time: time));
   }
 
-  /// Ticks [step] if it is not done, unticks it if it is. The screen updates at
-  /// once; the log is saved right after.
+  /// Shows what was done on [day] (this week, not after today).
+  void selectDay(DateTime day) {
+    final current = state.value;
+    final chosen = dateOnly(day);
+    if (current == null || chosen.isAfter(current.today)) return;
+    state = AsyncData(current.copyWith(selectedDay: chosen));
+  }
+
+  /// Ticks [step] if it is not done, unticks it if it is (today only). The
+  /// screen updates at once; the log is saved right after.
   Future<void> toggle(RoutineStep step) async {
     final current = state.value;
-    if (current == null) return;
+    if (current == null || !current.viewingToday) return;
 
     final key = routineStepKey(current.time, step.product);
     final done = !current.isDone(step);

@@ -5005,6 +5005,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saaf adjusts your daily tips to your city’s sun, heat and smog.'**
   String get cityWhy;
+
+  /// Shown when an earlier day is selected.
+  ///
+  /// In en, this message translates to:
+  /// **'What you did on {day}'**
+  String homeViewingDay(String day);
+
+  /// Returns to today.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to today'**
+  String get homeBackToToday;
 }
 
 class _AppLocalizationsDelegate
