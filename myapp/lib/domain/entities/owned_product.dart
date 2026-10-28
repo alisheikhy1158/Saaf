@@ -5,12 +5,13 @@ import 'package:saaf/domain/entities/product.dart';
 import 'package:saaf/domain/usecases/active_rules.dart';
 
 /// A product the user already uses, as they typed it, and which step of the
-/// routine it is ([step] null = something else, like a lip balm), with its
-/// shelf details when they gave them. Kept on the phone.
+/// routine it is ([step] null = something else, like a lip balm), with what
+/// it costs them and its shelf details when they gave them. Kept on the phone.
 class OwnedProduct {
   const OwnedProduct({
     required this.name,
     this.step,
+    this.pricePkr,
     this.openedOn,
     this.paoMonths,
     this.lastsWeeks,
@@ -18,6 +19,9 @@ class OwnedProduct {
 
   final String name;
   final ProductCategory? step;
+
+  /// What one pack costs them (counted against the monthly budget).
+  final int? pricePkr;
 
   /// The day it was opened.
   final DateTime? openedOn;
@@ -49,12 +53,14 @@ class OwnedProduct {
   };
 
   OwnedProduct withShelf({
+    int? pricePkr,
     DateTime? openedOn,
     int? paoMonths,
     int? lastsWeeks,
   }) => OwnedProduct(
     name: name,
     step: step,
+    pricePkr: pricePkr,
     openedOn: openedOn,
     paoMonths: paoMonths,
     lastsWeeks: lastsWeeks,
@@ -62,7 +68,7 @@ class OwnedProduct {
 
   static const idPrefix = 'mine-';
 
-  /// Whether [product] is one of the user's own (no price, "Yours").
+  /// Whether [product] is one of the user's own ("Yours").
   static bool isOwned(Product product) => product.id.startsWith(idPrefix);
 
   /// The user's products that belong in the routine, as products. One Saaf AI
@@ -80,7 +86,7 @@ class OwnedProduct {
             id: '$idPrefix${_slug(item.name)}',
             name: item.name,
             category: step,
-            pricePkr: 0,
+            pricePkr: item.pricePkr ?? 0,
             times: step == ProductCategory.sunscreen
                 ? const {RoutineTime.morning}
                 : const {RoutineTime.morning, RoutineTime.night},
@@ -107,6 +113,7 @@ class OwnedProduct {
       {
         'name': p.name,
         'step': p.step?.name ?? 'other',
+        'pricePkr': ?p.pricePkr,
         if (p.openedOn case final d?)
           'openedOn': DateTime(d.year, d.month, d.day).toIso8601String(),
         'paoMonths': ?p.paoMonths,
@@ -129,6 +136,10 @@ class OwnedProduct {
             OwnedProduct(
               name: name.trim(),
               step: ProductCategory.values.asNameMap()[item['step']],
+              pricePkr: switch (item['pricePkr']) {
+                final int price when price > 0 => price,
+                _ => null,
+              },
               openedOn: switch (item['openedOn']) {
                 final String date => DateTime.tryParse(date),
                 _ => null,
@@ -153,12 +164,14 @@ class OwnedProduct {
       other is OwnedProduct &&
       other.name == name &&
       other.step == step &&
+      other.pricePkr == pricePkr &&
       other.openedOn == openedOn &&
       other.paoMonths == paoMonths &&
       other.lastsWeeks == lastsWeeks;
 
   @override
-  int get hashCode => Object.hash(name, step, openedOn, paoMonths, lastsWeeks);
+  int get hashCode =>
+      Object.hash(name, step, pricePkr, openedOn, paoMonths, lastsWeeks);
 
   @override
   String toString() => 'OwnedProduct($name, ${step?.name ?? 'other'})';

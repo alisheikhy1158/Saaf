@@ -155,6 +155,8 @@ class BuildRoutine {
       _Move? best;
 
       for (final current in chosen.values.toSet()) {
+        // The user's own products stay: they already have them.
+        if (_owned.contains(current.id)) continue;
         final where = [
           for (final e in chosen.entries)
             if (e.value == current) e.key,

@@ -363,7 +363,11 @@ void main() {
       await s.planRoutine(
         context: _context,
         currentProducts: const [
-          OwnedProduct(name: 'Nivea Soft', step: ProductCategory.moisturiser),
+          OwnedProduct(
+            name: 'Nivea Soft',
+            step: ProductCategory.moisturiser,
+            pricePkr: 900,
+          ),
           OwnedProduct(name: 'Lip balm'),
         ],
         scan: const {SkinMetricKind.darkSpots: 0.5},
@@ -373,7 +377,7 @@ void main() {
       final body = jsonDecode(seen.body) as Map<String, dynamic>;
       expect(body.keys, {'context', 'scan', 'current'});
       expect(body['current'], [
-        {'name': 'Nivea Soft', 'step': 'moisturiser'},
+        {'name': 'Nivea Soft', 'step': 'moisturiser', 'pricePkr': 900},
         {'name': 'Lip balm', 'step': 'other'},
       ]);
       expect(body['scan'], {'darkSpots': 0.5});

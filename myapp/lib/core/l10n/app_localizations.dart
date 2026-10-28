@@ -5095,6 +5095,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use {name} in your routine'**
   String aiPicksUseThisLabel(String name);
+
+  /// Label of the price field for a product the user uses.
+  ///
+  /// In en, this message translates to:
+  /// **'Price (optional)'**
+  String get myProductsPriceLabel;
+
+  /// Hint in the price field.
+  ///
+  /// In en, this message translates to:
+  /// **'What one pack costs you'**
+  String get myProductsPriceHint;
+
+  /// Prefix in the price field.
+  ///
+  /// In en, this message translates to:
+  /// **'Rs '**
+  String get myProductsPricePrefix;
+
+  /// What the user's own products cost a month (no budget limit).
+  ///
+  /// In en, this message translates to:
+  /// **'You spend about {spent} a month on these.'**
+  String myProductsSpend(String spent);
+
+  /// What the user's own products cost against the budget.
+  ///
+  /// In en, this message translates to:
+  /// **'You spend about {spent} a month on these. {left} of your {limit} budget is left for new products.'**
+  String myProductsSpendLeft(String spent, String left, String limit);
+
+  /// When the user's own products cost more than the budget.
+  ///
+  /// In en, this message translates to:
+  /// **'You spend about {spent} a month on these, more than your {limit} budget.'**
+  String myProductsSpendOver(String spent, String limit);
 }
 
 class _AppLocalizationsDelegate

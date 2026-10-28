@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/data/repositories/in_memory_extra_repositories.dart';
+import 'package:saaf/domain/entities/budget_band.dart';
+import 'package:saaf/domain/entities/skin_profile.dart';
 import 'package:saaf/domain/services/clock.dart';
 import 'package:saaf/presentation/features/products/screens/my_products_screen.dart';
 import 'package:saaf/presentation/features/products/screens/product_ai_screen.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/settings_providers.dart';
+import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 
 import '../../../helpers/pump_app.dart';
 
@@ -20,16 +23,24 @@ class _Clock implements Clock {
   DateTime now() => DateTime(2026, 10, 18, 9);
 }
 
-List<Override> _overrides() => [
+List<Override> _overrides({BudgetBand? budget}) => [
   settingsRepositoryProvider.overrideWithValue(_settings),
   clockProvider.overrideWithValue(_Clock()),
+  if (budget != null)
+    skinProfileControllerProvider.overrideWithBuild(
+      (ref, n) => SkinProfile(budget: budget),
+    ),
 ];
 
-Future<void> _open(WidgetTester tester, {bool setup = false}) async {
+Future<void> _open(
+  WidgetTester tester, {
+  bool setup = false,
+  BudgetBand? budget,
+}) async {
   await pumpSaafApp(
     tester,
     location: setup ? '/my-products?setup=1' : '/my-products',
-    overrides: _overrides(),
+    overrides: _overrides(budget: budget),
   );
   await tester.pump();
   await tester.pump();
@@ -39,8 +50,12 @@ Future<void> _add(
   WidgetTester tester,
   String name, {
   String kind = 'Moisturiser',
+  String? price,
 }) async {
   await tester.enterText(find.byKey(const ValueKey('product-name')), name);
+  if (price != null) {
+    await tester.enterText(find.byKey(const ValueKey('product-price')), price);
+  }
   // The chip, not the same word under a product already in the list.
   final chip = find.widgetWithText(ChoiceChip, kind);
   await tester.ensureVisible(chip);
@@ -138,6 +153,53 @@ void main() {
     await _open(tester);
     expect(find.text('Done'), findsOneWidget);
     expect(find.text('Skip'), findsNothing);
+  });
+
+  group('prices', () {
+    testWidgets('a price can be added; it counts against the budget', (
+      tester,
+    ) async {
+      await _open(tester, budget: BudgetBand.balanced);
+      await _add(tester, 'Nivea Soft', price: '1200');
+      await _add(tester, 'Simple Wash', kind: 'Cleanser');
+      expect(
+        await _settings.read(SettingNames.currentProducts),
+        '[{"name":"Nivea Soft","step":"moisturiser","pricePkr":1200},'
+        '{"name":"Simple Wash","step":"cleanser"}]',
+      );
+      expect(find.textContaining('Rs 1,200'), findsWidgets);
+      expect(
+        find.text(
+          'You spend about Rs 1,200 a month on these. '
+          'Rs 4,800 of your Rs 6,000 budget is left for new products.',
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('over the budget: it says so', (tester) async {
+      await _open(tester, budget: BudgetBand.essential);
+      await _add(tester, 'Dear Serum', kind: 'Treatment', price: '4000');
+      expect(
+        find.text(
+          'You spend about Rs 4,000 a month on these, '
+          'more than your Rs 3,000 budget.',
+        ),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('the price can be changed later', (tester) async {
+      await _open(tester);
+      await _add(tester, 'Nivea Soft');
+      await _tap(tester, find.text('Nivea Soft'));
+      await tester.enterText(find.byKey(const ValueKey('shelf-price')), '950');
+      await _tap(tester, find.text('Save'));
+      expect(
+        await _settings.read(SettingNames.currentProducts),
+        contains('"pricePkr":950'),
+      );
+    });
   });
 
   group('the shelf', () {

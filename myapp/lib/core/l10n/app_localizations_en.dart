@@ -2961,4 +2961,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String aiPicksUseThisLabel(String name) {
     return 'Use $name in your routine';
   }
+
+  @override
+  String get myProductsPriceLabel => 'Price (optional)';
+
+  @override
+  String get myProductsPriceHint => 'What one pack costs you';
+
+  @override
+  String get myProductsPricePrefix => 'Rs ';
+
+  @override
+  String myProductsSpend(String spent) {
+    return 'You spend about $spent a month on these.';
+  }
+
+  @override
+  String myProductsSpendLeft(String spent, String left, String limit) {
+    return 'You spend about $spent a month on these. $left of your $limit budget is left for new products.';
+  }
+
+  @override
+  String myProductsSpendOver(String spent, String limit) {
+    return 'You spend about $spent a month on these, more than your $limit budget.';
+  }
 }

@@ -3,6 +3,7 @@
 // still apply (on the phone)
 import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/domain/entities/ai_routine_plan.dart';
+import 'package:saaf/domain/entities/budget_band.dart';
 import 'package:saaf/domain/entities/ingredient.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
 import 'package:saaf/domain/entities/product.dart';
@@ -64,6 +65,31 @@ void main() {
     expect(_names(routine), isNot(contains('Catalogue Cream')));
     expect(_names(routine), contains('Catalogue SPF')); // a step they lack
     expect(_names(routine), isNot(contains('Lip balm')));
+  });
+
+  test('the price they paid counts in the routine; none is 0', () {
+    final mine = OwnedProduct.productsFor(const [
+      OwnedProduct(
+        name: 'Nivea Soft',
+        step: ProductCategory.moisturiser,
+        pricePkr: 900,
+      ),
+    ], null).single;
+    expect(mine.pricePkr, 900);
+  });
+
+  test('a priced product of theirs is never swapped to fit the budget', () {
+    final routine = _build(const [
+      OwnedProduct(
+        name: 'Dear Cleanser',
+        step: ProductCategory.cleanser,
+        pricePkr: 5000,
+      ),
+    ], profile: const SkinProfile(budget: BudgetBand.essential));
+    expect(_names(routine), contains('Dear Cleanser'));
+    expect(_names(routine), isNot(contains('Catalogue Cleanser')));
+    expect(routine.monthlyCostPkr, greaterThan(5000));
+    expect(routine.fitsBudget, isFalse);
   });
 
   test('their product is marked as theirs and has no price', () {
@@ -144,7 +170,11 @@ void main() {
 
   test('reads and writes the saved list, including the old names-only one', () {
     const list = [
-      OwnedProduct(name: 'Nivea Soft', step: ProductCategory.moisturiser),
+      OwnedProduct(
+        name: 'Nivea Soft',
+        step: ProductCategory.moisturiser,
+        pricePkr: 900,
+      ),
       OwnedProduct(name: 'Lip balm'),
     ];
     expect(OwnedProduct.decodeList(OwnedProduct.encodeList(list)), list);

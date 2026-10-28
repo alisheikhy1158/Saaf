@@ -834,5 +834,11 @@
   "aiPicksOptionsHide": "آپشنز چھپائیں",
   "aiPicksInRoutine": "آپ کی روٹین میں",
   "aiPicksUseThis": "یہ استعمال کریں",
-  "aiPicksUseThisLabel": "{name} اپنی روٹین میں استعمال کریں"
+  "aiPicksUseThisLabel": "{name} اپنی روٹین میں استعمال کریں",
+  "myProductsPriceLabel": "قیمت (اختیاری)",
+  "myProductsPriceHint": "ایک پیک کتنے کا ملتا ہے",
+  "myProductsPricePrefix": "Rs ",
+  "myProductsSpend": "آپ ان پر مہینے میں تقریباً {spent} خرچ کرتے ہیں۔",
+  "myProductsSpendLeft": "آپ ان پر مہینے میں تقریباً {spent} خرچ کرتے ہیں۔ آپ کے {limit} کے بجٹ میں سے نئی پروڈکٹس کے لیے {left} باقی ہیں۔",
+  "myProductsSpendOver": "آپ ان پر مہینے میں تقریباً {spent} خرچ کرتے ہیں، جو آپ کے {limit} کے بجٹ سے زیادہ ہے۔"
 }

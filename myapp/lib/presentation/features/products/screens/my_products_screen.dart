@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 import 'package:saaf/presentation/providers/consent_providers.dart';
 import 'package:saaf/presentation/providers/life_providers.dart';
 import 'package:saaf/domain/entities/owned_product.dart';
-import 'package:intl/intl.dart' show DateFormat;
+import 'package:intl/intl.dart' show DateFormat, NumberFormat;
 import 'package:go_router/go_router.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/router/saaf_route.dart';
@@ -45,6 +47,7 @@ enum _Kind {
 
 class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
   final TextEditingController _name = TextEditingController();
+  final TextEditingController _price = TextEditingController();
   bool _full = false;
   _Kind? _kind;
   bool _needsKind = false;
@@ -52,6 +55,7 @@ class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
   @override
   void dispose() {
     _name.dispose();
+    _price.dispose();
     super.dispose();
   }
 
@@ -66,14 +70,43 @@ class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
     final now = await ref.read(currentProductsProvider.future);
     final added = await ref
         .read(currentProductsProvider.notifier)
-        .add(text, kind.step);
+        .add(text, kind.step, pricePkr: _rupees(_price.text));
     if (!mounted) return;
     setState(() {
       _full = !added && now.length >= CurrentProducts.max;
       _needsKind = false;
       if (added) _kind = null;
     });
-    if (added) _name.clear();
+    if (added) {
+      _name.clear();
+      _price.clear();
+    }
+  }
+
+  /// "Rs 1,200".
+  String _rs(AppLocalizations l10n, int amount) => l10n.priceRs(
+    NumberFormat.decimalPattern(
+      Localizations.localeOf(context).toString(),
+    ).format(amount),
+  );
+
+  /// What they spend a month on their products, against their budget.
+  String? _spendLine(AppLocalizations l10n, List<OwnedProduct> products) {
+    final spent = products.fold(0, (sum, p) => sum + (p.pricePkr ?? 0));
+    if (spent == 0) return null;
+    final limit = ref
+        .watch(skinProfileControllerProvider)
+        .budget
+        ?.maxMonthlyPkr;
+    if (limit == null) return l10n.myProductsSpend(_rs(l10n, spent));
+    if (spent > limit) {
+      return l10n.myProductsSpendOver(_rs(l10n, spent), _rs(l10n, limit));
+    }
+    return l10n.myProductsSpendLeft(
+      _rs(l10n, spent),
+      _rs(l10n, limit - spent),
+      _rs(l10n, limit),
+    );
   }
 
   /// "Moisturiser · Use by 18 Oct 2027 · runs out around 13 Dec".
@@ -81,6 +114,7 @@ class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
     final locale = Localizations.localeOf(context).toString();
     return [
       _kindLabel(l10n, _Kind.of(product.step)),
+      if (product.pricePkr case final price?) _rs(l10n, price),
       if (product.useBy case final d?)
         l10n.shelfUseBy(DateFormat('d MMM y', locale).format(d)),
       if (product.runsOutAround case final d?)
@@ -122,6 +156,7 @@ class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
         .read(currentProductsProvider.notifier)
         .updateShelf(
           product.name,
+          pricePkr: result.pricePkr,
           openedOn: result.openedOn,
           paoMonths: result.paoMonths,
           lastsWeeks: result.lastsWeeks,
@@ -177,6 +212,16 @@ class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
             hintText: l10n.myProductsFieldHint,
             textInputAction: TextInputAction.done,
             errorText: _full ? l10n.myProductsFull : null,
+          ),
+          SaafTextField(
+            key: const ValueKey('product-price'),
+            label: l10n.myProductsPriceLabel,
+            controller: _price,
+            hintText: l10n.myProductsPriceHint,
+            prefixText: l10n.myProductsPricePrefix,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            textInputAction: TextInputAction.done,
           ),
           Semantics(
             header: true,
@@ -274,6 +319,8 @@ class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
                 ],
               ),
             ),
+          if (_spendLine(l10n, products) case final line?)
+            Text(line, style: context.text.bodyMedium),
           Text(
             l10n.myProductsPrivacy,
             style: tokens.styles.legal.copyWith(color: tokens.textMeta),
@@ -295,8 +342,15 @@ class _MyProductsScreenState extends ConsumerState<MyProductsScreen> {
   }
 }
 
+/// A whole number of rupees from what was typed, or null (none, or 0).
+int? _rupees(String text) {
+  final value = int.tryParse(text.trim());
+  return value == null || value <= 0 ? null : value;
+}
+
 class _ShelfResult {
   const _ShelfResult({
+    this.pricePkr,
     this.openedOn,
     this.paoMonths,
     this.lastsWeeks,
@@ -304,6 +358,7 @@ class _ShelfResult {
     this.introduce = false,
   });
 
+  final int? pricePkr;
   final DateTime? openedOn;
   final int? paoMonths;
   final int? lastsWeeks;
@@ -326,7 +381,17 @@ class _ShelfSheetState extends ConsumerState<_ShelfSheet> {
   static const _months = [3, 6, 12, 24];
   static const _weeks = [4, 8, 12];
 
+  late final TextEditingController _price = TextEditingController(
+    text: widget.product.pricePkr?.toString() ?? '',
+  );
   late DateTime? _opened = widget.product.openedOn;
+
+  @override
+  void dispose() {
+    _price.dispose();
+    super.dispose();
+  }
+
   late int? _pao = widget.product.paoMonths;
   late int? _lasts = widget.product.lastsWeeks;
 
@@ -364,6 +429,16 @@ class _ShelfSheetState extends ConsumerState<_ShelfSheet> {
             Semantics(
               header: true,
               child: Text(widget.product.name, style: context.text.titleMedium),
+            ),
+            SaafTextField(
+              key: const ValueKey('shelf-price'),
+              label: l10n.myProductsPriceLabel,
+              controller: _price,
+              hintText: l10n.myProductsPriceHint,
+              prefixText: l10n.myProductsPricePrefix,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              textInputAction: TextInputAction.done,
             ),
             heading(l10n.shelfOpenedQuestion),
             Text(
@@ -422,6 +497,7 @@ class _ShelfSheetState extends ConsumerState<_ShelfSheet> {
               label: l10n.shelfSave,
               onPressed: () => Navigator.of(context).pop(
                 _ShelfResult(
+                  pricePkr: _rupees(_price.text),
                   openedOn: _opened,
                   paoMonths: _pao,
                   lastsWeeks: _lasts,

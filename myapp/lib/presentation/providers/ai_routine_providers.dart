@@ -32,20 +32,24 @@ class CurrentProducts extends _$CurrentProducts {
   }
 
   /// False when the name is empty, already there, or the list is full.
-  Future<bool> add(String name, ProductCategory? step) async {
+  Future<bool> add(String name, ProductCategory? step, {int? pricePkr}) async {
     final clean = name.trim().replaceAll(RegExp(r'\s+'), ' ');
     final now = await future;
     if (clean.isEmpty || now.length >= max) return false;
     if (now.any((p) => p.name.toLowerCase() == clean.toLowerCase())) {
       return false;
     }
-    await _save([...now, OwnedProduct(name: clean, step: step)]);
+    await _save([
+      ...now,
+      OwnedProduct(name: clean, step: step, pricePkr: pricePkr),
+    ]);
     return true;
   }
 
-  /// Saves the shelf details of the product called [name].
+  /// Saves the price and shelf details of the product called [name].
   Future<void> updateShelf(
     String name, {
+    int? pricePkr,
     DateTime? openedOn,
     int? paoMonths,
     int? lastsWeeks,
@@ -55,6 +59,7 @@ class CurrentProducts extends _$CurrentProducts {
       for (final p in now)
         if (p.name == name)
           p.withShelf(
+            pricePkr: pricePkr,
             openedOn: openedOn,
             paoMonths: paoMonths,
             lastsWeeks: lastsWeeks,
@@ -168,7 +173,7 @@ class AiRoutinePlanController extends _$AiRoutinePlanController {
       analysis?.scanId,
       language,
       ([
-        for (final p in current) '${p.name}:${p.step?.name}',
+        for (final p in current) '${p.name}:${p.step?.name}:${p.pricePkr}',
       ]..sort()).join(';'),
     ].join('|');
   }

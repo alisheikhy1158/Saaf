@@ -89,7 +89,11 @@ class HttpAiCoachService
       'scan': {for (final e in scan.entries) e.key.name: e.value},
       'current': [
         for (final p in currentProducts)
-          {'name': p.name, 'step': p.step?.name ?? 'other'},
+          {
+            'name': p.name,
+            'step': p.step?.name ?? 'other',
+            'pricePkr': ?p.pricePkr,
+          },
       ],
     });
     final body = _decode(sent);

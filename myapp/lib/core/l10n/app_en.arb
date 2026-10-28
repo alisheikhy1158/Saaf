@@ -2392,5 +2392,17 @@
   "aiPicksUseThis": "Use this one",
   "@aiPicksUseThis": {"description": "Button that puts this option in the routine."},
   "aiPicksUseThisLabel": "Use {name} in your routine",
-  "@aiPicksUseThisLabel": {"description": "Screen reader label for choosing an option.", "placeholders": {"name": {"type": "String"}}}
+  "@aiPicksUseThisLabel": {"description": "Screen reader label for choosing an option.", "placeholders": {"name": {"type": "String"}}},
+  "myProductsPriceLabel": "Price (optional)",
+  "@myProductsPriceLabel": {"description": "Label of the price field for a product the user uses."},
+  "myProductsPriceHint": "What one pack costs you",
+  "@myProductsPriceHint": {"description": "Hint in the price field."},
+  "myProductsPricePrefix": "Rs ",
+  "@myProductsPricePrefix": {"description": "Prefix in the price field."},
+  "myProductsSpend": "You spend about {spent} a month on these.",
+  "@myProductsSpend": {"description": "What the user's own products cost a month (no budget limit).", "placeholders": {"spent": {"type": "String"}}},
+  "myProductsSpendLeft": "You spend about {spent} a month on these. {left} of your {limit} budget is left for new products.",
+  "@myProductsSpendLeft": {"description": "What the user's own products cost against the budget.", "placeholders": {"spent": {"type": "String"}, "left": {"type": "String"}, "limit": {"type": "String"}}},
+  "myProductsSpendOver": "You spend about {spent} a month on these, more than your {limit} budget.",
+  "@myProductsSpendOver": {"description": "When the user's own products cost more than the budget.", "placeholders": {"spent": {"type": "String"}, "limit": {"type": "String"}}}
 }
