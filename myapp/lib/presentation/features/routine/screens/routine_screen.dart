@@ -68,8 +68,8 @@ class _RoutineScreenState extends ConsumerState<RoutineScreen> {
         trailing: SaafIconButton(
           icon: Icons.notifications_none,
           tooltip: l10n.routineReminders,
-          // Reminders are set up in the profile (14).
-          onPressed: () => context.push(SaafRoute.profile.path),
+          // The reminders, straight away (Profile has the same settings).
+          onPressed: () => context.push(SaafRoute.reminders.path),
         ),
       ),
       body: async.hasError && !async.hasValue

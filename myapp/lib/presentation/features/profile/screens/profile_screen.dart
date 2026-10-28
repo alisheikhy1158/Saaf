@@ -38,6 +38,7 @@ import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
 import 'package:saaf/presentation/widgets/common/saaf_ink_card.dart';
 import 'package:saaf/presentation/widgets/common/saaf_main_nav.dart';
 import 'package:saaf/presentation/widgets/common/saaf_overline.dart';
+import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_segmented_control.dart';
 import 'package:saaf/presentation/widgets/common/saaf_settings_group.dart';
@@ -670,6 +671,29 @@ class _BackupSheet extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The reminders on their own screen, for the bell on Home and Routine.
+class RemindersScreen extends StatelessWidget {
+  const RemindersScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return SaafScaffold(
+      key: ValueKey('screen-${SaafRoute.reminders.name}'),
+      fixedBody: true,
+      topBar: SaafTopBar(
+        leading: SaafTopBar.backButton(
+          tooltip: l10n.back,
+          onBack: () => context.canPop()
+              ? context.pop()
+              : context.go(SaafRoute.home.path),
+        ),
+      ),
+      body: const _RemindersSheet(),
     );
   }
 }

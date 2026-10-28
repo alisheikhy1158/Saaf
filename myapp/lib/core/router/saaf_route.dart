@@ -127,6 +127,15 @@ class SaafRoute {
     'Is this cream safe?',
   );
 
+  /// Reminders, opened from the bell on Home and Routine. Not a Figma
+  /// screen, so not in [all].
+  static const reminders = SaafRoute._(
+    0,
+    'reminders',
+    '/reminders',
+    'Reminders',
+  );
+
   /// The tissue test for the skin type, opened from the skin quiz (step 1). Not
   /// a Figma screen, so not in [all].
   static const skinTypeTest = SaafRoute._(

@@ -297,7 +297,7 @@ void main() {
       await tester.pump();
       await tester.tap(find.byTooltip('Reminders'));
       await tester.pump(const Duration(seconds: 1));
-      expect(find.byKey(const ValueKey('screen-profile')), findsOneWidget);
+      expect(find.byKey(const ValueKey('screen-reminders')), findsOneWidget);
     });
 
     testWidgets('back goes to the results, or Home when opened directly', (

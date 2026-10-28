@@ -146,6 +146,11 @@ GoRouter buildAppRouter({
         builder: (context, state) => const CreamSafetyScreen(),
       ),
       GoRoute(
+        name: SaafRoute.reminders.name,
+        path: SaafRoute.reminders.path,
+        builder: (context, state) => const RemindersScreen(),
+      ),
+      GoRoute(
         name: SaafRoute.skinTypeTest.name,
         path: SaafRoute.skinTypeTest.path,
         builder: (context, state) => const SkinTypeTestScreen(),
