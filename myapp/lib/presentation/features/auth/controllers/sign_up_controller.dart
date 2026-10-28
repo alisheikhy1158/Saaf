@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/domain/usecases/social_sign_in.dart';
 import 'package:saaf/presentation/features/auth/state/sign_up_state.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
@@ -57,9 +58,11 @@ class SignUpController extends _$SignUpController {
     if (session != null) {
       ref.read(authSessionControllerProvider.notifier).set(session);
     }
+    final failure = result.failureOrNull;
     state = state.copyWith(
       isSubmitting: false,
-      socialFailure: result.failureOrNull,
+      // Closing the sign-in window is not an error.
+      socialFailure: failure is SignInCancelled ? null : failure,
     );
     return session != null;
   }

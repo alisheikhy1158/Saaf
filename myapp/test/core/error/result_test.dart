@@ -48,6 +48,8 @@ void main() {
         const RateLimited(),
         const ServiceUnavailable(),
         const Unauthorised(),
+        // Closing the Google / Apple window.
+        const SignInCancelled(),
       ];
       // An exhaustive switch compiles only if the hierarchy is sealed.
       for (final failure in failures) {
@@ -62,6 +64,7 @@ void main() {
           RateLimited() => 'rate',
           ServiceUnavailable() => 'unavailable',
           Unauthorised() => 'unauthorised',
+          SignInCancelled() => 'cancelled',
         };
         expect(label, isNotEmpty);
       }

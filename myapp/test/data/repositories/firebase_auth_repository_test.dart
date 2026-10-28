@@ -382,7 +382,7 @@ void main() {
       ).thenThrow(FirebaseAuthException(code: 'canceled'));
       expect(
         (await repository.signInWithGoogle()).failureOrNull,
-        const UnknownFailure('canceled'),
+        const SignInCancelled(),
       );
     });
 
@@ -490,7 +490,11 @@ void main() {
       'too-many-requests': UnknownFailure('too-many-requests'),
       'quota-exceeded': UnknownFailure('quota-exceeded'),
       'session-expired': UnknownFailure('session-expired'),
-      'canceled': UnknownFailure('canceled'),
+      // Closing the Google / Apple window is not an error.
+      'canceled': SignInCancelled(),
+      'web-context-canceled': SignInCancelled(),
+      'popup-closed-by-user': SignInCancelled(),
+      'cancelled-popup-request': SignInCancelled(),
       'something-new': UnknownFailure('something-new'),
     };
     table.forEach((code, expected) {

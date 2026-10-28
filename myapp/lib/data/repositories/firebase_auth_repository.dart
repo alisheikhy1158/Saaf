@@ -228,5 +228,9 @@ Failure mapFirebaseAuthError(FirebaseAuthException error) =>
       'network-request-failed' => const NetworkFailure(),
       'invalid-phone-number' => const ValidationFailure('phone'),
       'invalid-verification-code' => const ValidationFailure('code'),
+      'canceled' ||
+      'web-context-canceled' ||
+      'popup-closed-by-user' ||
+      'cancelled-popup-request' => const SignInCancelled(),
       final code => UnknownFailure(code),
     };

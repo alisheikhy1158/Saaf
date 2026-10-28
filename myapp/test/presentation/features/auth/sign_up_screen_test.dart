@@ -8,6 +8,7 @@ import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/error/result.dart';
 import 'package:saaf/presentation/features/auth/screens/sign_up_screen.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
+import 'package:saaf/presentation/providers/onboarding_status.dart';
 
 import '../../../domain/usecases/auth_usecases_test.dart'
     show RecordingAuthRepository;
@@ -20,6 +21,7 @@ void main() {
     WidgetTester tester, {
     Size size = const Size(390, 1100),
     TargetPlatform? platform,
+    bool returning = false,
   }) async {
     repository = RecordingAuthRepository();
     debugDefaultTargetPlatformOverride = platform;
@@ -28,7 +30,14 @@ void main() {
       tester,
       location: '/sign-up',
       size: size,
-      overrides: [authRepositoryProvider.overrideWithValue(repository)],
+      overrides: [
+        authRepositoryProvider.overrideWithValue(repository),
+        // A returning user on this phone: already agreed, quiz done.
+        if (returning) ...[
+          consentStatusProvider.overrideWithBuild((ref, n) => true),
+          quizDoneProvider.overrideWithBuild((ref, n) => true),
+        ],
+      ],
     );
   }
 
@@ -215,10 +224,31 @@ void main() {
       );
     });
 
-    testWidgets('Android shows no "Continue with Apple"', (tester) async {
+    testWidgets('Android offers "Continue with Apple" too', (tester) async {
       await pumpSignUp(tester, platform: TargetPlatform.android);
-      expect(find.text('Continue with Apple'), findsNothing);
+      expect(find.text('Continue with Apple'), findsOneWidget);
       debugDefaultTargetPlatformOverride = null;
+    });
+
+    testWidgets('a returning user signing in with Google goes to Home', (
+      tester,
+    ) async {
+      await pumpSignUp(tester, returning: true);
+      await tester.tap(find.text('Continue with Google'));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+    });
+
+    testWidgets('closing the Google window is not an error', (tester) async {
+      await pumpSignUp(tester);
+      repository.verifyResult = const Err(SignInCancelled());
+      await tester.tap(find.text('Continue with Google'));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(
+        find.text('We couldn’t sign you in. Please try again.'),
+        findsNothing,
+      );
+      expect(find.byKey(const ValueKey('screen-signUp')), findsOneWidget);
     });
 
     testWidgets('iOS shows "Continue with Apple" above Google (§9.3)', (

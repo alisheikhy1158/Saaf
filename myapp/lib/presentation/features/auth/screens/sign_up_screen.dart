@@ -13,6 +13,7 @@ import 'package:saaf/presentation/widgets/common/linked_sentence.dart';
 import 'package:saaf/presentation/widgets/common/phone_number_input_formatter.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_labeled_divider.dart';
+import 'package:saaf/presentation/providers/onboarding_status.dart';
 import 'package:saaf/presentation/widgets/common/saaf_message_row.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_text_field.dart';
@@ -31,12 +32,16 @@ class SignUpScreen extends ConsumerWidget {
     final space = tokens.space;
     final form = ref.watch(signUpControllerProvider);
     final controller = ref.read(signUpControllerProvider.notifier);
-    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
-
     Future<void> socialSignIn(SocialProvider provider) async {
       final signedIn = await controller.signInWith(provider);
       if (signedIn && context.mounted) {
-        context.go(SaafRoute.privacyConsent.path);
+        // Someone who already agreed on this phone goes straight home (the
+        // guard still sends them to the quiz if it is not done).
+        context.go(
+          ref.read(consentStatusProvider) == true
+              ? SaafRoute.home.path
+              : SaafRoute.privacyConsent.path,
+        );
       }
     }
 
@@ -100,14 +105,15 @@ class SignUpScreen extends ConsumerWidget {
           Column(
             spacing: space.x12,
             children: [
-              if (isIos)
-                SaafButton.outline(
-                  label: l10n.continueWithApple,
-                  leadingIcon: Icons.apple,
-                  onPressed: form.isSubmitting
-                      ? null
-                      : () => socialSignIn(SocialProvider.apple),
-                ),
+              // Apple on both: required on iOS next to Google (App Store
+              // 4.8), and Firebase signs in with Apple on Android in a browser.
+              SaafButton.outline(
+                label: l10n.continueWithApple,
+                leadingIcon: Icons.apple,
+                onPressed: form.isSubmitting
+                    ? null
+                    : () => socialSignIn(SocialProvider.apple),
+              ),
               SaafButton.outline(
                 label: l10n.continueWithGoogle,
                 // Plain "G" as in Figma; the official Google logo asset replaces
@@ -122,7 +128,11 @@ class SignUpScreen extends ConsumerWidget {
                   liveRegion: true,
                   child: SaafMessageRow(
                     icon: Icons.error_outline,
-                    text: l10n.socialSignInFailed,
+                    text: withDetail(
+                      l10n.socialSignInFailed,
+                      form.socialFailure!,
+                      show: Env.diagnostics,
+                    ),
                     color: context.colors.error,
                   ),
                 ),

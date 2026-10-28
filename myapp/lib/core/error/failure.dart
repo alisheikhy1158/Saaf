@@ -68,6 +68,11 @@ final class PurchaseCancelled extends Failure {
   const PurchaseCancelled();
 }
 
+/// The user closed the Google / Apple sign-in window: not an error.
+final class SignInCancelled extends Failure {
+  const SignInCancelled();
+}
+
 /// An input did not pass validation at the boundary (SEC-8). [field] names it.
 final class ValidationFailure extends Failure {
   const ValidationFailure(this.field);
