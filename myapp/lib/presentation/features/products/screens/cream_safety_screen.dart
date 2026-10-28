@@ -180,7 +180,7 @@ class _CreamSafetyScreenState extends ConsumerState<CreamSafetyScreen> {
             ),
             SaafButton.primary(
               label: l10n.aiPicksTurnOn,
-              onPressed: () => context.push(SaafRoute.aiCoach.path),
+              onPressed: () => context.push(SaafRoute.aiConsentAndReturn),
             ),
           ] else ...[
             SaafTextField(

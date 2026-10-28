@@ -97,7 +97,7 @@ class ProductAiScreen extends ConsumerWidget {
         actions: [
           SaafButton.primary(
             label: l10n.aiPicksTurnOn,
-            onPressed: () => context.push(SaafRoute.aiCoach.path),
+            onPressed: () => context.push(SaafRoute.aiConsentAndReturn),
           ),
         ],
       );

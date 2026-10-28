@@ -138,6 +138,22 @@ void main() {
     _voice = _Voice();
   });
 
+  testWidgets('opened to turn Saaf AI on elsewhere: agreeing goes back', (
+    tester,
+  ) async {
+    await pumpSaafApp(
+      tester,
+      location: '/ai-coach?return=1',
+      overrides: _overrides(consented: false),
+    );
+    await tester.pump();
+    await tester.pump();
+    await _tap(tester, find.text('I agree, start chatting'));
+    await tester.pump(const Duration(seconds: 1));
+    // Nothing to go back to in this test, so Home.
+    expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+  });
+
   group('before the first chat', () {
     testWidgets('explains what is sent and who receives it, then asks', (
       tester,

@@ -425,7 +425,7 @@ class _AiReviewCard extends ConsumerWidget {
                 )
               : SaafButton.outline(
                   label: l10n.progressAiSetup,
-                  onPressed: () => context.push(SaafRoute.aiCoach.path),
+                  onPressed: () => context.push(SaafRoute.aiConsentAndReturn),
                 ),
         ],
       ),
@@ -716,7 +716,7 @@ class _NotAnalysedState extends ConsumerState<_NotAnalysed> {
                 alignment: AlignmentDirectional.centerStart,
                 child: SaafButton.text(
                   label: l10n.aiPicksTurnOn,
-                  onPressed: () => context.push(SaafRoute.aiCoach.path),
+                  onPressed: () => context.push(SaafRoute.aiConsentAndReturn),
                 ),
               ),
           ],

@@ -4,6 +4,7 @@
 // The estimate says how sure it is about each measure and can be reported.
 import 'dart:typed_data';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/core/error/failure.dart';
@@ -288,6 +289,22 @@ void main() {
       expect(_service.sentSizes, hasLength(1));
       expect(find.text('Skin score'), findsOneWidget);
     });
+
+    testWidgets(
+      'turning Saaf AI on afterwards still asks (the onboarding bug)',
+      (tester) async {
+        await _open(tester, consented: false, auto: null);
+        await settle(tester);
+        expect(find.text('Analyse every scan automatically?'), findsNothing);
+        // The user agrees on the AI screen and comes back.
+        final container = ProviderScope.containerOf(
+          tester.element(find.byType(AnalysisResultsScreen)),
+        );
+        await container.read(aiConsentStateProvider.notifier).give();
+        await settle(tester);
+        expect(find.text('Analyse every scan automatically?'), findsOneWidget);
+      },
+    );
 
     testWidgets('never without Saaf AI turned on', (tester) async {
       await _open(tester, consented: false, auto: 'on');

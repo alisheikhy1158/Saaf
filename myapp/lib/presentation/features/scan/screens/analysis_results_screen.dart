@@ -387,9 +387,11 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
     if (_autoTried || widget.analysis != null) return;
     final consent = ref.read(aiConsentStateProvider);
     final auto = ref.read(autoAnalyseScansProvider);
-    if (consent == null || !auto.hasValue) return;
+    // Only once Saaf AI is on: turning it on later (and coming back) still
+    // asks or analyses.
+    if (consent != true || !auto.hasValue) return;
     _autoTried = true;
-    if (consent != true || auto.value == false) return;
+    if (auto.value == false) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       auto.value == true ? _send() : _askOnce();
@@ -660,7 +662,7 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
         else if (consent == false)
           button(
             l10n.aiPicksTurnOn,
-            () => context.push(SaafRoute.aiCoach.path),
+            () => context.push(SaafRoute.aiConsentAndReturn),
           ),
       ],
     ];

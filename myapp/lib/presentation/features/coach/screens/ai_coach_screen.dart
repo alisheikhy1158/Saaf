@@ -28,7 +28,11 @@ import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
 /// reported (Google Play's AI-content policy); a standing reminder says it is
 /// not medical advice (store-compliance §5).
 class AiCoachScreen extends ConsumerStatefulWidget {
-  const AiCoachScreen({super.key});
+  const AiCoachScreen({super.key, this.returnAfterConsent = false});
+
+  /// Opened to turn Saaf AI on from another screen: go back there once the
+  /// user agrees, so what they were doing (an analysis, a check) carries on.
+  final bool returnAfterConsent;
 
   @override
   ConsumerState<AiCoachScreen> createState() => _AiCoachScreenState();
@@ -246,7 +250,10 @@ class _AiCoachScreenState extends ConsumerState<AiCoachScreen> {
       body: switch (consent) {
         null => const Center(child: CircularProgressIndicator()),
         false => _ConsentView(
-          onAgree: () => ref.read(aiConsentStateProvider.notifier).give(),
+          onAgree: () async {
+            await ref.read(aiConsentStateProvider.notifier).give();
+            if (mounted && widget.returnAfterConsent) _leave();
+          },
           onLater: _leave,
         ),
         true => _ChatBody(

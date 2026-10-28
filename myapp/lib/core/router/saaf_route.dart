@@ -87,6 +87,10 @@ class SaafRoute {
   /// The AI skin coach, opened from Home. Not a Figma screen, so not in [all].
   static const aiCoach = SaafRoute._(0, 'aiCoach', '/ai-coach', 'AI coach');
 
+  /// The AI coach's consent screen, going back to where it was opened from
+  /// once the user agrees (so what they were doing carries on).
+  static const aiConsentAndReturn = '/ai-coach?return=1';
+
   /// Scan a product's barcode (or type it), opened from Home. Not a Figma
   /// screen, so not in [all].
   static const scanProduct = SaafRoute._(

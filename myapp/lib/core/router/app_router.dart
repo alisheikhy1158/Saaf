@@ -114,7 +114,9 @@ GoRouter buildAppRouter({
       GoRoute(
         name: SaafRoute.aiCoach.name,
         path: SaafRoute.aiCoach.path,
-        builder: (context, state) => const AiCoachScreen(),
+        builder: (context, state) => AiCoachScreen(
+          returnAfterConsent: state.uri.queryParameters['return'] == '1',
+        ),
       ),
       GoRoute(
         name: SaafRoute.scanProduct.name,

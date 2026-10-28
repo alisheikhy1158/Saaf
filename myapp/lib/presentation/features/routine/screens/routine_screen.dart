@@ -519,7 +519,10 @@ class _AiPicksCardState extends ConsumerState<_AiPicksCard> {
           ],
         ),
         Text(l10n.aiPicksOfferBody, style: tokens.styles.pointCaption),
-        link(l10n.aiPicksTurnOn, () => context.push(SaafRoute.aiCoach.path)),
+        link(
+          l10n.aiPicksTurnOn,
+          () => context.push(SaafRoute.aiConsentAndReturn),
+        ),
       ]);
     }
 
