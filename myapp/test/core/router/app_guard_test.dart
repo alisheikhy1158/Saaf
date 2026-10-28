@@ -7,7 +7,7 @@ String? go(
   String path, {
   bool signedIn = true,
   bool? consented = true,
-  bool quizDone = true,
+  bool? quizDone = true,
 }) => guardRedirect(
   path: path,
   signedIn: signedIn,
@@ -128,6 +128,18 @@ void main() {
 
     test('is closed when signed out', () {
       expect(go('/skin-type-test', signedIn: false), '/welcome');
+    });
+  });
+
+  group('a returning user signing in again', () {
+    test('is not sent through consent and the quiz again', () {
+      // After "I already have an account" the code screen goes to Home.
+      expect(go('/home'), isNull);
+    });
+
+    test('is not sent to the quiz while the answer is still being read', () {
+      expect(go('/home', quizDone: null), isNull);
+      expect(go('/privacy-consent', quizDone: null), isNull);
     });
   });
 }

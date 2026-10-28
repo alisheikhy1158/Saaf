@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:saaf/core/config/env.dart';
 import 'package:saaf/core/error/failure_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:saaf/presentation/providers/onboarding_status.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saaf/core/error/failure.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
@@ -40,7 +41,13 @@ class VerifyCodeScreen extends ConsumerWidget {
     // Android can verify the number by itself; move on as soon as that happens.
     ref.listen(authSessionControllerProvider, (previous, next) {
       if (previous == null && next != null && context.mounted) {
-        context.go(SaafRoute.privacyConsent.path);
+        // A returning user who already agreed goes Home (the guard sends
+        // them on to the quiz if it is not done); a new user to consent.
+        context.go(
+          ref.read(consentStatusProvider) == true
+              ? SaafRoute.home.path
+              : SaafRoute.privacyConsent.path,
+        );
       }
     });
 
@@ -122,7 +129,13 @@ class VerifyCodeScreen extends ConsumerWidget {
                 ? () async {
                     final signedIn = await controller.submit();
                     if (signedIn && context.mounted) {
-                      context.go(SaafRoute.privacyConsent.path);
+                      // A returning user who already agreed goes Home (the guard sends
+                      // them on to the quiz if it is not done); a new user to consent.
+                      context.go(
+                        ref.read(consentStatusProvider) == true
+                            ? SaafRoute.home.path
+                            : SaafRoute.privacyConsent.path,
+                      );
                     }
                   }
                 : null,

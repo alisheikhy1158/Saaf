@@ -3,12 +3,13 @@
 /// Order of steps: sign in, consent, skin quiz. Until a step is done every
 /// other page redirects to it. [consented] is null while it is still being
 /// read from the database: nothing is redirected away then (a brief wait is
-/// better than bouncing a user who already consented).
+/// better than bouncing a user who already consented). [quizDone] is null the
+/// same way.
 String? guardRedirect({
   required String path,
   required bool signedIn,
   required bool? consented,
-  required bool quizDone,
+  required bool? quizDone,
 }) {
   const signInPages = {'/welcome', '/sign-up', '/verify-code'};
   const legalPages = {'/terms', '/privacy-policy'};
@@ -30,7 +31,7 @@ String? guardRedirect({
     return null;
   }
 
-  if (consented == true && !quizDone) {
+  if (consented == true && quizDone == false) {
     final open = isQuiz || legalPages.contains(path);
     if (!open) return '/skin-quiz';
     return null;

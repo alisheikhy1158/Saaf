@@ -10,6 +10,7 @@ import 'package:saaf/core/error/result.dart';
 import 'package:saaf/domain/entities/phone_number.dart';
 import 'package:saaf/presentation/features/auth/screens/verify_code_screen.dart';
 import 'package:saaf/presentation/providers/auth_providers.dart';
+import 'package:saaf/presentation/providers/onboarding_status.dart';
 import 'package:saaf/presentation/providers/pending_sign_in.dart';
 
 import '../../../domain/usecases/auth_usecases_test.dart'
@@ -24,6 +25,7 @@ void main() {
     WidgetTester tester, {
     PendingSignIn? pending,
     Size size = const Size(390, 1100),
+    bool returning = false,
   }) async {
     repository = RecordingAuthRepository();
     final signIn =
@@ -36,6 +38,11 @@ void main() {
       overrides: [
         authRepositoryProvider.overrideWithValue(repository),
         pendingSignInProvider.overrideWithBuild((ref, notifier) => signIn),
+        // A returning user on this phone: already agreed, quiz done.
+        if (returning) ...[
+          consentStatusProvider.overrideWithBuild((ref, n) => true),
+          quizDoneProvider.overrideWithBuild((ref, n) => true),
+        ],
       ],
     );
   }
@@ -150,6 +157,17 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets(
+      '"I already have an account": straight to Home, no onboarding',
+      (tester) async {
+        await pumpVerify(tester, returning: true);
+        await typeCode(tester, '482913');
+        await tester.tap(verify());
+        await tester.pump(const Duration(milliseconds: 600));
+        expect(find.byKey(const ValueKey('screen-home')), findsOneWidget);
+      },
+    );
 
     testWidgets('a wrong code shows an error and stays on the page', (
       tester,

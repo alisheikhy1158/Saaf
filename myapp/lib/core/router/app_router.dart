@@ -61,7 +61,7 @@ class AppGuardState {
 
   final bool signedIn;
   final bool? consented;
-  final bool quizDone;
+  final bool? quizDone;
 }
 
 /// Builds the app's [GoRouter]. [initialLocation] is for tests.

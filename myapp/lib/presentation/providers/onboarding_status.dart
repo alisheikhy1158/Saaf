@@ -30,16 +30,18 @@ OnboardingRepository onboardingRepository(Ref ref) {
       : DriftOnboardingRepository(db);
 }
 
-/// Whether the skin quiz was finished (or skipped to the end). The router guard
-/// sends a new user to the quiz until it is. Remembered between sessions.
+/// Whether the skin quiz was finished (or skipped to the end): null while it
+/// is being read from storage. The router guard sends a new user to the quiz
+/// until it is, and never redirects while it is still null. Remembered
+/// between sessions.
 @Riverpod(keepAlive: true)
 class QuizDone extends _$QuizDone {
   @override
-  bool build() {
+  bool? build() {
     ref.read(onboardingRepositoryProvider).quizDone().then((done) {
-      if (ref.mounted && done) state = true;
+      if (ref.mounted && state == null) state = done;
     });
-    return false;
+    return null;
   }
 
   void markDone() {
