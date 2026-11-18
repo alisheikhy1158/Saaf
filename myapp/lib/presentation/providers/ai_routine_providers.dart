@@ -164,8 +164,9 @@ class AiRoutinePlanController extends _$AiRoutinePlanController {
     List<String> names(Iterable<Enum> values) =>
         [for (final v in values) v.name]..sort();
     return [
-      // v2: several options per step (older single-pick plans are asked again).
-      'v2',
+      // v3: options priced for the budget, local brands first (older plans,
+      // with expensive imported picks, are asked again).
+      'v3',
       profile.skinType?.name,
       names(profile.concerns).join(','),
       profile.sensitivity?.name,

@@ -25,6 +25,15 @@ const METRIC_TEXT = {
  *  the morning and the night together). */
 const MAX_PER_STEP = { cleanser: 3, treatment: 4, moisturiser: 3, sunscreen: 3 };
 
+/**
+ * About the most one product may cost in Pakistan (it lasts about a month),
+ * from the monthly budget band. No limit for "premium" or no budget.
+ */
+export const PRODUCT_LIMIT = { essential: 900, balanced: 1800, comfortable: 3000 };
+
+/** An option a little over the limit is fine (prices vary between shops). */
+const LIMIT_SLACK = 1.25;
+
 const MAX_REASON = 200;
 const MAX_SUMMARY = 400;
 
@@ -68,6 +77,14 @@ function routineResearchPrompt({ context, scan, current }) {
     lines.push(`They already spend about Rs ${rupees(spent)} a month on their own products. Their budget covers those too, so choose new products that fit in what is left.`);
   }
 
+  const limit = PRODUCT_LIMIT[context?.budget];
+  const priceRules = [
+    '- Prefer Pakistani brands and affordable products that are widely sold in Pakistani pharmacies and online shops (such as Daraz), because imported international brands usually cost far more in Pakistan: '
+      + (limit ? 'only include one when its Pakistani price is within the limit below, and ' : '')
+      + 'include at least one Pakistani or low-cost option for each step when a good one exists.',
+    ...(limit ? [`- Each option should cost about Rs ${rupees(limit)} or less in Pakistan.`] : []),
+  ].join('\n');
+
   const system = `You research skin care products for one person in Pakistan, for Saaf, a skin care app. Use the browser search tool several times.
 
 Find:
@@ -75,7 +92,8 @@ Find:
 2. For each product they use now: decide keep, replace or stop, based on its ingredients AND what real users report about it.
 
 How to research (use at most 5 searches, and keep the notes short):
-- Check that each product is sold in Pakistan (Pakistani online shops). Use prices only to respect the budget; do not report them.
+- Check that each product is sold in Pakistan (Pakistani online shops), and note its usual Pakistani price in rupees. The price is used only to check the budget and is never shown.
+${priceRules}
 - Every option MUST be backed by reviews from real users: search Reddit, especially r/PakistaniSkincare, and other review pages. Only suggest products that many people there recommend for this skin type, and leave out any product you found no reviews for.
 - Never choose skin-whitening or bleaching creams, "formula" creams, or anything with hydroquinone, mercury or a steroid. If the person uses one, the verdict is stop and say why kindly.
 - Prefer gentle, fragrance-free products for skin that reacts. Do not combine two strong exfoliating or retinoid products.
@@ -108,8 +126,9 @@ const ROUTINE_SCHEMA = {
           why: { type: 'string' },
           reviews: { type: 'string' },
           sources: { type: 'array', items: { type: 'string' } },
+          approxPricePkr: { type: 'number' },
         },
-        required: ['step', 'brand', 'name', 'time', 'actives', 'fragranceFree', 'why', 'reviews', 'sources'],
+        required: ['step', 'brand', 'name', 'time', 'actives', 'fragranceFree', 'why', 'reviews', 'sources', 'approxPricePkr'],
         additionalProperties: false,
       },
     },
@@ -145,6 +164,7 @@ function structurePrompt(notes, { context, current }) {
 - time: morning, night or both.
 - actives: only these words, for the key active ingredients the product contains: ${ACTIVES.join(', ')}. Use aha for glycolic or lactic acid.
 - sources: the full URLs from the notes for that product.
+- approxPricePkr: the product's usual price in Pakistan in rupees, as the notes give it, or 0 when the notes give none. Do not include prices in any text field.
 - current: one entry per product the person uses now, with the name exactly as listed below; verdict is keep, replace or stop; replaceWith is the name of the pick that replaces it, or an empty string.
 - summary: one or two short sentences about the routine as a whole.
 - ${writtenIn(context.language)} Keep "why" under 25 words and "reviews" under 40 words.
@@ -170,8 +190,28 @@ function sourcesIn(list, notes) {
     .slice(0, MAX_SOURCES);
 }
 
+/**
+ * Up to MAX_PER_STEP options per step, best first, leaving out those that cost
+ * well over [limit] (an unknown price is kept). A step where nothing fits keeps
+ * its cheapest option, so it is not left empty.
+ */
+function withinBudget(candidates, limit) {
+  const picks = [];
+  for (const step of STEPS) {
+    const options = candidates.filter((c) => c.pick.step === step);
+    let fit = limit ? options.filter((c) => c.approx === 0 || c.approx <= limit * LIMIT_SLACK) : options;
+    if (fit.length === 0 && options.length) {
+      fit = [options.reduce((a, b) => (b.approx < a.approx ? b : a))];
+    }
+    picks.push(...fit.slice(0, MAX_PER_STEP[step]).map((c) => c.pick));
+  }
+  // Keep the research's order across steps.
+  const order = candidates.map((c) => c.pick);
+  return picks.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+}
+
 /** Checks and tidies the model's plan against the research and the request. */
-export function parsePlan(content, notes, { current }) {
+export function parsePlan(content, notes, { current, context }) {
   let data;
   try {
     data = JSON.parse(cleanReply(content));
@@ -179,16 +219,15 @@ export function parsePlan(content, notes, { current }) {
     throw new UpstreamError(502, 'bad_reply');
   }
 
-  const used = { cleanser: 0, treatment: 0, moisturiser: 0, sunscreen: 0 };
-  const picks = [];
+  const candidates = [];
   let unreviewed = 0;
   for (const item of Array.isArray(data?.picks) ? data.picks : []) {
     const step = STEPS.includes(item?.step) ? item.step : null;
     const brand = cleanText(item?.brand, 80);
     const name = cleanText(item?.name, 120);
-    if (!step || !name || used[step] >= MAX_PER_STEP[step]) continue;
+    if (!step || !name) continue;
     const id = `ai-${step}-${slug(`${brand} ${name}`)}`;
-    if (picks.some((p) => p.id === id)) continue;
+    if (candidates.some((c) => c.pick.id === id)) continue;
     // Only options backed by what real users say, with a page the research found.
     const reviews = cleanText(item.reviews, MAX_REVIEWS);
     const sources = sourcesIn(item.sources, notes);
@@ -196,8 +235,10 @@ export function parsePlan(content, notes, { current }) {
       unreviewed++;
       continue;
     }
-    used[step]++;
-    picks.push({
+    const price = Number(item.approxPricePkr);
+    candidates.push({
+      approx: Number.isFinite(price) && price > 0 ? price : 0,
+      pick: {
       id,
       step,
       brand,
@@ -210,8 +251,10 @@ export function parsePlan(content, notes, { current }) {
       why: cleanText(item.why, MAX_REASON),
       reviews,
       sources,
+      },
     });
   }
+  const picks = withinBudget(candidates, PRODUCT_LIMIT[context?.budget]);
   if (picks.length === 0) throw new UpstreamError(502, unreviewed ? 'no_reviewed_picks' : 'bad_reply');
 
   const byName = new Map(current.map((c) => [c.name.toLowerCase(), c.name]));

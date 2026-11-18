@@ -586,6 +586,42 @@ test('routine: up to 3 options per step, so the person can choose', async () => 
   assert.ok(asked.includes('reviews'), 'asks for reviews');
 });
 
+test('routine: asks for affordable products sold in Pakistan, with a price limit from the budget', async () => {
+  const groq = groqSequence([NOTES, plan()]);
+  await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl });
+  const asked = JSON.stringify(groq.bodies[0].messages);
+  assert.ok(asked.includes('about Rs 900 or less'), 'price limit for the essential budget');
+  assert.ok(asked.includes('Pakistani brands'), 'prefers local brands');
+  assert.ok(asked.includes('imported'), 'warns about imported brands');
+  // The structuring step reads the Pakistani price, only to check the limit.
+  const schema = groq.bodies[1].response_format.json_schema.schema;
+  assert.ok('approxPricePkr' in schema.properties.picks.items.properties);
+});
+
+test('routine: an option above the price limit is left out; a step with nothing cheap keeps its cheapest', async () => {
+  const picks = [
+    option('cleanser', 'Local Wash', { approxPricePkr: 650 }),
+    option('cleanser', 'Imported Wash', { approxPricePkr: 4200 }),
+    option('cleanser', 'Unknown Price Wash', { approxPricePkr: 0 }),
+    option('sunscreen', 'Dear SPF', { approxPricePkr: 3800 }),
+    option('sunscreen', 'Dearer SPF', { approxPricePkr: 5200 }),
+  ];
+  const groq = groqSequence([NOTES, plan({ picks })]);
+  const result = await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(routineBody).value, { fetchImpl: groq.fetchImpl });
+  assert.deepEqual(result.picks.map((p) => p.name), ['Local Wash', 'Unknown Price Wash', 'Dear SPF']);
+  // Still never a price for the app (web prices are often wrong).
+  assert.ok(result.picks.every((p) => p.pricePkr === 0 && !('approxPricePkr' in p)));
+});
+
+test('routine: no budget, no price limit', async () => {
+  const body = { ...routineBody, context: { ...routineBody.context, budget: 'premium' } };
+  const picks = [option('cleanser', 'Imported Wash', { approxPricePkr: 9000 })];
+  const groq = groqSequence([NOTES, plan({ picks })]);
+  const result = await planRoutine({ GROQ_API_KEY: 'k' }, validateRoutine(body).value, { fetchImpl: groq.fetchImpl });
+  assert.deepEqual(result.picks.map((p) => p.name), ['Imported Wash']);
+  assert.equal(JSON.stringify(groq.bodies[0].messages).includes('or less'), false);
+});
+
 test('routine: an option without reviews or without a link the research found is left out', async () => {
   const picks = [
     option('cleanser', 'No reviews', { reviews: '  ' }),
