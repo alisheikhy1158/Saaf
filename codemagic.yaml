@@ -91,7 +91,7 @@ workflows:
     instance_type: mac_mini_m2         # the free plan only offers Mac machines (Linux is paid)
     max_build_duration: 30
     environment:
-      flutter: stable
+      flutter: 3.47.7   # pinned: newer stable needs Gradle 9.3.1
       vars:
         APP_DIR: myapp
     triggering:
@@ -111,7 +111,7 @@ workflows:
     instance_type: mac_mini_m2         # the free plan only offers Mac machines (Linux is paid)
     max_build_duration: 60
     environment:
-      flutter: stable
+      flutter: 3.47.7   # pinned: newer stable needs Gradle 9.3.1
       android_signing:
         - "saaf upload keystore"        # reference name from step C2
       groups:
@@ -168,7 +168,7 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 45
     environment:
-      flutter: stable
+      flutter: 3.47.7   # pinned: newer stable needs Gradle 9.3.1
       android_signing:
         - "saaf upload keystore"
       groups:
@@ -219,7 +219,7 @@ workflows:
     integrations:
       app_store_connect: Saaf ASC Key  # name from step B2
     environment:
-      flutter: stable
+      flutter: 3.47.7   # pinned: newer stable needs Gradle 9.3.1
       xcode: latest
       cocoapods: default               # CocoaPods runs IN THE CLOUD during `flutter build ipa`
       ios_signing:
