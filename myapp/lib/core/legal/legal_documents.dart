@@ -33,7 +33,6 @@ class LegalDocument {
 /// The Terms of Use and Privacy Policy (English). They describe what the app
 /// actually does (docs/architecture.md PRV-1..4, docs/store-compliance.md) and
 /// must be kept in step with it; bump [currentPolicyVersion] when they change.
-/// DRAFT: have a lawyer review them before release (see LegalConfig.isReviewed).
 abstract final class LegalDocuments {
   static String _contact(LegalConfig c) => c.hasContactEmail
       ? 'You can contact us at ${c.contactEmail}.'

@@ -70,6 +70,12 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
+        <!-- Opening web pages in the browser ("Check prices online", sources,
+             Maps); Android 11+ hides the browser from apps that don't say so. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
         <!-- The phone's speech recognition service (voice input). -->
         <intent>
             <action android:name="android.speech.RecognitionService" />

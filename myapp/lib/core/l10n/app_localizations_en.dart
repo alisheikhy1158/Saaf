@@ -96,9 +96,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get legalDraftBanner => 'Draft: pending legal review';
-
-  @override
   String legalLastUpdated(String date) {
     return 'Last updated $date';
   }

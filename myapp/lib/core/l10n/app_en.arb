@@ -85,8 +85,6 @@
     "placeholders": { "name": { "type": "String" } }
   },
 
-  "legalDraftBanner": "Draft: pending legal review",
-  "@legalDraftBanner": { "description": "Shown on the Terms / Privacy pages until a lawyer has reviewed them (LegalConfig.isReviewed). Must not ship to the stores." },
 
   "legalLastUpdated": "Last updated {date}",
   "@legalLastUpdated": {

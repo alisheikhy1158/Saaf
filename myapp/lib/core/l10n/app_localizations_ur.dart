@@ -96,9 +96,6 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get legalDraftBanner => 'مسودہ: قانونی جائزہ باقی ہے';
-
-  @override
   String legalLastUpdated(String date) {
     return 'آخری تازہ کاری $date';
   }

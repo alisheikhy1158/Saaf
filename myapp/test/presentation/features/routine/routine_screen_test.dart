@@ -516,6 +516,25 @@ void main() {
       expect(find.text('Neem Face Wash'), findsNothing);
     });
 
+    testWidgets('a price link that cannot open says so', (tester) async {
+      await _open(
+        tester,
+        overrides: [
+          ...withAi(),
+          externalLinkServiceProvider.overrideWithValue(_NoBrowser()),
+        ],
+      );
+      for (var i = 0; i < 5; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      await tapText(tester, 'Compare and choose products');
+      await tester.ensureVisible(find.text('Check prices online').first);
+      await tester.tap(find.text('Check prices online').first);
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('We couldn’t open that link.'), findsOneWidget);
+    });
+
     testWidgets('why, what people say and the sources', (tester) async {
       final links = FakeExternalLinkService();
       await _open(
@@ -774,4 +793,11 @@ class _PlanService implements AiProductService {
     required ProductQuery query,
     required AiContext context,
   }) async => const Ok(ProductInsight.notFound());
+}
+
+/// A phone where the browser cannot be opened.
+class _NoBrowser extends FakeExternalLinkService {
+  @override
+  Future<Result<void>> open(String url) async =>
+      const Err(UnknownFailure('link'));
 }

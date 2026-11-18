@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:saaf/core/config/legal_config.dart';
 import 'package:saaf/core/l10n/app_localizations.dart';
 import 'package:saaf/core/legal/legal_documents.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/core/theme/saaf_tokens_extension.dart';
-import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
 
 /// A legal document page: top bar with back, the document name (translated),
-/// the date, then the English text in sections. While the documents are not
-/// lawyer-reviewed a "draft" chip is shown, so a draft cannot ship unnoticed.
+/// the date, then the English text in sections.
 class LegalPage extends StatelessWidget {
   const LegalPage({
     required this.route,
@@ -48,17 +45,6 @@ class LegalPage extends StatelessWidget {
             l10n.legalLastUpdated(document.lastUpdated),
             style: context.text.bodySmall,
           ),
-          if (!LegalConfig.current.isReviewed) ...[
-            SizedBox(height: space.x12),
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: SaafChip(
-                label: l10n.legalDraftBanner,
-                icon: Icons.edit_note,
-                tone: SaafChipTone.papaya,
-              ),
-            ),
-          ],
           if (!isEnglish) ...[
             SizedBox(height: space.x12),
             Text(l10n.legalEnglishOnlyNote, style: context.text.bodyMedium),

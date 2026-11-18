@@ -33,6 +33,18 @@ void main() {
       );
     });
 
+    test('may open web pages in the browser (Android 11+ needs this)', () {
+      expect(
+        manifest,
+        matches(
+          RegExp(
+            r'<action android:name="android.intent.action.VIEW"\s*/>\s*'
+            r'<data android:scheme="https"\s*/>',
+          ),
+        ),
+      );
+    });
+
     test('only HTTPS (no plain-text traffic)', () {
       expect(manifest, contains('android:usesCleartextTraffic="false"'));
     });

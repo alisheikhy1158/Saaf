@@ -254,12 +254,6 @@ abstract class AppLocalizations {
   /// **'Open {name}'**
   String openDocumentAction(String name);
 
-  /// Shown on the Terms / Privacy pages until a lawyer has reviewed them (LegalConfig.isReviewed). Must not ship to the stores.
-  ///
-  /// In en, this message translates to:
-  /// **'Draft: pending legal review'**
-  String get legalDraftBanner;
-
   /// Date line under the title of a legal document.
   ///
   /// In en, this message translates to:

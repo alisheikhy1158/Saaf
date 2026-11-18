@@ -5,7 +5,7 @@ import 'package:saaf/core/legal/legal_documents.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/presentation/features/legal/widgets/legal_page.dart';
 
-/// Privacy Policy (draft until LegalConfig.isReviewed).
+/// Privacy Policy.
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
 

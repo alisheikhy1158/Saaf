@@ -21,7 +21,6 @@ import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/life_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
 import 'package:saaf/presentation/providers/ai_routine_providers.dart';
-import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/providers/routine_providers.dart';
 import 'package:saaf/presentation/providers/skin_profile_providers.dart';
 import 'package:saaf/presentation/widgets/common/no_routine_message.dart';
@@ -37,6 +36,7 @@ import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_segmented_control.dart';
 import 'package:saaf/presentation/widgets/common/saaf_status_message.dart';
 import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
+import 'package:saaf/presentation/widgets/common/open_link.dart';
 
 /// Figma 08 Routine: morning and night steps with products and prices, the
 /// time it takes and when to expect results. Also the loading, empty (no
@@ -773,9 +773,8 @@ class _PickDetails extends ConsumerWidget {
           child: SaafButton.text(
             label: l10n.checkPricesOnline,
             leadingIcon: Icons.open_in_new,
-            onPressed: () => ref
-                .read(externalLinkServiceProvider)
-                .open(priceSearchUrl(pick.product.name)),
+            onPressed: () =>
+                openLink(context, ref, priceSearchUrl(pick.product.name)),
           ),
         ),
         if (pick.sources.isNotEmpty)
@@ -794,8 +793,7 @@ class _PickDetails extends ConsumerWidget {
                   button: true,
                   child: SaafButton.text(
                     label: _site(url),
-                    onPressed: () =>
-                        ref.read(externalLinkServiceProvider).open(url),
+                    onPressed: () => openLink(context, ref, url),
                   ),
                 ),
             ],

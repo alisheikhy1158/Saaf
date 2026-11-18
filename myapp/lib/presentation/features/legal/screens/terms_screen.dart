@@ -5,7 +5,7 @@ import 'package:saaf/core/legal/legal_documents.dart';
 import 'package:saaf/core/router/saaf_route.dart';
 import 'package:saaf/presentation/features/legal/widgets/legal_page.dart';
 
-/// Terms of Use (draft until LegalConfig.isReviewed).
+/// Terms of Use.
 class TermsScreen extends StatelessWidget {
   const TermsScreen({super.key});
 

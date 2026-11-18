@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show FilteringTextInputFormatter;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saaf/presentation/providers/weather_providers.dart';
-import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/providers/doctor_report_providers.dart';
 import 'package:saaf/domain/services/share_service.dart';
 import 'package:saaf/core/utils/dermatologist_search.dart';
@@ -43,6 +42,7 @@ import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_segmented_control.dart';
 import 'package:saaf/presentation/widgets/common/saaf_settings_group.dart';
 import 'package:saaf/presentation/widgets/common/saaf_text_field.dart';
+import 'package:saaf/presentation/widgets/common/open_link.dart';
 
 /// Figma 14 Profile & privacy: who you are, your plan, the answers behind your
 /// routine, privacy choices (including deleting the account, store requirement
@@ -180,7 +180,7 @@ class ProfileScreen extends ConsumerWidget {
                 SaafSettingsRow(
                   icon: Icons.local_hospital_outlined,
                   title: l10n.dermFind,
-                  onTap: () => _findDermatologist(ref),
+                  onTap: () => _findDermatologist(context, ref),
                 ),
                 SaafSettingsRow(
                   icon: Icons.picture_as_pdf_outlined,
@@ -516,11 +516,10 @@ class _ProCard extends StatelessWidget {
 
 /// The frame every bottom sheet shares: a title, the content and a Done button.
 /// Opens a Maps search for dermatologists in the user's weather city.
-Future<void> _findDermatologist(WidgetRef ref) async {
+Future<void> _findDermatologist(BuildContext context, WidgetRef ref) async {
   final city = await ref.read(weatherCityProvider.future);
-  await ref
-      .read(externalLinkServiceProvider)
-      .open(dermatologistSearchUrl(city?.englishName));
+  if (!context.mounted) return;
+  await openLink(context, ref, dermatologistSearchUrl(city?.englishName));
 }
 
 /// Makes the doctor's report and opens the share sheet (only on this tap).

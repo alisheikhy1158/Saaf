@@ -14,13 +14,13 @@ import 'package:saaf/domain/entities/ai_photo_source.dart';
 import 'package:saaf/domain/entities/product_insight.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/product_insight_controller.dart';
-import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_ai_text.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
 import 'package:saaf/presentation/widgets/common/saaf_icon_circle.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
+import 'package:saaf/presentation/widgets/common/open_link.dart';
 
 /// Looks a product up with Saaf AI when its barcode is unknown, its QR code is
 /// only a link, or nothing scans (a photo of the label). The user sees what
@@ -394,9 +394,8 @@ class _Answer extends ConsumerWidget {
             child: SaafButton.text(
               label: l10n.checkPricesOnline,
               leadingIcon: Icons.open_in_new,
-              onPressed: () => ref
-                  .read(externalLinkServiceProvider)
-                  .open(priceSearchUrl(insight.title!)),
+              onPressed: () =>
+                  openLink(context, ref, priceSearchUrl(insight.title!)),
             ),
           ),
         Text(

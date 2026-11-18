@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:saaf/presentation/providers/weather_providers.dart';
-import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/core/utils/dermatologist_search.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +32,7 @@ import 'package:saaf/presentation/widgets/common/saaf_progress_ring.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_status_message.dart';
 import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
+import 'package:saaf/presentation/widgets/common/open_link.dart';
 
 /// Figma 07 Analysis results: the score, the four measures and the way on to
 /// the routine. The numbers come only from Saaf AI reading the front photo;
@@ -759,9 +759,12 @@ class _FindDermatologist extends ConsumerWidget {
         leadingIcon: Icons.local_hospital_outlined,
         onPressed: () async {
           final city = await ref.read(weatherCityProvider.future);
-          await ref
-              .read(externalLinkServiceProvider)
-              .open(dermatologistSearchUrl(city?.englishName));
+          if (!context.mounted) return;
+          await openLink(
+            context,
+            ref,
+            dermatologistSearchUrl(city?.englishName),
+          );
         },
       ),
     );

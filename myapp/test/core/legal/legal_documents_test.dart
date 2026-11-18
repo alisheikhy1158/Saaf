@@ -17,7 +17,6 @@ void main() {
     operatorName: 'Saaf',
     contactEmail: 'help@example.test',
     deletionUrl: 'https://example.test/delete',
-    isReviewed: false,
   );
   final terms = LegalDocuments.terms(config);
   final privacy = LegalDocuments.privacy(config);
@@ -40,7 +39,17 @@ void main() {
 
       test('$name has no leftover placeholder text', () {
         final text = allText(doc);
-        for (final bad in ['lorem', 'todo', 'tbd', 'xxx', '[', '{']) {
+        for (final bad in [
+          'lorem',
+          'todo',
+          'tbd',
+          'xxx',
+          '[',
+          '{',
+          'draft',
+          'lawyer',
+          'legal review',
+        ]) {
           expect(text.contains(bad), isFalse, reason: '$name contains "$bad"');
         }
       });
@@ -136,14 +145,10 @@ void main() {
 
   group('LegalConfig', () {
     test('without a contact email the documents still read correctly', () {
-      const noEmail = LegalConfig(operatorName: 'Saaf', isReviewed: false);
+      const noEmail = LegalConfig(operatorName: 'Saaf');
       final text = allText(LegalDocuments.privacy(noEmail));
       expect(text, isNot(contains('null')));
       expect(text, contains('contact'));
-    });
-
-    test('the shipped config says it is still a draft', () {
-      expect(LegalConfig.current.isReviewed, isFalse);
     });
   });
 

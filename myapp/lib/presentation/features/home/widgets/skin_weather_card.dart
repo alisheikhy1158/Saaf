@@ -6,11 +6,11 @@ import 'package:saaf/core/theme/saaf_tokens_extension.dart';
 import 'package:saaf/domain/entities/pk_city.dart';
 import 'package:saaf/domain/entities/skin_weather.dart';
 import 'package:saaf/domain/usecases/skin_weather_tips.dart';
-import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/providers/weather_providers.dart';
 import 'package:saaf/presentation/widgets/common/city_name.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
+import 'package:saaf/presentation/widgets/common/open_link.dart';
 
 /// Home: today's "skin weather" in the user's city (sun, air, heat,
 /// humidity) as up to three tips. The user picks a city from a list (no
@@ -209,8 +209,7 @@ class SkinWeatherCard extends ConsumerWidget {
         alignment: AlignmentDirectional.centerStart,
         child: SaafButton.text(
           label: l10n.weatherCredit,
-          onPressed: () =>
-              ref.read(externalLinkServiceProvider).open(_sourceUrl),
+          onPressed: () => openLink(context, ref, _sourceUrl),
         ),
       ),
     ];

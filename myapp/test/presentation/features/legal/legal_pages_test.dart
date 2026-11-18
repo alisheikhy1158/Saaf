@@ -36,18 +36,15 @@ void main() {
         ),
       ]) {
     group(route.name, () {
-      testWidgets('shows its title, back button and the draft banner', (
+      testWidgets('shows its title and back button, and no draft line', (
         tester,
       ) async {
         await pumpSaafApp(tester, location: route.path);
         expect(find.byKey(ValueKey('screen-${route.name}')), findsOneWidget);
         expect(find.text(title), findsOneWidget);
         expect(find.byTooltip('Back'), findsOneWidget);
-        expect(
-          find.text('Draft: pending legal review'),
-          findsOneWidget,
-          reason: 'LegalConfig.current is not reviewed yet',
-        );
+        // Owner's decision (2026-11-19): no "pending legal review" line.
+        expect(find.textContaining('legal review'), findsNothing);
       });
 
       testWidgets('shows the date, the intro and every section heading', (

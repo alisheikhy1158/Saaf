@@ -14,7 +14,6 @@ import 'package:saaf/domain/entities/safety_check.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
 import 'package:saaf/presentation/providers/cream_safety_controller.dart';
 import 'package:saaf/core/utils/dermatologist_search.dart';
-import 'package:saaf/presentation/providers/product_providers.dart';
 import 'package:saaf/presentation/providers/weather_providers.dart';
 import 'package:saaf/presentation/widgets/common/saaf_button.dart';
 import 'package:saaf/presentation/widgets/common/saaf_chip.dart';
@@ -23,6 +22,7 @@ import 'package:saaf/presentation/widgets/common/saaf_message_row.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
 import 'package:saaf/presentation/widgets/common/saaf_text_field.dart';
 import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
+import 'package:saaf/presentation/widgets/common/open_link.dart';
 
 /// "Is this cream safe?" Fairness and "formula" creams are often found to
 /// contain mercury, hydroquinone or strong steroids. The user types the name
@@ -430,8 +430,7 @@ class _Verdict extends ConsumerWidget {
                   SaafButton.text(
                     label: Uri.tryParse(url)?.host ?? url,
                     leadingIcon: Icons.open_in_new,
-                    onPressed: () =>
-                        ref.read(externalLinkServiceProvider).open(url),
+                    onPressed: () => openLink(context, ref, url),
                   ),
               ],
             ),
@@ -442,9 +441,12 @@ class _Verdict extends ConsumerWidget {
             leadingIcon: Icons.local_hospital_outlined,
             onPressed: () async {
               final city = await ref.read(weatherCityProvider.future);
-              await ref
-                  .read(externalLinkServiceProvider)
-                  .open(dermatologistSearchUrl(city?.englishName));
+              if (!context.mounted) return;
+              await openLink(
+                context,
+                ref,
+                dermatologistSearchUrl(city?.englishName),
+              );
             },
           ),
         Text(
