@@ -659,7 +659,8 @@ class _SourceCardState extends ConsumerState<_SourceCard> {
           )
         else if (consent == true)
           button(l10n.resultsAnalysePhoto, _analyse)
-        else if (consent == false)
+        else
+          // Off or never decided: offer to turn Saaf AI on.
           button(
             l10n.aiPicksTurnOn,
             () => context.push(SaafRoute.aiConsentAndReturn),
