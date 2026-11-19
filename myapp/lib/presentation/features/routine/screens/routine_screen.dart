@@ -305,14 +305,41 @@ class _RoutineList extends StatelessWidget {
   }
 }
 
-class _StepRow extends StatelessWidget {
+class _StepRow extends ConsumerWidget {
   const _StepRow({required this.step, required this.isLast});
 
   final RoutineStep step;
   final bool isLast;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!OwnedProduct.isOwned(step.product) && step.product.pricePkr == 0) {
+      // No known price: "Check price" opens a price search in the browser.
+      final l10n = AppLocalizations.of(context);
+      return SaafRoutineStepRow(
+        name: step.product.name,
+        caption: l10n.routineStepLine(step.number, switch (step.category) {
+          ProductCategory.cleanser => l10n.stepCleanser,
+          ProductCategory.treatment => l10n.stepTreatment,
+          ProductCategory.moisturiser => l10n.stepMoisturiser,
+          ProductCategory.sunscreen => l10n.stepSunscreen,
+        }),
+        isLast: isLast,
+        trailing: Flexible(
+          flex: 2,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: AlignmentDirectional.centerEnd,
+            child: SaafButton.text(
+              label: l10n.productCheckPrice,
+              leadingIcon: Icons.open_in_new,
+              onPressed: () =>
+                  openLink(context, ref, priceSearchUrl(step.product.name)),
+            ),
+          ),
+        ),
+      );
+    }
     final l10n = AppLocalizations.of(context);
     final tokens = context.saaf;
     final locale = Localizations.localeOf(context).toString();
