@@ -1,6 +1,7 @@
 // Covers: Figma 08 Routine (node 3:185), design.md §9 (empty / error states),
 // A11Y-1/2/3/5/6/8, store-compliance (prices are a guide)
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:saaf/core/error/failure.dart';
@@ -28,6 +29,7 @@ import 'package:saaf/domain/entities/skin_type.dart';
 import 'package:saaf/domain/repositories/product_catalog.dart';
 import 'package:saaf/presentation/features/routine/screens/routine_screen.dart';
 import 'package:saaf/presentation/providers/ai_providers.dart';
+import 'package:saaf/presentation/providers/ai_routine_providers.dart';
 import 'package:saaf/presentation/providers/analysis_providers.dart';
 import 'package:saaf/presentation/providers/completed_scan.dart';
 import 'package:saaf/presentation/providers/product_providers.dart';
@@ -88,6 +90,41 @@ Future<void> _open(
 }
 
 void main() {
+  group('use my own product', () {
+    testWidgets('tapping a step lets the user put their own product there', (
+      tester,
+    ) async {
+      await _open(tester);
+      await tester.tap(find.text('Neem Face Wash'));
+      await tester.pumpAndSettle();
+      expect(find.text('Use your own product'), findsOneWidget);
+      await tester.enterText(find.byType(TextField).first, 'Trego FC26');
+      await tester.enterText(find.byType(TextField).last, '450');
+      await tester.tap(find.text('Use this product'));
+      await tester.pumpAndSettle();
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(RoutineScreen)),
+      );
+      final owned = await container.read(currentProductsProvider.future);
+      expect(owned, [
+        const OwnedProduct(
+          name: 'Trego FC26',
+          step: ProductCategory.cleanser,
+          pricePkr: 450,
+        ),
+      ]);
+    });
+
+    testWidgets('the step row says it can be changed', (tester) async {
+      await _open(tester);
+      expect(
+        find.bySemanticsLabel(RegExp('Neem Face Wash.*use your own')),
+        findsOneWidget,
+      );
+    });
+  });
+
   group('morning (as in Figma)', () {
     testWidgets('title and subtitle', (tester) async {
       await _open(tester);

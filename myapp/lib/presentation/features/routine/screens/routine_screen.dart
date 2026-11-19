@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' show DateFormat, NumberFormat;
@@ -33,6 +34,7 @@ import 'package:saaf/presentation/widgets/common/saaf_icon_circle.dart';
 import 'package:saaf/presentation/widgets/common/saaf_message_row.dart';
 import 'package:saaf/presentation/widgets/common/saaf_routine_step_row.dart';
 import 'package:saaf/presentation/widgets/common/saaf_scaffold.dart';
+import 'package:saaf/presentation/widgets/common/saaf_text_field.dart';
 import 'package:saaf/presentation/widgets/common/saaf_segmented_control.dart';
 import 'package:saaf/presentation/widgets/common/saaf_status_message.dart';
 import 'package:saaf/presentation/widgets/common/saaf_top_bar.dart';
@@ -313,33 +315,6 @@ class _StepRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (!OwnedProduct.isOwned(step.product) && step.product.pricePkr == 0) {
-      // No known price: "Check price" opens a price search in the browser.
-      final l10n = AppLocalizations.of(context);
-      return SaafRoutineStepRow(
-        name: step.product.name,
-        caption: l10n.routineStepLine(step.number, switch (step.category) {
-          ProductCategory.cleanser => l10n.stepCleanser,
-          ProductCategory.treatment => l10n.stepTreatment,
-          ProductCategory.moisturiser => l10n.stepMoisturiser,
-          ProductCategory.sunscreen => l10n.stepSunscreen,
-        }),
-        isLast: isLast,
-        trailing: Flexible(
-          flex: 2,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: AlignmentDirectional.centerEnd,
-            child: SaafButton.text(
-              label: l10n.productCheckPrice,
-              leadingIcon: Icons.open_in_new,
-              onPressed: () =>
-                  openLink(context, ref, priceSearchUrl(step.product.name)),
-            ),
-          ),
-        ),
-      );
-    }
     final l10n = AppLocalizations.of(context);
     final tokens = context.saaf;
     final locale = Localizations.localeOf(context).toString();
@@ -349,25 +324,145 @@ class _StepRow extends ConsumerWidget {
       ProductCategory.moisturiser => l10n.stepMoisturiser,
       ProductCategory.sunscreen => l10n.stepSunscreen,
     };
+    final caption = l10n.routineStepLine(step.number, category);
+    final owned = OwnedProduct.isOwned(step.product);
+    final noPrice = !owned && step.product.pricePkr == 0;
+    // The user's own product, or one from the web (no price).
+    final price = owned
+        ? l10n.routineYours
+        : noPrice
+        ? l10n.productCheckPrice
+        : _rs(l10n, locale, step.product.pricePkr);
 
     return SaafRoutineStepRow(
       name: step.product.name,
-      caption: l10n.routineStepLine(step.number, category),
+      caption: caption,
       isLast: isLast,
+      // Saaf AI's pick can be swapped for the user's own product.
+      onTap: owned ? null : () => _useOwn(context, ref, noPrice: noPrice),
+      semanticLabel: owned
+          ? null
+          : l10n.ownStepRowLabel(step.product.name, caption, price),
       // Shrinks a little at very large text sizes instead of overflowing.
       trailing: Flexible(
         flex: 2,
         child: FittedBox(
           fit: BoxFit.scaleDown,
           alignment: AlignmentDirectional.centerEnd,
-          child: Text(
-            // The user's own product, or one from the web (no price).
-            OwnedProduct.isOwned(step.product)
-                ? l10n.routineYours
-                : step.product.pricePkr == 0
-                ? l10n.productCheckPrice
-                : _rs(l10n, locale, step.product.pricePkr),
-            style: tokens.styles.segment,
+          child: noPrice
+              // No known price: opens a price search in the browser.
+              ? SaafButton.text(
+                  label: price,
+                  leadingIcon: Icons.open_in_new,
+                  onPressed: () =>
+                      openLink(context, ref, priceSearchUrl(step.product.name)),
+                )
+              : Text(price, style: tokens.styles.segment),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _useOwn(
+    BuildContext context,
+    WidgetRef ref, {
+    required bool noPrice,
+  }) async {
+    final result = await showModalBottomSheet<(String, int?)>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _OwnProductSheet(step: step, noPrice: noPrice),
+    );
+    if (result == null) return;
+    final (name, pricePkr) = result;
+    await ref
+        .read(currentProductsProvider.notifier)
+        .add(name, step.category, pricePkr: pricePkr);
+  }
+}
+
+/// Puts the user's own product (name and optional price) in a step, in place
+/// of Saaf AI's pick. Pops (name, price), or nothing when closed.
+class _OwnProductSheet extends ConsumerStatefulWidget {
+  const _OwnProductSheet({required this.step, required this.noPrice});
+
+  final RoutineStep step;
+  final bool noPrice;
+
+  @override
+  ConsumerState<_OwnProductSheet> createState() => _OwnProductSheetState();
+}
+
+class _OwnProductSheetState extends ConsumerState<_OwnProductSheet> {
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _price = TextEditingController();
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _price.dispose();
+    super.dispose();
+  }
+
+  void _save() {
+    final name = _name.text.trim();
+    if (name.isEmpty) return;
+    final price = int.tryParse(_price.text);
+    Navigator.of(
+      context,
+    ).pop((name, price == null || price <= 0 ? null : price));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final space = context.saaf.space;
+    final pick = widget.step.product.name;
+
+    return Padding(
+      padding: EdgeInsetsDirectional.only(
+        bottom: MediaQuery.viewInsetsOf(context).bottom,
+      ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsetsDirectional.all(space.x16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: space.x12,
+            children: [
+              Semantics(
+                header: true,
+                child: Text(l10n.ownStepTitle, style: context.text.titleMedium),
+              ),
+              Text(l10n.ownStepBody(pick), style: context.text.bodyMedium),
+              if (widget.noPrice)
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: SaafButton.text(
+                    label: l10n.checkPricesOnline,
+                    leadingIcon: Icons.open_in_new,
+                    onPressed: () =>
+                        openLink(context, ref, priceSearchUrl(pick)),
+                  ),
+                ),
+              SaafTextField(
+                label: l10n.myProductsFieldLabel,
+                controller: _name,
+                hintText: l10n.myProductsFieldHint,
+                textInputAction: TextInputAction.next,
+              ),
+              SaafTextField(
+                label: l10n.myProductsPriceLabel,
+                controller: _price,
+                hintText: l10n.myProductsPriceHint,
+                prefixText: l10n.myProductsPricePrefix,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                textInputAction: TextInputAction.done,
+              ),
+              SaafButton.primary(label: l10n.ownStepSave, onPressed: _save),
+            ],
           ),
         ),
       ),

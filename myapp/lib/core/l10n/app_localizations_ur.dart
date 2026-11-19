@@ -2983,4 +2983,20 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get paywallPayApple =>
       'آپ اپنی Apple ID کے ذریعے کارڈ یا Apple Pay سے ادائیگی کرتے ہیں۔ ہم آپ کی ادائیگی کی تفصیلات کبھی نہیں دیکھتے۔';
+
+  @override
+  String get ownStepTitle => 'اپنی پروڈکٹ استعمال کریں';
+
+  @override
+  String ownStepBody(String name) {
+    return 'کوئی سستی پروڈکٹ ہے، یا جو آپ پہلے سے استعمال کرتے ہیں؟ اسے $name کی جگہ اس قدم میں رکھیں۔ Saaf AI اس کا جائزہ لے گا اور Saaf اسے آپ کے حفاظتی جوابات سے جانچے گا۔';
+  }
+
+  @override
+  String get ownStepSave => 'یہ پروڈکٹ استعمال کریں';
+
+  @override
+  String ownStepRowLabel(String name, String caption, String price) {
+    return '$name، $caption، $price۔ اپنی پروڈکٹ استعمال کرنے کے لیے ٹیپ کریں۔';
+  }
 }

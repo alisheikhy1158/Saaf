@@ -5119,6 +5119,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You pay through your Apple ID with a card or Apple Pay. We never see your payment details.'**
   String get paywallPayApple;
+
+  /// Sheet title: put the user's own product in a routine step.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your own product'**
+  String get ownStepTitle;
+
+  /// Sheet body.
+  ///
+  /// In en, this message translates to:
+  /// **'Have something cheaper, or one you already use? Put it in this step instead of {name}. Saaf AI will review it and Saaf checks it against your safety answers.'**
+  String ownStepBody(String name);
+
+  /// Sheet button that saves the user's own product.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this product'**
+  String get ownStepSave;
+
+  /// Screen reader label of a routine step that can be changed.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, {caption}, {price}. Tap to use your own product instead.'**
+  String ownStepRowLabel(String name, String caption, String price);
 }
 
 class _AppLocalizationsDelegate
